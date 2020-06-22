@@ -216,18 +216,18 @@ def mock_crypto(request):
 
     else:
 
-        def unsecure_but_fast_argon2i_kdf(size, password, salt, *args, **kwargs):
+        def unsecure_but_fast_argon2id_kdf(size, password, salt, *args, **kwargs):
             data = password + salt
             return data[:size] + b"\x00" * (size - len(data))
 
-        from parsec.crypto import argon2i
+        from parsec.crypto import argon2id
 
-        vanilla_kdf = argon2i.kdf
+        vanilla_kdf = argon2id.kdf
 
         def unmock():
-            return patch("parsec.crypto.argon2i.kdf", new=vanilla_kdf)
+            return patch("parsec.crypto.argon2id.kdf", new=vanilla_kdf)
 
-        with patch("parsec.crypto.argon2i.kdf", new=unsecure_but_fast_argon2i_kdf):
+        with patch("parsec.crypto.argon2id.kdf", new=unsecure_but_fast_argon2id_kdf):
             yield unmock
 
 
