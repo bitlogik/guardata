@@ -10,7 +10,7 @@ from nacl.signing import SigningKey as _SigningKey, VerifyKey as _VerifyKey
 from nacl.secret import SecretBox
 from nacl.bindings import crypto_sign_BYTES, crypto_scalarmult
 from nacl.hash import blake2b, BLAKE2B_BYTES
-from nacl.pwhash import argon2i
+from nacl.pwhash import argon2id
 from nacl.utils import random
 from nacl.encoding import RawEncoder
 
@@ -35,11 +35,8 @@ __all__ = (
 )
 
 
-# TODO: SENSITIVE is really slow which is not good for unittests...
-# CRYPTO_OPSLIMIT = argon2i.OPSLIMIT_SENSITIVE
-# CRYPTO_MEMLIMIT = argon2i.MEMLIMIT_SENSITIVE
-CRYPTO_OPSLIMIT = argon2i.OPSLIMIT_INTERACTIVE
-CRYPTO_MEMLIMIT = argon2i.MEMLIMIT_INTERACTIVE
+CRYPTO_OPSLIMIT = argon2id.OPSLIMIT_MODERATE
+CRYPTO_MEMLIMIT = argon2id.MEMLIMIT_MODERATE
 
 
 # Types
@@ -187,8 +184,8 @@ def import_root_verify_key(raw: str) -> VerifyKey:
 
 
 def derivate_secret_key_from_password(password: str, salt: bytes = None) -> Tuple[SecretKey, bytes]:
-    salt = salt or random(argon2i.SALTBYTES)
-    rawkey = argon2i.kdf(
+    salt = salt or random(argon2id.SALTBYTES)
+    rawkey = argon2id.kdf(
         SecretBox.KEY_SIZE,
         password.encode("utf8"),
         salt,
