@@ -46,7 +46,11 @@ FORMS += forms/main_window.ui \
     forms/file_history_button.ui \
     forms/create_org_first_page_widget.ui \
     forms/create_org_widget.ui \
-    forms/create_org_second_page_widget.ui
+    forms/create_org_second_page_widget.ui \
+    forms/account_button.ui \
+    forms/login_accounts_widget.ui \
+    forms/login_password_input_widget.ui \
+    forms/login_no_devices_widget.ui
 
 RESOURCES += rc/resources.qrc \
     forms/rc/resources.qrc
