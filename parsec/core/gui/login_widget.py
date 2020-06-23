@@ -126,15 +126,13 @@ class LoginWidget(QWidget, Ui_LoginWidget):
 
     def reload_devices(self):
         self._clear_widget()
+        devices = list_available_devices(self.config.config_dir)
         # Display devices in `<organization>:<user>@<device>` format
         if len(devices):
             accounts_widget = LoginAccountsWidget(devices)
             accounts_widget.account_clicked.connect(self._on_account_clicked)
             self.widget.layout().addWidget(accounts_widget)
             accounts_widget.setFocus()
-                name = f"{available_device.organization_id}: {available_device.user_display} @ {available_device.device_display}"
-                self.combo_username.addItem(name)
-                self.devices[name] = available_device
         else:
             no_device_widget = LoginNoDevicesWidget()
             no_device_widget.create_organization_clicked.connect(
@@ -161,6 +159,7 @@ class LoginWidget(QWidget, Ui_LoginWidget):
         lw.log_in_clicked.connect(self.try_login)
         self.widget.layout().addWidget(lw)
         lw.line_edit_password.setFocus()
+
     def _on_back_clicked(self):
         self.reload_devices()
 
