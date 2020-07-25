@@ -315,8 +315,6 @@ border-radius: 8px;
         </widget>
        </item>
        <item>
-       </item>
-       <item>
         <widget class="QWidget" name="widget_interface" native="true">
          <layout class="QVBoxLayout" name="verticalLayout_7">
           <property name="spacing">
