@@ -24,7 +24,6 @@ from parsec.api.protocol import InvitationType
 from parsec.core.gui.lang import translate as _
 from parsec.core.gui.instance_widget import InstanceWidget
 from parsec.core.gui.parsec_application import ParsecApp
-from parsec.core.gui import telemetry
 from parsec.core.gui import desktop
 from parsec.core import win_registry
 from parsec.core.gui.changelog_widget import ChangelogWidget
@@ -397,7 +396,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def on_config_updated(self, event, **kwargs):
         self.config = self.config.evolve(**kwargs)
         save_config(self.config)
-        telemetry.init(self.config)
 
     def showMaximized(self, skip_dialogs=False, invitation_link=""):
         super().showMaximized()
@@ -409,19 +407,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         # At the very first launch
         if self.config.gui_first_launch:
-            r = ask_question(
-                self,
-                _("TEXT_ERROR_REPORTING_TITLE"),
-                _("TEXT_ERROR_REPORTING_INSTRUCTIONS"),
-                [_("ACTION_ERROR_REPORTING_ACCEPT"), _("ACTION_NO")],
-            )
-
-            # Acknowledge the changes
             self.event_bus.send(
                 CoreEvent.GUI_CONFIG_CHANGED,
                 gui_first_launch=False,
-                gui_last_version=PARSEC_VERSION,
-                telemetry_enabled=r == _("ACTION_ERROR_REPORTING_ACCEPT"),
+                gui_last_version=PARSEC_VERSION
             )
 
         # For each parsec update
@@ -440,8 +429,6 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
             # Acknowledge the changes
             self.event_bus.send(CoreEvent.GUI_CONFIG_CHANGED, gui_last_version=PARSEC_VERSION)
-
-        telemetry.init(self.config)
 
         devices = list_available_devices(self.config.config_dir)
         if not len(devices) and not invitation_link:

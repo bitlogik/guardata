@@ -65,9 +65,6 @@ class CoreConfig:
     mountpoint_enabled: bool = False
     disabled_workspaces: FrozenSet[EntryID] = frozenset()
 
-    sentry_url: Optional[str] = None
-    telemetry_enabled: bool = True
-
     gui_last_device: Optional[str] = None
     gui_tray_enabled: bool = True
     gui_language: Optional[str] = None
@@ -98,7 +95,6 @@ def config_factory(
     backend_max_cooldown: int = 30,
     backend_connection_keepalive: Optional[int] = 29,
     backend_max_connections: int = 4,
-    telemetry_enabled: bool = True,
     debug: bool = False,
     gui_last_device: str = None,
     gui_tray_enabled: bool = True,
@@ -125,7 +121,6 @@ def config_factory(
         backend_max_connections=backend_max_connections,
         telemetry_enabled=telemetry_enabled,
         debug=debug,
-        sentry_url=environ.get("SENTRY_URL") or None,
         gui_last_device=gui_last_device,
         gui_tray_enabled=gui_tray_enabled,
         gui_language=gui_language,
@@ -206,7 +201,6 @@ def save_config(config: CoreConfig):
             {
                 "data_base_dir": str(config.data_base_dir),
                 "cache_base_dir": str(config.cache_base_dir),
-                "telemetry_enabled": config.telemetry_enabled,
                 "disabled_workspaces": list(map(str, config.disabled_workspaces)),
                 "backend_max_cooldown": config.backend_max_cooldown,
                 "backend_connection_keepalive": config.backend_connection_keepalive,

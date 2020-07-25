@@ -1048,27 +1048,17 @@ p, li { white-space: pre-wrap; }
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/settings_widget.ui" line="347"/>
-        <source>TEXT_SETTINGS_ERROR_REPORTING_TITLE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/settings_widget.ui" line="361"/>
-        <source>TEXT_SETTINGS_CHECK_SEND_CRASH_REPORT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/settings_widget.ui" line="400"/>
+        <location filename="../forms/settings_widget.ui" line="349"/>
         <source>TEXT_SETTINGS_INTERFACE_TITLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/settings_widget.ui" line="414"/>
+        <location filename="../forms/settings_widget.ui" line="363"/>
         <source>TEXT_SETTINGS_CHECK_USE_WORKSPACES_COLORS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/settings_widget.ui" line="504"/>
+        <location filename="../forms/settings_widget.ui" line="453"/>
         <source>ACTION_SAVE</source>
         <translation type="unfinished"></translation>
     </message>

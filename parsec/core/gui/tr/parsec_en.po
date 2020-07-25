@@ -1855,20 +1855,6 @@ msgstr "Please provide the link to bootstrap the organization."
 msgid "TEXT_BOOTSTRAP_ORG_URL_PLACEHOLDER"
 msgstr "parsec://parsec.example.com/my_org?action=bootstrap_organization&token=1234ABCD"
 
-msgid "TEXT_ERROR_REPORTING_TITLE"
-msgstr "Error reporting"
-
-msgid "TEXT_ERROR_REPORTING_INSTRUCTIONS"
-msgstr ""
-"PARSEC can automatically send information when it encounters an error. "
-"This information helps us improve your user experience.\n"
-"\n"
-"Do you allow PARSEC to automatically report errors? This can later be "
-"turned ON or OFF in the settings."
-
-msgid "ACTION_ERROR_REPORTING_ACCEPT"
-msgstr "Allow error reporting"
-
 msgid "TEXT_KICKSTART_PARSEC_WHAT_TO_DO_TITLE"
 msgstr "Welcome to Parsec!"
 
@@ -2280,9 +2266,6 @@ msgstr "Check for new versions on startup"
 
 msgid "ACTION_SETTINGS_CHECK_NEW_VERSION"
 msgstr "Check for new version now"
-
-msgid "TEXT_SETTINGS_ERROR_REPORTING_TITLE"
-msgstr "Error reporting"
 
 msgid "TEXT_SETTINGS_CHECK_SEND_CRASH_REPORT"
 msgstr "Automatically send reports on errors"

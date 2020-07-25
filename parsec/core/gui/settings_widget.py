@@ -33,7 +33,6 @@ class SettingsWidget(QWidget, Ui_SettingsWidget):
         if current:
             self.combo_languages.setCurrentText(current)
         self.check_box_check_at_startup.setChecked(self.core_config.gui_check_version_at_startup)
-        self.check_box_send_data.setChecked(self.core_config.telemetry_enabled)
         self.check_box_workspace_color.setChecked(self.core_config.gui_workspace_color)
         self.button_check_version.clicked.connect(self.check_version)
 
@@ -44,7 +43,6 @@ class SettingsWidget(QWidget, Ui_SettingsWidget):
     def save(self):
         self.event_bus.send(
             CoreEvent.GUI_CONFIG_CHANGED,
-            telemetry_enabled=self.check_box_send_data.isChecked(),
             gui_tray_enabled=self.check_box_tray.isChecked(),
             gui_language=self.combo_languages.currentData(),
             gui_check_version_at_startup=self.check_box_check_at_startup.isChecked(),

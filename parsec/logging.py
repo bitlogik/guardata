@@ -3,8 +3,6 @@
 import re
 import structlog
 import logging
-import sentry_sdk
-from sentry_sdk.integrations.logging import LoggingIntegration
 
 from parsec import __version__
 
@@ -76,15 +74,3 @@ def configure_logging(log_level=None, log_format=None, log_file=None, log_filter
     root_logger.addHandler(handler)
     if log_level is not None:
         root_logger.setLevel(log_level.upper())
-
-
-def configure_sentry_logging(sentry_url):
-    sentry_logging = LoggingIntegration(
-        level=logging.WARNING,  # Capture warning and above as breadcrumbs
-        event_level=logging.ERROR,  # Send errors as events
-    )
-    sentry_sdk.init(dsn=sentry_url, integrations=[sentry_logging], release=__version__)
-
-
-def disable_sentry_logging():
-    sentry_sdk.init(dsn=None)
