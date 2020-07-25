@@ -387,22 +387,6 @@ msgstr "Défaut: log dans stderr"
 msgid "The log file to write to."
 msgstr "Le fichier de log dans lequel écrire."
 
-#: ../../hosting_server.rst:192
-msgid "Sentry"
-msgstr "Sentry"
-
-#: ../../hosting_server.rst:194
-msgid "``--sentry-url <url>``"
-msgstr ""
-
-#: ../../hosting_server.rst:195
-msgid "Environ: ``PARSEC_SENTRY_URL``"
-msgstr ""
-
-#: ../../hosting_server.rst:197
-msgid "`Sentry <https://sentry.io/>`_ URL for telemetry report."
-msgstr "URL de `Sentry <https://sentry.io/>`_ utilisé pour la télémétrie."
-
 #: ../../hosting_server.rst:200
 msgid "Debug"
 msgstr "Débogage"

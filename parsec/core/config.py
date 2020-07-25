@@ -119,7 +119,6 @@ def config_factory(
         backend_max_cooldown=backend_max_cooldown,
         backend_connection_keepalive=backend_connection_keepalive,
         backend_max_connections=backend_max_connections,
-        telemetry_enabled=telemetry_enabled,
         debug=debug,
         gui_last_device=gui_last_device,
         gui_tray_enabled=gui_tray_enabled,

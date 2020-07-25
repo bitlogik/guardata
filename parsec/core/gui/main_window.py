@@ -410,7 +410,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.event_bus.send(
                 CoreEvent.GUI_CONFIG_CHANGED,
                 gui_first_launch=False,
-                gui_last_version=PARSEC_VERSION
+                gui_last_version=PARSEC_VERSION,
             )
 
         # For each parsec update
