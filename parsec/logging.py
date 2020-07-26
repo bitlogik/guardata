@@ -4,8 +4,6 @@ import re
 import structlog
 import logging
 
-from parsec import __version__
-
 
 _log_level = None
 
