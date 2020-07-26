@@ -9,6 +9,7 @@ from collections import defaultdict
 
 from parsec.utils import trio_run
 from parsec.cli_utils import cli_exception_handler
+from parsec.logging import configure_logging
 from parsec.backend import backend_app_factory
 from parsec.backend.config import (
     BackendConfig,

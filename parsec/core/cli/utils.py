@@ -6,6 +6,7 @@ from typing import List
 from functools import wraps
 from pathlib import Path
 
+from parsec.logging import configure_logging
 from parsec.core.config import get_default_config_dir, load_config
 from parsec.core.local_device import (
     AvailableDevice,
