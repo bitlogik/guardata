@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+import re
 import trio
 from pathlib import Path
 from pendulum import Pendulum, now as pendulum_now
@@ -9,6 +9,7 @@ from structlog import get_logger
 
 from async_generator import asynccontextmanager
 
+from parsec.core.core_events import CoreEvent
 from parsec.event_bus import EventBus
 from parsec.crypto import SecretKey
 from parsec.api.data import (
@@ -152,12 +153,14 @@ class UserFS:
         backend_cmds: Union[APIV1_BackendAuthenticatedCmds, BackendAuthenticatedCmds],
         remote_devices_manager: RemoteDevicesManager,
         event_bus: EventBus,
+        pattern_filter: re.Pattern,
     ):
         self.device = device
         self.path = path
         self.backend_cmds = backend_cmds
         self.remote_devices_manager = remote_devices_manager
         self.event_bus = event_bus
+        self.pattern_filter = pattern_filter
 
         self.storage: UserStorage  # Setup by UserStorage.run factory
 
@@ -262,7 +265,7 @@ class UserFS:
         local_storage = await self._instantiate_workspace_storage(workspace_id)
 
         # Instantiate the workspace
-        return WorkspaceFS(
+        workspace = WorkspaceFS(
             workspace_id=workspace_id,
             get_workspace_entry=get_workspace_entry,
             device=self.device,
@@ -271,6 +274,11 @@ class UserFS:
             event_bus=self.event_bus,
             remote_devices_manager=self.remote_devices_manager,
         )
+
+        # Apply the current filter
+        await workspace.set_and_apply_pattern_filter(self.pattern_filter)
+
+        return workspace
 
     async def _create_workspace(
         self, workspace_id: EntryID, manifest: LocalWorkspaceManifest
