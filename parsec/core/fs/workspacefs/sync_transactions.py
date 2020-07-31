@@ -1,7 +1,8 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
+import re
 from itertools import count
-from typing import Optional, List, Dict, AsyncIterator, cast, Tuple, Any, Union, Callable
+from typing import Optional, List, Dict, AsyncIterator, cast, Tuple, Any, Union
 
 from pendulum import now as pendulum_now
 
@@ -142,12 +143,13 @@ def merge_folder_children(
 
 def merge_manifests(
     local_author: DeviceID,
-    pattern_filter: Callable[[str], bool],
+    pattern_filter: re.Pattern,
     local_manifest: LocalManifest,
     remote_manifest: Optional[RemoteManifest] = None,
+    force_filter: Optional[bool] = False,
 ):
     # Start by re-applying filter (idempotent)
-    if is_folderish_manifest(local_manifest):
+    if is_folderish_manifest(local_manifest) and force_filter:
         local_manifest = local_manifest.apply_filter(pattern_filter)
 
     # The remote hasn't changed
@@ -219,6 +221,17 @@ class SyncTransactions(EntryTransactions):
 
     # Atomic transactions
 
+    async def apply_filter(self, entry_id: EntryID, pattern_filter: re.Pattern) -> None:
+        # Fetch and lock
+        async with self.local_storage.lock_manifest(entry_id) as local_manifest:
+
+            # Craft new local manifest
+            new_local_manifest = local_manifest.apply_filter(pattern_filter)
+
+            # Set the new base manifest
+            if new_local_manifest != local_manifest:
+                await self.local_storage.set_manifest(entry_id, new_local_manifest)
+
     async def synchronization_step(
         self,
         entry_id: EntryID,
@@ -270,8 +283,10 @@ class SyncTransactions(EntryTransactions):
                 assert local_manifest.is_reshaped()
 
             # Merge manifests
+            pattern_filter = self.local_storage.get_pattern_filter()
+            force_filter = not self.local_storage.get_pattern_filter_fully_applied()
             new_local_manifest = merge_manifests(
-                self.local_author, self.pattern_filter, local_manifest, remote_manifest
+                self.local_author, pattern_filter, local_manifest, remote_manifest, force_filter
             )
 
             # Extract authors
@@ -362,7 +377,8 @@ class SyncTransactions(EntryTransactions):
                     size=current_manifest.size, blocks=new_blocks
                 )
                 new_parent_manifest = parent_manifest.evolve_children_and_mark_updated(
-                    {new_name: new_manifest.id}, self.pattern_filter
+                    {new_name: new_manifest.id},
+                    pattern_filter=self.local_storage.get_pattern_filter(),
                 )
                 other_manifest = LocalManifest.from_remote(remote_manifest)
 
