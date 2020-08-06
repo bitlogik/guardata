@@ -27,7 +27,7 @@ from parsec.core.fs.utils import is_file_manifest
 
 __all__ = "SyncTransactions"
 
-DEFAULT_BLOCK_SIZE = 512 * 1024  # 512Ko
+DEFAULT_BLOCK_SIZE = 4096 * 1024  # 4 MB
 
 
 # Helpers

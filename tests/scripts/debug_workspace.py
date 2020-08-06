@@ -43,7 +43,7 @@ async def make_workspace_dir_complex_versions(device, workspace, path):
 async def benchmark_file_writing(device, workspace):
     # Touch file
     path = "/foo"
-    block_size = 512 * 1024
+    block_size = 4096 * 1024
     file_size = 64 * 1024 * 1024
     await workspace.touch(path)
     info = await workspace.path_info(path)

@@ -36,7 +36,7 @@ __all__ = (
 )
 
 
-DEFAULT_BLOCK_SIZE = 512 * 1024  # 512 KB
+DEFAULT_BLOCK_SIZE = 4096 * 1024  # 4 MB
 
 
 # Cheap rename
