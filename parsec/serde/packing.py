@@ -15,7 +15,7 @@ from msgpack.exceptions import ExtraData, FormatError, StackError
 from parsec.serde.exceptions import SerdePackingError
 
 
-MAX_BIN_LEN = 4 * 1024 * 1024  # 4 MB
+MAX_BIN_LEN = 8 * 1024 * 1024  # 2*4 MB (>150% 4MB)
 
 
 def packb(data: dict, exc_cls=SerdePackingError) -> bytes:
