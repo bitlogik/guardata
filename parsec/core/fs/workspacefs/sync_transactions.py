@@ -149,7 +149,7 @@ def merge_manifests(
 ):
     # Start by re-applying filter (idempotent)
     if is_folderish_manifest(local_manifest) and force_filter:
-        local_manifest = local_manifest.apply_filter(pattern_filter)
+        local_manifest = cast(LocalFolderishManifests, local_manifest).apply_filter(pattern_filter)
 
     # The remote hasn't changed
     if remote_manifest is None or remote_manifest.version <= local_manifest.base_version:
@@ -255,6 +255,7 @@ class SyncTransactions(EntryTransactions):
             current_manifest = local_manifest
             while not is_workspace_manifest(current_manifest):
                 parent_manifest = await self.local_storage.get_manifest(current_manifest.parent)
+                parent_manifest = cast(LocalFolderishManifests, parent_manifest)
 
                 # The entry is not confined
                 if current_manifest.id not in parent_manifest.confined_entries:

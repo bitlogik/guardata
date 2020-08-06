@@ -88,8 +88,9 @@ class EntryTransactions(FileTransactions):
             manifest = await self._load_manifest(entry_id)
             if is_file_manifest(manifest):
                 raise FSNotADirectoryError(filename=path)
+            manifest = cast(LocalFolderishManifests, manifest)
             try:
-                entry_id = cast(LocalFolderishManifests, manifest).children[name]
+                entry_id = manifest.children[name]
             except (AttributeError, KeyError):
                 raise FSFileNotFoundError(filename=path)
             if entry_id in manifest.confined_entries:

@@ -64,6 +64,10 @@ class BaseWorkspaceStorage:
         self.block_storage = block_storage
         self.chunk_storage = chunk_storage
 
+        # Pattern attributes
+        self._pattern_filter: Optional[Pattern] = None
+        self._pattern_filter_fully_applied: bool = False
+
     def _get_next_fd(self) -> FileDescriptor:
         self.fd_counter += 1
         return FileDescriptor(self.fd_counter)
@@ -154,24 +158,12 @@ class BaseWorkspaceStorage:
 
     # Pattern filter interface
 
-    async def _load_pattern_filter(self) -> None:
-        self._pattern_filter, self._pattern_filter_fully_applied = (
-            await self.manifest_storage.get_pattern_filter()
-        )
-
     def get_pattern_filter(self) -> Pattern:
+        assert self._pattern_filter is not None
         return self._pattern_filter
 
     def get_pattern_filter_fully_applied(self) -> bool:
         return self._pattern_filter_fully_applied
-
-    async def set_pattern_filter(self, pattern: Pattern) -> None:
-        await self.manifest_storage.set_pattern_filter(pattern)
-        await self._load_pattern_filter()
-
-    async def set_pattern_filter_fully_applied(self, pattern: Pattern):
-        await self.manifest_storage.set_pattern_filter_fully_applied(pattern)
-        await self._load_pattern_filter()
 
 
 class WorkspaceStorage(BaseWorkspaceStorage):
@@ -198,10 +190,6 @@ class WorkspaceStorage(BaseWorkspaceStorage):
         self.data_localdb = data_localdb
         self.cache_localdb = cache_localdb
         self.manifest_storage = manifest_storage
-
-        # Pattern attributes
-        self._pattern_filter = None
-        self._pattern_filter_fully_applied = None
 
     @classmethod
     @asynccontextmanager
@@ -303,6 +291,21 @@ class WorkspaceStorage(BaseWorkspaceStorage):
     async def clear_manifest(self, entry_id: EntryID) -> None:
         self._check_lock_status(entry_id)
         await self.manifest_storage.clear_manifest(entry_id)
+
+    # Pattern filter interface
+
+    async def _load_pattern_filter(self) -> None:
+        self._pattern_filter, self._pattern_filter_fully_applied = (
+            await self.manifest_storage.get_pattern_filter()
+        )
+
+    async def set_pattern_filter(self, pattern: Pattern) -> None:
+        await self.manifest_storage.set_pattern_filter(pattern)
+        await self._load_pattern_filter()
+
+    async def set_pattern_filter_fully_applied(self, pattern: Pattern):
+        await self.manifest_storage.set_pattern_filter_fully_applied(pattern)
+        await self._load_pattern_filter()
 
     # Vacuum
 
