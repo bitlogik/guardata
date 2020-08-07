@@ -15,7 +15,7 @@ import math
 
 PROJECT_DIR = pathlib.Path(__file__).resolve().parent.parent
 HISTORY_FILE = PROJECT_DIR / "HISTORY.rst"
-VERSION_FILE = PROJECT_DIR / "guardata/_version.py"
+VERSION_FILE = PROJECT_DIR / "parsec/_version.py"
 FRAGMENTS_DIR = PROJECT_DIR / "newsfragments"
 FRAGMENT_TYPES = {
     "feature": "Features",
