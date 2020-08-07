@@ -17,7 +17,7 @@
   </property>
   <property name="windowIcon">
    <iconset resource="../rc/resources.qrc">
-    <normaloff>:/logos/images/icons/parsec.png</normaloff>:/logos/images/icons/parsec.png</iconset>
+    <normaloff>:/logos/images/icons/guardata.png</normaloff>:/logos/images/icons/guardata.png</iconset>
   </property>
   <property name="autoFillBackground">
    <bool>true</bool>
