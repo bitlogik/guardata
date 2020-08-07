@@ -38,7 +38,7 @@ windows-tests:
     - python.exe setup.py bdist_wheel
     - rm -R -Force parsec
       # Install the parsec wheel with all dependencies
-    - $WHLfiles = Get-ChildItem "dist\parsec_cloud-*.whl" | ForEach-Object {$_.Name}
+    - $WHLfiles = Get-ChildItem "dist\guardata-*.whl" | ForEach-Object {$_.Name}
     - python.exe -m pip install "dist\$WHLfiles[all]"
       # Check dependency compatibility
     - python.exe -m pip check parsec[all]
@@ -69,7 +69,7 @@ pip-build:
   script:
     - source venv_test/bin/activate
     - pip3 install -r pre-requirements.txt
-    - pip3 install $(ls dist/parsec_cloud-*.whl)[all]
+    - pip3 install $(ls dist/guardata-*.whl)[all]
     - mkdir empty
     - cd empty
     - parsec --version
@@ -81,12 +81,12 @@ pip-build:
     #  password = $PYPI_CREDENTIALS
     #  " > ~/.pypirc
     #  pip3 install twine
-    #  twine upload dist/parsec_cloud-*.whl
+    #  twine upload dist/guardata-*.whl
     #env:
     #  PYPI_CREDENTIALS: $(PYPI_CREDENTIALS)
   artifacts:
     paths:
-      - dist/parsec_cloud-*.whl
+      - dist/guardata-*.whl
 
 windows-build:
   extends:
