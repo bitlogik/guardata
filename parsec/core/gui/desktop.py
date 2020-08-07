@@ -16,16 +16,16 @@ def open_url(url):
     QDesktopServices.openUrl(QUrl(url))
 
 
-def open_doc_link():
-    open_url("SOON")
+# def open_doc_link():
+    # open_url("SOON")
 
 
 def open_feedback_link():
-    open_url("https://my.parsec.cloud/feedback")
+    open_url("https://guardata.app/queryform")
 
 
-def open_user_guide():
-    open_url("https://parsec.cloud")
+# def open_user_guide():
+    # open_url("https://USERGUIDE")
 
 
 def get_default_device():

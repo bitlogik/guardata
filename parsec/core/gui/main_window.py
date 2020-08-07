@@ -112,8 +112,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.shortcut_settings.activated.connect(self._shortcut_proxy(self._show_settings))
         self.shortcut_menu = QShortcut(QKeySequence(_("Alt+E")), self)
         self.shortcut_menu.activated.connect(self._shortcut_proxy(self._show_menu))
-        self.shortcut_help = QShortcut(QKeySequence(QKeySequence.HelpContents), self)
-        self.shortcut_help.activated.connect(self._shortcut_proxy(self._on_show_doc_clicked))
+        # self.shortcut_help = QShortcut(QKeySequence(QKeySequence.HelpContents), self)
+        # self.shortcut_help.activated.connect(self._shortcut_proxy(self._on_show_doc_clicked))
         self.shortcut_quit = QShortcut(QKeySequence(QKeySequence.Quit), self)
         self.shortcut_quit.activated.connect(self._shortcut_proxy(self.close_app))
         self.shortcut_create_org = QShortcut(QKeySequence(QKeySequence.New), self)
@@ -191,15 +191,15 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         action.setShortcut(self.shortcut_settings.key())
         action.setShortcutVisibleInContextMenu(True)
 
-        action = menu.addAction(_("ACTION_MAIN_MENU_OPEN_DOCUMENTATION"))
-        action.triggered.connect(self._on_show_doc_clicked)
-        action.setShortcut(self.shortcut_help.key())
-        action.setShortcutVisibleInContextMenu(True)
+        # action = menu.addAction(_("ACTION_MAIN_MENU_OPEN_DOCUMENTATION"))
+        # action.triggered.connect(self._on_show_doc_clicked)
+        # action.setShortcut(self.shortcut_help.key())
+        # action.setShortcutVisibleInContextMenu(True)
 
         action = menu.addAction(_("ACTION_MAIN_MENU_ABOUT"))
         action.triggered.connect(self._show_about)
-        action = menu.addAction(_("ACTION_MAIN_MENU_CHANGELOG"))
-        action.triggered.connect(self._show_changelog)
+        # action = menu.addAction(_("ACTION_MAIN_MENU_CHANGELOG"))
+        # action.triggered.connect(self._show_changelog)
         action = menu.addAction(_("ACTION_MAIN_MENU_LICENSE"))
         action.triggered.connect(self._show_license)
         action = menu.addAction(_("ACTION_MAIN_MENU_FEEDBACK_SEND"))
@@ -226,18 +226,18 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         d = GreyedDialog(w, title=_("TEXT_LICENSE_TITLE"), parent=self, width=1000)
         d.exec_()
 
-    def _show_changelog(self):
-        w = ChangelogWidget()
-        d = GreyedDialog(w, title=_("TEXT_CHANGELOG_TITLE"), parent=self, width=1000)
-        d.exec_()
+    # def _show_changelog(self):
+        # w = ChangelogWidget()
+        # d = GreyedDialog(w, title=_("TEXT_CHANGELOG_TITLE"), parent=self, width=1000)
+        # d.exec_()
 
     def _show_settings(self):
         w = SettingsWidget(self.config, self.jobs_ctx, self.event_bus)
         d = GreyedDialog(w, title=_("TEXT_SETTINGS_TITLE"), parent=self, width=1000)
         d.exec_()
 
-    def _on_show_doc_clicked(self):
-        desktop.open_doc_link()
+    # def _on_show_doc_clicked(self):
+        # desktop.open_doc_link()
 
     def _on_send_feedback_clicked(self):
         desktop.open_feedback_link()

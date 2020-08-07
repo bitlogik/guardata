@@ -72,7 +72,7 @@ class CreateOrgWidget(QWidget, Ui_CreateOrgWidget):
         self.req_job = None
         self.dialog = None
         self.status = None
-        self.button_validate.clicked.connect(self._validate_clicked)
+        self.button_validate.clicked.connect(self._previous_clicked)
         self.button_previous.clicked.connect(self._previous_clicked)
         self.button_previous.hide()
         self.current_widget = CreateOrgSecondPageWidget()
@@ -80,7 +80,7 @@ class CreateOrgWidget(QWidget, Ui_CreateOrgWidget):
         self.current_widget.line_edit_user_email.textChanged.connect(self._check_infos)
         self.current_widget.line_edit_org_name.textChanged.connect(self._check_infos)
         self.current_widget.check_accept_contract.clicked.connect(self._check_infos)
-        self.button_validate.setEnabled(False)
+        self.button_validate.setEnabled(True)
         self.req_success.connect(self._on_req_success)
         self.req_error.connect(self._on_req_error)
 
@@ -144,36 +144,36 @@ class CreateOrgWidget(QWidget, Ui_CreateOrgWidget):
         self.button_validate.setEnabled(True)
         self.button_previous.show()
 
-    def _validate_clicked(self):
-        if isinstance(self.current_widget, CreateOrgFirstPageWidget):
-            if self.current_widget.radio_bootstrap_org.isChecked():
-                self.status = ""
-                if self.dialog:
-                    self.dialog.accept()
-                elif QApplication.activeModalWidget():
-                    QApplication.activeModalWidget().accept()
-                else:
-                    logger.warning("Cannot close dialog when org wizard")
-            else:
-                self.button_validate.setText(_("ACTION_CREATE_ORGANIZATION"))
-                self.button_previous.show()
-                self._clear_page()
-                self.current_widget = CreateOrgSecondPageWidget()
-                self.main_layout.addWidget(self.current_widget)
-                self.current_widget.line_edit_user_email.textChanged.connect(self._check_infos)
-                self.current_widget.line_edit_org_name.textChanged.connect(self._check_infos)
-                self.current_widget.check_accept_contract.clicked.connect(self._check_infos)
-                self.button_validate.setEnabled(False)
-        elif isinstance(self.current_widget, CreateOrgSecondPageWidget):
-            self.req_job = self.jobs_ctx.submit_job(
-                ThreadSafeQtSignal(self, "req_success"),
-                ThreadSafeQtSignal(self, "req_error"),
-                _do_api_request,
-                email=self.current_widget.line_edit_user_email.text(),
-                organization_id=self.current_widget.line_edit_org_name.text(),
-            )
-            self.button_validate.setEnabled(False)
-            self.button_previous.hide()
+    # def _validate_clicked(self):
+        # if isinstance(self.current_widget, CreateOrgFirstPageWidget):
+            # if self.current_widget.radio_bootstrap_org.isChecked():
+                # self.status = ""
+                # if self.dialog:
+                    # self.dialog.accept()
+                # elif QApplication.activeModalWidget():
+                    # QApplication.activeModalWidget().accept()
+                # else:
+                    # logger.warning("Cannot close dialog when org wizard")
+            # else:
+                # self.button_validate.setText(_("ACTION_CREATE_ORGANIZATION"))
+                # self.button_previous.show()
+                # self._clear_page()
+                # self.current_widget = CreateOrgSecondPageWidget()
+                # self.main_layout.addWidget(self.current_widget)
+                # self.current_widget.line_edit_user_email.textChanged.connect(self._check_infos)
+                # self.current_widget.line_edit_org_name.textChanged.connect(self._check_infos)
+                # self.current_widget.check_accept_contract.clicked.connect(self._check_infos)
+                # self.button_validate.setEnabled(False)
+        # elif isinstance(self.current_widget, CreateOrgSecondPageWidget):
+            # self.req_job = self.jobs_ctx.submit_job(
+                # ThreadSafeQtSignal(self, "req_success"),
+                # ThreadSafeQtSignal(self, "req_error"),
+                # _do_api_request,
+                # email=self.current_widget.line_edit_user_email.text(),
+                # organization_id=self.current_widget.line_edit_org_name.text(),
+            # )
+            # self.button_validate.setEnabled(False)
+            # self.button_previous.hide()
 
     def _previous_clicked(self):
         self._clear_page()
