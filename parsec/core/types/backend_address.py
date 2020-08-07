@@ -12,7 +12,7 @@ from parsec.api.data import EntryID
 from parsec.core.types.base import FsPath
 
 
-GUARDATA_SCHEME = "parsec"
+PARSEC_SCHEME = "parsec"
 
 
 class BackendAddr:
@@ -54,8 +54,8 @@ class BackendAddr:
     def from_url(cls, url: str):
         split = urlsplit(url)
 
-        if split.scheme != GUARDATA_SCHEME:
-            raise ValueError(f"Must start with `{GUARDATA_SCHEME}://`")
+        if split.scheme != PARSEC_SCHEME:
+            raise ValueError(f"Must start with `{PARSEC_SCHEME}://`")
 
         if split.query:
             # Note `parse_qs` takes care of percent-encoding
@@ -105,7 +105,7 @@ class BackendAddr:
         else:
             netloc = self.hostname
         query = urlencode(self._to_url_get_params())
-        return urlunsplit((GUARDATA_SCHEME, netloc, quote_plus(self._to_url_get_path()), query, None))
+        return urlunsplit((PARSEC_SCHEME, netloc, quote_plus(self._to_url_get_path()), query, None))
 
     def _to_url_get_path(self):
         return ""
