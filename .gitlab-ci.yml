@@ -8,6 +8,8 @@
 linux-tests:
   image: ubuntu:focal
   stage: test
+  except:
+    - tags
   before_script:
     - apt-get -y update
     - DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install python3-pip python3-venv fuse postgresql postgresql-contrib desktop-file-utils libgl1-mesa-glx xdg-utils libffi-dev
@@ -24,6 +26,8 @@ windows-tests:
   extends:
     - .shared_windows_runners
   stage: test
+  except:
+    - tags
   before_script:
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - choco install -y python --version=3.7.8
