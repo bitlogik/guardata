@@ -1684,10 +1684,10 @@ msgid "ACTION_CREATE_ORGANIZATION"
 msgstr "Créer l'organisation"
 
 msgid "ACTION_NEXT"
-msgstr "Suivant"
+msgstr "Retour"
 
 msgid "TEXT_ORG_WIZARD_TITLE"
-msgstr "Créer une nouvelle organisation"
+msgstr "Enregistrement"
 
 msgid "ACTION_SYSTRAY_SHOW_WINDOW"
 msgstr "Afficher guardata"
@@ -1704,7 +1704,7 @@ msgstr ""
 "ordinateur."
 
 msgid "TEXT_LOGIN_NO_DEVICE_ON_MACHINE"
-msgstr "Vous n'avez aucun appareil sur cet ordinateur."
+msgstr "Vous n'avez aucun compte sur cet ordinateur."
 
 msgid "ACTION_LOGGING_IN"
 msgstr "En cours de connexion..."
@@ -1848,10 +1848,10 @@ msgid "ACTION_MAIN_MENU_ADD_INSTANCE"
 msgstr "Ouvrir un nouvel onglet"
 
 msgid "ACTION_MAIN_MENU_CREATE_ORGANIZATION"
-msgstr "Créer une organisation"
+msgstr "S'enregistrer pour commencer"
 
 msgid "ACTION_MAIN_MENU_JOIN_ORGANIZATION"
-msgstr "Rejoindre une organisation"
+msgstr "Première connexion"
 
 msgid "ACTION_MAIN_MENU_SETTINGS"
 msgstr "Configuration"
@@ -1884,13 +1884,13 @@ msgid "TEXT_SETTINGS_TITLE"
 msgstr "Configuration"
 
 msgid "TEXT_JOIN_ORG_URL_TITLE"
-msgstr "Rejoindre une organisation"
+msgstr "Rejoindre un groupe"
 
 msgid "TEXT_JOIN_ORG_URL_INSTRUCTIONS"
-msgstr "Veuillez fournir l'URL pour joindre l'organisation."
+msgstr "Veuillez fournir l'URL pour joindre le groupe."
 
 msgid "TEXT_JOIN_ORG_URL_PLACEHOLDER"
-msgstr "parsec://hote:port/organisation?action=action&..."
+msgstr "parsec://hote/organisation?action=action&..."
 
 msgid "TEXT_JOIN_ORG_INVALID_URL"
 msgstr "L'URL n'est pas valide."
@@ -1926,13 +1926,13 @@ msgid "TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_TITLE"
 msgstr "Bienvenue dans guardata !"
 
 msgid "TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_INSTRUCTIONS"
-msgstr "Vous semblez être un nouvel utilisateur. Que souhaitez vous faire ?"
+msgstr "Vous semblez être un nouvel utilisateur. Que souhaitez-vous faire ?"
 
 msgid "ACTION_NO_DEVICE_CREATE_ORGANIZATION"
-msgstr "Je souhaite créer une nouvelle organisation"
+msgstr "Je souhaite m'enregistrer pour commencer à utiliser guardata"
 
 msgid "ACTION_NO_DEVICE_JOIN_ORGANIZATION"
-msgstr "Je souhaite rejoindre une organisation existante"
+msgstr "Je souhaite effectuer une première connexion et rejoindre un groupe existant"
 
 msgid "TEXT_TAB_TITLE_LOG_IN_SCREEN"
 msgstr "Connexion"
@@ -2103,20 +2103,19 @@ msgstr ""
 "organisation"
 
 msgid "TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS"
-msgstr ""
-"Veuillez saisir votre adresse email et le nom désiré de votre "
-"organisation."
+msgstr "Si votre groupe n'existe pas encore, vous devez le créer sur le site web de guardata."
+"<a href=\"https://guardata.app/register\" "
+"title=\"Enregistrer votre groupe\">
+"CREER MON GROUPE"
+"</a>"
+"Ensuite, vous pourrez effectuer une première connexion au retour, en donnant un lien parsec."
 
 msgid "TEXT_LABEL_ORG_NAME"
 msgstr "Nom de l'organisation"
 
 msgid "ACTION_ACCEPT_CONTRACT"
 msgstr ""
-"J'accepte la <a href=\"https://parsec.cloud/pdf/Parsec-Privacy-Policy-fr.pdf\""
-" title=\"Politique de confidentialité\">Politique de Confidentialité</a> et les <a "
-"href=\"https://parsec.cloud/pdf/Parsec-CGVU-fr.pdf\" "
-"title=\"Condition Générales de vente ou d'Utilisation\">conditions générales de vente ou "
-"d'utilisation</a> de guardata"
+""
 
 msgid "ACTION_PREVIOUS"
 msgstr "Précédent"
