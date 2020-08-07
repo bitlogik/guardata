@@ -378,16 +378,6 @@
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/create_org_second_page_widget.ui" line="54"/>
-        <source>TEXT_LABEL_USER_EMAIL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/create_org_second_page_widget.ui" line="96"/>
-        <source>TEXT_LABEL_ORG_NAME</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
         <location filename="../forms/create_org_second_page_widget.ui" line="187"/>
         <source>ACTION_ACCEPT_CONTRACT</source>
         <translation type="unfinished"></translation>
