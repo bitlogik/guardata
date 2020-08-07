@@ -19,7 +19,7 @@
 !ifndef GUARDATA_FREEZE_BUILD_DIR
    !error "Cannot find freeze build directory"
 !endif
-!searchparse /file ${BUILD_DIR}/BUILD.tmp `parsec_version = "` PROGRAM_VERSION `"`
+!searchparse /file ${BUILD_DIR}/BUILD.tmp `guardata_version = "` PROGRAM_VERSION `"`
 !ifndef PROGRAM_VERSION
    !error "Program Version Undefined"
 !endif
@@ -238,12 +238,12 @@ Section "WinFSP" Section2
       # WinFSP is not installed
       !insertmacro InstallWinFSP
     ${Else}
-        ${VersionCompare} $0 "1.3.0" $R0
+        ${VersionCompare} $0 "1.7.0" $R0
         ${VersionCompare} $0 "2.0.0" $R1
         ${If} $R0 == 2
             ${OrIf} $R1 == 1
                 ${OrIf} $R1 == 0
-                  # Incorrect WinSFP version (<1.4.0 or >=2.0.0)
+                  # Incorrect WinSFP version (<1.7.0 or >=2.0.0)
                   !insertmacro InstallWinFSP
         ${EndIf}
     ${EndIf}
@@ -271,7 +271,7 @@ SectionEnd
 # LangString DESC_Section1 ${LANG_ENGLISH} "Install guardata."
 # LangString DESC_Section2 ${LANG_ENGLISH} "Install WinFSP."
 # LangString DESC_Section3 ${LANG_ENGLISH} "Let guardata handle parsec:// URI links from the web-browser."
-# LangString DESC_Section4 ${LANG_ENGLISH} "Remove obsolete entries from outdated parsec installation."
+# LangString DESC_Section4 ${LANG_ENGLISH} "Remove obsolete entries from outdated guardata installation."
 # !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
 #     !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
 #     !insertmacro MUI_DESCRIPTION_TEXT ${Section2} $(DESC_Section2)

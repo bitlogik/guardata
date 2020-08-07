@@ -350,7 +350,7 @@ setup(
     author="BitLogiK",
     author_email="contact@bitlogik.fr",
     url="https://guardata.app",
-    python_requires="~=3.6",
+    python_requires='>=3.6',
     packages=find_packages(include=["guardata", "parsec.*"]),
     package_dir={"guardata": "guardata"},
     setup_requires=[WHEEL_DEP, PYQT_DEP, BABEL_DEP, DOCUTILS_DEP],  # To generate resources bundle
