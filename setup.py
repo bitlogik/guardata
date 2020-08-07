@@ -352,7 +352,7 @@ setup(
     url="https://guardata.app",
     python_requires='>=3.6',
     packages=find_packages(include=["parsec", "parsec.*"]),
-    package_dir={"guardata": "parsec"},
+    package_dir={"guardata": "guardata"},
     setup_requires=[WHEEL_DEP, PYQT_DEP, BABEL_DEP, DOCUTILS_DEP],  # To generate resources bundle
     install_requires=requirements,
     extras_require=extra_requirements,
