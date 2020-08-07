@@ -16,7 +16,7 @@ class Systray(QSystemTrayIcon):
 
         self.menu = QMenu()
         self.show_action = self.menu.addAction(_("ACTION_SYSTRAY_SHOW_WINDOW"))
-        self.close_action = self.menu.addAction(_("ACTION_SYSTRAY_QUIT_PARSEC"))
+        self.close_action = self.menu.addAction(_("ACTION_SYSTRAY_QUIT_guardata"))
 
         self.on_show = self.show_action.triggered
         self.on_close = self.close_action.triggered

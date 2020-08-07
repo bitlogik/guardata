@@ -185,7 +185,7 @@ class DevOption(click.Option):
     "-H",
     default="127.0.0.1",
     show_default=True,
-    envvar="PARSEC_HOST",
+    envvar="GUARDATA_HOST",
     help="Host to listen on",
 )
 @click.option(
@@ -194,13 +194,13 @@ class DevOption(click.Option):
     default=6777,
     type=int,
     show_default=True,
-    envvar="PARSEC_PORT",
+    envvar="GUARDATA_PORT",
     help="Port to listen on",
 )
 @click.option(
     "--db",
     required=True,
-    envvar="PARSEC_DB",
+    envvar="GUARDATA_DB",
     help="""Database configuration.
 Allowed values:
 -`MOCKED`: Mocked in memory
@@ -211,28 +211,28 @@ Allowed values:
     "--db-min-connections",
     default=5,
     show_default=True,
-    envvar="PARSEC_DB_MIN_CONNECTIONS",
+    envvar="GUARDATA_DB_MIN_CONNECTIONS",
     help="Minimal number of connections to the database if using PostgreSQL",
 )
 @click.option(
     "--db-max-connections",
     default=7,
     show_default=True,
-    envvar="PARSEC_DB_MAX_CONNECTIONS",
+    envvar="GUARDATA_DB_MAX_CONNECTIONS",
     help="Maximum number of connections to the database if using PostgreSQL",
 )
 @click.option(
     "--db-first-tries-number",
     default=1,
     show_default=True,
-    envvar="PARSEC_DB_FIRST_TRIES_NUMBER",
+    envvar="GUARDATA_DB_FIRST_TRIES_NUMBER",
     help="Number of tries allowed during initial database connection (0 is unlimited)",
 )
 @click.option(
     "--db-first-tries-sleep",
     default=1,
     show_default=True,
-    envvar="PARSEC_DB_FIRST_TRIES_SLEEP",
+    envvar="GUARDATA_DB_FIRST_TRIES_SLEEP",
     help="Number of second waited between tries during initial database connection",
 )
 @click.option(
@@ -241,7 +241,7 @@ Allowed values:
     required=True,
     multiple=True,
     callback=lambda ctx, param, value: _parse_blockstore_params(value),
-    envvar="PARSEC_BLOCKSTORE",
+    envvar="GUARDATA_BLOCKSTORE",
     help="""Blockstore configuration.
 Allowed values:
 -`MOCKED`: Mocked in memory
@@ -264,12 +264,12 @@ integer and `<config>` the MOCKED/POSTGRESQL/S3/SWIFT config.
 @click.option(
     "--administration-token",
     required=True,
-    envvar="PARSEC_ADMINISTRATION_TOKEN",
+    envvar="GUARDATA_ADMINISTRATION_TOKEN",
     help="Secret token to access the administration api",
 )
 @click.option(
     "--spontaneous-organization-bootstrap",
-    envvar="PARSEC_SPONTANEOUS_ORGANIZATION_BOOTSTRAP",
+    envvar="GUARDATA_SPONTANEOUS_ORGANIZATION_BOOTSTRAP",
     is_flag=True,
     help="""Allow organization bootstrap without prior creation.
 
@@ -284,7 +284,7 @@ reservation and change the bootstrap token)
 )
 @click.option(
     "--organization-bootstrap-webhook",
-    envvar="PARSEC_ORGANIZATION_BOOTSTRAP_WEBHOOK",
+    envvar="GUARDATA_ORGANIZATION_BOOTSTRAP_WEBHOOK",
     help="""URL to notify 3rd party service that a new organization has been bootstrapped.
 
 Each time an organization is bootstrapped, an HTTP POST will be send to the URL
@@ -294,14 +294,14 @@ organization_id, device_id, device_label (can be null), human_email (can be null
 )
 @click.option(
     "--backend-addr",
-    envvar="PARSEC_BACKEND_ADDR",
+    envvar="GUARDATA_BACKEND_ADDR",
     type=BackendAddr.from_url,
     help="URL to reach this server (typically used in invitation emails)",
 )
-@click.option("--email-host", envvar="PARSEC_EMAIL_HOST", help="The host to use for sending email")
+@click.option("--email-host", envvar="GUARDATA_EMAIL_HOST", help="The host to use for sending email")
 @click.option(
     "--email-port",
-    envvar="PARSEC_EMAIL_PORT",
+    envvar="GUARDATA_EMAIL_PORT",
     type=int,
     default=25,
     show_default=True,
@@ -309,12 +309,12 @@ organization_id, device_id, device_label (can be null), human_email (can be null
 )
 @click.option(
     "--email-host-user",
-    envvar="PARSEC_EMAIL_HOST_USER",
+    envvar="GUARDATA_EMAIL_HOST_USER",
     help="Username to use for the SMTP server defined in EMAIL_HOST",
 )
 @click.option(
     "--email-host-password",
-    envvar="PARSEC_EMAIL_HOST_PASSWORD",
+    envvar="GUARDATA_EMAIL_HOST_PASSWORD",
     help=(
         "Password to use for the SMTP server defined in EMAIL_HOST."
         " This setting is used in conjunction with EMAIL_HOST_USER when authenticating to the SMTP server."
@@ -322,7 +322,7 @@ organization_id, device_id, device_label (can be null), human_email (can be null
 )
 @click.option(
     "--email-use-ssl",
-    envvar="PARSEC_EMAIL_USE_SSL",
+    envvar="GUARDATA_EMAIL_USE_SSL",
     is_flag=True,
     help=(
         "Whether to use a TLS (secure) connection when talking to the SMTP server."
@@ -331,7 +331,7 @@ organization_id, device_id, device_label (can be null), human_email (can be null
 )
 @click.option(
     "--email-use-tls",
-    envvar="PARSEC_EMAIL_USE_TLS",
+    envvar="GUARDATA_EMAIL_USE_TLS",
     is_flag=True,
     help=(
         "Whether to use an implicit TLS (secure) connection when talking to the SMTP server."
@@ -342,18 +342,18 @@ organization_id, device_id, device_label (can be null), human_email (can be null
     ),
 )
 @click.option(
-    "--email-sender", envvar="PARSEC_EMAIL_SENDER", help="Sender address used in sent emails"
+    "--email-sender", envvar="GUARDATA_EMAIL_SENDER", help="Sender address used in sent emails"
 )
 @click.option(
     "--ssl-keyfile",
     type=click.Path(exists=True, dir_okay=False),
-    envvar="PARSEC_SSL_KEYFILE",
+    envvar="GUARDATA_SSL_KEYFILE",
     help="SSL key file",
 )
 @click.option(
     "--ssl-certfile",
     type=click.Path(exists=True, dir_okay=False),
-    envvar="PARSEC_SSL_CERTFILE",
+    envvar="GUARDATA_SSL_CERTFILE",
     help="SSL certificate file",
 )
 @click.option(
@@ -362,15 +362,15 @@ organization_id, device_id, device_label (can be null), human_email (can be null
     default="WARNING",
     show_default=True,
     type=click.Choice(("DEBUG", "INFO", "WARNING", "ERROR", "CRITICAL")),
-    envvar="PARSEC_LOG_LEVEL",
+    envvar="GUARDATA_LOG_LEVEL",
 )
 @click.option(
-    "--log-format", "-f", type=click.Choice(("CONSOLE", "JSON")), envvar="PARSEC_LOG_FORMAT"
+    "--log-format", "-f", type=click.Choice(("CONSOLE", "JSON")), envvar="GUARDATA_LOG_FORMAT"
 )
-@click.option("--log-file", "-o", envvar="PARSEC_LOG_FILE")
-@click.option("--log-filter", envvar="PARSEC_LOG_FILTER")
-@click.option("--sentry-url", envvar="PARSEC_SENTRY_URL", help="Sentry URL for telemetry report")
-@click.option("--debug", is_flag=True, envvar="PARSEC_DEBUG")
+@click.option("--log-file", "-o", envvar="GUARDATA_LOG_FILE")
+@click.option("--log-filter", envvar="GUARDATA_LOG_FILTER")
+@click.option("--sentry-url", envvar="GUARDATA_SENTRY_URL", help="Sentry URL for telemetry report")
+@click.option("--debug", is_flag=True, envvar="GUARDATA_DEBUG")
 @click.option(
     "--dev",
     cls=DevOption,

@@ -17,7 +17,7 @@ def open_url(url):
 
 
 def open_doc_link():
-    open_url("https://parsec-cloud.readthedocs.io")
+    open_url("SOON")
 
 
 def open_feedback_link():

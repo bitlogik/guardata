@@ -22,7 +22,7 @@ The Parsec server only requires a PostgreSQL DB for metadata (that is encrypted 
 Parsec security model
 =====================
 
-PARSEC secures sensitive data before they are stored on public clouds, proceeding in 3 steps :
+guardata secures sensitive data before they are stored on public clouds, proceeding in 3 steps :
 
 - Splitting of files in blocks before encryption;
 - Encryption of each block with a different symmetric key (BLOCK_ENC_KEY);

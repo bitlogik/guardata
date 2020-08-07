@@ -176,7 +176,7 @@ END
             curr_dir = target_file
         else:
             assert curr_dir == target_file.parent
-            install_files_lines.append(f'File "${{PARSEC_FREEZE_BUILD_DIR}}\\{target_file}"')
+            install_files_lines.append(f'File "${{GUARDATA_FREEZE_BUILD_DIR}}\\{target_file}"')
     (BUILD_DIR / "install_files.nsh").write_text("\n".join(install_files_lines))
 
     uninstall_files_lines = ["; Files to uninstall"]

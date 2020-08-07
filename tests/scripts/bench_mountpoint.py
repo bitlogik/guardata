@@ -16,8 +16,8 @@ TOKEN = "CCDCC27B6108438D99EF8AF5E847C3BB"
 DEVICE = "alice@dev1"
 PASSWORD = "P@ssw0rd."
 
-PARSEC_CLI = "python -m parsec.cli"
-PARSEC_PROFILE_CLI = "python -m cProfile -o bench.prof -m parsec.cli"
+GUARDATA_CLI = "python -m parsec.cli"
+GUARDATA_PROFILE_CLI = "python -m cProfile -o bench.prof -m parsec.cli"
 
 
 def run_cmd(cmd):
@@ -60,27 +60,27 @@ def main():
     mountdir.mkdir(exist_ok=True)
 
     # Start backend & create organization
-    with keep_running_cmd(f"{PARSEC_CLI} backend run --port={PORT}"):
+    with keep_running_cmd(f"{GUARDATA_CLI} backend run --port={PORT}"):
         backend_addr = f"parsec://127.0.0.1:{PORT}?no_ssl=true"
 
         out = run_cmd(
-            f"{PARSEC_CLI} core create_organization {ORGNAME}"
+            f"{GUARDATA_CLI} core create_organization {ORGNAME}"
             f" --addr={backend_addr} --administration-token={TOKEN}"
         )
 
         boostrap_addr = out.stdout.decode().split("Bootstrap organization url: ")[-1].strip()
         out = run_cmd(
-            f"{PARSEC_CLI} core bootstrap_organization {DEVICE}"
+            f"{GUARDATA_CLI} core bootstrap_organization {DEVICE}"
             f" --addr={boostrap_addr} --config-dir={confdir} --password={PASSWORD}"
         )
 
         out = run_cmd(
-            f"{PARSEC_CLI} core create_workspace w1"
+            f"{GUARDATA_CLI} core create_workspace w1"
             f" --config-dir={confdir} --device={DEVICE} --password={PASSWORD}"
         )
 
         with keep_running_cmd(
-            f"{PARSEC_PROFILE_CLI} core run -l INFO"
+            f"{GUARDATA_PROFILE_CLI} core run -l INFO"
             f" --device={DEVICE} --password={PASSWORD} --mountpoint={mountdir} --config-dir={confdir}"
         ):
 

@@ -10,7 +10,7 @@ from PyQt5.QtCore import QCoreApplication, pyqtSignal, Qt, QSize
 from PyQt5.QtGui import QColor, QIcon, QKeySequence
 from PyQt5.QtWidgets import QMainWindow, QApplication, QMenu, QShortcut
 
-from parsec import __version__ as PARSEC_VERSION
+from parsec import __version__ as GUARDATA_VERSION
 
 from parsec.core.local_device import list_available_devices, get_key_file
 from parsec.core.config import save_config
@@ -67,7 +67,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.force_close = False
         self.need_close = False
         self.event_bus.connect(CoreEvent.GUI_CONFIG_CHANGED, self.on_config_updated)
-        self.setWindowTitle(_("TEXT_PARSEC_WINDOW_TITLE_version").format(version=PARSEC_VERSION))
+        self.setWindowTitle(_("TEXT_GUARDATA_WINDOW_TITLE_version").format(version=GUARDATA_VERSION))
         self.foreground_needed.connect(self._on_foreground_needed)
         self.new_instance_needed.connect(self._on_new_instance_needed)
         self.tab_center.tabCloseRequested.connect(self.close_tab)
@@ -205,7 +205,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         action = menu.addAction(_("ACTION_MAIN_MENU_FEEDBACK_SEND"))
         action.triggered.connect(self._on_send_feedback_clicked)
         menu.addSeparator()
-        action = menu.addAction(_("ACTION_MAIN_MENU_QUIT_PARSEC"))
+        action = menu.addAction(_("ACTION_MAIN_MENU_QUIT_guardata"))
         action.triggered.connect(self.close_app)
         action.setShortcut(self.shortcut_quit.key())
         action.setShortcutVisibleInContextMenu(True)
@@ -420,12 +420,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.event_bus.send(
                 CoreEvent.GUI_CONFIG_CHANGED,
                 gui_first_launch=False,
-                gui_last_version=PARSEC_VERSION,
+                gui_last_version=GUARDATA_VERSION,
                 telemetry_enabled=r == _("ACTION_ERROR_REPORTING_ACCEPT"),
             )
 
         # For each parsec update
-        if self.config.gui_last_version and self.config.gui_last_version != PARSEC_VERSION:
+        if self.config.gui_last_version and self.config.gui_last_version != GUARDATA_VERSION:
 
             # Update from parsec `<1.14` to `>=1.14`
             if LooseVersion(self.config.gui_last_version) < "1.14":
@@ -439,7 +439,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     win_registry.del_acrobat_app_container_enabled()
 
             # Acknowledge the changes
-            self.event_bus.send(CoreEvent.GUI_CONFIG_CHANGED, gui_last_version=PARSEC_VERSION)
+            self.event_bus.send(CoreEvent.GUI_CONFIG_CHANGED, gui_last_version=GUARDATA_VERSION)
 
         telemetry.init(self.config)
 
@@ -447,8 +447,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if not len(devices) and not invitation_link:
             r = ask_question(
                 self,
-                _("TEXT_KICKSTART_PARSEC_WHAT_TO_DO_TITLE"),
-                _("TEXT_KICKSTART_PARSEC_WHAT_TO_DO_INSTRUCTIONS"),
+                _("TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_TITLE"),
+                _("TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_INSTRUCTIONS"),
                 [
                     _("ACTION_NO_DEVICE_CREATE_ORGANIZATION"),
                     _("ACTION_NO_DEVICE_JOIN_ORGANIZATION"),
@@ -658,17 +658,17 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not self.minimize_on_close_notif_already_send:
                 self.minimize_on_close_notif_already_send = True
                 self.systray_notification.emit(
-                    "Parsec", _("TEXT_TRAY_PARSEC_STILL_RUNNING_MESSAGE"), 2000
+                    "Parsec", _("TEXT_TRAY_GUARDATA_STILL_RUNNING_MESSAGE"), 2000
                 )
         else:
             if self.config.gui_confirmation_before_close and not self.force_close:
                 result = ask_question(
                     self if self.isVisible() else None,
-                    _("TEXT_PARSEC_QUIT_TITLE"),
-                    _("TEXT_PARSEC_QUIT_INSTRUCTIONS"),
-                    [_("ACTION_PARSEC_QUIT_CONFIRM"), _("ACTION_CANCEL")],
+                    _("TEXT_GUARDATA_QUIT_TITLE"),
+                    _("TEXT_GUARDATA_QUIT_INSTRUCTIONS"),
+                    [_("ACTION_GUARDATA_QUIT_CONFIRM"), _("ACTION_CANCEL")],
                 )
-                if result != _("ACTION_PARSEC_QUIT_CONFIRM"):
+                if result != _("ACTION_GUARDATA_QUIT_CONFIRM"):
                     event.ignore()
                     self.force_close = False
                     self.need_close = False
