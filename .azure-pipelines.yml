@@ -293,7 +293,7 @@ jobs:
       cp $(Build.SourcesDirectory)/HISTORY.rst src
       VERBOSE_TAG=`git -C $(Build.SourcesDirectory) describe --tag`
       sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" src/parsec/_version.py
-      sed -i "s/__PARSEC_VERSION__/$VERBOSE_TAG/" snap/snapcraft.yaml
+      sed -i "s/__GUARDATA_VERSION__/$VERBOSE_TAG/" snap/snapcraft.yaml
       snapcraft --destructive-mode
       mkdir dist
       cp parsec*.snap dist

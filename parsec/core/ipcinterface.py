@@ -77,7 +77,7 @@ cmd_req_serializer = MsgpackSerializer(CommandReqSchema)
 cmd_rep_serializer = MsgpackSerializer(CommandRepSchema)
 
 
-DEFAULT_WIN32_MUTEX_NAME = "parsec-cloud"
+DEFAULT_WIN32_MUTEX_NAME = "guardata"
 
 
 @contextmanager

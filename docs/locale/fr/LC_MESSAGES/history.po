@@ -544,7 +544,7 @@ msgstr ""
 
 #: ../../../HISTORY.rst:314
 msgid ""
-"Fix argument parsing in backend cli commands (``PARSEC_CMD_ARGS`` env "
+"Fix argument parsing in backend cli commands (``GUARDATA_CMD_ARGS`` env "
 "var, db param and S3 entry point default value) (`#749 "
 "<https://github.com/Scille/parsec-cloud/issues/749>`__)"
 msgstr ""

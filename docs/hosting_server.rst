@@ -56,17 +56,17 @@ Settings
 
 .. note::
 
-    Settings can be specified by using environment variable ``PARSEC_CMD_ARGS``.
+    Settings can be specified by using environment variable ``GUARDATA_CMD_ARGS``.
     All available command line arguments can be used and environ variables
     within it will be expanded. For instance::
 
-        $ DB_URL=postgres:///parsec PARSEC_CMD_ARGS='--db=$DB_URL --host=0.0.0.0' parsec backend run
+        $ DB_URL=postgres:///parsec GUARDATA_CMD_ARGS='--db=$DB_URL --host=0.0.0.0' parsec backend run
 
 Host
 ----
 
 * ``--host <host>, -H <host>``
-* Environ: ``PARSEC_HOST``
+* Environ: ``GUARDATA_HOST``
 * Default: ``127.0.0.1``
 
 Host to listen on.
@@ -75,7 +75,7 @@ Port
 ----
 
 * ``--port <port>, -P <port>``
-* Environ: ``PARSEC_PORT``
+* Environ: ``GUARDATA_PORT``
 * Default: ``6777``
 
 Port to listen on.
@@ -84,7 +84,7 @@ Database URL
 ------------
 
 * ``--db <url>``
-* Environ: ``PARSEC_DB``
+* Environ: ``GUARDATA_DB``
 
 Database configuration.
 
@@ -101,13 +101,13 @@ Database connections
 --------------------
 
 * ``--db-min-connections <int>``
-* Environ: ``PARSEC_DB_MIN_CONNECTIONS``
+* Environ: ``GUARDATA_DB_MIN_CONNECTIONS``
 * Default: ``5``
 
 Minimal number of connections to the database if using PostgreSQL.
 
 * ``--db-max-connections <int>``
-* Environ: ``PARSEC_DB_MAX_CONNECTIONS``
+* Environ: ``GUARDATA_DB_MAX_CONNECTIONS``
 * Default: ``7``
 
 Maximum number of connections to the database if using PostgreSQL.
@@ -116,7 +116,7 @@ Blockstore URL
 --------------
 
 * ``--blockstore <url>, -b <url>``
-* Environ: ``PARSEC_BLOCKSTORE``
+* Environ: ``GUARDATA_BLOCKSTORE``
 
 Blockstore configuration.
 
@@ -151,7 +151,7 @@ Administration token
 --------------------
 
 * ``--administration-token <token>``
-* Environ: ``PARSEC_ADMINISTRATION_TOKEN``
+* Environ: ``GUARDATA_ADMINISTRATION_TOKEN``
 
 Secret token to access the administration api.
 
@@ -159,12 +159,12 @@ SSL
 ---
 
 * ``--ssl-keyfile <file>``
-* Environ: ``PARSEC_SSL_KEYFILE``
+* Environ: ``GUARDATA_SSL_KEYFILE``
 
 Custom SSL key file.
 
 * ``--ssl-certfile <file>``
-* Environ: ``PARSEC_SSL_CERTFILE``
+* Environ: ``GUARDATA_SSL_CERTFILE``
 
 Custom SSL certificate file.
 
@@ -172,7 +172,7 @@ Logs
 ----
 
 * ``--log-level <level>, -l <level>``
-* Environ: ``PARSEC_LOG_LEVEL``
+* Environ: ``GUARDATA_LOG_LEVEL``
 * Default: ``WARNING``
 
 The granularity of Error log outputs.
@@ -180,14 +180,14 @@ The granularity of Error log outputs.
 Must be one of ``DEBUG``, ``INFO``, ``WARNING``, ``ERROR``, ``CRITICAL``.
 
 * ``--log-format <format>, -f <format>``
-* Environ: ``PARSEC_LOG_FORMAT``
+* Environ: ``GUARDATA_LOG_FORMAT``
 * Default: ``CONSOLE``
 
 Log formatting to use.
 Must be one of ``CONSOLE``, ``JSON``.
 
 * ``--log-file <file>, -o <file>``
-* Environ: ``PARSEC_LOG_FILE``
+* Environ: ``GUARDATA_LOG_FILE``
 * Default: log to stderr
 
 The log file to write to.
@@ -196,40 +196,40 @@ Email
 -----
 
 * ``--backend-addr``
-* Environ: ``PARSEC_BACKEND_ADDR``
+* Environ: ``GUARDATA_BACKEND_ADDR``
 
 URL to reach this server (typically used in invitation emails).
 
 * ``--email-host``
-* Environ: ``PARSEC_EMAIL_HOST``
+* Environ: ``GUARDATA_EMAIL_HOST``
 
 The host to use for sending email.
 
 * ``--email-port``
-* Environ: ``PARSEC_EMAIL_PORT``
+* Environ: ``GUARDATA_EMAIL_PORT``
 * Default: ``25``
 
 Port to use for the SMTP server defined in EMAIL_HOST.
 
 * ``--email-host-user``
-* Environ: ``PARSEC_EMAIL_HOST_USER``
+* Environ: ``GUARDATA_EMAIL_HOST_USER``
 
 Username to use for the SMTP server defined in EMAIL_HOST.
 
 * ``--email-host-password``
-* Environ: ``PARSEC_EMAIL_HOST_PASSWORD``
+* Environ: ``GUARDATA_EMAIL_HOST_PASSWORD``
 
 Password to use for the SMTP server defined in EMAIL_HOST.
 This setting is used in conjunction with EMAIL_HOST_USER when authenticating to the SMTP server.
 
 * ``--email-use-ssl``
-* Environ: ``PARSEC_EMAIL_USE_SSL``
+* Environ: ``GUARDATA_EMAIL_USE_SSL``
 
 Whether to use a TLS (secure) connection when talking to the SMTP server.
 This is used for explicit TLS connections, generally on port 587.
 
 * ``--email-use-tls``
-* Environ: ``PARSEC_EMAIL_USE_TLS``
+* Environ: ``GUARDATA_EMAIL_USE_TLS``
 
 Whether to use an implicit TLS (secure) connection when talking to the SMTP server.
 In most email documentation this type of TLS connection is referred to as SSL.
@@ -237,7 +237,7 @@ It is generally used on port 465.
 Note that ``--email-use-tls``/``--email-use-ssl`` are mutually exclusive, so only set one of those settings to True.
 
 * ``--email-language``
-* Environ: ``PARSEC_EMAIL_LANGUAGE``
+* Environ: ``GUARDATA_EMAIL_LANGUAGE``
 * Default: ``en``
 
 Language used in email (Allowed values: ``en`` or ``fr``).
@@ -246,7 +246,7 @@ Webhooks
 --------
 
 * ``--spontaneous-organization-bootstrap``
-* Environ: ``PARSEC_SPONTANEOUS_ORGANIZATION_BOOTSTRAP``
+* Environ: ``GUARDATA_SPONTANEOUS_ORGANIZATION_BOOTSTRAP``
 
 Allow organization bootstrap without prior creation.
 
@@ -259,7 +259,7 @@ and 2) the organization hasn't been created by administration (which would act a
 reservation and change the bootstrap token)
 
 * ``--organization-bootstrap-webhook``
-* Environ: ``PARSEC_ORGANIZATION_BOOTSTRAP_WEBHOOK``
+* Environ: ``GUARDATA_ORGANIZATION_BOOTSTRAP_WEBHOOK``
 
 URL to notify 3rd party service that a new organization has been bootstrapped.
 
@@ -283,7 +283,7 @@ Sentry
 ------
 
 * ``--sentry-url <url>``
-* Environ: ``PARSEC_SENTRY_URL``
+* Environ: ``GUARDATA_SENTRY_URL``
 
 `Sentry <https://sentry.io/>`_ URL for telemetry report.
 
@@ -291,7 +291,7 @@ Debug
 -----
 
 * ``--debug``
-* Environ: ``PARSEC_DEBUG``
+* Environ: ``GUARDATA_DEBUG``
 
 Enable debug informations.
 

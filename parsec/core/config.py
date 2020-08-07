@@ -74,15 +74,15 @@ class CoreConfig:
     gui_first_launch: bool = True
     gui_last_version: Optional[str] = None
     gui_check_version_at_startup: bool = True
-    gui_check_version_url: str = "https://github.com/Scille/parsec-cloud/releases/latest"
-    gui_check_version_api_url: str = "https://api.github.com/repos/Scille/parsec-cloud/releases"
+    gui_check_version_url: str = "https://github.com/BitLogiK/guardata-client/releases/latest"
+    gui_check_version_api_url: str = "https://api.github.com/repos/BitLogiK/guardata-client/releases"
     gui_check_version_allow_pre_release: bool = False
     gui_confirmation_before_close: bool = True
     gui_workspace_color: bool = False
     gui_allow_multiple_instances: bool = False
 
     ipc_socket_file: Path = None
-    ipc_win32_mutex_name: str = "parsec-cloud"
+    ipc_win32_mutex_name: str = "guardata"
 
     def evolve(self, **kwargs):
         return attr.evolve(self, **kwargs)
@@ -135,8 +135,8 @@ def config_factory(
         gui_check_version_allow_pre_release=gui_check_version_allow_pre_release,
         gui_workspace_color=gui_workspace_color,
         gui_allow_multiple_instances=gui_allow_multiple_instances,
-        ipc_socket_file=data_base_dir / "parsec-cloud.lock",
-        ipc_win32_mutex_name="parsec-cloud",
+        ipc_socket_file=data_base_dir / "guardata.lock",
+        ipc_win32_mutex_name="guardata",
     )
 
     # Make sure the directories exist on the system

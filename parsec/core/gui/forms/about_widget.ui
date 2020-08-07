@@ -112,7 +112,7 @@
       </font>
      </property>
      <property name="text">
-      <string>TEXT_PARSEC_DEVELOPMENT_INFO</string>
+      <string>TEXT_GUARDATA_DEVELOPMENT_INFO</string>
      </property>
      <property name="alignment">
       <set>Qt::AlignCenter</set>

@@ -100,12 +100,12 @@ msgstr "Paramètres"
 
 #: ../../hosting_server.rst:59
 msgid ""
-"Settings can be specified by using environment variable ``PARSEC_CMD_ARGS``. "
+"Settings can be specified by using environment variable ``GUARDATA_CMD_ARGS``. "
 "All available command line arguments can be used and environ variables within "
 "it will be expanded. For instance::"
 msgstr ""
 "Des paramètres supplémentaires peuvent être spécifiés via la variable "
-"d'environnement ``PARSEC_CMD_ARGS``. Tous les paramètres pouvant être passés "
+"d'environnement ``GUARDATA_CMD_ARGS``. Tous les paramètres pouvant être passés "
 "via la ligne de commande sont utilisables et les variables d'environnement "
 "seront développées. Par exemple::"
 
@@ -118,7 +118,7 @@ msgid "``--host <host>, -H <host>``"
 msgstr ""
 
 #: ../../hosting_server.rst:69
-msgid "Environ: ``PARSEC_HOST``"
+msgid "Environ: ``GUARDATA_HOST``"
 msgstr ""
 
 #: ../../hosting_server.rst:70
@@ -138,7 +138,7 @@ msgid "``--port <port>, -P <port>``"
 msgstr ""
 
 #: ../../hosting_server.rst:78
-msgid "Environ: ``PARSEC_PORT``"
+msgid "Environ: ``GUARDATA_PORT``"
 msgstr ""
 
 #: ../../hosting_server.rst:79
@@ -158,7 +158,7 @@ msgid "``--db <url>``"
 msgstr ""
 
 #: ../../hosting_server.rst:87
-msgid "Environ: ``PARSEC_DB``"
+msgid "Environ: ``GUARDATA_DB``"
 msgstr ""
 
 #: ../../hosting_server.rst:89
@@ -194,7 +194,7 @@ msgid "``--db-min-connections <int>``"
 msgstr ""
 
 #: ../../hosting_server.rst:104
-msgid "Environ: ``PARSEC_DB_MIN_CONNECTIONS``"
+msgid "Environ: ``GUARDATA_DB_MIN_CONNECTIONS``"
 msgstr ""
 
 #: ../../hosting_server.rst:105
@@ -210,7 +210,7 @@ msgid "``--db-max-connections <int>``"
 msgstr ""
 
 #: ../../hosting_server.rst:110
-msgid "Environ: ``PARSEC_DB_MAX_CONNECTIONS``"
+msgid "Environ: ``GUARDATA_DB_MAX_CONNECTIONS``"
 msgstr ""
 
 #: ../../hosting_server.rst:111
@@ -230,7 +230,7 @@ msgid "``--blockstore <url>, -b <url>``"
 msgstr ""
 
 #: ../../hosting_server.rst:119
-msgid "Environ: ``PARSEC_BLOCKSTORE``"
+msgid "Environ: ``GUARDATA_BLOCKSTORE``"
 msgstr ""
 
 #: ../../hosting_server.rst:121
@@ -296,7 +296,7 @@ msgid "``--administration-token <token>``"
 msgstr ""
 
 #: ../../hosting_server.rst:150
-msgid "Environ: ``PARSEC_ADMINISTRATION_TOKEN``"
+msgid "Environ: ``GUARDATA_ADMINISTRATION_TOKEN``"
 msgstr ""
 
 #: ../../hosting_server.rst:152
@@ -312,7 +312,7 @@ msgid "``--ssl-keyfile <file>``"
 msgstr ""
 
 #: ../../hosting_server.rst:158
-msgid "Environ: ``PARSEC_SSL_KEYFILE``"
+msgid "Environ: ``GUARDATA_SSL_KEYFILE``"
 msgstr ""
 
 #: ../../hosting_server.rst:160
@@ -324,7 +324,7 @@ msgid "``--ssl-certfile <file>``"
 msgstr ""
 
 #: ../../hosting_server.rst:163
-msgid "Environ: ``PARSEC_SSL_CERTFILE``"
+msgid "Environ: ``GUARDATA_SSL_CERTFILE``"
 msgstr ""
 
 #: ../../hosting_server.rst:165
@@ -340,7 +340,7 @@ msgid "``--log-level <level>, -l <level>``"
 msgstr ""
 
 #: ../../hosting_server.rst:171
-msgid "Environ: ``PARSEC_LOG_LEVEL``"
+msgid "Environ: ``GUARDATA_LOG_LEVEL``"
 msgstr ""
 
 #: ../../hosting_server.rst:172
@@ -360,7 +360,7 @@ msgid "``--log-format <format>, -f <format>``"
 msgstr ""
 
 #: ../../hosting_server.rst:179
-msgid "Environ: ``PARSEC_LOG_FORMAT``"
+msgid "Environ: ``GUARDATA_LOG_FORMAT``"
 msgstr ""
 
 #: ../../hosting_server.rst:180
@@ -376,7 +376,7 @@ msgid "``--log-file <file>, -o <file>``"
 msgstr ""
 
 #: ../../hosting_server.rst:186
-msgid "Environ: ``PARSEC_LOG_FILE``"
+msgid "Environ: ``GUARDATA_LOG_FILE``"
 msgstr ""
 
 #: ../../hosting_server.rst:187
@@ -396,7 +396,7 @@ msgid "``--sentry-url <url>``"
 msgstr ""
 
 #: ../../hosting_server.rst:195
-msgid "Environ: ``PARSEC_SENTRY_URL``"
+msgid "Environ: ``GUARDATA_SENTRY_URL``"
 msgstr ""
 
 #: ../../hosting_server.rst:197
@@ -412,7 +412,7 @@ msgid "``--debug``"
 msgstr ""
 
 #: ../../hosting_server.rst:203
-msgid "Environ: ``PARSEC_DEBUG``"
+msgid "Environ: ``GUARDATA_DEBUG``"
 msgstr ""
 
 #: ../../hosting_server.rst:205

@@ -1,6 +1,6 @@
 FROM python:3.7-slim-buster
 
-RUN pip install --no-cache-dir parsec-cloud[backend]
+RUN pip install --no-cache-dir guardata[backend]
 EXPOSE 6777
-ENTRYPOINT ["parsec", "backend"]
+ENTRYPOINT ["guardata", "backend"]
 CMD ["run"]

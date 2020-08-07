@@ -85,7 +85,7 @@
           <string notr="true"/>
          </property>
          <property name="text">
-          <string>ACTION_PARSEC_DOWNLOAD_NEW_VERSION</string>
+          <string>ACTION_GUARDATA_DOWNLOAD_NEW_VERSION</string>
          </property>
          <property name="iconSize">
           <size>
@@ -154,7 +154,7 @@
         <string notr="true"/>
        </property>
        <property name="text">
-        <string>ACTION_PARSEC_IGNORE_NEW_VERSION</string>
+        <string>ACTION_GUARDATA_IGNORE_NEW_VERSION</string>
        </property>
        <property name="iconSize">
         <size>

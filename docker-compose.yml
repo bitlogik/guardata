@@ -5,13 +5,13 @@ services:
       context: .
       dockerfile: packaging/docker/Dockerfile
     environment:
-      - PARSEC_HOST=0.0.0.0
-      - PARSEC_DB=postgresql://parsec@postgres/parsec?password=DBPASS  # Change db password for prod
-      - PARSEC_BLOCKSTORE=POSTGRESQL  # This is a demo...
-      - PARSEC_LOG_LEVEL=INFO
-      - PARSEC_ADMINISTRATION_TOKEN=s3cr3t  # Change for prod
-      - PARSEC_DB_FIRST_TRIES_NUMBER=20
-      - PARSEC_DB_FIRST_TRIES_SLEEP=1
+      - GUARDATA_HOST=0.0.0.0
+      - GUARDATA_DB=postgresql://parsec@postgres/parsec?password=DBPASS  # Change db password for prod
+      - GUARDATA_BLOCKSTORE=POSTGRESQL  # This is a demo...
+      - GUARDATA_LOG_LEVEL=INFO
+      - GUARDATA_ADMINISTRATION_TOKEN=s3cr3t  # Change for prod
+      - GUARDATA_DB_FIRST_TRIES_NUMBER=20
+      - GUARDATA_DB_FIRST_TRIES_SLEEP=1
     ports:
       - 6777:6777
     depends_on:

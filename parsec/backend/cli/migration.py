@@ -18,25 +18,25 @@ def _validate_postgres_db_url(ctx, param, value):
     "--db",
     required=True,
     callback=_validate_postgres_db_url,
-    envvar="PARSEC_DB",
+    envvar="GUARDATA_DB",
     help="PostgreSQL database url",
 )
 @click.option(
     "--db-first-tries-number",
     default=1,
     show_default=True,
-    envvar="PARSEC_DB_FIRST_TRIES_NUMBER",
+    envvar="GUARDATA_DB_FIRST_TRIES_NUMBER",
     help="Number of tries allowed during initial database connection (0 is unlimited)",
 )
 @click.option(
     "--db-first-tries-sleep",
     default=1,
     show_default=True,
-    envvar="PARSEC_DB_FIRST_TRIES_SLEEP",
+    envvar="GUARDATA_DB_FIRST_TRIES_SLEEP",
     help="Number of second waited between tries during initial database connection",
 )
 @click.option("--dry-run", is_flag=True)
-@click.option("--debug", is_flag=True, envvar="PARSEC_DEBUG")
+@click.option("--debug", is_flag=True, envvar="GUARDATA_DEBUG")
 def migrate(db, db_first_tries_number, db_first_tries_sleep, debug, dry_run):
     """
     Updates the database schema
