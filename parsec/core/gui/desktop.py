@@ -52,7 +52,7 @@ def parsec_instances_count():
     inst_count = 0
     for proc in psutil.process_iter():
         try:
-            if proc.name().lower() in ["parsec", "parsec.exe"] and "backend" not in proc.cmdline():
+            if proc.name().lower() in ["guardata", "guardata.exe"] and "backend" not in proc.cmdline():
                 inst_count += 1
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass
