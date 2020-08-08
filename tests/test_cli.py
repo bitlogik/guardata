@@ -21,7 +21,7 @@ import trustme
 from click.testing import CliRunner
 from async_generator import asynccontextmanager
 
-from parsec import __version__ as parsec_version
+from parsec import __version__ as guardata_version
 from parsec.api.protocol import OrganizationID, DeviceID
 from parsec.backend.postgresql import MigrationItem
 from parsec.core.local_device import save_device_with_password, list_available_devices
@@ -34,7 +34,7 @@ def test_version():
     runner = CliRunner()
     result = runner.invoke(cli, ["--version"])
     assert result.exit_code == 0
-    assert f"parsec, version {parsec_version}\n" in result.output
+    assert f"guardata, version {guardata_version}\n" in result.output
 
 
 def test_share_workspace(tmpdir, alice, bob):
