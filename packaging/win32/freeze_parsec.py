@@ -96,14 +96,14 @@ def main(guardata_source):
     resource_rc = BUILD_DIR / "resource.rc"
     resource_res = BUILD_DIR / "resource.res"
     versioninfo = (*re.match(r"^.*([0-9]+)\.([0-9]+)\.([0-9]+)", guardata_version).groups(), "0")
-    escaped_parsec_ico = str(Path("guardata.ico").resolve()).replace("\\", "\\\\")
-    escaped_parsec_manifest = str(Path("guardata.manifest").resolve()).replace("\\", "\\\\")
+    escaped_guardata_ico = str(Path("guardata.ico").resolve()).replace("\\", "\\\\")
+    escaped_guardata_manifest = str(Path("guardata.manifest").resolve()).replace("\\", "\\\\")
     resource_rc.write_text(
         f"""
 #include <windows.h>
 
-1 RT_MANIFEST "{escaped_parsec_manifest}"
-2 ICON "{escaped_parsec_ico}"
+1 RT_MANIFEST "{escaped_guardata_manifest}"
+2 ICON "{escaped_guardata_ico}"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION     {','.join(versioninfo)}
@@ -137,9 +137,9 @@ END
     )
     run(f"rc.exe /i. /fo {resource_res} {resource_rc}")
     # Must make sure /Fo option ends with a "\", otherwise it is not considered as a folder...
-    run(f"cl.exe parsec-bootstrap.c /c /I { CPYTHON_DIR / 'include' } /Fo{BUILD_DIR}\\")
+    run(f"cl.exe guardata-bootstrap.c /c /I { CPYTHON_DIR / 'include' } /Fo{BUILD_DIR}\\")
     run(
-        f"link.exe { BUILD_DIR / 'parsec-bootstrap.obj' } {resource_res} "
+        f"link.exe { BUILD_DIR / 'guardata-bootstrap.obj' } {resource_res} "
         f"/LIBPATH:{ CPYTHON_DIR / 'libs' } /OUT:{ target_dir / 'guardata.exe' } "
         f"/subsystem:windows /entry:mainCRTStartup"
     )

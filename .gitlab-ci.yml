@@ -76,9 +76,9 @@ pip-build:
     - pip3 install $(ls dist/guardata-*.whl)[all]
     - mkdir empty
     - cd empty
-    - parsec --version
-    # Run Parsec GUI in background and log it return code
-    # xvfb-run parsec core gui --diagnose
+    - guardata --version
+    # Run guardata GUI in background and log it return code
+    # xvfb-run guardata core gui --diagnose
     #echo "
     #  [pypi]
     #  username = __token__
