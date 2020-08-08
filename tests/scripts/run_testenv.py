@@ -113,7 +113,7 @@ async def configure_mime_types():
         """\
 [Desktop Entry]
 Name=Parsec
-Exec=parsec core gui %u
+Exec=guardata core gui %u
 Type=Application
 Terminal=false
 StartupNotify=false
@@ -203,7 +203,7 @@ def main(**kwargs):
 
         \b
         $ source tests/scripts/run_testenv.sh
-        $ parsec core gui
+        $ guardata core gui
         # Connect as bob@laptop and register a new device called pc
         # Copy the URL
 
@@ -262,9 +262,9 @@ Using existing backend: {backend_address}
         f"""\
 Mount alice and bob drives using:
 
-    $ parsec core run -P {password} -D {alice_device.slughash[:3]}  # Alice
-    $ parsec core run -P {password} -D {other_alice_device.slughash[:3]}  # Alice 2nd device
-    $ parsec core run -P {password} -D {bob_device.slughash[:3]}  # Bob
+    $ guardata core run -P {password} -D {alice_device.slughash[:3]}  # Alice
+    $ guardata core run -P {password} -D {other_alice_device.slughash[:3]}  # Alice 2nd device
+    $ guardata core run -P {password} -D {bob_device.slughash[:3]}  # Bob
 """
     )
 
