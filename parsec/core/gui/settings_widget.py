@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from parsec.core.core_events import CoreEvent
@@ -33,7 +34,6 @@ class SettingsWidget(QWidget, Ui_SettingsWidget):
         if current:
             self.combo_languages.setCurrentText(current)
         self.check_box_check_at_startup.setChecked(self.core_config.gui_check_version_at_startup)
-        self.check_box_send_data.setChecked(self.core_config.telemetry_enabled)
         self.check_box_workspace_color.setChecked(self.core_config.gui_workspace_color)
         self.button_check_version.clicked.connect(self.check_version)
         self.check_box_show_confined.setChecked(self.core_config.gui_show_confined)
@@ -45,7 +45,6 @@ class SettingsWidget(QWidget, Ui_SettingsWidget):
     def save(self):
         self.event_bus.send(
             CoreEvent.GUI_CONFIG_CHANGED,
-            telemetry_enabled=self.check_box_send_data.isChecked(),
             gui_tray_enabled=self.check_box_tray.isChecked(),
             gui_language=self.combo_languages.currentData(),
             gui_check_version_at_startup=self.check_box_check_at_startup.isChecked(),

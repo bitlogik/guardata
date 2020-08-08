@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import ssl
@@ -9,7 +10,7 @@ from collections import defaultdict
 
 from parsec.utils import trio_run
 from parsec.cli_utils import cli_exception_handler
-from parsec.logging import configure_logging, configure_sentry_logging
+from parsec.logging import configure_logging
 from parsec.backend import backend_app_factory
 from parsec.backend.config import (
     BackendConfig,
@@ -369,7 +370,6 @@ organization_id, device_id, device_label (can be null), human_email (can be null
 )
 @click.option("--log-file", "-o", envvar="GUARDATA_LOG_FILE")
 @click.option("--log-filter", envvar="GUARDATA_LOG_FILTER")
-@click.option("--sentry-url", envvar="GUARDATA_SENTRY_URL", help="Sentry URL for telemetry report")
 @click.option("--debug", is_flag=True, envvar="GUARDATA_DEBUG")
 @click.option(
     "--dev",
@@ -404,13 +404,10 @@ def run_cmd(
     log_format,
     log_file,
     log_filter,
-    sentry_url,
     debug,
     dev,
 ):
     configure_logging(log_level, log_format, log_file, log_filter)
-    if sentry_url:
-        configure_sentry_logging(sentry_url)
 
     with cli_exception_handler(debug):
 

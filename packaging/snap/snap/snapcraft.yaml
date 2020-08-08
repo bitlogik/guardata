@@ -15,12 +15,8 @@ apps:
   parsec:
     command: parsec
     desktop: parsec.desktop
-    environment:
-      SENTRY_URL: https://863e60bbef39406896d2b7a5dbd491bb@sentry.io/1212848
   cli:
     command: parsec-cli
-    environment:
-      SENTRY_URL: https://863e60bbef39406896d2b7a5dbd491bb@sentry.io/1212848
 
 parts:
   bootstrap:

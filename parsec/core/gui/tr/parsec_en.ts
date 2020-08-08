@@ -1039,31 +1039,21 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/settings_widget.ui" line="347"/>
-        <source>TEXT_SETTINGS_ERROR_REPORTING_TITLE</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/settings_widget.ui" line="361"/>
-        <source>TEXT_SETTINGS_CHECK_SEND_CRASH_REPORT</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/settings_widget.ui" line="400"/>
         <source>TEXT_SETTINGS_INTERFACE_TITLE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/settings_widget.ui" line="425"/>
+        <location filename="../forms/settings_widget.ui" line="372"/>
         <source>TEXT_SETTINGS_CHECK_USE_WORKSPACES_COLORS</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/settings_widget.ui" line="515"/>
+        <location filename="../forms/settings_widget.ui" line="462"/>
         <source>ACTION_SAVE</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
-        <location filename="../forms/settings_widget.ui" line="411"/>
+        <location filename="../forms/settings_widget.ui" line="358"/>
         <source>TEXT_SETTINGS_CHECK_SHOW_CONFINED_FILES</source>
         <translation type="unfinished"></translation>
     </message>

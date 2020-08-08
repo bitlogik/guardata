@@ -279,14 +279,6 @@ Example:
       "human_label": "John Doe"
     }
 
-Sentry
-------
-
-* ``--sentry-url <url>``
-* Environ: ``GUARDATA_SENTRY_URL``
-
-`Sentry <https://sentry.io/>`_ URL for telemetry report.
-
 Debug
 -----
 

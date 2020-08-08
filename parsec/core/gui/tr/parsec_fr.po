@@ -1916,21 +1916,6 @@ msgstr "Veuillez fournir le lien pour démarrer l'organisation."
 msgid "TEXT_BOOTSTRAP_ORG_URL_PLACEHOLDER"
 msgstr "parsec://cloud.guardata.app/my_org?action=bootstrap_organization&token=1234ABCD"
 
-msgid "TEXT_ERROR_REPORTING_TITLE"
-msgstr "Rapport d'erreur"
-
-msgid "TEXT_ERROR_REPORTING_INSTRUCTIONS"
-msgstr ""
-"guardata peut automatiquement envoyer des données quand une erreur est "
-"rencontrée. Cette information nous aide à améliorer votre expérience "
-"utilisateur.<br /><br />\n"
-"\n"
-"Autorisez-vous guardata à envoyer automatiquement des rapports d'erreur ? "
-"Vous pourrez désactiver cette fonctionnalité dans la configuration."
-
-msgid "ACTION_ERROR_REPORTING_ACCEPT"
-msgstr "Autoriser les rapports d'erreur"
-
 msgid "TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_TITLE"
 msgstr "Bienvenue dans guardata !"
 
@@ -2342,9 +2327,6 @@ msgstr "Vérifier la disponibilité d'une nouvelle version au démarrage"
 
 msgid "ACTION_SETTINGS_CHECK_NEW_VERSION"
 msgstr "Vérifier la disponibilité d'une nouvelle version maintenant"
-
-msgid "TEXT_SETTINGS_ERROR_REPORTING_TITLE"
-msgstr "Rapport d'erreur"
 
 msgid "TEXT_SETTINGS_CHECK_SEND_CRASH_REPORT"
 msgstr "Envoyer les rapports d'erreur"
