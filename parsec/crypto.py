@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from typing import Tuple
@@ -7,12 +8,13 @@ from hashlib import sha256
 from nacl.exceptions import CryptoError  # noqa: republishing
 from nacl.public import SealedBox, PrivateKey as _PrivateKey, PublicKey as _PublicKey
 from nacl.signing import SigningKey as _SigningKey, VerifyKey as _VerifyKey
-from nacl.secret import SecretBox
 from nacl.bindings import crypto_sign_BYTES, crypto_scalarmult
 from nacl.hash import blake2b, BLAKE2B_BYTES
 from nacl.pwhash import argon2i
 from nacl.utils import random
 from nacl.encoding import RawEncoder
+
+from parsec.SecretBox2 import SecretBox
 
 
 # Note to simplify things, we adopt `nacl.CryptoError` as our root error cls

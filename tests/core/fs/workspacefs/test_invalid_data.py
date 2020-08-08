@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
@@ -70,7 +71,7 @@ async def testbed(running_backend, alice_user_fs, alice, bob):
 
 @pytest.mark.trio
 async def test_empty_blob(testbed):
-    exc_msg = "Cannot decrypt vlob: The nonce must be exactly 24 bytes long"
+    exc_msg = "Cannot decrypt vlob: Nonce must be a 24 bytes long bytes sequence"
     await testbed.run(blob=b"", exc_msg=exc_msg)
 
 
