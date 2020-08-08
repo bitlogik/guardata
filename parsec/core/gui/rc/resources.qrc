@@ -1,10 +1,10 @@
 <RCC>
     <qresource prefix="/logos">
-        <file>images/logos/parsec.png</file>
-        <file>images/logos/scille.png</file>
-        <file>images/logos/parsec_white_small.png</file>
-        <file>images/logos/parsec_white_medium.png</file>
-        <file>images/icons/parsec.png</file>
+        <file>images/logos/guardata.png</file>
+        <file>images/logos/bitlogik.png</file>
+        <file>images/logos/guardata_white_small.png</file>
+        <file>images/logos/guardata_white_medium.png</file>
+        <file>images/icons/guardata.png</file>
     </qresource>
     <qresource prefix="/translations">
         <file>translations/parsec_en.mo</file>

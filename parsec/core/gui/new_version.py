@@ -133,7 +133,7 @@ class NewVersionAvailable(QWidget, Ui_NewVersionAvailable):
     def set_version(self, version):
         if version:
             self.label.setText(
-                _("TEXT_PARSEC_NEW_VERSION_AVAILABLE_version").format(version=str(version))
+                _("TEXT_GUARDATA_NEW_VERSION_AVAILABLE_version").format(version=str(version))
             )
 
 

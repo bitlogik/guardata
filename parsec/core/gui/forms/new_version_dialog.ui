@@ -113,7 +113,7 @@ background-color: rgb(255, 255, 255);
            <string/>
           </property>
           <property name="pixmap">
-           <pixmap resource="../rc/resources.qrc">:/logos/images/logos/parsec.png</pixmap>
+           <pixmap resource="../rc/resources.qrc">:/logos/images/logos/guardata.png</pixmap>
           </property>
           <property name="scaledContents">
            <bool>true</bool>

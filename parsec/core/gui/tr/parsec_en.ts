@@ -9,7 +9,7 @@
     </message>
     <message>
         <location filename="../forms/about_widget.ui" line="115"/>
-        <source>TEXT_PARSEC_DEVELOPMENT_INFO</source>
+        <source>TEXT_GUARDATA_DEVELOPMENT_INFO</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -375,16 +375,6 @@
     <message>
         <location filename="../forms/create_org_second_page_widget.ui" line="35"/>
         <source>TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/create_org_second_page_widget.ui" line="54"/>
-        <source>TEXT_LABEL_USER_EMAIL</source>
-        <translation type="unfinished"></translation>
-    </message>
-    <message>
-        <location filename="../forms/create_org_second_page_widget.ui" line="96"/>
-        <source>TEXT_LABEL_ORG_NAME</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
@@ -895,12 +885,12 @@ p, li { white-space: pre-wrap; }
     </message>
     <message>
         <location filename="../forms/new_version_available.ui" line="88"/>
-        <source>ACTION_PARSEC_DOWNLOAD_NEW_VERSION</source>
+        <source>ACTION_GUARDATA_DOWNLOAD_NEW_VERSION</source>
         <translation type="unfinished"></translation>
     </message>
     <message>
         <location filename="../forms/new_version_available.ui" line="157"/>
-        <source>ACTION_PARSEC_IGNORE_NEW_VERSION</source>
+        <source>ACTION_GUARDATA_IGNORE_NEW_VERSION</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

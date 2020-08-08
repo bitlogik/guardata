@@ -23,9 +23,8 @@ int main(int argc, char *argv[])
     PyRun_SimpleString(
         "import os, sys\n"
         "from parsec.cli import cli\n"
-        "os.environ['SENTRY_URL'] = 'https://863e60bbef39406896d2b7a5dbd491bb@sentry.io/1212848'\n"
-        "os.makedirs(os.path.expandvars('%APPDATA%\\\\parsec'), exist_ok=True)\n"
-        "log_file = os.path.expandvars('%APPDATA%\\\\parsec\\\\parsec-core.log')\n"
+        "os.makedirs(os.path.expandvars('%APPDATA%\\\\guardata'), exist_ok=True)\n"
+        "log_file = os.path.expandvars('%APPDATA%\\\\guardata\\\\guardata-core.log')\n"
         "args = ['core', 'gui', '--log-level', 'INFO', '--log-file', log_file, ' '.join(sys.argv[1:])]\n"
         "cli(args)\n"
     );

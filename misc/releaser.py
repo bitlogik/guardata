@@ -238,29 +238,9 @@ def build_release(version, stage_pause):
         history_body = history_txt
 
     newsfragments = collect_newsfragments()
-    new_entry_title = f"Parsec {version} ({date.today().isoformat()})"
+    new_entry_title = f"guardata {version} ({date.today().isoformat()})"
     new_entry = f"\n\n{new_entry_title}\n{len(new_entry_title) * '-'}\n"
     issues_per_type = defaultdict(list)
-    for fragment in newsfragments:
-        issue_id, type, _ = fragment.name.split(".")
-        # Don't add empty fragments. Still needed to be collected as they will be deleted later
-        if type == "empty":
-            continue
-        issue_txt = f"{fragment.read_text()} (`#{issue_id} <https://github.com/Scille/parsec-cloud/issues/{issue_id}>`__)\n"
-        wrapped_issue_txt = textwrap.fill(
-            issue_txt, width=80, break_long_words=False, initial_indent="* ", subsequent_indent="  "
-        )
-        issues_per_type[type].append(wrapped_issue_txt)
-
-    if not issues_per_type:
-        new_entry += "\nNo significant changes.\n"
-    else:
-        for fragment_type, fragment_title in FRAGMENT_TYPES.items():
-            if fragment_type not in issues_per_type:
-                continue
-            new_entry += f"\n{fragment_title}\n{len(fragment_title) * '~'}\n\n"
-            new_entry += "\n".join(issues_per_type[fragment_type])
-            new_entry += "\n"
 
     updated_history_txt = f"{history_header}{new_entry}{history_body}".strip() + "\n"
     HISTORY_FILE.write_text(updated_history_txt)

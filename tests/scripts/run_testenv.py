@@ -11,7 +11,7 @@ Run `tests/scripts/run_testenv.sh --help` for more information.
 import pkg_resources
 
 # Make sure parsec is fully installed (core, backend, dev)
-pkg_resources.require("parsec-cloud[all]")
+pkg_resources.require("guardata[all]")
 
 import os
 import sys
@@ -24,7 +24,7 @@ import trio
 import click
 import psutil
 
-from parsec import __version__ as PARSEC_VERSION
+from parsec import __version__ as GUARDATA_VERSION
 from parsec.utils import trio_run
 from parsec.core.types import BackendAddr
 from parsec.core.config import get_default_config_dir
@@ -97,7 +97,7 @@ async def generate_gui_config():
         "gui_first_launch": False,
         "gui_check_version_at_startup": False,
         "gui_tray_enabled": False,
-        "gui_last_version": PARSEC_VERSION,
+        "gui_last_version": GUARDATA_VERSION,
         "gui_show_confined": True,
     }
     await config_file.write_text(json.dumps(config, indent=4))

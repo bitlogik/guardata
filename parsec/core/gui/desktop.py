@@ -16,16 +16,16 @@ def open_url(url):
     QDesktopServices.openUrl(QUrl(url))
 
 
-def open_doc_link():
-    open_url("https://parsec-cloud.readthedocs.io")
+# def open_doc_link():
+    # open_url("SOON")
 
 
 def open_feedback_link():
-    open_url("https://my.parsec.cloud/feedback")
+    open_url("https://guardata.app/queryform")
 
 
-def open_user_guide():
-    open_url("https://parsec.cloud")
+# def open_user_guide():
+    # open_url("https://USERGUIDE")
 
 
 def get_default_device():
@@ -52,7 +52,7 @@ def parsec_instances_count():
     inst_count = 0
     for proc in psutil.process_iter():
         try:
-            if proc.name().lower() in ["parsec", "parsec.exe"] and "backend" not in proc.cmdline():
+            if proc.name().lower() in ["guardata", "guardata.exe"] and "backend" not in proc.cmdline():
                 inst_count += 1
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass

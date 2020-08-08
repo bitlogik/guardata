@@ -1,11 +1,11 @@
 [Desktop Entry]
-Name=Parsec
-Comment=Secure cloud framework
-Exec=parsec %u
-Icon=${SNAP}/parsec.png
+Name=guardata
+Comment=trustless data cloud storage service
+Exec=guardata %u
+Icon=${SNAP}/guardata.png
 Type=Application
 Terminal=false
 StartupNotify=false
-StartupWMClass=Parsec
+StartupWMClass=guardata
 Categories=Network
 MimeType=x-scheme-handler/parsec;

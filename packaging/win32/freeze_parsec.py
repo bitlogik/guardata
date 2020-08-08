@@ -38,14 +38,14 @@ def run(cmd, **kwargs):
     return ret
 
 
-def main(parsec_source):
+def main(guardata_source):
     BUILD_DIR.mkdir(parents=True, exist_ok=True)
 
-    # Retrieve parsec version
+    # Retrieve version
     global_dict = {}
-    exec((parsec_source / "parsec/_version.py").read_text(), global_dict)
-    parsec_version = global_dict.get("__version__")
-    print(f"### Detected Parsec version {parsec_version} ###")
+    exec((guardata_source / "parsec/_version.py").read_text(), global_dict)
+    guardata_version = global_dict.get("__version__")
+    print(f"### Detected version {guardata_version} ###")
 
     # Fetch CPython distrib
     if not CPYTHON_DISTRIB_ARCHIVE.is_file():
@@ -60,14 +60,14 @@ def main(parsec_source):
         run(f"{ TOOLS_VENV_DIR / 'Scripts/python' } -m pip install wheel")
 
     if not WHEELS_DIR.is_dir():
-        print(f"### Generate wheels from Parsec&dependencies ###")
+        print(f"### Generate wheels from . and dependencies ###")
         run(
-            f"{ TOOLS_VENV_DIR / 'Scripts/python' } -m pip wheel {parsec_source}[core] --wheel-dir {WHEELS_DIR}"
+            f"{ TOOLS_VENV_DIR / 'Scripts/python' } -m pip wheel {guardata_source}[core] --wheel-dir {WHEELS_DIR}"
         )
 
     # Now we actually generate the build target
 
-    target_dir = BUILD_DIR / f"parsec-{parsec_version}-{get_archslug()}"
+    target_dir = BUILD_DIR / f"guardata-{guardata_version}-{get_archslug()}"
     if target_dir.exists():
         raise SystemExit(f"{target_dir} already exists, exiting...")
 
@@ -90,20 +90,20 @@ def main(parsec_source):
     pth_file.write_text(pth_file.read_text() + "site-packages\n")
 
     # Include LICENSE file
-    (target_dir / "LICENSE.txt").write_text((parsec_source / "LICENSE").read_text())
+    (target_dir / "LICENSE.txt").write_text((guardata_source / "LICENSE").read_text())
 
-    # Build parsec.exe
+    # Build guardata.exe
     resource_rc = BUILD_DIR / "resource.rc"
     resource_res = BUILD_DIR / "resource.res"
-    versioninfo = (*re.match(r"^.*([0-9]+)\.([0-9]+)\.([0-9]+)", parsec_version).groups(), "0")
-    escaped_parsec_ico = str(Path("parsec.ico").resolve()).replace("\\", "\\\\")
-    escaped_parsec_manifest = str(Path("parsec.manifest").resolve()).replace("\\", "\\\\")
+    versioninfo = (*re.match(r"^.*([0-9]+)\.([0-9]+)\.([0-9]+)", guardata_version).groups(), "0")
+    escaped_guardata_ico = str(Path("guardata.ico").resolve()).replace("\\", "\\\\")
+    escaped_guardata_manifest = str(Path("guardata.manifest").resolve()).replace("\\", "\\\\")
     resource_rc.write_text(
         f"""
 #include <windows.h>
 
-1 RT_MANIFEST "{escaped_parsec_manifest}"
-2 ICON "{escaped_parsec_ico}"
+1 RT_MANIFEST "{escaped_guardata_manifest}"
+2 ICON "{escaped_guardata_ico}"
 
 VS_VERSION_INFO VERSIONINFO
 FILEVERSION     {','.join(versioninfo)}
@@ -118,14 +118,14 @@ BEGIN
     BEGIN
         BLOCK "000004b0"
         BEGIN
-            VALUE "CompanyName",      "Scille SAS\\0"
-            VALUE "FileDescription",  "Parsec Secure Cloud Storage\\0"
-            VALUE "FileVersion",      "{parsec_version}\\0"
-            VALUE "InternalName",     "Parsec GUI Bootstrapper\\0"
-            VALUE "LegalCopyright",   "Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS\\0"
-            VALUE "OriginalFilename", "parsec.exe\\0"
-            VALUE "ProductName",      "Parsec\\0"
-            VALUE "ProductVersion",   "{parsec_version}\\0"
+            VALUE "CompanyName",      "BitLogiK\\0"
+            VALUE "FileDescription",  "trustless data cloud storage service\\0"
+            VALUE "FileVersion",      "{guardata_version}\\0"
+            VALUE "InternalName",     "guardata client\\0"
+            VALUE "LegalCopyright",   "guardata Copyright (c) AGPLv3 2019-2020 BitLogiK and Scille\\0"
+            VALUE "OriginalFilename", "guardata.exe\\0"
+            VALUE "ProductName",      "guardata\\0"
+            VALUE "ProductVersion",   "{guardata_version}\\0"
         END
     END
     BLOCK "VarFileInfo"
@@ -137,17 +137,17 @@ END
     )
     run(f"rc.exe /i. /fo {resource_res} {resource_rc}")
     # Must make sure /Fo option ends with a "\", otherwise it is not considered as a folder...
-    run(f"cl.exe parsec-bootstrap.c /c /I { CPYTHON_DIR / 'include' } /Fo{BUILD_DIR}\\")
+    run(f"cl.exe guardata-bootstrap.c /c /I { CPYTHON_DIR / 'include' } /Fo{BUILD_DIR}\\")
     run(
-        f"link.exe { BUILD_DIR / 'parsec-bootstrap.obj' } {resource_res} "
-        f"/LIBPATH:{ CPYTHON_DIR / 'libs' } /OUT:{ target_dir / 'parsec.exe' } "
+        f"link.exe { BUILD_DIR / 'guardata-bootstrap.obj' } {resource_res} "
+        f"/LIBPATH:{ CPYTHON_DIR / 'libs' } /OUT:{ target_dir / 'guardata.exe' } "
         f"/subsystem:windows /entry:mainCRTStartup"
     )
 
     # Create build info file for NSIS installer
     (BUILD_DIR / "BUILD.tmp").write_text(
         f'target = "{target_dir}"\n'
-        f'parsec_version = "{parsec_version}"\n'
+        f'guardata_version = "{guardata_version}"\n'
         f'python_version = "{sys.version_info.major}.{sys.version_info.minor}.{sys.version_info.micro}"\n'
         f'platform = "{get_archslug()}"\n'
     )
@@ -176,7 +176,7 @@ END
             curr_dir = target_file
         else:
             assert curr_dir == target_file.parent
-            install_files_lines.append(f'File "${{PARSEC_FREEZE_BUILD_DIR}}\\{target_file}"')
+            install_files_lines.append(f'File "${{GUARDATA_FREEZE_BUILD_DIR}}\\{target_file}"')
     (BUILD_DIR / "install_files.nsh").write_text("\n".join(install_files_lines))
 
     uninstall_files_lines = ["; Files to uninstall"]
@@ -189,7 +189,7 @@ END
 
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Freeze Parsec")
-    parser.add_argument("parsec_source")
+    parser = argparse.ArgumentParser(description="Freeze guardata")
+    parser.add_argument("guardata_source")
     args = parser.parse_args()
-    main(Path(args.parsec_source))
+    main(Path(args.guardata_source))
