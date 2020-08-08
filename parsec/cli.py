@@ -21,7 +21,7 @@ except ImportError as exc:
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="parsec")
+@click.version_option(version=__version__, prog_name="guardata")
 def cli():
     pass
 
