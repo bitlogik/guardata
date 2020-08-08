@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from uuid import UUID
@@ -15,7 +16,7 @@ from msgpack.exceptions import ExtraData, FormatError, StackError
 from parsec.serde.exceptions import SerdePackingError
 
 
-MAX_BIN_LEN = 1024 * 1024  # 1 MB
+MAX_BIN_LEN = 8 * 1024 * 1024  # 2*4 MB (>150% 4MB)
 
 
 def packb(data: dict, exc_cls=SerdePackingError) -> bytes:

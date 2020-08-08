@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import errno
@@ -365,7 +366,7 @@ async def test_dump(alice_workspace):
                 "children": {
                     "bar": {
                         "base_version": 1,
-                        "blocksize": 524_288,
+                        "blocksize": 4_194_304,
                         "blocks": [],
                         "created": ANY,
                         "id": ANY,

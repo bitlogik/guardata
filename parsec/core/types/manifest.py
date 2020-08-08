@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import attr
@@ -36,7 +37,7 @@ __all__ = (
 )
 
 
-DEFAULT_BLOCK_SIZE = 512 * 1024  # 512 KB
+DEFAULT_BLOCK_SIZE = 4096 * 1024  # 4 MB
 
 
 # Cheap rename
