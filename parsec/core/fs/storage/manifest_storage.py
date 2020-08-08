@@ -1,15 +1,19 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
+import re
+
 import trio
 from structlog import get_logger
-from typing import Dict, Tuple, Set, Optional
+from typing import Dict, Tuple, Set, Optional, Union, Pattern
 from async_generator import asynccontextmanager
 
 from parsec.core.fs.exceptions import FSLocalMissError
-from parsec.core.types import EntryID, ChunkID, LocalDevice, LocalManifest
+from parsec.core.types import EntryID, ChunkID, LocalDevice, LocalManifest, BlockID
 from parsec.core.fs.storage.local_database import LocalDatabase
 
 logger = get_logger()
+
+EMPTY_PATTERN = r"^/b$"  # Do not match anything
 
 
 class ManifestStorage:
@@ -25,7 +29,7 @@ class ManifestStorage:
 
         # This cache contains all the manifests that have been set or accessed
         # since the last call to `clear_memory_cache`
-        self._cache = {}
+        self._cache: Dict[EntryID, LocalManifest] = {}
 
         # This dictionnary keeps track of all the entry ids of the manifests
         # that have been added to the cache but still needs to be written to
@@ -33,7 +37,7 @@ class ManifestStorage:
         # the chunks that needs to be removed from the localdb after the
         # manifest is written. Note: this set might be empty but the manifest
         # still requires to be flushed.
-        self._cache_ahead_of_localdb = {}
+        self._cache_ahead_of_localdb: Dict[EntryID, Set[Union[ChunkID, BlockID]]] = {}
 
     @property
     def path(self):
@@ -87,6 +91,47 @@ class ManifestStorage:
                   checkpoint INTEGER NOT NULL
                 );
                 """
+            )
+            # Singleton storing the pattern_filter
+            cursor.execute(
+                """
+                CREATE TABLE IF NOT EXISTS pattern_filter
+                (
+                  _id INTEGER PRIMARY KEY NOT NULL,
+                  pattern TEXT NOT NULL,
+                  fully_applied INTEGER NOT NULL  -- Boolean
+                );
+                """
+            )
+            # Set the default pattern filter if it doesn't exist
+            cursor.execute(
+                """
+                INSERT OR IGNORE INTO pattern_filter(_id, pattern, fully_applied)
+                VALUES (0, ?, 0)""",
+                (EMPTY_PATTERN,),
+            )
+
+    # Pattern filter operations
+
+    async def get_pattern_filter(self) -> Tuple[Pattern, bool]:
+        async with self._open_cursor() as cursor:
+            cursor.execute("SELECT pattern, fully_applied FROM pattern_filter WHERE _id = 0")
+            reply = cursor.fetchone()
+            pattern, fully_applied = reply
+            return (re.compile(pattern), bool(fully_applied))
+
+    async def set_pattern_filter(self, pattern: Pattern):
+        async with self._open_cursor() as cursor:
+            cursor.execute(
+                """UPDATE pattern_filter SET pattern = ?, fully_applied = 0 WHERE _id = 0 AND pattern != ?""",
+                (pattern.pattern, pattern.pattern),
+            )
+
+    async def set_pattern_filter_fully_applied(self, pattern):
+        async with self._open_cursor() as cursor:
+            cursor.execute(
+                """UPDATE pattern_filter SET fully_applied = 1 WHERE _id = 0 AND pattern = ?""",
+                (pattern.pattern,),
             )
 
     # Checkpoint operations
@@ -172,7 +217,7 @@ class ManifestStorage:
         entry_id: EntryID,
         manifest: LocalManifest,
         cache_only: bool = False,
-        removed_ids: Optional[Set[ChunkID]] = None,
+        removed_ids: Optional[Set[Union[ChunkID, BlockID]]] = None,
     ) -> None:
         """
         Raises: Nothing !

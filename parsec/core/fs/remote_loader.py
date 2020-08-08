@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from contextlib import contextmanager
-from typing import Dict, Optional, List, Tuple
+from typing import Dict, Optional, List, Tuple, cast
 
 from pendulum import Pendulum, now as pendulum_now
 
@@ -127,7 +127,7 @@ class RemoteLoader:
                 key=lambda x: x[0].timestamp,
             )
 
-            current_roles = {}
+            current_roles: Dict[UserID, RealmRole] = {}
             owner_only = (RealmRole.OWNER,)
             owner_or_manager = (RealmRole.OWNER, RealmRole.MANAGER)
 
@@ -147,7 +147,7 @@ class RemoteLoader:
                 existing_user_role = current_roles.get(unsecure_certif.user_id)
                 if not current_roles and unsecure_certif.user_id == author.device_id.user_id:
                     # First user is autosigned
-                    needed_roles = (None,)
+                    needed_roles: Tuple[Optional[RealmRole], ...] = (None,)
                 elif (
                     existing_user_role in owner_or_manager
                     or unsecure_certif.role in owner_or_manager
@@ -155,7 +155,11 @@ class RemoteLoader:
                     needed_roles = owner_only
                 else:
                     needed_roles = owner_or_manager
-                if current_roles.get(unsecure_certif.author.user_id) not in needed_roles:
+                # TODO: typing, author is optional in base.py but it seems that manifests always have an author (no RVK)
+                if (
+                    current_roles.get(cast(DeviceID, unsecure_certif.author).user_id)
+                    not in needed_roles
+                ):
                     raise FSError(
                         f"Invalid realm role certificates: "
                         f"{unsecure_certif.author} has not right to give "
@@ -261,7 +265,7 @@ class RemoteLoader:
             raise FSWorkspaceNoReadAccess("Cannot load block: no read access")
         elif rep["status"] == "in_maintenance":
             raise FSWorkspaceInMaintenance(
-                f"Cannot download block while the workspace in maintenance"
+                "Cannot download block while the workspace in maintenance"
             )
         elif rep["status"] != "ok":
             raise FSError(f"Cannot download block: `{rep['status']}`")
@@ -304,9 +308,7 @@ class RemoteLoader:
             # Seems we lost the access to the realm
             raise FSWorkspaceNoWriteAccess("Cannot upload block: no write access")
         elif rep["status"] == "in_maintenance":
-            raise FSWorkspaceInMaintenance(
-                f"Cannot upload block while the workspace in maintenance"
-            )
+            raise FSWorkspaceInMaintenance("Cannot upload block while the workspace in maintenance")
         elif rep["status"] != "ok":
             raise FSError(f"Cannot upload block: {rep}")
 
@@ -317,9 +319,9 @@ class RemoteLoader:
     async def load_manifest(
         self,
         entry_id: EntryID,
-        version: int = None,
-        timestamp: Pendulum = None,
-        expected_backend_timestamp: Pendulum = None,
+        version: Optional[int] = None,
+        timestamp: Optional[Pendulum] = None,
+        expected_backend_timestamp: Optional[Pendulum] = None,
     ) -> RemoteManifest:
         """
         Download a manifest.
@@ -368,7 +370,7 @@ class RemoteLoader:
             )
         elif rep["status"] == "in_maintenance":
             raise FSWorkspaceInMaintenance(
-                f"Cannot download vlob while the workspace is in maintenance"
+                "Cannot download vlob while the workspace is in maintenance"
             )
         elif rep["status"] != "ok":
             raise FSError(f"Cannot fetch vlob {entry_id}: `{rep['status']}`")
@@ -437,7 +439,7 @@ class RemoteLoader:
             raise FSRemoteManifestNotFound(entry_id)
         elif rep["status"] == "in_maintenance":
             raise FSWorkspaceInMaintenance(
-                f"Cannot download vlob while the workspace is in maintenance"
+                "Cannot download vlob while the workspace is in maintenance"
             )
         elif rep["status"] != "ok":
             raise FSError(f"Cannot fetch vlob {entry_id}: `{rep['status']}`")
@@ -526,7 +528,7 @@ class RemoteLoader:
             )
         elif rep["status"] == "in_maintenance":
             raise FSWorkspaceInMaintenance(
-                f"Cannot create vlob while the workspace is in maintenance"
+                "Cannot create vlob while the workspace is in maintenance"
             )
         elif rep["status"] != "ok":
             raise FSError(f"Cannot create vlob {entry_id}: `{rep['status']}`")
@@ -569,7 +571,7 @@ class RemoteLoader:
             )
         elif rep["status"] == "in_maintenance":
             raise FSWorkspaceInMaintenance(
-                f"Cannot create vlob while the workspace is in maintenance"
+                "Cannot create vlob while the workspace is in maintenance"
             )
         elif rep["status"] != "ok":
             raise FSError(f"Cannot update vlob {entry_id}: `{rep['status']}`")
@@ -591,14 +593,14 @@ class RemoteLoaderTimestamped(RemoteLoader):
         self.timestamp = timestamp
 
     async def upload_block(self, *e, **ke):
-        raise FSError(f"Cannot upload block through a timestamped remote loader")
+        raise FSError("Cannot upload block through a timestamped remote loader")
 
     async def load_manifest(
         self,
         entry_id: EntryID,
-        version: int = None,
-        timestamp: Pendulum = None,
-        expected_backend_timestamp: Pendulum = None,
+        version: Optional[int] = None,
+        timestamp: Optional[Pendulum] = None,
+        expected_backend_timestamp: Optional[Pendulum] = None,
     ) -> RemoteManifest:
         """
         Allows to have manifests at all timestamps as it is needed by the versions method of either
@@ -626,10 +628,10 @@ class RemoteLoaderTimestamped(RemoteLoader):
         )
 
     async def upload_manifest(self, *e, **ke):
-        raise FSError(f"Cannot upload manifest through a timestamped remote loader")
+        raise FSError("Cannot upload manifest through a timestamped remote loader")
 
     async def _vlob_create(self, *e, **ke):
-        raise FSError(f"Cannot create vlob through a timestamped remote loader")
+        raise FSError("Cannot create vlob through a timestamped remote loader")
 
     async def _vlob_update(self, *e, **ke):
-        raise FSError(f"Cannot update vlob through a timestamped remote loader")
+        raise FSError("Cannot update vlob through a timestamped remote loader")

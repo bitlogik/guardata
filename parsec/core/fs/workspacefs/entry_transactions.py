@@ -1,7 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
-from typing import Tuple
+from typing import Tuple, cast, Optional, AsyncIterator
 from async_generator import asynccontextmanager
 
 from parsec.core.types import (
@@ -12,9 +11,11 @@ from parsec.core.types import (
     LocalFileManifest,
     LocalFolderManifest,
     FileDescriptor,
+    LocalFolderishManifests,
 )
 
 
+from parsec.core.core_events import CoreEvent
 from parsec.core.fs.workspacefs.file_transactions import FileTransactions
 from parsec.core.fs.utils import is_file_manifest, is_folder_manifest, is_folderish_manifest
 from parsec.core.fs.exceptions import (
@@ -35,6 +36,8 @@ WRITE_RIGHT_ROLES = (WorkspaceRole.OWNER, WorkspaceRole.MANAGER, WorkspaceRole.C
 
 
 class EntryTransactions(FileTransactions):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     # Right management helper
 
@@ -53,8 +56,10 @@ class EntryTransactions(FileTransactions):
         try:
             return await self.local_storage.get_manifest(entry_id)
         except FSLocalMissError as exc:
-            remote_manifest = await self.remote_loader.load_manifest(exc.id)
-            return LocalManifest.from_remote(remote_manifest)
+            remote_manifest = await self.remote_loader.load_manifest(cast(EntryID, exc.id))
+            return LocalManifest.from_remote(
+                remote_manifest, pattern_filter=self.local_storage.get_pattern_filter()
+            )
 
     @asynccontextmanager
     async def _load_and_lock_manifest(self, entry_id: EntryID):
@@ -62,8 +67,10 @@ class EntryTransactions(FileTransactions):
             try:
                 local_manifest = await self.local_storage.get_manifest(entry_id)
             except FSLocalMissError as exc:
-                remote_manifest = await self.remote_loader.load_manifest(exc.id)
-                local_manifest = LocalManifest.from_remote(remote_manifest)
+                remote_manifest = await self.remote_loader.load_manifest(cast(EntryID, exc.id))
+                local_manifest = LocalManifest.from_remote(
+                    remote_manifest, pattern_filter=self.local_storage.get_pattern_filter()
+                )
                 await self.local_storage.set_manifest(entry_id, local_manifest)
             yield local_manifest
 
@@ -71,33 +78,42 @@ class EntryTransactions(FileTransactions):
         async with self._load_and_lock_manifest(entry_id) as manifest:
             return manifest
 
-    @asynccontextmanager
-    async def _lock_manifest_from_path(self, path: FsPath) -> LocalManifest:
+    async def _entry_id_from_path(self, path: FsPath) -> Tuple[EntryID, bool]:
         # Root entry_id and manifest
         entry_id = self.workspace_id
+        confined = False
 
         # Follow the path
         for name in path.parts:
             manifest = await self._load_manifest(entry_id)
             if is_file_manifest(manifest):
                 raise FSNotADirectoryError(filename=path)
+            manifest = cast(LocalFolderishManifests, manifest)
             try:
                 entry_id = manifest.children[name]
             except (AttributeError, KeyError):
                 raise FSFileNotFoundError(filename=path)
+            if entry_id in manifest.confined_entries:
+                confined = True
 
-        # Lock entry
+        # Return both entry_id and confined status
+        return entry_id, confined
+
+    @asynccontextmanager
+    async def _lock_manifest_from_path(self, path: FsPath) -> AsyncIterator[LocalManifest]:
+        entry_id, _ = await self._entry_id_from_path(path)
         async with self._load_and_lock_manifest(entry_id) as manifest:
             yield manifest
 
-    async def _get_manifest_from_path(self, path: FsPath) -> LocalManifest:
-        async with self._lock_manifest_from_path(path) as manifest:
-            return manifest
+    async def _get_manifest_from_path(self, path: FsPath) -> Tuple[LocalManifest, bool]:
+        entry_id, confined = await self._entry_id_from_path(path)
+        manifest = await self._load_manifest(entry_id)
+        return manifest, confined
 
     @asynccontextmanager
     async def _lock_parent_manifest_from_path(
         self, path: FsPath
-    ) -> Tuple[LocalManifest, LocalManifest]:
+    ) -> AsyncIterator[Tuple[LocalManifest, Optional[LocalManifest]]]:
         # This is the most complicated locking scenario.
         # It requires locking the parent of the given entry and the entry itself
         # if it exists.
@@ -156,12 +172,14 @@ class EntryTransactions(FileTransactions):
         self.check_read_rights(path)
 
         # Fetch data
-        manifest = await self._get_manifest_from_path(path)
-        return manifest.to_stats()
+        manifest, confined = await self._get_manifest_from_path(path)
+        stats = manifest.to_stats()
+        stats["confined"] = confined
+        return stats
 
     async def entry_rename(
         self, source: FsPath, destination: FsPath, overwrite: bool = True
-    ) -> EntryID:
+    ) -> Optional[EntryID]:
         # Check write rights
         self.check_write_rights(source)
 
@@ -191,7 +209,7 @@ class EntryTransactions(FileTransactions):
 
             # Source and destination are the same
             if source.name == destination.name:
-                return
+                return None
 
             # Destination already exists
             if not overwrite and child is not None:
@@ -221,7 +239,8 @@ class EntryTransactions(FileTransactions):
 
             # Create new manifest
             new_parent = parent.evolve_children_and_mark_updated(
-                {destination.name: source_entry_id, source.name: None}
+                {destination.name: source_entry_id, source.name: None},
+                pattern_filter=self.local_storage.get_pattern_filter(),
             )
 
             # Atomic change
@@ -253,7 +272,9 @@ class EntryTransactions(FileTransactions):
                 raise FSDirectoryNotEmptyError(filename=path)
 
             # Create new manifest
-            new_parent = parent.evolve_children_and_mark_updated({path.name: None})
+            new_parent = parent.evolve_children_and_mark_updated(
+                {path.name: None}, pattern_filter=self.local_storage.get_pattern_filter()
+            )
 
             # Atomic change
             await self.local_storage.set_manifest(parent.id, new_parent)
@@ -280,7 +301,9 @@ class EntryTransactions(FileTransactions):
                 raise FSIsADirectoryError(filename=path)
 
             # Create new manifest
-            new_parent = parent.evolve_children_and_mark_updated({path.name: None})
+            new_parent = parent.evolve_children_and_mark_updated(
+                {path.name: None}, pattern_filter=self.local_storage.get_pattern_filter()
+            )
 
             # Atomic change
             await self.local_storage.set_manifest(parent.id, new_parent)
@@ -306,7 +329,9 @@ class EntryTransactions(FileTransactions):
             child = LocalFolderManifest.new_placeholder(parent=parent.id)
 
             # New parent manifest
-            new_parent = parent.evolve_children_and_mark_updated({path.name: child.id})
+            new_parent = parent.evolve_children_and_mark_updated(
+                {path.name: child.id}, pattern_filter=self.local_storage.get_pattern_filter()
+            )
 
             # ~ Atomic change
             await self.local_storage.set_manifest(child.id, child, check_lock_status=False)
@@ -319,7 +344,9 @@ class EntryTransactions(FileTransactions):
         # Return the entry id of the created folder
         return child.id
 
-    async def file_create(self, path: FsPath, open=True) -> Tuple[EntryID, FileDescriptor]:
+    async def file_create(
+        self, path: FsPath, open=True
+    ) -> Tuple[EntryID, Optional[FileDescriptor]]:
         # Check write rights
         self.check_write_rights(path)
 
@@ -334,7 +361,9 @@ class EntryTransactions(FileTransactions):
             child = LocalFileManifest.new_placeholder(parent=parent.id)
 
             # New parent manifest
-            new_parent = parent.evolve_children_and_mark_updated({path.name: child.id})
+            new_parent = parent.evolve_children_and_mark_updated(
+                {path.name: child.id}, pattern_filter=self.local_storage.get_pattern_filter()
+            )
 
             # ~ Atomic change
             await self.local_storage.set_manifest(child.id, child, check_lock_status=False)

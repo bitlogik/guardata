@@ -53,6 +53,7 @@ class CoreConfig:
     data_base_dir: Path
     cache_base_dir: Path
     mountpoint_base_dir: Path
+    pattern_filter: Optional[str] = None  # None means: use the default filter
 
     debug: bool = False
 
@@ -80,6 +81,7 @@ class CoreConfig:
     gui_confirmation_before_close: bool = True
     gui_workspace_color: bool = False
     gui_allow_multiple_instances: bool = False
+    gui_show_confined: bool = False
 
     ipc_socket_file: Path = None
     ipc_win32_mutex_name: str = "parsec-cloud"
@@ -93,6 +95,7 @@ def config_factory(
     data_base_dir: Path = None,
     cache_base_dir: Path = None,
     mountpoint_base_dir: Path = None,
+    pattern_filter: Optional[str] = None,
     mountpoint_enabled: bool = False,
     disabled_workspaces: FrozenSet[EntryID] = frozenset(),
     backend_max_cooldown: int = 30,
@@ -109,6 +112,7 @@ def config_factory(
     gui_check_version_allow_pre_release: bool = False,
     gui_workspace_color: bool = False,
     gui_allow_multiple_instances: bool = False,
+    gui_show_confined: bool = False,
     environ: dict = {},
     **_,
 ) -> CoreConfig:
@@ -118,6 +122,7 @@ def config_factory(
         data_base_dir=data_base_dir,
         cache_base_dir=cache_base_dir or get_default_cache_base_dir(environ),
         mountpoint_base_dir=get_default_mountpoint_base_dir(environ),
+        pattern_filter=pattern_filter,
         mountpoint_enabled=mountpoint_enabled,
         disabled_workspaces=disabled_workspaces,
         backend_max_cooldown=backend_max_cooldown,
@@ -135,6 +140,7 @@ def config_factory(
         gui_check_version_allow_pre_release=gui_check_version_allow_pre_release,
         gui_workspace_color=gui_workspace_color,
         gui_allow_multiple_instances=gui_allow_multiple_instances,
+        gui_show_confined=gui_show_confined,
         ipc_socket_file=data_base_dir / "parsec-cloud.lock",
         ipc_win32_mutex_name="parsec-cloud",
     )
@@ -206,6 +212,7 @@ def save_config(config: CoreConfig):
             {
                 "data_base_dir": str(config.data_base_dir),
                 "cache_base_dir": str(config.cache_base_dir),
+                "pattern_filter": config.pattern_filter,
                 "telemetry_enabled": config.telemetry_enabled,
                 "disabled_workspaces": list(map(str, config.disabled_workspaces)),
                 "backend_max_cooldown": config.backend_max_cooldown,
@@ -219,6 +226,7 @@ def save_config(config: CoreConfig):
                 "gui_check_version_allow_pre_release": config.gui_check_version_allow_pre_release,
                 "gui_workspace_color": config.gui_workspace_color,
                 "gui_allow_multiple_instances": config.gui_allow_multiple_instances,
+                "gui_show_confined": config.gui_show_confined,
             },
             indent=True,
         )

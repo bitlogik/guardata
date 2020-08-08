@@ -3,18 +3,18 @@
 import attr
 import trio
 from collections import defaultdict
-from typing import Union, List, Dict, Tuple, AsyncGenerator
+from typing import Union, List, Dict, Tuple, AsyncIterator, cast, Pattern
 from pendulum import Pendulum, now as pendulum_now
 
 from parsec.api.data import Manifest as RemoteManifest
+from parsec.api.data import FileManifest as RemoteFileManifest
 from parsec.api.protocol import UserID
 from parsec.core.types import (
     FsPath,
     EntryID,
     LocalDevice,
     WorkspaceRole,
-    LocalFolderishManifests,
-    LocalFileManifest,
+    RemoteFolderishManifests,
     DEFAULT_BLOCK_SIZE,
 )
 from parsec.core.fs.remote_loader import RemoteLoader
@@ -43,8 +43,8 @@ AnyPath = Union[FsPath, str]
 
 @attr.s(slots=True, frozen=True, auto_attribs=True)
 class ReencryptionNeed:
-    user_revoked: Tuple[UserID]
-    role_revoked: Tuple[UserID]
+    user_revoked: Tuple[UserID, ...]
+    role_revoked: Tuple[UserID, ...]
 
     @property
     def need_reencryption(self):
@@ -69,7 +69,7 @@ class WorkspaceFS:
         self.backend_cmds = backend_cmds
         self.event_bus = event_bus
         self.remote_devices_manager = remote_devices_manager
-        self.sync_locks = defaultdict(trio.Lock)
+        self.sync_locks: Dict[EntryID, trio.Lock] = defaultdict(trio.Lock)
 
         self.remote_loader = RemoteLoader(
             self.device,
@@ -241,7 +241,7 @@ class WorkspaceFS:
         info = await self.transactions.entry_info(FsPath(path))
         return info["type"] == "file"
 
-    async def iterdir(self, path: AnyPath) -> AsyncGenerator[FsPath, None]:
+    async def iterdir(self, path: AnyPath) -> AsyncIterator[FsPath]:
         """
         Raises:
             FSError
@@ -449,11 +449,11 @@ class WorkspaceFS:
 
     # Sync helpers
 
-    async def _synchronize_placeholders(self, manifest: LocalFolderishManifests) -> None:
+    async def _synchronize_placeholders(self, manifest: RemoteFolderishManifests) -> None:
         async for child in self.transactions.get_placeholder_children(manifest):
             await self.minimal_sync(child)
 
-    async def _upload_blocks(self, manifest: LocalFileManifest) -> None:
+    async def _upload_blocks(self, manifest: RemoteFileManifest) -> None:
         for access in manifest.blocks:
             try:
                 data = await self.local_storage.get_dirty_block(access.id)
@@ -542,11 +542,13 @@ class WorkspaceFS:
 
             # Synchronize placeholder children
             if is_folderish_manifest(new_remote_manifest):
-                await self._synchronize_placeholders(new_remote_manifest)
+                await self._synchronize_placeholders(
+                    cast(RemoteFolderishManifests, new_remote_manifest)
+                )
 
             # Upload blocks
             if is_file_manifest(new_remote_manifest):
-                await self._upload_blocks(new_remote_manifest)
+                await self._upload_blocks(cast(RemoteFileManifest, new_remote_manifest))
 
             # Restamp the remote manifest
             new_remote_manifest = new_remote_manifest.evolve(timestamp=pendulum_now())
@@ -608,7 +610,7 @@ class WorkspaceFS:
             return
 
         # Synchronize children
-        for name, entry_id in manifest.children.items():
+        for name, entry_id in cast(RemoteFolderishManifests, manifest).children.items():
             await self.sync_by_id(entry_id, remote_changed=remote_changed, recursive=True)
 
     async def sync(self, *, remote_changed: bool = True) -> None:
@@ -617,6 +619,41 @@ class WorkspaceFS:
             FSError
         """
         await self.sync_by_id(self.workspace_id, remote_changed=remote_changed, recursive=True)
+
+    # Apply filter
+
+    async def _recursive_apply_filter(self, entry_id: EntryID, pattern_filter: Pattern):
+        # Load manifest
+        try:
+            manifest = await self.local_storage.get_manifest(entry_id)
+        # Not stored locally, nothing to do
+        except FSLocalMissError:
+            return
+
+        # A file manifest, nothing to do
+        if is_file_manifest(manifest):
+            return
+
+        # Apply filter (idempotent)
+        await self.transactions.apply_filter(entry_id, pattern_filter)
+
+        # Synchronize children
+        for name, child_entry_id in manifest.children.items():
+            await self._recursive_apply_filter(child_entry_id, pattern_filter)
+
+    async def apply_pattern_filter(self, pattern: Pattern):
+        # Fully apply pattern filter
+        await self._recursive_apply_filter(self.workspace_id, pattern)
+        # Acknowledge pattern filter
+        await self.local_storage.set_pattern_filter_fully_applied(pattern)
+
+    async def set_pattern_filter(self, pattern: Pattern):
+        await self.local_storage.set_pattern_filter(pattern)
+
+    async def set_and_apply_pattern_filter(self, pattern: Pattern):
+        await self.set_pattern_filter(pattern)
+        if not self.local_storage.get_pattern_filter_fully_applied():
+            await self.apply_pattern_filter(self.local_storage.get_pattern_filter())
 
     # Debugging helper
 

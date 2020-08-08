@@ -1,11 +1,12 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
 from itertools import count
-from typing import Optional, List, Dict, Iterator
+from typing import Optional, List, Dict, AsyncIterator, cast, Tuple, Any, Union, Pattern
 
 from pendulum import now as pendulum_now
+
 from parsec.api.protocol import DeviceID
+from parsec.core.core_events import CoreEvent
 from parsec.api.data import Manifest as RemoteManifest
 from parsec.core.types import (
     Chunk,
@@ -13,7 +14,9 @@ from parsec.core.types import (
     EntryName,
     LocalManifest,
     LocalFileManifest,
+    LocalFolderManifest,
     LocalFolderishManifests,
+    RemoteFolderishManifests,
 )
 
 from parsec.core.fs.workspacefs.entry_transactions import EntryTransactions
@@ -23,7 +26,7 @@ from parsec.core.fs.exceptions import (
     FSLocalMissError,
 )
 
-from parsec.core.fs.utils import is_file_manifest
+from parsec.core.fs.utils import is_file_manifest, is_workspace_manifest, is_folderish_manifest
 
 __all__ = "SyncTransactions"
 
@@ -38,7 +41,9 @@ def get_filename(manifest: LocalFolderishManifests, entry_id: EntryID) -> Option
     return next(gen, None)
 
 
-def get_conflict_filename(filename: EntryName, filenames: List[EntryName], author: DeviceID):
+def get_conflict_filename(
+    filename: EntryName, filenames: List[EntryName], author: Optional[DeviceID]
+):
     counter = count(2)
     new_filename = full_name(filename, [f"conflicting with {author}"])
     while new_filename in filenames:
@@ -68,7 +73,7 @@ def merge_folder_children(
     base_children: Dict[EntryName, EntryID],
     local_children: Dict[EntryName, EntryID],
     remote_children: Dict[EntryName, EntryID],
-    remote_device_name: DeviceID,
+    remote_device_name: Optional[DeviceID],
 ):
     # Prepare lookups
     base_reversed = {entry_id: name for name, entry_id in base_children.items()}
@@ -79,8 +84,8 @@ def merge_folder_children(
     ids = set(local_reversed) | set(remote_reversed)
 
     # First map all ids to their rightful name
-    solved_local_children = {}
-    solved_remote_children = {}
+    solved_local_children: Dict[EntryName, Any] = {}
+    solved_remote_children: Dict[EntryName, Any] = {}
     for id in ids:
         base_name = base_reversed.get(id)
         local_name = local_reversed.get(id)
@@ -137,27 +142,36 @@ def merge_folder_children(
 
 def merge_manifests(
     local_author: DeviceID,
+    pattern_filter: Pattern,
     local_manifest: LocalManifest,
     remote_manifest: Optional[RemoteManifest] = None,
+    force_filter: Optional[bool] = False,
 ):
-    # Exctract versions
-    local_version = local_manifest.base_version
-    remote_version = local_version if remote_manifest is None else remote_manifest.version
+    # Start by re-applying filter (idempotent)
+    if is_folderish_manifest(local_manifest) and force_filter:
+        local_manifest = cast(LocalFolderishManifests, local_manifest).apply_filter(pattern_filter)
 
     # The remote hasn't changed
-    if remote_version <= local_version:
+    if remote_manifest is None or remote_manifest.version <= local_manifest.base_version:
         return local_manifest
+    remote_manifest = cast(RemoteManifest, remote_manifest)
+
+    # Exctract versions
+    assert remote_manifest is not None
+    remote_version = remote_manifest.version
+    local_version = local_manifest.base_version
+    local_from_remote = LocalManifest.from_remote(remote_manifest, pattern_filter, local_manifest)
 
     # Only the remote has changed
     if not local_manifest.need_sync:
-        return LocalManifest.from_remote(remote_manifest)
+        return local_from_remote
 
     # Both the remote and the local have changed
     assert remote_version > local_version and local_manifest.need_sync
 
     # All the local changes have been successfully uploaded
     if local_manifest.match_remote(remote_manifest):
-        return LocalManifest.from_remote(remote_manifest)
+        return local_from_remote
 
     # The remote changes are ours, simply acknowledge them and keep our local changes
     if remote_manifest.author == local_author:
@@ -172,12 +186,14 @@ def merge_manifests(
 
     # Solve the folder conflict
     new_children = merge_folder_children(
-        local_manifest.base.children,
-        local_manifest.children,
-        remote_manifest.children,
+        cast(LocalFolderishManifests, local_manifest).base.children,
+        cast(LocalFolderishManifests, local_manifest).children,
+        cast(LocalFolderishManifests, local_from_remote).children,
         remote_manifest.author,
     )
-    return local_manifest.evolve_and_mark_updated(base=remote_manifest, children=new_children)
+
+    # Mark as updated
+    return local_from_remote.evolve_and_mark_updated(children=new_children)
 
 
 class SyncTransactions(EntryTransactions):
@@ -185,8 +201,8 @@ class SyncTransactions(EntryTransactions):
     # Public read-only helpers
 
     async def get_placeholder_children(
-        self, remote_manifest: LocalFolderishManifests
-    ) -> Iterator[EntryID]:
+        self, remote_manifest: RemoteFolderishManifests
+    ) -> AsyncIterator[EntryID]:
         # Check children placeholder
         for chield_entry_id in remote_manifest.children.values():
             try:
@@ -203,6 +219,17 @@ class SyncTransactions(EntryTransactions):
         return manifest.base.evolve(author=self.local_author, timestamp=pendulum_now(), version=1)
 
     # Atomic transactions
+
+    async def apply_filter(self, entry_id: EntryID, pattern_filter: Pattern) -> None:
+        # Fetch and lock
+        async with self.local_storage.lock_manifest(entry_id) as local_manifest:
+
+            # Craft new local manifest
+            new_local_manifest = local_manifest.apply_filter(pattern_filter)
+
+            # Set the new base manifest
+            if new_local_manifest != local_manifest:
+                await self.local_storage.set_manifest(entry_id, new_local_manifest)
 
     async def synchronization_step(
         self,
@@ -224,6 +251,23 @@ class SyncTransactions(EntryTransactions):
         # Fetch and lock
         async with self.local_storage.lock_manifest(entry_id) as local_manifest:
 
+            # Go through the parent chain
+            current_manifest = local_manifest
+            while not is_workspace_manifest(current_manifest):
+                parent_manifest = await self.local_storage.get_manifest(current_manifest.parent)
+                parent_manifest = cast(LocalFolderishManifests, parent_manifest)
+
+                # The entry is not confined
+                if current_manifest.id not in parent_manifest.confined_entries:
+                    current_manifest = parent_manifest
+                    continue
+
+                # Send synced event
+                self._send_event(
+                    CoreEvent.FS_ENTRY_CONFINED, entry_id=entry_id, cause_id=parent_manifest.id
+                )
+                return None
+
             # Sync cannot be performed yet
             if not final and is_file_manifest(local_manifest) and not local_manifest.is_reshaped():
 
@@ -239,7 +283,11 @@ class SyncTransactions(EntryTransactions):
                 assert local_manifest.is_reshaped()
 
             # Merge manifests
-            new_local_manifest = merge_manifests(self.local_author, local_manifest, remote_manifest)
+            pattern_filter = self.local_storage.get_pattern_filter()
+            force_filter = not self.local_storage.get_pattern_filter_fully_applied()
+            new_local_manifest = merge_manifests(
+                self.local_author, pattern_filter, local_manifest, remote_manifest, force_filter
+            )
 
             # Extract authors
             base_author = local_manifest.base.author
@@ -248,10 +296,9 @@ class SyncTransactions(EntryTransactions):
             # Extract versions
             base_version = local_manifest.base_version
             new_base_version = new_local_manifest.base_version
-            remote_version = base_version if remote_manifest is None else remote_manifest.version
 
             # Set the new base manifest
-            if base_version != remote_version or new_local_manifest.need_sync:
+            if new_local_manifest != local_manifest:
                 await self.local_storage.set_manifest(entry_id, new_local_manifest)
 
             # Send downsynced event
@@ -288,7 +335,10 @@ class SyncTransactions(EntryTransactions):
             await self.remote_loader.load_blocks(missing)
 
     async def file_conflict(
-        self, entry_id: EntryID, local_manifest: LocalManifest, remote_manifest: RemoteManifest
+        self,
+        entry_id: EntryID,
+        local_manifest: Union[LocalFolderManifest, LocalFileManifest],
+        remote_manifest: RemoteManifest,
     ) -> None:
         # This is the only transaction that affects more than one manifests
         # That's because the local version of the file has to be registered in the
@@ -317,7 +367,7 @@ class SyncTransactions(EntryTransactions):
                             new_chunk = new_chunk.evolve_as_block(data)
                         new_chunks.append(chunk)
                     new_blocks.append(tuple(new_chunks))
-                new_blocks = tuple(new_blocks)
+                new_blocks: Tuple[Tuple[Any, ...], ...] = tuple(new_blocks)
 
                 # Prepare
                 new_name = get_conflict_filename(
@@ -327,7 +377,8 @@ class SyncTransactions(EntryTransactions):
                     size=current_manifest.size, blocks=new_blocks
                 )
                 new_parent_manifest = parent_manifest.evolve_children_and_mark_updated(
-                    {new_name: new_manifest.id}
+                    {new_name: new_manifest.id},
+                    pattern_filter=self.local_storage.get_pattern_filter(),
                 )
                 other_manifest = LocalManifest.from_remote(remote_manifest)
 

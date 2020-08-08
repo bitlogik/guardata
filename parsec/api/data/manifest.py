@@ -33,6 +33,7 @@ class ManifestType(Enum):
     USER_MANIFEST = "user_manifest"
 
 
+@attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
 class BlockAccess(BaseData):
     class SCHEMA_CLS(BaseSchema):
         id = BlockIDField(required=True)
@@ -52,6 +53,7 @@ class BlockAccess(BaseData):
     digest: HashDigest
 
 
+@attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
 class WorkspaceEntry(BaseData):
     class SCHEMA_CLS(BaseSchema):
         name = EntryNameField(validate=validate.Length(min=1, max=256), required=True)
@@ -104,9 +106,11 @@ class VerifyParentMixin:
         return data
 
 
+@attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
 class Manifest(BaseAPISignedData):
     class SCHEMA_CLS(OneOfSchema, BaseSignedDataSchema):
         type_field = "type"
+        version = fields.Integer(required=True, validate=validate.Range(min=0))
 
         @property
         def type_schemas(self):
@@ -119,6 +123,8 @@ class Manifest(BaseAPISignedData):
 
         def get_obj_type(self, obj):
             return obj["type"]
+
+    version: int
 
     @classmethod
     def verify_and_load(
@@ -142,6 +148,7 @@ class Manifest(BaseAPISignedData):
         return data
 
 
+@attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
 class FolderManifest(VerifyParentMixin, Manifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.FOLDER_MANIFEST, required=True)
@@ -164,12 +171,12 @@ class FolderManifest(VerifyParentMixin, Manifest):
 
     id: EntryID
     parent: EntryID
-    version: int
     created: Pendulum
     updated: Pendulum
     children: FrozenDict[EntryName, EntryID]
 
 
+@attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
 class FileManifest(VerifyParentMixin, Manifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.FILE_MANIFEST, required=True)
@@ -190,7 +197,6 @@ class FileManifest(VerifyParentMixin, Manifest):
 
     id: EntryID
     parent: EntryID
-    version: int
     created: Pendulum
     updated: Pendulum
     size: int
@@ -198,6 +204,7 @@ class FileManifest(VerifyParentMixin, Manifest):
     blocks: Tuple[BlockAccess]
 
 
+@attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
 class WorkspaceManifest(Manifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.WORKSPACE_MANIFEST, required=True)
@@ -218,12 +225,12 @@ class WorkspaceManifest(Manifest):
             return WorkspaceManifest(**data)
 
     id: EntryID
-    version: int
     created: Pendulum
     updated: Pendulum
     children: FrozenDict[EntryName, EntryID]
 
 
+@attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
 class UserManifest(Manifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.USER_MANIFEST, required=True)
@@ -241,7 +248,6 @@ class UserManifest(Manifest):
             return UserManifest(**data)
 
     id: EntryID
-    version: int
     created: Pendulum
     updated: Pendulum
     last_processed_message: int
