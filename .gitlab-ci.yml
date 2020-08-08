@@ -120,5 +120,5 @@ windows-build:
     - makensis.exe installer.nsi
   artifacts:
     paths:
-      - packaging/win32/build/parsec*-setup.exe
+      - packaging/win32/build/guardata*-setup.exe
 
