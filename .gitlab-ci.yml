@@ -109,7 +109,7 @@ windows-build:
     - rm -R -Force parsec/test_utils
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - choco install -y python --version=3.7.8
-    - choco install -y nsis
+    - choco install -y nsis --version=3.06.1
     - cd packaging/win32/
     - curl -o winfsp-1.7.20172.msi https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi
     - RefreshEnv
