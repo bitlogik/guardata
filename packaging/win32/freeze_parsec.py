@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import sys
@@ -143,6 +144,14 @@ END
         f"/LIBPATH:{ CPYTHON_DIR / 'libs' } /OUT:{ target_dir / 'guardata.exe' } "
         f"/subsystem:windows /entry:mainCRTStartup"
     )
+
+    # Clean up deleting not required files
+    delete_assets_list = [
+            "site-packages/pip",
+            "site-packages/setuptools"
+    ]
+    for remdir in delete_assets_list:
+        shutil.rmtree(target_dir / remdir)
 
     # Create build info file for NSIS installer
     (BUILD_DIR / "BUILD.tmp").write_text(

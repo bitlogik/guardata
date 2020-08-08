@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import click
@@ -21,7 +22,7 @@ except ImportError as exc:
 
 
 @click.group()
-@click.version_option(version=__version__, prog_name="parsec")
+@click.version_option(version=__version__, prog_name="guardata")
 def cli():
     pass
 

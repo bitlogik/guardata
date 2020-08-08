@@ -65,6 +65,10 @@ pip-build:
     - DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install python3-pip python3-venv fuse postgresql postgresql-contrib desktop-file-utils libgl1-mesa-glx xdg-utils libffi-dev
     - /sbin/ldconfig
     - ln -s /usr/bin/python3 /usr/bin/python
+    - rm -Rf docs
+    - rm -Rf tests
+    - rm -Rf parsec/backend
+    - rm -Rf parsec/test_utils
     - python -m venv venv_build
     - ./venv_build/bin/python -m pip install -r pre-requirements.txt
     - ./venv_build/bin/python setup.py bdist_wheel
@@ -73,7 +77,7 @@ pip-build:
   script:
     - source venv_test/bin/activate
     - pip3 install -r pre-requirements.txt
-    - pip3 install $(ls dist/guardata-*.whl)[all]
+    - pip3 install $(ls dist/guardata-*.whl)[core]
     - mkdir empty
     - cd empty
     - guardata --version
@@ -99,6 +103,10 @@ windows-build:
     - tags
   stage: build
   before_script:
+    - rm -R -Force docs
+    - rm -R -Force tests
+    - rm -R -Force parsec/backend
+    - rm -R -Force parsec/test_utils
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - choco install -y python --version=3.7.8
     - choco install -y nsis
