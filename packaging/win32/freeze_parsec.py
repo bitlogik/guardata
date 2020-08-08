@@ -144,6 +144,14 @@ END
         f"/subsystem:windows /entry:mainCRTStartup"
     )
 
+    # Clean up deleting not required files
+    delete_assets_list = [
+            "site-packages/pip",
+            "site-packages/setuptools"
+    ]
+    for remdir in delete_assets_list:
+        shutil.rmtree(target_dir / remdir)
+
     # Create build info file for NSIS installer
     (BUILD_DIR / "BUILD.tmp").write_text(
         f'target = "{target_dir}"\n'
