@@ -4,7 +4,7 @@
 import re
 import attr
 import json
-import subprocess
+from secrets import token_hex
 from typing import List, Dict, Tuple, Optional
 import mimetypes
 from urllib.parse import parse_qs, urlsplit, urlunsplit, urlencode
@@ -15,7 +15,7 @@ import h11
 from parsec.backend.config import BackendConfig
 from parsec.backend import static as http_static_module
 from parsec.backend.templates import get_template
-
+from parsec.api.protocol import apiv1_organization_create_serializer
 
 @attr.s(slots=True, auto_attribs=True)
 class HTTPRequest:
@@ -85,8 +85,9 @@ class HTTPResponse:
 
 
 class HTTPComponent:
-    def __init__(self, config: BackendConfig):
+    def __init__(self, config: BackendConfig, org):
         self._config = config
+        self._org = org
 
     async def _http_404(self, req: HTTPRequest) -> HTTPResponse:
         data = get_template("404.html").render()
@@ -134,12 +135,15 @@ class HTTPComponent:
         if not re.match(r"^[a-zA-Z]{4,63}$", path):
             data = b"Allowed group name : azAZ 4-63 chars long"
             return HTTPResponse.build(400, data=data)
-        create_process = subprocess.run(f"guardata core create_organization {path} -B parsec://cloud.guardata.app -T $(cat /home/guardatausr/protected_files/AdminToken)", shell=True, check=True)
-        groupURL = re.match(r"(?P<url>parsec:\/\/cloud\.guardata\.app\/.{4,})$", create_process.stdout)
-        if not groupURL:
-            data = b"Error during group creation"
-            return HTTPResponse.build(500, data=data)
-        dataj = {"CreatedGroup": path, "groupURL": groupURL.group("url")}
+        headers = {"content-Type": "application/json"}
+        org_token = token_hex(32)
+        try:
+            await self._org.create(path, org_token)
+        except OrganizationAlreadyExistsError:
+            dataj = {"status": "already_exists"}
+            return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
+        groupURL = f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
+        dataj = {"status": "ok", "CreatedGroup": path, "groupURL": groupURL}
         headers = {"content-Type": "application/json"}
         return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
 
