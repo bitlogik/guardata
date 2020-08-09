@@ -150,6 +150,7 @@ class HTTPComponent:
         if ACAO_domain:
             headers["Access-Control-Allow-Origin"] = ACAO_domain
             headers["Access-Control-Allow-Methods"] = "GET"
+            headers["Access-Control-Allow-Headers"] = "Content-Type"
         return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
 
     ROUTE_MAPPING = [
@@ -164,6 +165,7 @@ class HTTPComponent:
             headers = {}
             headers["Access-Control-Allow-Origin"] = ACAO_domain
             headers["Access-Control-Allow-Methods"] = "GET"
+            headers["Access-Control-Allow-Headers"] = "Content-Type"
             return HTTPResponse.build(204, headers=headers)
 
         if req.method != "GET":
