@@ -138,10 +138,10 @@ class HTTPComponent:
         return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
 
     ROUTE_MAPPING = [
-        (r"^/?$", _http_root),
-        (r"^/redirect(?P<path>.*)$", _http_redirect),
-        (r"^/static/(?P<path>.*)$", _http_static),
-        (r"^/creategroup/(?P<path>\w+)$", _http_creategroup),
+        (r"^\/?$", _http_root),
+        (r"^\/redirect(?P<path>.*)$", _http_redirect),
+        (r"^\/static\/(?P<path>.*)$", _http_static),
+        (r"^\/creategroup\/(?P<path>\w+)$", _http_creategroup),
     ]
 
     async def handle_request(self, req: HTTPRequest) -> HTTPResponse:
