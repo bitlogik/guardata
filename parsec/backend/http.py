@@ -127,10 +127,19 @@ class HTTPComponent:
             headers = {"content-Type": content_type}
         return HTTPResponse.build(200, headers=headers, data=data)
 
+    async def _http_creategroup(self, req: HTTPRequest, path: str) -> HTTPResponse:
+        data = "CreateGroup : "+path
+        headers = {}
+        content_type, _ = mimetypes.guess_type(path)
+        if content_type:
+            headers = {"content-Type": content_type}
+        return HTTPResponse.build(200, headers=headers, data=data)
+
     ROUTE_MAPPING = [
         (r"^/?$", _http_root),
         (r"^/redirect(?P<path>.*)$", _http_redirect),
         (r"^/static/(?P<path>.*)$", _http_static),
+        (r"^/creategroup/(?P<path>.*)$", _http_creategroup),
     ]
 
     async def handle_request(self, req: HTTPRequest) -> HTTPResponse:
