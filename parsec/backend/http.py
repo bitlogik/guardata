@@ -4,6 +4,7 @@
 import re
 import attr
 import json
+import subprocess
 from typing import List, Dict, Tuple, Optional
 import mimetypes
 from urllib.parse import parse_qs, urlsplit, urlunsplit, urlencode
@@ -132,8 +133,13 @@ class HTTPComponent:
     async def _http_creategroup(self, req: HTTPRequest, path: str) -> HTTPResponse:
         if not re.match(r"^[a-zA-Z]{4,63}$", path):
             data = b"Allowed group name : azAZ 4-63 chars long"
-            return HTTPResponse.build(400)
-        dataj = {"CreateGroup": path}
+            return HTTPResponse.build(400, data=data)
+        create_process = subprocess.run(f"guardata core create_organization {path} -B parsec://cloud.guardata.app -T $(cat /home/guardatausr/protected_files/AdminToken)", shell=True, check=True)
+        groupURL = re.match(r"(?P<url>parsec:\/\/cloud\.guardata\.app\/.{4,})$", create_process.stdout)
+        if not groupURL:
+            data = b"Error during group creation"
+            return HTTPResponse.build(500, data=data)
+        dataj = {"CreatedGroup": path, "groupURL": groupURL.group("url")}
         headers = {"content-Type": "application/json"}
         return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
 
