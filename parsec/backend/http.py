@@ -145,6 +145,9 @@ class HTTPComponent:
         groupURL = f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
         dataj = {"status": "ok", "CreatedGroup": path, "groupURL": groupURL}
         headers = {"content-Type": "application/json"}
+        # headers["Access-Control-Allow-Origin"] = "guardata.app"
+        headers["Access-Control-Allow-Origin"] = "127.0.0.1:8080"
+        headers["Access-Control-Allow-Methods"] = "GET"
         return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
 
     ROUTE_MAPPING = [
