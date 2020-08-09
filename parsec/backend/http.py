@@ -140,7 +140,7 @@ class HTTPComponent:
         (r"^/?$", _http_root),
         (r"^/redirect(?P<path>.*)$", _http_redirect),
         (r"^/static/(?P<path>.*)$", _http_static),
-        (r"^/creategroup/(?P<path>)$", _http_creategroup),
+        (r"^/creategroup/(?P<path>\w+)$", _http_creategroup),
     ]
 
     async def handle_request(self, req: HTTPRequest) -> HTTPResponse:
