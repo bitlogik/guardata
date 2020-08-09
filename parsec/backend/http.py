@@ -17,6 +17,8 @@ from parsec.backend import static as http_static_module
 from parsec.backend.templates import get_template
 from parsec.api.protocol import apiv1_organization_create_serializer
 
+ACAO_domain = "127.0.0.1:8080" # use "" to disable ACAO
+
 @attr.s(slots=True, auto_attribs=True)
 class HTTPRequest:
     method: str
@@ -145,9 +147,9 @@ class HTTPComponent:
         groupURL = f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
         dataj = {"status": "ok", "CreatedGroup": path, "groupURL": groupURL}
         headers = {"content-Type": "application/json"}
-        # headers["Access-Control-Allow-Origin"] = "guardata.app"
-        headers["Access-Control-Allow-Origin"] = "127.0.0.1:8080"
-        headers["Access-Control-Allow-Methods"] = "GET"
+        if ACAO_domain:
+            headers["Access-Control-Allow-Origin"] = ACAO_domain
+            headers["Access-Control-Allow-Methods"] = "GET"
         return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
 
     ROUTE_MAPPING = [
@@ -158,6 +160,11 @@ class HTTPComponent:
     ]
 
     async def handle_request(self, req: HTTPRequest) -> HTTPResponse:
+        if req.methods == "OPTIONS" and ACAO_domain:
+            headers["Access-Control-Allow-Origin"] = ACAO_domain
+            headers["Access-Control-Allow-Methods"] = "GET"
+            return HTTPResponse.build(200, headers=headers)
+
         if req.method != "GET":
             return HTTPResponse.build(405)
 
