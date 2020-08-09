@@ -27,7 +27,7 @@ class HTTPRequest:
 
     @classmethod
     def from_h11_req(cls, h11_req: h11.Request) -> "HTTPRequest":
-        # h11 make sur the headers and target are ISO-8859-1
+        # h11 make sure the headers and target are ISO-8859-1
         target_split = urlsplit(h11_req.target.decode("ISO-8859-1"))
         query_params = parse_qs(target_split.query)
 
