@@ -1,7 +1,10 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import re
 import attr
+import json
+from secrets import token_hex
 from typing import List, Dict, Tuple, Optional
 import mimetypes
 from urllib.parse import parse_qs, urlsplit, urlunsplit, urlencode
@@ -12,7 +15,7 @@ import h11
 from parsec.backend.config import BackendConfig
 from parsec.backend import static as http_static_module
 from parsec.backend.templates import get_template
-
+from parsec.api.protocol import apiv1_organization_create_serializer
 
 @attr.s(slots=True, auto_attribs=True)
 class HTTPRequest:
@@ -27,7 +30,7 @@ class HTTPRequest:
 
     @classmethod
     def from_h11_req(cls, h11_req: h11.Request) -> "HTTPRequest":
-        # h11 make sur the headers and target are ISO-8859-1
+        # h11 make sure the headers and target are ISO-8859-1
         target_split = urlsplit(h11_req.target.decode("ISO-8859-1"))
         query_params = parse_qs(target_split.query)
 
@@ -82,8 +85,9 @@ class HTTPResponse:
 
 
 class HTTPComponent:
-    def __init__(self, config: BackendConfig):
+    def __init__(self, config: BackendConfig, org):
         self._config = config
+        self._org = org
 
     async def _http_404(self, req: HTTPRequest) -> HTTPResponse:
         data = get_template("404.html").render()
@@ -127,10 +131,27 @@ class HTTPComponent:
             headers = {"content-Type": content_type}
         return HTTPResponse.build(200, headers=headers, data=data)
 
+    async def _http_creategroup(self, req: HTTPRequest, path: str) -> HTTPResponse:
+        if not re.match(r"^[a-zA-Z]{4,63}$", path):
+            data = b"Allowed group name : azAZ 4-63 chars long"
+            return HTTPResponse.build(400, data=data)
+        headers = {"content-Type": "application/json"}
+        org_token = token_hex(32)
+        try:
+            await self._org.create(path, org_token)
+        except OrganizationAlreadyExistsError:
+            dataj = {"status": "already_exists"}
+            return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
+        groupURL = f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
+        dataj = {"status": "ok", "CreatedGroup": path, "groupURL": groupURL}
+        headers = {"content-Type": "application/json"}
+        return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
+
     ROUTE_MAPPING = [
-        (r"^/?$", _http_root),
-        (r"^/redirect(?P<path>.*)$", _http_redirect),
-        (r"^/static/(?P<path>.*)$", _http_static),
+        (r"^\/?$", _http_root),
+        (r"^\/redirect(?P<path>.*)$", _http_redirect),
+        (r"^\/static\/(?P<path>.*)$", _http_static),
+        (r"^\/creategroup\/(?P<path>\w+)$", _http_creategroup),
     ]
 
     async def handle_request(self, req: HTTPRequest) -> HTTPResponse:
