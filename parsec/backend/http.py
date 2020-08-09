@@ -87,7 +87,7 @@ class HTTPResponse:
 
 
 class HTTPComponent:
-    def __init__(self, config: BackendConfig, org):
+    def __init__(self, config: BackendConfig, org=None):
         self._config = config
         self._org = org
 
