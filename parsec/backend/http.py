@@ -128,7 +128,7 @@ class HTTPComponent:
         return HTTPResponse.build(200, headers=headers, data=data)
 
     async def _http_creategroup(self, req: HTTPRequest, path: str) -> HTTPResponse:
-        data = "CreateGroup : "+path
+        data = b"CreateGroup : " + path.encode("utf8")
         headers = {}
         content_type, _ = mimetypes.guess_type(path)
         if content_type:
