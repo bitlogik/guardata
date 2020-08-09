@@ -161,6 +161,7 @@ class HTTPComponent:
 
     async def handle_request(self, req: HTTPRequest) -> HTTPResponse:
         if req.method == "OPTIONS" and ACAO_domain:
+            headers = {}
             headers["Access-Control-Allow-Origin"] = ACAO_domain
             headers["Access-Control-Allow-Methods"] = "GET"
             return HTTPResponse.build(204, headers=headers)
