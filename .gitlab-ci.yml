@@ -114,7 +114,7 @@ windows-build:
     - RefreshEnv
     - cat parsec\_version.py
     - $pytver = "__version__=`"${CI_COMMIT_TAG}0`""
-    - $pytver | Out-File parsec\_version.py
+    - $pytver | Set-Content -Path parsec\_version.py -Encoding UTF8
     - cat parsec\_version.py
     - cd packaging/win32/
     - curl -o winfsp-1.7.20172.msi https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi
