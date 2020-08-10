@@ -2047,11 +2047,11 @@ msgstr ""
 
 msgid "TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS"
 msgstr "If your group doesn't exist yet, you need to register on the guardata web site."
-"<a href=\"https://guardata.app/register\" "
+"<a href=\"https://guardata.app/create\" "
 "title=\"Register your group\">
 "REGISTER YOUR NEW GROUP"
 "</a>"
-"Then you can use first login back here, by giving a parsec link."
+"Then you can use first login back here, by giving the parsec link."
 
 msgid "TEXT_LABEL_ORG_NAME"
 msgstr "Organization name"
