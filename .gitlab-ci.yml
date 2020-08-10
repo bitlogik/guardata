@@ -111,12 +111,12 @@ windows-build:
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - choco install -y python --version=3.7.8
     - choco install -y nsis --version=3.06.1
-    - .\Invoke-Environment.ps1 '"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"'
-    - $env:PATH+=";C:\Program Files (x86)\NSIS"
+    - RefreshEnv
     - echo __version__="$env:CI_COMMIT_TAG" > parsec\_version.py
     - cd packaging/win32/
     - curl -o winfsp-1.7.20172.msi https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi
-    - RefreshEnv
+    - .\Invoke-Environment.ps1 '"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"'
+    - $env:PATH+=";C:\Program Files (x86)\NSIS"
   script:
     - python.exe freeze_parsec.py ..\\..
     - makensis.exe installer.nsi
