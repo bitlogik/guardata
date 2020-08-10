@@ -74,6 +74,7 @@ pip-build:
     - ./venv_build/bin/python setup.py bdist_wheel
     - pip3 install --user virtualenv
     - python -m venv venv_test
+    - echo __version__=\"$CI_COMMIT_TAG\" > parsec/_version.py
   script:
     - source venv_test/bin/activate
     - pip3 install -r pre-requirements.txt
@@ -115,6 +116,7 @@ windows-build:
     - RefreshEnv
     - .\Invoke-Environment.ps1 '"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"'
     - $env:PATH+=";C:\Program Files (x86)\NSIS"
+    - echo __version__="$env:CI_COMMIT_TAG" > parsec\_version.py
   script:
     - python.exe freeze_parsec.py ..\\..
     - makensis.exe installer.nsi
