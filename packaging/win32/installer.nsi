@@ -149,45 +149,6 @@ Function CreateDesktopShortcut
     CreateShortCut "$DESKTOP\guardata.lnk" "$INSTDIR\guardata.exe"
 FunctionEnd
 
-# # Test if Visual Studio Redistributables 2008 SP1 installed and returns -1 if none installed
-# Function CheckVCRedist2008
-#     Push $R0
-#     ClearErrors
-#     ReadRegDword $R0 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{FF66E9F6-83E7-3A3E-AF14-8DE9A809A6A4}" "Version"
-#     IfErrors 0 +2
-#         StrCpy $R0 "-1"
-#
-#     Push $R1
-#     ClearErrors
-#     ReadRegDword $R1 HKLM "SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall\{9BE518E6-ECC6-35A9-88E4-87755C07200F}" "Version"
-#     IfErrors 0 VSRedistInstalled
-#         StrCpy $R1 "-1"
-#
-#     StrCmp $R0 "-1" +3 0
-#         Exch $R0
-#         Goto VSRedistInstalled
-#     StrCmp $R1 "-1" +3 0
-#         Exch $R1
-#         Goto VSRedistInstalled
-#     # else
-#         Push "-1"
-#     VSRedistInstalled:
-# FunctionEnd
-#
-# Function VCRedistMessage
-#     Call CheckVCRedist2008
-#     Pop $R0
-#     StrCmp $R0 "-1" 0 end
-#     MessageBox MB_YESNO|MB_ICONEXCLAMATION "guardata requires an MSVC package to run \
-#     but the recommended package does not appear to be installed:$\r$\n$\r$\n\
-#     Microsoft Visual C++ 2008 SP1 Redistributable Package (x86)$\r$\n$\r$\n\
-#     Would you like to download it now?" /SD IDNO IDYES clickyes
-#     Goto end
-#     clickyes:
-#         ExecShell open "https://www.microsoft.com/en-us/download/details.aspx?id=26368"
-#     end:
-# FunctionEnd
-
 # --- Installation sections ---
 !define PROGRAM_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}"
 !define PROGRAM_UNINST_ROOT_KEY "HKLM"
@@ -251,10 +212,10 @@ SectionEnd
 
 # Create parsec:// uri association.
 Section "Associate parsec:// URI links with guardata" Section3
-    DeleteRegKey HKCR "guardata"
-    WriteRegStr HKCR "guardata" "" "URL:Parsec Protocol"
-    WriteRegStr HKCR "guardata" "URL Protocol" ""
-    WriteRegStr HKCR "guardata\shell\open\command" "" '"$INSTDIR\guardata.exe" "%1"'
+    DeleteRegKey HKCR "parsec"
+    WriteRegStr HKCR "parsec" "" "URL:parsec"
+    WriteRegStr HKCR "parsec" "URL Protocol" ""
+    WriteRegStr HKCR "parsec\shell\open\command" "" '"$INSTDIR\guardata.exe" "%1"'
 SectionEnd
 
 # Hidden: Remove obsolete entries
@@ -266,18 +227,6 @@ Section "-Remove obsolete entries" Section4
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel\{${APPGUID}}"
     ClearErrors
 SectionEnd
-
-# The components screen is skipped - this is no longer necessary
-# LangString DESC_Section1 ${LANG_ENGLISH} "Install guardata."
-# LangString DESC_Section2 ${LANG_ENGLISH} "Install WinFSP."
-# LangString DESC_Section3 ${LANG_ENGLISH} "Let guardata handle parsec:// URI links from the web-browser."
-# LangString DESC_Section4 ${LANG_ENGLISH} "Remove obsolete entries from outdated guardata installation."
-# !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
-#     !insertmacro MUI_DESCRIPTION_TEXT ${Section1} $(DESC_Section1)
-#     !insertmacro MUI_DESCRIPTION_TEXT ${Section2} $(DESC_Section2)
-#     !insertmacro MUI_DESCRIPTION_TEXT ${Section3} $(DESC_Section3)
-#     !insertmacro MUI_DESCRIPTION_TEXT ${Section4} $(DESC_Section4)
-# !insertmacro MUI_FUNCTION_DESCRIPTION_END
 
 # Create uninstaller.
 Section -Uninstaller
