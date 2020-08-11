@@ -16,7 +16,7 @@ from parsec.core.types import (
     ChunkID,
     LocalDevice,
     FileDescriptor,
-    LocalManifest,
+    BaseLocalManifest,
     LocalFileManifest,
 )
 from parsec.core.fs.exceptions import FSError, FSLocalMissError, FSInvalidFileDescriptor
@@ -72,7 +72,7 @@ class BaseWorkspaceStorage:
         self.fd_counter += 1
         return FileDescriptor(self.fd_counter)
 
-    async def get_manifest(self, entry_id: EntryID) -> LocalManifest:
+    async def get_manifest(self, entry_id: EntryID) -> BaseLocalManifest:
         raise NotImplementedError
 
     # Locking helpers
@@ -87,7 +87,7 @@ class BaseWorkspaceStorage:
                 del self.locking_tasks[entry_id]
 
     @asynccontextmanager
-    async def lock_manifest(self, entry_id: EntryID) -> AsyncIterator[LocalManifest]:
+    async def lock_manifest(self, entry_id: EntryID) -> AsyncIterator[BaseLocalManifest]:
         async with self.lock_entry_id(entry_id):
             yield await self.get_manifest(entry_id)
 
@@ -266,14 +266,14 @@ class WorkspaceStorage(BaseWorkspaceStorage):
 
     # Manifest interface
 
-    async def get_manifest(self, entry_id: EntryID) -> LocalManifest:
+    async def get_manifest(self, entry_id: EntryID) -> BaseLocalManifest:
         """Raises: FSLocalMissError"""
         return await self.manifest_storage.get_manifest(entry_id)
 
     async def set_manifest(
         self,
         entry_id: EntryID,
-        manifest: LocalManifest,
+        manifest: BaseLocalManifest,
         cache_only: bool = False,
         check_lock_status: bool = True,
         removed_ids: Optional[Set[Union[BlockID, ChunkID]]] = None,
@@ -338,7 +338,7 @@ class WorkspaceStorageTimestamped(BaseWorkspaceStorage):
             chunk_storage=workspace_storage.chunk_storage,
         )
 
-        self._cache: Dict[EntryID, LocalManifest] = {}
+        self._cache: Dict[EntryID, BaseLocalManifest] = {}
         self.timestamp = timestamp
         self.manifest_storage = None
 
@@ -376,7 +376,7 @@ class WorkspaceStorageTimestamped(BaseWorkspaceStorage):
 
     # Manifest interface
 
-    async def get_manifest(self, entry_id: EntryID) -> LocalManifest:
+    async def get_manifest(self, entry_id: EntryID) -> BaseLocalManifest:
         """Raises: FSLocalMissError"""
         assert isinstance(entry_id, EntryID)
         try:
@@ -385,7 +385,7 @@ class WorkspaceStorageTimestamped(BaseWorkspaceStorage):
             raise FSLocalMissError(entry_id)
 
     async def set_manifest(
-        self, entry_id: EntryID, manifest: LocalManifest, cache_only: bool = False
+        self, entry_id: EntryID, manifest: BaseLocalManifest, cache_only: bool = False
     ) -> None:  # initially for clean
         assert isinstance(entry_id, EntryID)
         if manifest.need_sync:

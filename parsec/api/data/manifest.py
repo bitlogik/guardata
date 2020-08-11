@@ -6,8 +6,8 @@ from pendulum import Pendulum, now as pendulum_now
 
 from parsec.types import UUID4
 from parsec.crypto import SecretKey, HashDigest
-from parsec.serde import fields, validate, post_load, OneOfSchema
-from parsec.api.protocol import RealmRole, RealmRoleField
+from parsec.serde import fields, validate, post_load, OneOfSchema, pre_load
+from parsec.api.protocol import RealmRole, RealmRoleField, DeviceID
 from parsec.api.data.base import (
     BaseData,
     BaseSchema,
@@ -17,6 +17,10 @@ from parsec.api.data.base import (
 )
 from parsec.api.data.entry import EntryID, EntryIDField, EntryName, EntryNameField
 from enum import Enum
+
+LOCAL_AUTHOR_LEGACY_PLACEHOLDER = DeviceID(
+    "LOCAL_AUTHOR_LEGACY_PLACEHOLDER@LOCAL_AUTHOR_LEGACY_PLACEHOLDER"
+)
 
 
 class BlockID(UUID4):
@@ -107,7 +111,7 @@ class VerifyParentMixin:
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
-class Manifest(BaseAPISignedData):
+class BaseManifest(BaseAPISignedData):
     class SCHEMA_CLS(OneOfSchema, BaseSignedDataSchema):
         type_field = "type"
         version = fields.Integer(required=True, validate=validate.Range(min=0))
@@ -133,10 +137,8 @@ class Manifest(BaseAPISignedData):
         expected_id: Optional[EntryID] = None,
         expected_version: Optional[int] = None,
         **kwargs,
-    ) -> "Manifest":
+    ) -> "BaseManifest":
         data = super().verify_and_load(*args, **kwargs)
-        if data.author is None and data.version != 0:
-            raise DataValidationError("Manifest cannot be signed by root verify key")
         if expected_id is not None and data.id != expected_id:
             raise DataValidationError(
                 f"Invalid entry ID: expected `{expected_id}`, got `{data.id}`"
@@ -149,12 +151,12 @@ class Manifest(BaseAPISignedData):
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
-class FolderManifest(VerifyParentMixin, Manifest):
+class FolderManifest(VerifyParentMixin, BaseManifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.FOLDER_MANIFEST, required=True)
         id = EntryIDField(required=True)
         parent = EntryIDField(required=True)
-        # Version 0 means the data is not synchronized (hence author sould be None)
+        # Version 0 means the data is not synchronized
         version = fields.Integer(required=True, validate=validate.Range(min=0))
         created = fields.DateTime(required=True)
         updated = fields.DateTime(required=True)
@@ -163,6 +165,13 @@ class FolderManifest(VerifyParentMixin, Manifest):
             EntryIDField(required=True),
             required=True,
         )
+
+        @pre_load
+        def fix_legacy(self, data):
+            # Compatibility with versions <= 1.14
+            if data["author"] is None:
+                data["author"] = LOCAL_AUTHOR_LEGACY_PLACEHOLDER
+            return data
 
         @post_load
         def make_obj(self, data):
@@ -177,18 +186,25 @@ class FolderManifest(VerifyParentMixin, Manifest):
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
-class FileManifest(VerifyParentMixin, Manifest):
+class FileManifest(VerifyParentMixin, BaseManifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.FILE_MANIFEST, required=True)
         id = EntryIDField(required=True)
         parent = EntryIDField(required=True)
-        # Version 0 means the data is not synchronized (hence author sould be None)
+        # Version 0 means the data is not synchronized
         version = fields.Integer(required=True, validate=validate.Range(min=0))
         created = fields.DateTime(required=True)
         updated = fields.DateTime(required=True)
         size = fields.Integer(required=True, validate=validate.Range(min=0))
         blocksize = fields.Integer(required=True, validate=validate.Range(min=8))
         blocks = fields.FrozenList(fields.Nested(BlockAccess.SCHEMA_CLS), required=True)
+
+        @pre_load
+        def fix_legacy(self, data):
+            # Compatibility with versions <= 1.14
+            if data["author"] is None:
+                data["author"] = LOCAL_AUTHOR_LEGACY_PLACEHOLDER
+            return data
 
         @post_load
         def make_obj(self, data):
@@ -205,11 +221,11 @@ class FileManifest(VerifyParentMixin, Manifest):
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
-class WorkspaceManifest(Manifest):
+class WorkspaceManifest(BaseManifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.WORKSPACE_MANIFEST, required=True)
         id = EntryIDField(required=True)
-        # Version 0 means the data is not synchronized (hence author sould be None)
+        # Version 0 means the data is not synchronized
         version = fields.Integer(required=True, validate=validate.Range(min=0))
         created = fields.DateTime(required=True)
         updated = fields.DateTime(required=True)
@@ -218,6 +234,13 @@ class WorkspaceManifest(Manifest):
             EntryIDField(required=True),
             required=True,
         )
+
+        @pre_load
+        def fix_legacy(self, data):
+            # Compatibility with versions <= 1.14
+            if data["author"] is None:
+                data["author"] = LOCAL_AUTHOR_LEGACY_PLACEHOLDER
+            return data
 
         @post_load
         def make_obj(self, data):
@@ -231,16 +254,23 @@ class WorkspaceManifest(Manifest):
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)
-class UserManifest(Manifest):
+class UserManifest(BaseManifest):
     class SCHEMA_CLS(BaseSignedDataSchema):
         type = fields.EnumCheckedConstant(ManifestType.USER_MANIFEST, required=True)
         id = EntryIDField(required=True)
-        # Version 0 means the data is not synchronized (hence author sould be None)
+        # Version 0 means the data is not synchronized
         version = fields.Integer(required=True, validate=validate.Range(min=0))
         created = fields.DateTime(required=True)
         updated = fields.DateTime(required=True)
         last_processed_message = fields.Integer(required=True, validate=validate.Range(min=0))
         workspaces = fields.List(fields.Nested(WorkspaceEntry.SCHEMA_CLS), required=True)
+
+        @pre_load
+        def fix_legacy(self, data):
+            # Compatibility with versions <= 1.14
+            if data["author"] is None:
+                data["author"] = LOCAL_AUTHOR_LEGACY_PLACEHOLDER
+            return data
 
         @post_load
         def make_obj(self, data):
