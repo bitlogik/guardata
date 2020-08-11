@@ -240,6 +240,23 @@ class SyncTransactions(EntryTransactions):
         # Fetch and lock
         async with self.local_storage.lock_manifest(entry_id) as local_manifest:
 
+            # Go through the parent chain
+            current_manifest = local_manifest
+            while not is_workspace_manifest(current_manifest):
+                parent_manifest = await self.local_storage.get_manifest(current_manifest.parent)
+                parent_manifest = cast(LocalFolderishManifests, parent_manifest)
+
+                # The entry is not confined
+                if current_manifest.id not in parent_manifest.confined_entries:
+                    current_manifest = parent_manifest
+                    continue
+
+                # Send synced event
+                self._send_event(
+                    CoreEvent.FS_ENTRY_CONFINED, entry_id=entry_id, cause_id=parent_manifest.id
+                )
+                return None
+
             # Sync cannot be performed yet
             if not final and is_file_manifest(local_manifest) and not local_manifest.is_reshaped():
 
