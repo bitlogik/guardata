@@ -1,14 +1,14 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
 import trio
 from pathlib import Path
 from pendulum import Pendulum, now as pendulum_now
-from typing import Tuple, Optional, Union, Dict, Sequence
+from typing import Tuple, Optional, Union, Dict, Sequence, Pattern
 from structlog import get_logger
 
 from async_generator import asynccontextmanager
 
+from parsec.core.core_events import CoreEvent
 from parsec.event_bus import EventBus
 from parsec.crypto import SecretKey
 from parsec.api.data import (
@@ -152,12 +152,14 @@ class UserFS:
         backend_cmds: Union[APIV1_BackendAuthenticatedCmds, BackendAuthenticatedCmds],
         remote_devices_manager: RemoteDevicesManager,
         event_bus: EventBus,
+        pattern_filter: Pattern,
     ):
         self.device = device
         self.path = path
         self.backend_cmds = backend_cmds
         self.remote_devices_manager = remote_devices_manager
         self.event_bus = event_bus
+        self.pattern_filter = pattern_filter
 
         self.storage: UserStorage  # Setup by UserStorage.run factory
 
