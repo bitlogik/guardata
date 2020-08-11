@@ -264,7 +264,7 @@ class UserFS:
         local_storage = await self._instantiate_workspace_storage(workspace_id)
 
         # Instantiate the workspace
-        return WorkspaceFS(
+        workspace = WorkspaceFS(
             workspace_id=workspace_id,
             get_workspace_entry=get_workspace_entry,
             device=self.device,
@@ -273,6 +273,11 @@ class UserFS:
             event_bus=self.event_bus,
             remote_devices_manager=self.remote_devices_manager,
         )
+
+        # Apply the current filter
+        await workspace.set_and_apply_pattern_filter(self.pattern_filter)
+
+        return workspace
 
     async def _create_workspace(
         self, workspace_id: EntryID, manifest: LocalWorkspaceManifest
