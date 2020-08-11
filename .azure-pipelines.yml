@@ -14,7 +14,7 @@ variables:
   winfsp.version: '1.7.20172'
   pytest.base_args: |
     --log-level=DEBUG \
-    --durations=10 -v \
+    --durations=10 -vv \
     --cov=parsec --cov-config=setup.cfg --cov-append --cov-report= \
   debug.stress_flaky_tests: 0  # Repeat all flaky tests X times
 
@@ -53,122 +53,122 @@ jobs:
 # Step 1: Tests
 
 
-- job: 's1_qa'
-  displayName: 'Q&A'
-  timeoutInMinutes: 5
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - checkout: self
-    submodules: true
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-  - bash: |
-      set -eux
-      python --version
-      pip install pre-commit
-    displayName: 'Bootstrap'
-  - bash: |
-      set -eux
-      # Patch .pre-commit-config.yaml to force mixed-line-ending checks to LF
-      sed -i '/id: mixed-line-ending/a\      args:\n\        - "--fix=lf"' .pre-commit-config.yaml
-      cat .pre-commit-config.yaml
-      # Run all pre-commit hooks on all files
-      pre-commit run --all-files --show-diff-on-failure
-    displayName: 'Pre-commit hooks check'
-  - bash: |
-      if ([[ $(Build.SourceBranch) = "refs/heads/master" ]] || [[ $(Build.SourceBranch) = "refs/tags/"* ]])
-      then exit 0; fi
-      for FILENAME in newsfragments/*
-      do
-        # If file never existed in master, consider as a new newsfragment
-        # Cannot git diff against master branch here given newsfragments removed in master will be considered as
-        # new items in our branch
-        if git log origin/master --exit-code -- "$FILENAME" > /dev/null
-        then exit 0; fi
-      done
-      echo "NO NEW NEWSFRAGMENT FOUND" >&2
-    displayName: 'Newsfragment'
-    failOnStderr: true
-  - bash: |
-      git fetch --tags  # Needed by releaser.py to have a consistent `git describe`
-      python ./misc/releaser.py check --verbose
-    displayName: 'Version check'
+# - job: 's1_qa'
+  # displayName: 'Q&A'
+  # timeoutInMinutes: 5
+  # pool:
+    # vmImage: 'ubuntu-latest'
+  # steps:
+  # - checkout: self
+    # submodules: true
+  # - task: UsePythonVersion@0
+    # inputs:
+      # versionSpec: '$(python.version)'
+  # - bash: |
+      # set -eux
+      # python --version
+      # pip install pre-commit
+    # displayName: 'Bootstrap'
+  # - bash: |
+      # set -eux
+      # # Patch .pre-commit-config.yaml to force mixed-line-ending checks to LF
+      # sed -i '/id: mixed-line-ending/a\      args:\n\        - "--fix=lf"' .pre-commit-config.yaml
+      # cat .pre-commit-config.yaml
+      # # Run all pre-commit hooks on all files
+      # pre-commit run --all-files --show-diff-on-failure
+    # displayName: 'Pre-commit hooks check'
+  # - bash: |
+      # if ([[ $(Build.SourceBranch) = "refs/heads/master" ]] || [[ $(Build.SourceBranch) = "refs/tags/"* ]])
+      # then exit 0; fi
+      # for FILENAME in newsfragments/*
+      # do
+        # # If file never existed in master, consider as a new newsfragment
+        # # Cannot git diff against master branch here given newsfragments removed in master will be considered as
+        # # new items in our branch
+        # if git log origin/master --exit-code -- "$FILENAME" > /dev/null
+        # then exit 0; fi
+      # done
+      # echo "NO NEW NEWSFRAGMENT FOUND" >&2
+    # displayName: 'Newsfragment'
+    # failOnStderr: true
+  # - bash: |
+      # git fetch --tags  # Needed by releaser.py to have a consistent `git describe`
+      # python ./misc/releaser.py check --verbose
+    # displayName: 'Version check'
 
 
 #################################################################################
 
 
-- job: 's1_linux_test'
-  displayName: 'Linux tests'
-  dependsOn: s0_build_wheel
-  timeoutInMinutes: 60
-  pool:
-    vmImage: 'ubuntu-latest'
-  variables:
-    PGINSTALLATION: '/usr/lib/postgresql/$(postgresql.version)/bin'
-  steps:
-  - checkout: self
-    submodules: true
-  - download: current
-    artifact: wheel
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-  - bash: |
-      set -eux
-      python --version
-      pip install -r pre-requirements.txt
-      sudo apt-get install \
-        postgresql-$(postgresql.version) \
-        desktop-file-utils  # Provides `update-desktop-database` used by `tests/scripts/run_testenv.sh`
-      psql --version
-    displayName: 'Bootstrap'
-  - bash: |
-      set -eux
-      # Remove the parsec folder from the source to force use of the wheel
-      rm -rf parsec
-      # Install the parsec wheel with all dependencies
-      WHEEL=$(ls $(Pipeline.Workspace)/wheel/parsec_cloud-*.whl)
-      echo $WHEEL
-      pip install $WHEEL[all]
-      # Check dependency compatibility
-      pip check parsec[all]
-    displayName: 'Install'
-  - bash: |
-      set -eux
-      py.test $(pytest.base_args) \
-        tests --runmountpoint --runslow \
-        -n auto --max-worker-restart=0 -x \
-        --junitxml=test-results-memory.xml
-    displayName: 'Tests memory'
-  - bash: |
-      set -eux
-      py.test $(pytest.base_args) \
-        tests/backend tests/test_cli.py --postgresql --runslow \
-        -n auto --max-worker-restart=0 -x \
-        --junitxml=test-results-postgresql.xml
-    displayName: 'Tests postgresql'
-  # TODO: run gui tests with xvfb
+# - job: 's1_linux_test'
+  # displayName: 'Linux tests'
+  # dependsOn: s0_build_wheel
+  # timeoutInMinutes: 60
+  # pool:
+    # vmImage: 'ubuntu-latest'
+  # variables:
+    # PGINSTALLATION: '/usr/lib/postgresql/$(postgresql.version)/bin'
+  # steps:
+  # - checkout: self
+    # submodules: true
+  # - download: current
+    # artifact: wheel
+  # - task: UsePythonVersion@0
+    # inputs:
+      # versionSpec: '$(python.version)'
   # - bash: |
-  #     set -eux
-  #     py.test $(pytest.base_args) \
-  #       tests -m gui --runmountpoint --runslow --rungui -x \
-  #       --junitxml=test-results-gui.xml
-  #   displayName: 'Tests GUI'
-  - bash: |
-      set -eux
-      pip install -U codecov
-      coverage xml -o coverage.xml
-      grep -E '( filename=|<package )' coverage.xml
-      codecov --file=coverage.xml --commit=$(Build.SourceVersion)
-    displayName: 'Codecov upload'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '$(Agent.TempDirectory)/test-results-*.xml'
-      testRunTitle: 'Linux'
-    condition: succeededOrFailed()
+      # set -eux
+      # python --version
+      # pip install -r pre-requirements.txt
+      # sudo apt-get install \
+        # postgresql-$(postgresql.version) \
+        # desktop-file-utils  # Provides `update-desktop-database` used by `tests/scripts/run_testenv.sh`
+      # psql --version
+    # displayName: 'Bootstrap'
+  # - bash: |
+      # set -eux
+      # # Remove the parsec folder from the source to force use of the wheel
+      # rm -rf parsec
+      # # Install the parsec wheel with all dependencies
+      # WHEEL=$(ls $(Pipeline.Workspace)/wheel/parsec_cloud-*.whl)
+      # echo $WHEEL
+      # pip install $WHEEL[all]
+      # # Check dependency compatibility
+      # pip check parsec[all]
+    # displayName: 'Install'
+  # - bash: |
+      # set -eux
+      # py.test $(pytest.base_args) \
+        # tests --runmountpoint --runslow \
+        # -n auto --max-worker-restart=0 -x \
+        # --junitxml=test-results-memory.xml
+    # displayName: 'Tests memory'
+  # - bash: |
+      # set -eux
+      # py.test $(pytest.base_args) \
+        # tests/backend tests/test_cli.py --postgresql --runslow \
+        # -n auto --max-worker-restart=0 -x \
+        # --junitxml=test-results-postgresql.xml
+    # displayName: 'Tests postgresql'
+  # # TODO: run gui tests with xvfb
+  # # - bash: |
+  # #     set -eux
+  # #     py.test $(pytest.base_args) \
+  # #       tests -m gui --runmountpoint --runslow --rungui -x \
+  # #       --junitxml=test-results-gui.xml
+  # #   displayName: 'Tests GUI'
+  # - bash: |
+      # set -eux
+      # pip install -U codecov
+      # coverage xml -o coverage.xml
+      # grep -E '( filename=|<package )' coverage.xml
+      # codecov --file=coverage.xml --commit=$(Build.SourceVersion)
+    # displayName: 'Codecov upload'
+  # - task: PublishTestResults@2
+    # inputs:
+      # testResultsFiles: '$(Agent.TempDirectory)/test-results-*.xml'
+      # testRunTitle: 'Linux'
+    # condition: succeededOrFailed()
 
 
 #################################################################################
@@ -364,91 +364,91 @@ jobs:
 # Step 3: Release packages tests
 
 
-- job: 's3_linux_snap_test'
-  displayName: 'Never trust a snap'
-  dependsOn: s2_linux_snap_build
-  timeoutInMinutes: 10
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  # Note there no point specifying Python version given snap doesn't take it into account
-  - checkout: none
-  - download: current
-    artifact: linux_amd64_snap
-  - bash: |
-      set -eux
-      # TODO: xvfb doesn't currently work
-      # sudo apt-get install -y xvfb xorg
-      sudo snap install --classic --dangerous $(Pipeline.Workspace)/linux_amd64_snap/parsec*.snap
-      parsec.cli --version
-      # Make sure snap contains core but not backend
-      NOT_AVAILABLES=$(parsec.cli --help | grep -i "not available")
-      test "$(echo $NOT_AVAILABLES | grep -i 'backend')"
-      test -z "$(echo $NOT_AVAILABLES | grep -i 'core')"
-      # xvfb-run parsec &
-      # sleep 5
-      # jobs  # returns error if parsec is not started
-      # kill %1
-    displayName: 'Test Snap'
+# - job: 's3_linux_snap_test'
+  # displayName: 'Never trust a snap'
+  # dependsOn: s2_linux_snap_build
+  # timeoutInMinutes: 10
+  # pool:
+    # vmImage: 'ubuntu-latest'
+  # steps:
+  # # Note there no point specifying Python version given snap doesn't take it into account
+  # - checkout: none
+  # - download: current
+    # artifact: linux_amd64_snap
+  # - bash: |
+      # set -eux
+      # # TODO: xvfb doesn't currently work
+      # # sudo apt-get install -y xvfb xorg
+      # sudo snap install --classic --dangerous $(Pipeline.Workspace)/linux_amd64_snap/parsec*.snap
+      # parsec.cli --version
+      # # Make sure snap contains core but not backend
+      # NOT_AVAILABLES=$(parsec.cli --help | grep -i "not available")
+      # test "$(echo $NOT_AVAILABLES | grep -i 'backend')"
+      # test -z "$(echo $NOT_AVAILABLES | grep -i 'core')"
+      # # xvfb-run parsec &
+      # # sleep 5
+      # # jobs  # returns error if parsec is not started
+      # # kill %1
+    # displayName: 'Test Snap'
 
 
 #################################################################################
 # Step 4: Release packages upload
 
 
-- job: 's4_linux_snap_upload'
-  displayName: 'Upload snap'
-  condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
-  dependsOn: [s0_build_wheel, s1_qa, s1_linux_test, s1_windows_test, s2_linux_snap_build, s2_windows_installer_build, s3_linux_snap_test]
-  timeoutInMinutes: 10
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - checkout: none
-  - download: current
-    artifact: linux_amd64_snap
-  - bash: |
-      sudo snap install snapcraft --classic
-      echo $SNAPCRAFT_CREDENTIALS | snapcraft login --with -
-    displayName: 'Bootstrap'
-    env:
-      SNAPCRAFT_CREDENTIALS: $(SNAPCRAFT_CREDENTIALS)
-  - bash: |
-      snapcraft upload --release=edge $(Pipeline.Workspace)/linux_amd64_snap/parsec*.snap
-    displayName: 'Upload Snap'
+# - job: 's4_linux_snap_upload'
+  # displayName: 'Upload snap'
+  # condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
+  # dependsOn: [s0_build_wheel, s1_qa, s1_linux_test, s1_windows_test, s2_linux_snap_build, s2_windows_installer_build, s3_linux_snap_test]
+  # timeoutInMinutes: 10
+  # pool:
+    # vmImage: 'ubuntu-latest'
+  # steps:
+  # - checkout: none
+  # - download: current
+    # artifact: linux_amd64_snap
+  # - bash: |
+      # sudo snap install snapcraft --classic
+      # echo $SNAPCRAFT_CREDENTIALS | snapcraft login --with -
+    # displayName: 'Bootstrap'
+    # env:
+      # SNAPCRAFT_CREDENTIALS: $(SNAPCRAFT_CREDENTIALS)
+  # - bash: |
+      # snapcraft upload --release=edge $(Pipeline.Workspace)/linux_amd64_snap/parsec*.snap
+    # displayName: 'Upload Snap'
 
 
 #################################################################################
 
 
-- job: 's4_wheel_pypi_upload'
-  displayName: 'Upload wheel on PyPI'
-  condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
-  dependsOn: [s0_build_wheel, s1_qa, s1_linux_test, s1_windows_test, s2_linux_snap_build, s2_windows_installer_build, s3_linux_snap_test]
-  timeoutInMinutes: 10
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - checkout: none
-  - download: current
-    artifact: wheel
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-  - bash: |
-      set -eux
-      pip install twine
-    displayName: 'Bootstrap'
-  - bash: |
-      set -eux
-      echo "
-      [pypi]
-      username = __token__
-      password = $PYPI_CREDENTIALS
-      " > ~/.pypirc
-      WHEEL=$(ls $(Pipeline.Workspace)/wheel/parsec_cloud-*.whl)
-      echo $WHEEL
-      twine upload $WHEEL
-    env:
-      PYPI_CREDENTIALS: $(PYPI_CREDENTIALS)
-    displayName: 'Upload to PyPI'
+# - job: 's4_wheel_pypi_upload'
+  # displayName: 'Upload wheel on PyPI'
+  # condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
+  # dependsOn: [s0_build_wheel, s1_qa, s1_linux_test, s1_windows_test, s2_linux_snap_build, s2_windows_installer_build, s3_linux_snap_test]
+  # timeoutInMinutes: 10
+  # pool:
+    # vmImage: 'ubuntu-latest'
+  # steps:
+  # - checkout: none
+  # - download: current
+    # artifact: wheel
+  # - task: UsePythonVersion@0
+    # inputs:
+      # versionSpec: '$(python.version)'
+  # - bash: |
+      # set -eux
+      # pip install twine
+    # displayName: 'Bootstrap'
+  # - bash: |
+      # set -eux
+      # echo "
+      # [pypi]
+      # username = __token__
+      # password = $PYPI_CREDENTIALS
+      # " > ~/.pypirc
+      # WHEEL=$(ls $(Pipeline.Workspace)/wheel/parsec_cloud-*.whl)
+      # echo $WHEEL
+      # twine upload $WHEEL
+    # env:
+      # PYPI_CREDENTIALS: $(PYPI_CREDENTIALS)
+    # displayName: 'Upload to PyPI'
