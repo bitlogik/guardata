@@ -76,28 +76,37 @@ class EntryTransactions(FileTransactions):
         async with self._load_and_lock_manifest(entry_id) as manifest:
             return manifest
 
-    @asynccontextmanager
-    async def _lock_manifest_from_path(self, path: FsPath) -> AsyncIterator[BaseLocalManifest]:
+    async def _entry_id_from_path(self, path: FsPath) -> Tuple[EntryID, bool]:
         # Root entry_id and manifest
         entry_id = self.workspace_id
+        confined = False
 
         # Follow the path
         for name in path.parts:
             manifest = await self._load_manifest(entry_id)
             if is_file_manifest(manifest):
                 raise FSNotADirectoryError(filename=path)
+            manifest = cast(LocalFolderishManifests, manifest)
             try:
-                entry_id = cast(LocalFolderishManifests, manifest).children[name]
+                entry_id = manifest.children[name]
             except (AttributeError, KeyError):
                 raise FSFileNotFoundError(filename=path)
+            if entry_id in manifest.confined_entries:
+                confined = True
 
-        # Lock entry
+        # Return both entry_id and confined status
+        return entry_id, confined
+
+    @asynccontextmanager
+    async def _lock_manifest_from_path(self, path: FsPath) -> AsyncIterator[BaseLocalManifest]:
+        entry_id, _ = await self._entry_id_from_path(path)
         async with self._load_and_lock_manifest(entry_id) as manifest:
             yield manifest
 
-    async def _get_manifest_from_path(self, path: FsPath) -> BaseLocalManifest:
-        async with self._lock_manifest_from_path(path) as manifest:
-            return manifest
+    async def _get_manifest_from_path(self, path: FsPath) -> Tuple[BaseLocalManifest, bool]:
+        entry_id, confined = await self._entry_id_from_path(path)
+        manifest = await self._load_manifest(entry_id)
+        return manifest, confined
 
     @asynccontextmanager
     async def _lock_parent_manifest_from_path(
@@ -161,8 +170,10 @@ class EntryTransactions(FileTransactions):
         self.check_read_rights(path)
 
         # Fetch data
-        manifest = await self._get_manifest_from_path(path)
-        return manifest.to_stats()
+        manifest, confined = await self._get_manifest_from_path(path)
+        stats = manifest.to_stats()
+        stats["confined"] = confined
+        return stats
 
     async def entry_rename(
         self, source: FsPath, destination: FsPath, overwrite: bool = True
