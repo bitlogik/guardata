@@ -220,6 +220,17 @@ class SyncTransactions(EntryTransactions):
 
     # Atomic transactions
 
+    async def apply_filter(self, entry_id: EntryID, pattern_filter: Pattern) -> None:
+        # Fetch and lock
+        async with self.local_storage.lock_manifest(entry_id) as local_manifest:
+
+            # Craft new local manifest
+            new_local_manifest = local_manifest.apply_filter(pattern_filter)
+
+            # Set the new base manifest
+            if new_local_manifest != local_manifest:
+                await self.local_storage.set_manifest(entry_id, new_local_manifest)
+
     async def synchronization_step(
         self,
         entry_id: EntryID,

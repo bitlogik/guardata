@@ -3,7 +3,7 @@
 import attr
 import trio
 from collections import defaultdict
-from typing import Union, List, Dict, Tuple, AsyncIterator, cast
+from typing import Union, List, Dict, Tuple, AsyncIterator, cast, Pattern
 from pendulum import Pendulum, now as pendulum_now
 
 from parsec.api.data import BaseManifest as BaseRemoteManifest
@@ -621,6 +621,41 @@ class WorkspaceFS:
             FSError
         """
         await self.sync_by_id(self.workspace_id, remote_changed=remote_changed, recursive=True)
+
+    # Apply filter
+
+    async def _recursive_apply_filter(self, entry_id: EntryID, pattern_filter: Pattern):
+        # Load manifest
+        try:
+            manifest = await self.local_storage.get_manifest(entry_id)
+        # Not stored locally, nothing to do
+        except FSLocalMissError:
+            return
+
+        # A file manifest, nothing to do
+        if is_file_manifest(manifest):
+            return
+
+        # Apply filter (idempotent)
+        await self.transactions.apply_filter(entry_id, pattern_filter)
+
+        # Synchronize children
+        for name, child_entry_id in manifest.children.items():
+            await self._recursive_apply_filter(child_entry_id, pattern_filter)
+
+    async def apply_pattern_filter(self, pattern: Pattern):
+        # Fully apply pattern filter
+        await self._recursive_apply_filter(self.workspace_id, pattern)
+        # Acknowledge pattern filter
+        await self.local_storage.set_pattern_filter_fully_applied(pattern)
+
+    async def set_pattern_filter(self, pattern: Pattern):
+        await self.local_storage.set_pattern_filter(pattern)
+
+    async def set_and_apply_pattern_filter(self, pattern: Pattern):
+        await self.set_pattern_filter(pattern)
+        if not self.local_storage.get_pattern_filter_fully_applied():
+            await self.apply_pattern_filter(self.local_storage.get_pattern_filter())
 
     # Debugging helper
 
