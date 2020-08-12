@@ -93,9 +93,10 @@ def fix_dir_win(path: Path) -> Path:
 
 
 def decorator_fix_windir(func):
-    def wrapper(*args, **kwargs): 
-        path = func(*args, **kwargs) 
+    def wrapper(*args, **kwargs):
+        path = func(*args, **kwargs)
         return fix_dir_win(path)
+
     return wrapper
 
 
