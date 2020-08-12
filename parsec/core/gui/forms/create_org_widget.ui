@@ -46,10 +46,10 @@
         </size>
        </property>
        <property name="text">
-        <string/>
+        <string></string>
        </property>
        <property name="pixmap">
-        <pixmap resource="../rc/resources.qrc">:/logos/images/icons/guardata.png</pixmap>
+        <pixmap resource="../rc/resources.qrc">:/logos/images/logos/guardata.png</pixmap>
        </property>
        <property name="scaledContents">
         <bool>true</bool>
