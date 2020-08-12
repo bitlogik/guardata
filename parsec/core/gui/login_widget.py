@@ -8,7 +8,7 @@ from PyQt5.QtWidgets import QWidget
 from parsec.core.local_device import list_available_devices, AvailableDevice
 
 from parsec.core.gui.lang import translate as _
-from parsec.core.gui.parsec_application import ParsecApp
+from parsec.core.gui.parsec_application import guardataApp
 from parsec.core.gui.ui.login_widget import Ui_LoginWidget
 from parsec.core.gui.ui.account_button import Ui_AccountButton
 from parsec.core.gui.ui.login_accounts_widget import Ui_LoginAccountsWidget
@@ -39,7 +39,7 @@ class LoginAccountsWidget(QWidget, Ui_LoginAccountsWidget):
         super().__init__()
         self.setupUi(self)
         for available_device in devices:
-            if not ParsecApp.is_device_connected(
+            if not guardataApp.is_device_connected(
                 available_device.organization_id, available_device.device_id
             ):
                 ab = AccountButton(available_device)
@@ -89,7 +89,7 @@ class LoginNoDevicesWidget(QWidget, Ui_LoginNoDevicesWidget):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
-        if ParsecApp.connected_devices:
+        if guardataApp.connected_devices:
             self.label_no_device.setText(_("TEXT_LOGIN_NO_AVAILABLE_DEVICE"))
         else:
             self.label_no_device.setText(_("TEXT_LOGIN_NO_DEVICE_ON_MACHINE"))

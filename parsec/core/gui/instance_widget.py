@@ -19,7 +19,7 @@ from parsec.core.mountpoint import (
 )
 
 from parsec.core.gui.trio_thread import QtToTrioJobScheduler, ThreadSafeQtSignal
-from parsec.core.gui.parsec_application import ParsecApp
+from parsec.core.gui.parsec_application import guardataApp
 from parsec.core.gui.custom_dialogs import show_error
 from parsec.core.gui.lang import translate as _
 from parsec.core.gui.login_widget import LoginWidget
@@ -96,7 +96,7 @@ class InstanceWidget(QWidget):
         assert not self.core
         assert not self.core_jobs_ctx
 
-        self.config = ParsecApp.get_main_window().config
+        self.config = guardataApp.get_main_window().config
 
         self.running_core_job = self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "run_core_success"),
@@ -117,7 +117,7 @@ class InstanceWidget(QWidget):
                 self.core.device.organization_addr.organization_id, self.core.device.device_id
             ),
         )
-        ParsecApp.add_connected_device(
+        guardataApp.add_connected_device(
             self.core.device.organization_addr.organization_id, self.core.device.device_id
         )
         self.logged_in.emit()
@@ -156,7 +156,7 @@ class InstanceWidget(QWidget):
     def on_core_run_done(self):
         assert self.running_core_job.is_finished()
         if self.core:
-            ParsecApp.remove_connected_device(
+            guardataApp.remove_connected_device(
                 self.core.device.organization_addr.organization_id, self.core.device.device_id
             )
             self.core.event_bus.disconnect(
@@ -187,7 +187,7 @@ class InstanceWidget(QWidget):
         exception = None
         try:
             device = load_device_with_password(key_file, password)
-            if ParsecApp.is_device_connected(
+            if guardataApp.is_device_connected(
                 device.organization_addr.organization_id, device.device_id
             ):
                 message = _("TEXT_LOGIN_ERROR_ALREADY_CONNECTED")

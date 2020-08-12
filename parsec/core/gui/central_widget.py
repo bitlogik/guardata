@@ -217,7 +217,7 @@ class CentralWidget(QWidget, Ui_CentralWidget):
             self.new_notification.emit(*notif)
         if allow_systray and disconnected:
             self.systray_notification.emit(
-                "Parsec",
+                "guardata",
                 _("TEXT_SYSTRAY_BACKEND_DISCONNECT_organization").format(
                     organization=self.core.device.organization_id
                 ),

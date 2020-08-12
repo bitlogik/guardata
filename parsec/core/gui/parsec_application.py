@@ -5,14 +5,14 @@ from PyQt5.QtCore import QFile
 from PyQt5.QtGui import QFont, QFontDatabase
 
 
-class ParsecApp(QApplication):
+class guardataApp(QApplication):
     connected_devices = set()
 
     def __init__(self):
         super().__init__(["-stylesheet"])
-        self.setOrganizationName("Scille")
-        self.setOrganizationDomain("parsec.cloud")
-        self.setApplicationName("Parsec")
+        self.setOrganizationName("BitLogiK")
+        self.setOrganizationDomain("cloud.guardata.app")
+        self.setApplicationName("guardata")
 
     def load_stylesheet(self, res=":/styles/styles/main.css"):
         rc = QFile(res)

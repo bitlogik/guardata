@@ -298,7 +298,7 @@ def ClaimUserTestBed(
             assert autoclose_dialog.dialogs == [
                 (
                     "",
-                    "The user was successfully created. You will now be logged in.\nWelcome to Parsec!",
+                    "The user was successfully created. You will now be logged in.\nWelcome to guardata!",
                 )
             ]
 

@@ -468,7 +468,7 @@ def run_cmd(
                 await trio.serve_tcp(_serve_client, port, host=host)
 
         click.echo(
-            f"Starting Parsec Backend on {host}:{port} (db={config.db_type}, "
+            f"Starting guardata server on {host}:{port} (db={config.db_type}, "
             f"blockstore={config.blockstore_config.type})"
         )
         try:

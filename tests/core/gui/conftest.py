@@ -20,7 +20,7 @@ from parsec.core.gui.trio_thread import QtToTrioJobScheduler
 from parsec.core.gui.login_widget import LoginWidget, LoginPasswordInputWidget, LoginAccountsWidget
 from parsec.core.gui.central_widget import CentralWidget
 from parsec.core.gui.lang import switch_language
-from parsec.core.gui.parsec_application import ParsecApp
+from parsec.core.gui.parsec_application import guardataApp
 
 
 class ThreadedTrioTestRunner:
@@ -306,7 +306,7 @@ def gui_factory(
             main_w.add_instance(start_arg)
 
             def right_main_window():
-                assert ParsecApp.get_main_window() is main_w
+                assert guardataApp.get_main_window() is main_w
 
             # For some reasons, the main window from the previous test might
             # still be around. Simply wait for things to settle down until

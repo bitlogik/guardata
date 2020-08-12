@@ -24,7 +24,7 @@ from parsec.core.types import (
 from parsec.api.protocol import InvitationType
 from parsec.core.gui.lang import translate as _
 from parsec.core.gui.instance_widget import InstanceWidget
-from parsec.core.gui.parsec_application import ParsecApp
+from parsec.core.gui.parsec_application import guardataApp
 from parsec.core.gui import desktop
 from parsec.core import win_registry
 from parsec.core.gui.changelog_widget import ChangelogWidget
@@ -129,7 +129,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _shortcut_proxy(self, funct):
         def _inner_proxy():
-            if ParsecApp.has_active_modal():
+            if guardataApp.has_active_modal():
                 return
             funct()
 
@@ -500,7 +500,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         return tab
 
     def switch_to_tab(self, idx):
-        if not ParsecApp.has_active_modal():
+        if not guardataApp.has_active_modal():
             self.tab_center.setCurrentIndex(idx)
 
     def go_to_file_link(self, action_addr):
@@ -646,7 +646,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             if not self.minimize_on_close_notif_already_send:
                 self.minimize_on_close_notif_already_send = True
                 self.systray_notification.emit(
-                    "Parsec", _("TEXT_TRAY_GUARDATA_STILL_RUNNING_MESSAGE"), 2000
+                    "guardata", _("TEXT_TRAY_GUARDATA_STILL_RUNNING_MESSAGE"), 2000
                 )
         else:
             if self.config.gui_confirmation_before_close and not self.force_close:

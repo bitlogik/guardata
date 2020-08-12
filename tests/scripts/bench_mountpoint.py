@@ -91,7 +91,7 @@ def main():
                 if w1dir.exists():
                     break
             else:
-                RuntimeError("Parsec failed to mount workspace")
+                RuntimeError("guardata failed to mount workspace")
 
             # Create 100 MB file
             file = workdir / "sample"

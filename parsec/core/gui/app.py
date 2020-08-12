@@ -25,7 +25,7 @@ from parsec.core.ipcinterface import (
 
 try:
     from parsec.core.gui import lang
-    from parsec.core.gui.parsec_application import ParsecApp
+    from parsec.core.gui.parsec_application import guardataApp
     from parsec.core.gui.new_version import CheckNewVersion
     from parsec.core.gui.systray import systray_available, Systray
     from parsec.core.gui.main_window import MainWindow
@@ -68,7 +68,7 @@ async def _start_ipc_server(config, main_window, start_arg, result_queue):
                 await trio.sleep_forever()
 
         except IPCServerAlreadyRunning:
-            # Parsec is already started, give it our work then
+            # guardata is already started, give it our work then
             try:
                 try:
                     if start_arg:
@@ -115,7 +115,7 @@ def run_gui(config: CoreConfig, start_arg: str = None, diagnose: bool = False):
         Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
     )
 
-    app = ParsecApp()
+    app = guardataApp()
 
     app.load_stylesheet()
     app.load_font()
@@ -152,7 +152,7 @@ def run_gui(config: CoreConfig, start_arg: str = None, diagnose: bool = False):
             result_queue,
         )
         if result_queue.get() == "already_running":
-            # Another instance of Parsec already started, nothing more to do
+            # Another instance of guardata already started, nothing more to do
             return
 
         if systray_available():

@@ -273,7 +273,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
             f" --port={unused_tcp_port}"
             f" {ssl_conf.backend_opts}"
         ),
-        wait_for="Starting Parsec Backend",
+        wait_for="Starting guardata server",
     ):
 
         print("####### Create organization #######")
@@ -410,7 +410,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
             f" --port={unused_tcp_port}"
             f" {ssl_conf.backend_opts}"
         ),
-        wait_for="Starting Parsec Backend",
+        wait_for="Starting guardata server",
     ):
 
         print("####### Create organization #######")

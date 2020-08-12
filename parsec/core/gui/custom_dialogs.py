@@ -19,7 +19,7 @@ from structlog import get_logger
 from parsec.core.gui.lang import translate as _
 from parsec.core.gui import desktop
 from parsec.core.gui.custom_widgets import Button
-from parsec.core.gui.parsec_application import ParsecApp
+from parsec.core.gui.parsec_application import guardataApp
 
 from parsec.core.gui.ui.error_widget import Ui_ErrorWidget
 from parsec.core.gui.ui.info_widget import Ui_InfoWidget
@@ -54,7 +54,7 @@ class GreyedDialog(QDialog, Ui_GreyedDialog):
             self.label_title.setText(title)
         if hide_close:
             self.button_close.hide()
-        main_win = ParsecApp.get_main_window()
+        main_win = guardataApp.get_main_window()
         if width:
             if width < main_win.size().width():
                 spacing = int((main_win.size().width() - width) / 2)

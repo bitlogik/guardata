@@ -158,7 +158,7 @@ async def winfsp_mountpoint_runner(
         post_cleanup_when_modified_only=1,
         device_control=0,
         um_file_context_is_user_context2=1,
-        file_system_name="Parsec",
+        file_system_name="guardata",
         prefix="",
         # The minimum value for IRP timeout is 1 minute (default is 5)
         irp_timeout=60000,
