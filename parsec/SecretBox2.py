@@ -6,7 +6,7 @@ from nacl.encoding import RawEncoder
 import nacl.bindings
 import nacl.secret
 from nacl import exceptions as exc
-from nacl.utils import EncryptedMessage, StringFixer, random
+from nacl.utils import EncryptedMessage, random
 
 class SecretBox(nacl.secret.SecretBox):
     """
