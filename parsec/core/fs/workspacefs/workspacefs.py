@@ -354,7 +354,11 @@ class WorkspaceFS:
             FSError
         """
         path = FsPath(path)
-        _, fd = await self.transactions.file_open(path, "w")
+        try:
+            _, fd = await self.transactions.file_create(path, open=True)
+            assert fd is not None  # Because `open=True` has been provided
+        except FileExistsError:
+            _, fd = await self.transactions.file_open(path, "w")
         try:
             if offset >= 0 and truncate:
                 await self.transactions.fd_resize(fd, offset)
