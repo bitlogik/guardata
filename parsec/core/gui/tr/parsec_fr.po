@@ -2100,19 +2100,21 @@ msgstr ""
 "organisation"
 
 msgid "TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS"
-msgstr "Si votre groupe n'existe pas encore, vous devez le créer sur le site web de guardata."
+msgstr "Si votre groupe n'existe pas encore, vous devez le"
+"créer sur le site web de guardata."
 "<a href=\"https://guardata.app/create\" "
 "title=\"Enregistrer votre groupe\">
 "CREER MON GROUPE"
 "</a>"
-"Ensuite, vous pourrez effectuer une première connexion au retour, en donnant le lien parsec."
+"Ensuite, vous pourrez effectuer une première connexion"
+"au retour, en donnant le lien parsec."
 
 msgid "TEXT_LABEL_ORG_NAME"
 msgstr "Nom de l'organisation"
 
 msgid "ACTION_ACCEPT_CONTRACT"
-msgstr ""
-""
+msgstr "Fermez ce message, et allez sur Première connexion"
+"lorsque vous aurez le code du site web."
 
 msgid "ACTION_PREVIOUS"
 msgstr "Précédent"
