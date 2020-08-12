@@ -67,7 +67,7 @@ async def test_bootstrap_organization(aqtbot, backend, gui_ready_for_bootstrap, 
         assert autoclose_dialog.dialogs == [
             (
                 "",
-                "You organization <b>NewOrg</b> has been created!<br />\n<br />\n"
+                "Your organization <b>NewOrg</b> has been created!<br />\n<br />\n"
                 "You will now be automatically logged in.<br />\n<br />\n"
                 "<br />\n"
             )

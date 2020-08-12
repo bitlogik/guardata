@@ -1576,7 +1576,7 @@ msgstr "Could not bootstrap the organization."
 
 msgid "TEXT_BOOTSTRAP_ORG_SUCCESS_organization"
 msgstr ""
-"You organization <b>{organization}</b> has been created!<br />\n"
+"Your organization <b>{organization}</b> has been created!<br />\n"
 "<br />\n"
 "You will now be automatically logged in.<br />\n"
 "<br />\n"
