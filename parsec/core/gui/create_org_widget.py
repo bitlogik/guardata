@@ -79,6 +79,7 @@ class CreateOrgWidget(QWidget, Ui_CreateOrgWidget):
         self.main_layout.addWidget(self.current_widget)
         # self.current_widget.check_accept_contract.clicked.connect(self._check_infos)
         self.button_validate.setEnabled(True)
+        self.button_validate.hide()
         self.req_success.connect(self._on_req_success)
         self.req_error.connect(self._on_req_error)
 
