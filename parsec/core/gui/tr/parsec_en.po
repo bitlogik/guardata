@@ -1920,11 +1920,10 @@ msgstr "Quit"
 msgid "TEXT_GUARDATA_DEVELOPMENT_INFO"
 msgstr ""
 "Developed by <a href=\"https://bitlogik.fr\" title=\"BitLogiK\" "
-"style=\"color: #0092FF; font-weight: bold;\">BitLogiK</a> and <a href=\"https://scille.eu\" title=\"Scille\" \">Scille</a>"
+"style=\"color: #0092FF; font-weight: bold;\">BitLogiK</a><br/>and <a href=\"https://scille.eu\" title=\"Scille\">Scille</a>"
 
 msgid "TEXT_ATTRIBUTE_ICONS"
-msgstr ""
-""
+msgstr "AGPL License"
 
 msgid "TEXT_LABEL_DEVICE_NAME"
 msgstr "Device name"
@@ -2049,20 +2048,20 @@ msgstr ""
 "organization"
 
 msgid "TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS"
-msgstr "If your group doesn't exist yet, you need to"
-"register on the guardata web site."
+msgstr "If your group doesn't exist yet, you need to\n"
+"register on the guardata web site.\n\n"
 "<a href=\"https://guardata.app/create\" "
 "title=\"Register your group\">
 "REGISTER YOUR NEW GROUP"
 "</a>"
-"Then you can use first login back here, by giving"
+"\nThen you can use first login back here, by giving\n"
 "the parsec link."
 
 msgid "TEXT_LABEL_ORG_NAME"
 msgstr "Organization name"
 
 msgid "ACTION_ACCEPT_CONTRACT"
-msgstr "Close this message, then go on First Login"
+msgstr "Close this message, then go on First Login\n"
 "when you'll get the code from the website."
 
 msgid "ACTION_PREVIOUS"
