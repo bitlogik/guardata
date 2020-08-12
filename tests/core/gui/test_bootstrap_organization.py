@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
@@ -68,8 +69,7 @@ async def test_bootstrap_organization(aqtbot, backend, gui_ready_for_bootstrap, 
                 "",
                 "You organization <b>NewOrg</b> has been created!<br />\n<br />\n"
                 "You will now be automatically logged in.<br />\n<br />\n"
-                "To help you start with guardata, you can read the "
-                '<a href="https://docs.parsec.cloud/en/stable/" title="User guide">user guide</a>.',
+                "<br />\n"
             )
         ]
 
