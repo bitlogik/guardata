@@ -35,14 +35,14 @@
       <widget class="QLabel" name="label">
        <property name="minimumSize">
         <size>
-         <width>200</width>
-         <height>200</height>
+         <width>188</width>
+         <height>121</height>
         </size>
        </property>
        <property name="maximumSize">
         <size>
-         <width>200</width>
-         <height>200</height>
+         <width>188</width>
+         <height>121</height>
         </size>
        </property>
        <property name="text">

@@ -5,6 +5,7 @@
         <file>images/logos/guardata_white_small.png</file>
         <file>images/logos/guardata_white_medium.png</file>
         <file>images/icons/guardata.png</file>
+        <file>images/logos/guardata_vert.png</file>
     </qresource>
     <qresource prefix="/translations">
         <file>translations/parsec_en.mo</file>
