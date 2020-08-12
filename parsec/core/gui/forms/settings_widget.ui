@@ -350,18 +350,18 @@ border-radius: 8px;
             </item>
            </layout>
           </item>
-          <item>
-           <layout class="QHBoxLayout" name="horizontalLayout_12">
-            <item>
-             <widget class="QCheckBox" name="check_box_show_confined">
-              <property name="text">
-               <string>TEXT_SETTINGS_CHECK_SHOW_CONFINED_FILES</string>
-              </property>
-             </widget>
-            </item>
-           </layout>
-          </item>
-          <item>
+
+
+
+
+
+
+
+
+
+
+
+
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
              <widget class="QCheckBox" name="check_box_show_confined">
