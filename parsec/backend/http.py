@@ -17,7 +17,7 @@ from parsec.backend import static as http_static_module
 from parsec.backend.templates import get_template
 from parsec.api.protocol import apiv1_organization_create_serializer
 
-ACAO_domain = "http://127.0.0.1:8080" # use "" to disable ACAO
+ACAO_domain = "https://cloud.guardata.app" # use "" to disable ACAO
 
 @attr.s(slots=True, auto_attribs=True)
 class HTTPRequest:
