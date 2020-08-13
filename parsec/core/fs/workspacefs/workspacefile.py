@@ -2,10 +2,12 @@
 
 import os
 import re
+from typing import Union
 from enum import IntEnum
 import functools
+
 from parsec.core.fs.exceptions import FSUnsupportedOperation, FSOffsetError
-from parsec.core.types import FsPath
+from parsec.core.types import FsPath, FileDescriptor
 
 
 class FileState(IntEnum):
@@ -47,7 +49,11 @@ class WorkspaceFile:
     mode("r") -> read file.
     """
 
-    def __init__(self, fd: int, transactions, path: FsPath, mode: str = "r"):
+    def __init__(self, fd: FileDescriptor, transactions, path: FsPath, mode: str = "r"):
+        self._readable = False
+        self._writable = False
+        self._append = False
+        self._binary = False
         self._fd = fd
         self._offset = 0
         self._state = FileState.INIT
@@ -55,11 +61,11 @@ class WorkspaceFile:
         self._transactions = transactions
         mode = mode.lower()
         # Preventing to open in write and read in same time or write and append or open with no mode
-        if sum(c in mode for c in "rwa") != 1:
+        if sum(c in mode for c in "rwax") != 1:
             raise ValueError("must have exactly one of create/read/write/append mode")
         # Preventing to open with non-existant mode
-        elif re.search("[^arwb]", mode) is not None:
-            raise ValueError("invalid mode: ", mode)
+        elif re.search("[^arwxb+]", mode) is not None:
+            raise ValueError(f"invalid mode: '{mode}'")
         self._mode = mode
 
     async def __aenter__(self):
@@ -77,9 +83,24 @@ class WorkspaceFile:
         """
         if self._state == FileState.INIT:
             self._state = FileState.OPEN
-            # Checking if the 'w' open mode have been selected, if yes, truncate the file
-            if "w" in self._mode:
+            if "b" in self._mode:
+                self._binary = True
+            if "w" in self._mode or "x" in self._mode:
+                self._writable = True
+                # Checking if the 'w' open mode have been selected, if yes, truncate the file
                 await self.truncate(0)
+                if "+" in self._mode:
+                    self._readable = True
+            elif "r" in self._mode:
+                self._readable = True
+                if "+" in self._mode:
+                    self._writable = True
+                await self.seek(0)
+            elif "a" in self._mode:
+                self._writable = True
+                self._append = True
+                if "+" in self._mode:
+                    self._readable = True
 
     async def __anext__(self):
         return await self.readline()
@@ -89,6 +110,10 @@ class WorkspaceFile:
         if self._state != FileState.CLOSED:
             self._state = FileState.CLOSED
             await self._transactions.fd_close(self._fd)
+
+    async def aclose(self):
+        """Same as close"""
+        return await self.close()
 
     @property
     def closed(self):
@@ -145,7 +170,7 @@ class WorkspaceFile:
 
     @check_state
     def readable(self):
-        return "r" in self._mode
+        return self._readable
 
     async def readline(self, size: int = -1):
         raise NotImplementedError
@@ -186,7 +211,7 @@ class WorkspaceFile:
         return True
 
     def tell(self) -> int:
-        """Return the current stream position."""
+        """Return the current stream position. Unlike trio.open_file files, this method is sync"""
         if not self.seekable():
             raise FSUnsupportedOperation
         return self._offset
@@ -222,19 +247,36 @@ class WorkspaceFile:
 
     @check_state
     def writable(self):
-        return "w" in self._mode or "a" in self._mode
+        return self._writable
 
-    async def write(self, data: bytes) -> int:
-        """ Write the given bytes-like object.
-        Return the number of bytes written.
-        Raises:
+    async def write(self, data: Union[str, bytes]) -> int:
+        """ Check write right and execute write_bytes or write_str depend on the mode
+            Raises:
             FSUnsupportedOperation
         """
         if not self.writable():
             raise FSUnsupportedOperation
         # Preparing offset at EOF if open with append mode
-        elif "a" in self._mode:
+        if self._append:
             self._offset = await self.get_size()
+        if self._binary:
+            if not isinstance(data, bytes):
+                raise TypeError(f"a bytes-like object is required, not '{type(data).__name__}'")
+            return await self._write_bytes(data)
+        else:
+            if not isinstance(data, str):
+                raise TypeError(f"write() argument must be str, not {type(data).__name__}")
+        return await self._write_str(data)
+
+    async def _write_str(self, data: str) -> int:
+        raise NotImplementedError
+
+    async def _write_bytes(self, data: bytes) -> int:
+        """ Write the given bytes-like object.
+        Return the number of bytes written.
+        """
+
         result = await self._transactions.fd_write(self._fd, data, self._offset)
-        self._offset += result
+        if not self._append:
+            self._offset += result
         return result

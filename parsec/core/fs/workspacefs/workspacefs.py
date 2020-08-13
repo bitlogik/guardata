@@ -338,7 +338,17 @@ class WorkspaceFS:
 
     async def open_file(self, path: AnyPath, mode="r"):
         path = FsPath(path)
-        _, fd = await self.transactions.file_open(path, mode)
+        # check if file exist, if not and a writting mode is set, then create the file
+        if "x" in mode:
+            try:
+                _, fd = await self.transactions.file_create(path, open=True)
+            except FileExistsError:
+                raise
+        elif not await self.exists(path) and sum(c in mode for c in "aw") == 1:
+            _, fd = await self.transactions.file_create(path, open=True)
+        else:
+            _, fd = await self.transactions.file_open(path, mode)
+        assert fd is not None
         f = WorkspaceFile(fd, self.transactions, mode=mode, path=path)
         await f.ainit()
         return f

@@ -52,7 +52,7 @@ async def compare_read(triof=None, f=None, size: int = -1, alice_workspace=None,
     output = await f.read(size)
     trio_output = await triof.read(size)
     assert trio_output == output
-    assert f.tell() == await triof.tell()
+    assert await triof.tell() == f.tell()
 
 
 async def write_in_both_files(triof, f, text):
@@ -66,7 +66,8 @@ async def write_in_both_files(triof, f, text):
 
 
 @pytest.mark.trio
-async def test_open(alice_workspace, trio_file):
+async def test_open(alice_workspace, trio_file, random_text, tmp_path):
+    random_text = random_text.encode("utf-8")
 
     # Testing open multiples times same file
     f = await alice_workspace.open_file("/foo/bar", "r")
@@ -98,10 +99,16 @@ async def test_open(alice_workspace, trio_file):
         await alice_workspace.open_file("/foo/bar", "")
     with pytest.raises(ValueError):
         await trio.open_file(trio_file, "")
+    # Opening non existent file with w
+    f = await alice_workspace.open_file("/foo/unknow", "bw")
+    await f.write(random_text)
+    f = await alice_workspace.open_file("/foo/unknow", "rb")
+    f.read()
+    await f.close()
 
 
 @pytest.mark.trio
-async def test_open_right(alice_workspace, trio_file, random_text):
+async def test_open_right(alice_workspace, trio_file, random_text, tmp_path):
     # The text tested in both methods
     random_text = random_text.encode("utf-8")
 
@@ -130,6 +137,7 @@ async def test_open_right(alice_workspace, trio_file, random_text):
         await triof.read()
     await f.close()
     await triof.aclose()
+
     # Open with a
     f = await alice_workspace.open_file("/foo/bar", "wb")
     triof = await trio.open_file(trio_file, "wb")
@@ -141,6 +149,20 @@ async def test_open_right(alice_workspace, trio_file, random_text):
     with pytest.raises(io.UnsupportedOperation):
         await triof.read()
     await f.close()
+    await triof.aclose()
+
+    # Test creating file with x mode
+    triopath = tmp_path / "new"
+    f = await alice_workspace.open_file("/foo/new", "xb+")
+    triof = await trio.open_file(triopath, "xb+")
+    assert triof.writable() == f.writable()
+    assert triof.readable() == f.readable()
+    assert triof.mode == f.mode
+    triof = await trio.open_file(trio_file, "rb")
+    f = await alice_workspace.open_file("/foo/new", "rb")
+    await compare_read(triof, f)
+    await triof.aclose()
+    await f.aclose()
 
 
 @pytest.mark.trio
@@ -253,6 +275,57 @@ async def test_read_write(alice_workspace, trio_file, random_text):
     with pytest.raises(ValueError):
         output = await f.read(-1000)
         output = f.decode("utf-8")
+    # Opening both files without byte mode
+    f = await alice_workspace.open_file("/foo/bar", "w")
+    triof = await trio.open_file(trio_file, "w")
+
+    with pytest.raises(TypeError):
+        output = await f.write(random_text)
+    with pytest.raises(TypeError):
+        trio_output = await triof.write(random_text)
+    await f.close()
+    await triof.aclose()
+
+    # Opening with rb+
+    f = await alice_workspace.open_file("/foo/bar", "rb+")
+    triof = await trio.open_file(trio_file, "rb+")
+    # test write
+    await write_in_both_files(triof, f, new_text)
+    assert f.tell() == await triof.tell()
+    # test read
+    await compare_read(triof, f)
+    await f.close()
+    await triof.aclose()
+
+    # Opening with wb+
+    # writting some text before to move the offset
+    f = await alice_workspace.open_file("/foo/bar", "wb")
+    triof = await trio.open_file(trio_file, "wb")
+    await write_in_both_files(triof, f, new_text)
+    f = await alice_workspace.open_file("/foo/bar", "rb+")
+    triof = await trio.open_file(trio_file, "rb+")
+    # check if offset is at start of file
+    assert f.tell() == await triof.tell()
+    # test write
+    await write_in_both_files(triof, f, new_text)
+    # test read
+    await compare_read(triof, f)
+    await f.close()
+    await triof.aclose()
+
+    # Opening with ab+ and testing also offset moving with append
+    # writting some text before to move the offset
+    f = await alice_workspace.open_file("/foo/bar", "wb")
+    triof = await trio.open_file(trio_file, "wb")
+    await write_in_both_files(triof, f, new_text)
+    f = await alice_workspace.open_file("/foo/bar", "ab+")
+    triof = await trio.open_file(trio_file, "ab+")
+    # test write
+    await write_in_both_files(triof, f, new_text)
+    # check if offset is at start of file
+    assert f.tell() == await triof.tell()
+    await f.close()
+    await triof.aclose()
 
 
 @pytest.mark.trio
