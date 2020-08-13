@@ -10,7 +10,6 @@ from datetime import date
 from collections import defaultdict
 import subprocess
 import re
-import textwrap
 import math
 
 
@@ -241,7 +240,6 @@ def build_release(version, stage_pause):
     newsfragments = collect_newsfragments()
     new_entry_title = f"guardata {version} ({date.today().isoformat()})"
     new_entry = f"\n\n{new_entry_title}\n{len(new_entry_title) * '-'}\n"
-    issues_per_type = defaultdict(list)
 
     updated_history_txt = f"{history_header}{new_entry}{history_body}".strip() + "\n"
     HISTORY_FILE.write_text(updated_history_txt)

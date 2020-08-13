@@ -31,9 +31,4 @@ repos:
       language_version: python3
       pass_filenames: false
       require_serial: true
-    - id: license_headers
-      name: license_headers
-      entry: python ./misc/license_headers.py add
-      language: python
-      language_version: python3
-      types: [python]
+

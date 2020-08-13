@@ -27,7 +27,7 @@ from parsec.core.gui.instance_widget import InstanceWidget
 from parsec.core.gui.parsec_application import guardataApp
 from parsec.core.gui import desktop
 from parsec.core import win_registry
-from parsec.core.gui.changelog_widget import ChangelogWidget
+# from parsec.core.gui.changelog_widget import ChangelogWidget
 from parsec.core.gui.bootstrap_organization_widget import BootstrapOrganizationWidget
 from parsec.core.gui.claim_user_widget import ClaimUserWidget
 from parsec.core.gui.claim_device_widget import ClaimDeviceWidget

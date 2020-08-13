@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QDialog
 from parsec.core.types import BackendOrganizationBootstrapAddr
 
 from parsec.core.gui.custom_dialogs import GreyedDialog, show_error
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal
+from parsec.core.gui.trio_thread import JobResultError #, ThreadSafeQtSignal
 from parsec.core.gui.lang import translate as _
 
 from parsec.core.gui.ui.create_org_widget import Ui_CreateOrgWidget
