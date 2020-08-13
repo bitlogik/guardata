@@ -732,6 +732,9 @@ msgstr "Le serveur est hors-ligne ou vous n'avez pas de connexion internet."
 msgid "TEXT_INVITE_USER_INVITE_ERROR"
 msgstr "Impossible d'inviter l'utilisateur."
 
+msgid "TEXT_INVITE_USER_ALREADY_MEMBER_ERROR"
+msgstr "Cet utilisateur est déjà membre de l'organisation."
+
 msgid "TEXT_GUARDATA_LICENSE"
 msgstr ""
 "<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Strict//EN\"\n"
