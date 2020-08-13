@@ -25,41 +25,39 @@ async def test_file_history(
 
     await aqtbot.wait_until(_workspace_available)
 
-    # BROKEN TESTS SKIPPED
+    f_w = await logged_gui.test_switch_to_files_widget("wksp1")
 
-    # f_w = await logged_gui.test_switch_to_files_widget("wksp1")
+    # Add an entry to the workspace
+    await wfs.touch("/file.txt")
+    await wfs.sync()
+    await wfs.write_bytes("/file.txt", data=b"v2")
+    await wfs.sync()
 
-    # # Add an entry to the workspace
-    # await wfs.touch("/file.txt")
-    # await wfs.sync()
-    # await wfs.write_bytes("/file.txt", data=b"v2")
-    # await wfs.sync()
+    def _entry_available():
+        assert f_w.table_files.rowCount() == 2
 
-    # def _entry_available():
-        # assert f_w.table_files.rowCount() == 2
+    await aqtbot.wait_until(_entry_available)
 
-    # await aqtbot.wait_until(_entry_available)
+    # First select the entry...
+    await aqtbot.run(
+        f_w.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(1, 0, 1, 0), True
+    )
 
-    # # First select the entry...
-    # await aqtbot.run(
-        # f_w.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(1, 0, 1, 0), True
-    # )
+    def _entry_selected():
+        assert f_w.table_files.selectedItems()
 
-    # def _entry_selected():
-        # assert f_w.table_files.selectedItems()
+    await aqtbot.wait_until(_entry_selected)
 
-    # await aqtbot.wait_until(_entry_selected)
+    # ...then ask for history
+    await aqtbot.run(f_w.table_files.show_history_clicked.emit)
 
-    # # ...then ask for history
-    # await aqtbot.run(f_w.table_files.show_history_clicked.emit)
+    hf_w = await catch_file_history_widget()
 
-    # hf_w = await catch_file_history_widget()
+    def _history_displayed():
+        assert hf_w.isVisible()
+        assert hf_w.layout_history.count() == 1
+        hb2_w = hf_w.layout_history.itemAt(0).widget()
+        assert hb2_w.label_user.text() == "Boby McBobFace"
+        assert hb2_w.label_version.text() == "1"
 
-    # def _history_displayed():
-        # assert hf_w.isVisible()
-        # assert hf_w.layout_history.count() == 1
-        # hb2_w = hf_w.layout_history.itemAt(0).widget()
-        # assert hb2_w.label_user.text() == "Boby McBobFace"
-        # assert hb2_w.label_version.text() == "1"
-
-    # await aqtbot.wait_until(_history_displayed)
+    await aqtbot.wait_until(_history_displayed)
