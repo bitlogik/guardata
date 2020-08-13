@@ -78,8 +78,7 @@ class LocalDevice(BaseLocalData):
         # Add a hash to avoid clash when the backend is reseted
         # and we recreate a device with same organization/device_id
         # organization and device_id than a previous one
-        hash_part = sha256(self.root_verify_key.encode()).hexdigest()[:10]
-        return f"{hash_part}#{self.organization_id}#{self.device_id}"
+        return f"{self.root_verify_key_hash}#{self.organization_id}#{self.device_id}"
 
     @property
     def slughash(self) -> str:
@@ -91,16 +90,20 @@ class LocalDevice(BaseLocalData):
         return sha256(self.slug.encode()).hexdigest()
 
     @staticmethod
-    def load_slug(slug: str) -> Tuple[OrganizationID, DeviceID]:
+    def load_slug(slug: str) -> Tuple[str, OrganizationID, DeviceID]:
         """
         Raises: ValueError
         """
-        _, raw_org_id, raw_device_id = slug.split("#")
-        return OrganizationID(raw_org_id), DeviceID(raw_device_id)
+        rvk_hash, raw_org_id, raw_device_id = slug.split("#")
+        return rvk_hash, OrganizationID(raw_org_id), DeviceID(raw_device_id)
 
     @property
     def root_verify_key(self):
         return self.organization_addr.root_verify_key
+
+    @property
+    def root_verify_key_hash(self):
+        return sha256(self.root_verify_key.encode()).hexdigest()[:10]
 
     @property
     def organization_id(self):

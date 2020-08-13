@@ -86,6 +86,7 @@ def test_list_devices(organization_factory, local_device_factory, config_dir):
             device_id=d.device_id,
             human_handle=d.human_handle,
             device_label=d.device_label,
+            root_verify_key_hash=d.root_verify_key_hash,
         )
         for d in [o1d11, o1d12, o1d21, o2d11, o2d12, o2d21]
     }
@@ -107,6 +108,7 @@ def test_list_devices_support_legacy_file_without_labels(config_dir):
         device_id=DeviceID("Zack@PC1"),
         human_handle=None,
         device_label=None,
+        root_verify_key_hash="9d84fbd57a",
     )
     assert devices == [expected_device]
 
@@ -118,6 +120,7 @@ def test_available_device_display(config_dir, alice):
         device_id=alice.device_id,
         human_handle=None,
         device_label=None,
+        root_verify_key_hash=alice.root_verify_key_hash,
     )
 
     with_labels = AvailableDevice(
@@ -126,6 +129,7 @@ def test_available_device_display(config_dir, alice):
         device_id=alice.device_id,
         human_handle=alice.human_handle,
         device_label=alice.device_label,
+        root_verify_key_hash=alice.root_verify_key_hash,
     )
 
     assert without_labels.device_display == alice.device_name
@@ -145,6 +149,7 @@ def test_available_devices_slughash_uniqueness(
             device_id=device.device_id,
             human_handle=device.human_handle,
             device_label=device.device_label,
+            root_verify_key_hash=device.root_verify_key_hash,
         )
 
     def _assert_different_as_available(d1, d2):

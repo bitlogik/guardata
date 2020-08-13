@@ -15,7 +15,14 @@ from parsec.crypto import (
     CryptoError,
     derivate_secret_key_from_password,
 )
-from parsec.api.protocol import OrganizationID, DeviceID, HumanHandle, HumanHandleField
+from parsec.api.protocol import (
+    OrganizationID,
+    DeviceID,
+    HumanHandle,
+    HumanHandleField,
+    OrganizationIDField,
+    DeviceIDField,
+)
 from parsec.api.data import DataError, UserProfile
 from parsec.core.types import EntryID, LocalDevice, BackendOrganizationAddr
 
@@ -55,6 +62,12 @@ class DeviceFileSchema(BaseSchema):
     # the GUI can use them to provide useful information.
     human_handle = HumanHandleField(allow_none=True, missing=None)
     device_label = fields.String(allow_none=True, missing=None)
+
+    # Store device and organization ID in the device file
+    # For legacy versions, this information is available in the file name
+    device_id = DeviceIDField(allow_none=True, missing=None)
+    organization_id = OrganizationIDField(allow_none=True, missing=None)
+    root_verify_key_hash = fields.String(allow_none=True, missing=None)
 
 
 key_file_serializer = MsgpackSerializer(
@@ -102,8 +115,12 @@ def decorator_fix_windir(func):
 
 @decorator_fix_windir
 def get_key_file(config_dir: Path, device: LocalDevice) -> Path:
-    slug = device.slug
-    return get_devices_dir(config_dir) / slug / f"{slug}.keys"
+    """Return the keyfile path for a given device.
+
+    Note that the filename does not carry any intrinsic meaning.
+    Here, we simply use the slughash to avoid name collision.
+    """
+    return get_devices_dir(config_dir) / f"{device.slughash}.keys"
 
 
 @decorator_fix_windir
@@ -118,6 +135,7 @@ class AvailableDevice:
     device_id: DeviceID
     human_handle: Optional[HumanHandle]
     device_label: Optional[str]
+    root_verify_key_hash: str
 
     @property
     def user_display(self) -> str:
@@ -133,8 +151,8 @@ class AvailableDevice:
 
     @property
     def slug(self) -> str:
-        # Drop the `.keys` suffix
-        return self.key_file_path.stem
+        # Identical to LocalDevice
+        return f"{self.root_verify_key_hash}#{self.organization_id}#{self.device_id}"
 
     @property
     def slughash(self) -> str:
@@ -143,35 +161,40 @@ class AvailableDevice:
 
 def list_available_devices(config_dir: Path) -> List[AvailableDevice]:
     try:
-        candidate_pathes = list(get_devices_dir(config_dir).iterdir())
+        key_file_paths = list(get_devices_dir(config_dir).rglob("*.keys"))
     except FileNotFoundError:
         return []
 
     # Sanity checks
     devices = []
-    for device_folder_path in candidate_pathes:
-        slug = device_folder_path.name
-        key_file_path = fix_dir_win(device_folder_path / f"{slug}.keys")
-
-        try:
-            organization_id, device_id = LocalDevice.load_slug(slug)
-            # Not a valid slug, ignore this folder
-        except ValueError:
-            continue
+    for key_file_path in key_file_paths:
 
         try:
             data = key_file_serializer.loads(key_file_path.read_bytes())
         except (FileNotFoundError, LocalDeviceError):
-            # Not a valid device file, ignore this folder
+            # Not a valid keys file, ignore this folder
             continue
+
+        # Legacy device file
+        if data["organization_id"] is None or data["device_id"] is None:
+            try:
+                rvk_hash, organization_id, device_id = LocalDevice.load_slug(key_file_path.stem)
+            except ValueError:
+                # Not a valid slug, ignore this keys file
+                continue
+            else:
+                data["organization_id"] = organization_id
+                data["device_id"] = device_id
+                data["root_verify_key_hash"] = rvk_hash
 
         devices.append(
             AvailableDevice(
                 key_file_path=key_file_path,
-                organization_id=organization_id,
-                device_id=device_id,
+                organization_id=data["organization_id"],
+                device_id=data["device_id"],
                 human_handle=data["human_handle"],
                 device_label=data["device_label"],
+                root_verify_key_hash=data["root_verify_key_hash"],
             )
         )
 
@@ -242,6 +265,9 @@ def _save_device_with_password(
             "ciphertext": ciphertext,
             "human_handle": device.human_handle,
             "device_label": device.device_label,
+            "organization_id": device.organization_id,
+            "device_id": device.device_id,
+            "root_verify_key_hash": device.root_verify_key_hash,
         }
     )
 
