@@ -45,7 +45,7 @@ windows-tests:
     - $WHLfiles = Get-ChildItem "dist\guardata-*.whl" | ForEach-Object {$_.Name}
     - python.exe -m pip install "dist\$WHLfiles[all]"
       # Check dependency compatibility
-    - python.exe -m pip check parsec[all]
+    - python.exe -m pip check guardata[all]
       # Check winfsp-tests availability
     - python.exe -c "import winfspy.tests.winfsp_tests"
   script:
