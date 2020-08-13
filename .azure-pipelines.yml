@@ -130,11 +130,11 @@ jobs:
       # Remove the parsec folder from the source to force use of the wheel
       rm -rf parsec
       # Install the parsec wheel with all dependencies
-      WHEEL=$(ls $(Pipeline.Workspace)/wheel/parsec_cloud-*.whl)
+      WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
       echo $WHEEL
       pip install $WHEEL[all]
       # Check dependency compatibility
-      pip check parsec[all]
+      pip check guardata[all]
     displayName: 'Install'
   - bash: |
       set -eux
@@ -206,13 +206,13 @@ jobs:
       set -eux
       # Remove the parsec folder from the source to force use of the wheel
       rm -rf parsec
-      # Install the parsec wheel with all dependencies
+      # Install the guardata wheel with all dependencies
       WHEEL_DIRECTORY=`python -c 'print(r"$(Pipeline.Workspace)/wheel".replace("\\\\", "/"))'`
-      WHEEL=$(ls $WHEEL_DIRECTORY/parsec_cloud-*.whl)
+      WHEEL=$(ls $WHEEL_DIRECTORY/guardata-*.whl)
       echo $WHEEL
       pip install $WHEEL[all]
       # Check dependency compatibility
-      pip check parsec[all]
+      pip check guardata[all]
       # Check winfsp-tests availability
       python.exe -c "import winfspy.tests.winfsp_tests"
     displayName: 'Install'
@@ -296,7 +296,7 @@ jobs:
       sed -i "s/__GUARDATA_VERSION__/$VERBOSE_TAG/" snap/snapcraft.yaml
       snapcraft --destructive-mode
       mkdir dist
-      cp parsec*.snap dist
+      cp guardata*.snap dist
     displayName: 'Build snap'
     workingDirectory: $(Agent.TempDirectory)
   - publish: $(Agent.TempDirectory)/snapbuild/dist
@@ -353,7 +353,7 @@ jobs:
       curl -L https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi -o winfsp-1.7.20172.msi
       makensis.exe installer.nsi
       mkdir dist
-      cp build/parsec*-setup.exe dist
+      cp build/guardata*-setup.exe dist
     displayName: 'Build NSIS setup'
     workingDirectory: $(Agent.TempDirectory)/winbuild
   - publish: $(Agent.TempDirectory)/winbuild/dist
@@ -379,15 +379,15 @@ jobs:
       set -eux
       # TODO: xvfb doesn't currently work
       # sudo apt-get install -y xvfb xorg
-      sudo snap install --classic --dangerous $(Pipeline.Workspace)/linux_amd64_snap/parsec*.snap
-      parsec.cli --version
+      sudo snap install --classic --dangerous $(Pipeline.Workspace)/linux_amd64_snap/guardata*.snap
+      guardata.cli --version
       # Make sure snap contains core but not backend
-      NOT_AVAILABLES=$(parsec.cli --help | grep -i "not available")
+      NOT_AVAILABLES=$(guardata.cli --help | grep -i "not available")
       test "$(echo $NOT_AVAILABLES | grep -i 'backend')"
       test -z "$(echo $NOT_AVAILABLES | grep -i 'core')"
-      # xvfb-run parsec &
+      # xvfb-run guardata &
       # sleep 5
-      # jobs  # returns error if parsec is not started
+      # jobs  # returns error if guardata is not started
       # kill %1
     displayName: 'Test Snap'
 
@@ -414,7 +414,7 @@ jobs:
     env:
       SNAPCRAFT_CREDENTIALS: $(SNAPCRAFT_CREDENTIALS)
   - bash: |
-      snapcraft upload --release=edge $(Pipeline.Workspace)/linux_amd64_snap/parsec*.snap
+      snapcraft upload --release=edge $(Pipeline.Workspace)/linux_amd64_snap/guardata*.snap
     displayName: 'Upload Snap'
 
 
@@ -446,7 +446,7 @@ jobs:
       username = __token__
       password = $PYPI_CREDENTIALS
       " > ~/.pypirc
-      WHEEL=$(ls $(Pipeline.Workspace)/wheel/parsec_cloud-*.whl)
+      WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
       echo $WHEEL
       twine upload $WHEEL
     env:
