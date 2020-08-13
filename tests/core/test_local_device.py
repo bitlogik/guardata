@@ -5,6 +5,7 @@ import pytest
 from pathlib import Path
 from uuid import UUID, uuid4
 from os import name as osname
+from os import fspath
 
 from parsec.crypto import SigningKey
 from parsec.serde import packb, unpackb
