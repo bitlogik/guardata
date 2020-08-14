@@ -413,6 +413,7 @@ jobs:
   - download: current
     artifact: linux_amd64_snap
   - bash: |
+      sudo apt-get update
       sudo snap install snapcraft --classic
       echo $SNAPCRAFT_CREDENTIALS | snapcraft login --with -
     displayName: 'Bootstrap'
@@ -442,6 +443,7 @@ jobs:
       versionSpec: '$(python.version)'
   - bash: |
       set -eux
+      sudo apt-get update
       pip install twine
     displayName: 'Bootstrap'
   - bash: |
