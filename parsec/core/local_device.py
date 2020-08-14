@@ -5,6 +5,7 @@ import attr
 from pathlib import Path
 from hashlib import sha256
 from typing import List, Optional, Iterator
+from os import fspath
 from os import name as osname
 
 from parsec.serde import BaseSchema, fields, MsgpackSerializer
@@ -121,6 +122,7 @@ def get_key_file(config_dir: Path, device: LocalDevice) -> Path:
     raise FileNotFoundError
 
 
+@decorator_fix_windir
 def get_default_key_file(config_dir: Path, device: LocalDevice) -> Path:
     """Return the default keyfile path for a given device.
 
