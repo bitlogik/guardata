@@ -337,6 +337,8 @@ extra_requirements = {
         # Swift
         "python-swiftclient==3.5.0",
         "pbr==4.0.2",
+        "python_http_client>=3.2.1",
+        "starkbank-ecdsa>=1.0.0",
     ],
     "dev": test_requirements,
 }

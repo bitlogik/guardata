@@ -1,9 +1,9 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from parsec.backend.backend_events import BackendEvent
+import parsec.backend.sendgrid
 import attr
 import trio
-import smtplib
 import ssl
 from enum import Enum
 from uuid import UUID, uuid4
@@ -143,10 +143,10 @@ def generate_invite_email(
     from_addr: str,
     to_addr: str,
     reply_to: Optional[str],
-    greeter_name: Optional[str],  # Noe for device invitation
+    greeter_name: Optional[str],  # None for device invitation
     organization_id: OrganizationID,
     invitation_url: str,
-) -> Message:
+) -> dict:
     html = get_template("invitation_mail.html").render(
         greeter_name=greeter_name, organization_id=organization_id, invitation_url=invitation_url
     )
@@ -155,44 +155,35 @@ def generate_invite_email(
     )
 
     # mail settings
-    message = MIMEMultipart("alternative")
+    message = {}
     if greeter_name:
-        message["Subject"] = f"[guardata] { greeter_name } invited you to { organization_id}"
+        message["subject"] = f"[guardata] { greeter_name } invited you to { organization_id}"
     else:
-        message["Subject"] = f"[guardata] New device invitation to { organization_id }"
+        message["subject"] = f"[guardata] New device invitation to { organization_id }"
+
     message["From"] = from_addr
     message["To"] = to_addr
     if reply_to:
         message["Reply-To"] = reply_to
 
-    # Turn parts into MIMEText objects
-    part1 = MIMEText(text, "plain")
-    part2 = MIMEText(html, "html")
-
-    # Add HTML/plain-text parts to MIMEMultipart message
-    # The email client will try to render the last part first
-    message.attach(part1)
-    message.attach(part2)
+    message["text"] = text
+    message["html"] = html
 
     return message
 
 
-async def send_email(email_config: EmailConfig, to_addr: str, message: Message) -> None:
+async def send_email(email_config: EmailConfig, to_addr: str, message: dict) -> None:
     def _do():
         try:
-            context = ssl.create_default_context()
-            if email_config.use_ssl:
-                server = smtplib.SMTP_SSL(email_config.host, email_config.port, context=context)
-            else:
-                server = smtplib.SMTP(email_config.host, email_config.port)
-
-            with server:
-                if email_config.use_tls and not email_config.use_ssl:
-                    if server.starttls(context=context)[0] != 220:
-                        logger.warning("Email TLS connexion isn't encrypted")
-                if email_config.host_user and email_config.host_password:
-                    server.login(email_config.host_user, email_config.host_password)
-                server.sendmail(email_config.sender, to_addr, message.as_string())
+            sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SG_APIKEY'))
+            from_email = sendgrid.helpers.mail.Email(email_config.sender)
+            to_email = sendgrid.helpers.mail.To(to_addr)
+            subject = message["subject"]
+            content_html = sendgrid.helpers.mail.Content("text/html", message["html"])
+            content_text = sendgrid.helpers.mail.Content("text/plain", message["text"])
+            mail = sendgrid.helpers.mail.Mail(from_email=from_email, to_emails=to_email, subject=subject, plain_text_content=content_text, html_content=content_html)
+            response = sg.client.mail.send.post(request_body=mail.get())
+            assert 202 == response.status_code
 
         except smtplib.SMTPException as e:
             logger.warning("SMTP error", exc_info=e, to_addr=to_addr)
@@ -247,7 +238,7 @@ class BaseInviteComponent:
             ).to_http_redirection_url()
 
         if msg["send_email"]:
-            if not self._config.email_config or not self._config.backend_addr:
+            if not os.environ.get('SG_APIKEY'):
                 return invite_new_serializer.rep_dump({"status": "not_available"})
 
         if msg["type"] == InvitationType.USER:
