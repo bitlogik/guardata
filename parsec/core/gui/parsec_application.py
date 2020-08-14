@@ -20,8 +20,8 @@ class guardataApp(QApplication):
         content = rc.readAll().data()
         self.setStyleSheet(str(content, "utf-8"))
 
-    def load_font(self, font="Montserrat"):
-        QFontDatabase.addApplicationFont(":/fonts/fonts/Montserrat.ttf")
+    def load_font(self, font="Open Sans"):
+        QFontDatabase.addApplicationFont(":/fonts/fonts/OpenSans.ttf")
         QFontDatabase.addApplicationFont(":/fonts/fonts/Roboto-Regular.ttf")
         f = QFont(font)
         self.setFont(f)
