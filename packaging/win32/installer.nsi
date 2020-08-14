@@ -1,5 +1,8 @@
-; Greatly inspired by Deluge NSIS installer
-; https://github.com/deluge-torrent/deluge/blob/develop/packaging/win32/Win32%20README.txt
+; Copyright (C) 2009 Jesper Lund <mail@jesperlund.com>
+; Copyright (C) 2009 Andrew Resch <andrewresch@gmail.com>
+; Copyright (C) 2009 John Garland <johnnybg@gmail.com>
+; Copyright (C) 2019-2020 Scille SAS
+; Copyright (C) 2020 BitLogiK
 
 !addplugindir nsis_plugins
 !addincludedir nsis_plugins
@@ -174,8 +177,8 @@ ShowInstDetails hide
 ShowUnInstDetails hide
 
 ; Check 64 bits
-!include LogicLib.nsh
-!include x64.nsh
+!include "LogicLib.nsh"
+!include "x64.nsh"
 Section
 ${IfNot} ${RunningX64}
     MessageBox mb_iconstop "Sorry, this requires a 64 bits Windows."
@@ -236,6 +239,7 @@ Section "Associate parsec:// URI links with guardata" Section3
     DeleteRegKey HKCR "parsec"
     WriteRegStr HKCR "parsec" "" "URL:parsec"
     WriteRegStr HKCR "parsec" "URL Protocol" ""
+    WriteRegStr HKCR "parsec\DefaultIcon" "" "$INSTDIR\guardata.exe,0"
     WriteRegStr HKCR "parsec\shell\open\command" "" '"$INSTDIR\guardata.exe" "%1"'
 SectionEnd
 
