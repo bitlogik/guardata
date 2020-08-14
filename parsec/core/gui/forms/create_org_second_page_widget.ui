@@ -34,11 +34,11 @@
      <property name="text">
       <string>TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS</string>
      </property>
+     <property name="textFormat">
+      <enum>Qt::RichText</enum>
+     </property>
     </widget>
    </item>
-
-
-
 
 
 
