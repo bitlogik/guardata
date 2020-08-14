@@ -420,9 +420,9 @@ def run_cmd(
         else:
             ssl_context = None
 
-        if email_host:
+        if True:
             if not email_sender:
-                raise ValueError("--email-sender is required when --email-host is provided")
+                raise ValueError("--email-sender is required")
             email_config = EmailConfig(
                 host=email_host,
                 port=email_port,
