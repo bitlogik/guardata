@@ -698,12 +698,9 @@ class FilesWidget(QWidget, Ui_FilesWidget):
             show_error(self, _("TEXT_FILE_DELETE_ERROR"), exception=job.exc)
 
     def _on_folder_stat_success(self, job):
-        (
-            self.current_directory,
-            self.current_directory_uuid,
-            files_stats,
-            default_selection,
-        ) = job.ret
+        self.current_directory, self.current_directory_uuid, files_stats, default_selection = (
+            job.ret
+        )
         self.table_files.clear()
         old_sort = self.table_files.horizontalHeader().sortIndicatorSection()
         old_order = self.table_files.horizontalHeader().sortIndicatorOrder()
