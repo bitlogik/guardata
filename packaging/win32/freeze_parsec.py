@@ -149,7 +149,7 @@ END
     # Clean up deleting not required files
     def filter_info_dirs(dirname):
         return dirname.endswith("-info")
-    _, dirlist, _ = os.walk(target_dir / "site-packages")
+    dirlist = os.walk(target_dir / "site-packages").next()[1]
     dirlistinfo = filter(filter_info_dirs, dirlist)
     delete_assets_list = [
             "site-packages/pip",
