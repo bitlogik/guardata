@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from parsec.backend.backend_events import BackendEvent
-import parsec.backend.sendgrid
+import parsec.backend.sendgrid as sg
 import attr
 import os
 import trio
@@ -176,18 +176,18 @@ def generate_invite_email(
 async def send_email(email_config: EmailConfig, to_addr: str, message: dict) -> None:
     def _do():
         try:
-            sg = sendgrid.SendGridAPIClient(api_key=os.environ.get('SG_APIKEY'))
-            from_email = sendgrid.helpers.mail.Email(email_config.sender)
-            to_email = sendgrid.helpers.mail.To(to_addr)
+            sgc = sg.SendGridAPIClient(api_key=os.environ.get('SG_APIKEY'))
+            from_email = sg.helpers.mail.Email(email_config.sender)
+            to_email = sg.helpers.mail.To(to_addr)
             subject = message["subject"]
-            content_html = sendgrid.helpers.mail.Content("text/html", message["html"])
-            content_text = sendgrid.helpers.mail.Content("text/plain", message["text"])
-            mail = sendgrid.helpers.mail.Mail(from_email=from_email, to_emails=to_email, subject=subject, plain_text_content=content_text, html_content=content_html)
-            response = sg.client.mail.send.post(request_body=mail.get())
+            content_html = sg.helpers.mail.Content("text/html", message["html"])
+            content_text = sg.helpers.mail.Content("text/plain", message["text"])
+            mail = sg.helpers.mail.Mail(from_email=from_email, to_emails=to_email, subject=subject, plain_text_content=content_text, html_content=content_html)
+            response = sgc.client.mail.send.post(request_body=mail.get())
             assert 202 == response.status_code
 
-        except smtplib.SMTPException as e:
-            logger.warning("SMTP error", exc_info=e, to_addr=to_addr)
+        except Exception as e:
+            logger.warning("Send email error", exc_info=e, to_addr=to_addr)
 
     await trio.to_thread.run_sync(_do)
 
