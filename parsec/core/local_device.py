@@ -2,10 +2,9 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import attr
-from typing import List, Optional
 from pathlib import Path
 from hashlib import sha256
-from os import fspath
+from typing import List, Optional, Iterator
 from os import name as osname
 
 from parsec.serde import BaseSchema, fields, MsgpackSerializer
@@ -116,7 +115,14 @@ def decorator_fix_windir(func):
 
 @decorator_fix_windir
 def get_key_file(config_dir: Path, device: LocalDevice) -> Path:
-    """Return the keyfile path for a given device.
+    for available_device in _iter_available_devices(config_dir):
+        if available_device.slug == device.slug:
+            return available_device.key_file_path
+    raise FileNotFoundError
+
+
+def get_default_key_file(config_dir: Path, device: LocalDevice) -> Path:
+    """Return the default keyfile path for a given device.
 
     Note that the filename does not carry any intrinsic meaning.
     Here, we simply use the slughash to avoid name collision.
@@ -160,14 +166,13 @@ class AvailableDevice:
         return sha256(self.slug.encode()).hexdigest()
 
 
-def list_available_devices(config_dir: Path) -> List[AvailableDevice]:
+def _iter_available_devices(config_dir: Path) -> Iterator[AvailableDevice]:
     try:
         key_file_paths = list(get_devices_dir(config_dir).rglob("*.keys"))
     except FileNotFoundError:
-        return []
+        return
 
     # Sanity checks
-    devices = []
     for key_file_path in key_file_paths:
 
         try:
@@ -188,18 +193,18 @@ def list_available_devices(config_dir: Path) -> List[AvailableDevice]:
                 data["device_id"] = device_id
                 data["root_verify_key_hash"] = rvk_hash
 
-        devices.append(
-            AvailableDevice(
-                key_file_path=key_file_path,
-                organization_id=data["organization_id"],
-                device_id=data["device_id"],
-                human_handle=data["human_handle"],
-                device_label=data["device_label"],
-                root_verify_key_hash=data["root_verify_key_hash"],
-            )
+        yield AvailableDevice(
+            key_file_path=key_file_path,
+            organization_id=data["organization_id"],
+            device_id=data["device_id"],
+            human_handle=data["human_handle"],
+            device_label=data["device_label"],
+            root_verify_key_hash=data["root_verify_key_hash"],
         )
 
-    return devices
+
+def list_available_devices(config_dir: Path) -> List[AvailableDevice]:
+    return list(_iter_available_devices(config_dir))
 
 
 def load_device_with_password(key_file: Path, password: str) -> LocalDevice:
@@ -242,7 +247,7 @@ def save_device_with_password(
         LocalDeviceValidationError
         LocalDevicePackingError
     """
-    key_file = get_key_file(config_dir, device)
+    key_file = get_default_key_file(config_dir, device)
     _save_device_with_password(key_file, device, password, force=force)
     return key_file
 
