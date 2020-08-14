@@ -113,6 +113,15 @@ FunctionEnd
 
 # Check for running guardata instance.
 Function .onInit
+
+    UserInfo::GetAccountType
+    pop $0
+    ${If} $0 != "admin" ;Require admin rights on NT4+
+        MessageBox mb_iconstop "Administrator rights are required for the installation."
+        SetErrorLevel 740 ;ERROR_ELEVATION_REQUIRED
+        Quit
+    ${EndIf}
+
     Call checkGuardataRunning
 
     ReadRegStr $R0 HKLM \
@@ -157,11 +166,22 @@ FunctionEnd
 BrandingText "${PROGRAM_NAME} Windows Installer v${GUARDATA_INSTALLER_VERSION}"
 Name "${PROGRAM_NAME} ${PROGRAM_VERSION}"
 OutFile "${BUILD_DIR}\${INSTALLER_FILENAME}"
-InstallDir "$PROGRAMFILES\guardata"
+InstallDir "$PROGRAMFILES64\guardata"
 
 # No need for such details
 ShowInstDetails hide
 ShowUnInstDetails hide
+
+; Check 64 bits
+!include LogicLib.nsh
+!include x64.nsh
+Section
+${IfNot} ${RunningX64}
+	MessageBox mb_iconstop "Sorry, this requires a 64 bits Windows."
+	SetErrorLevel 1637 ;ERROR_INSTALL_PLATFORM_UNSUPPORTED
+	Quit
+${EndIf}
+SectionEnd
 
 # Install main application
 Section "guardata trustless data cloud storage service" Section1
