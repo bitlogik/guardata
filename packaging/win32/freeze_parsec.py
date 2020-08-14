@@ -120,7 +120,7 @@ BEGIN
         BLOCK "000004b0"
         BEGIN
             VALUE "CompanyName",      "BitLogiK\\0"
-            VALUE "FileDescription",  "trustless data cloud storage service\\0"
+            VALUE "FileDescription",  "guardata : trustless data cloud storage\\0"
             VALUE "FileVersion",      "{guardata_version}\\0"
             VALUE "InternalName",     "guardata client\\0"
             VALUE "LegalCopyright",   "guardata Copyright (c) AGPLv3 2019-2020 BitLogiK and Scille\\0"

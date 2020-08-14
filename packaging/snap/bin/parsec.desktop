@@ -1,6 +1,6 @@
 [Desktop Entry]
 Name=guardata
-Comment=trustless data cloud storage service
+Comment=guardata : trustless data cloud storage
 Exec=guardata %u
 Icon=${SNAP}/guardata.png
 Type=Application

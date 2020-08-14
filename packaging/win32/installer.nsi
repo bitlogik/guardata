@@ -184,7 +184,7 @@ ${EndIf}
 SectionEnd
 
 # Install main application
-Section "guardata trustless data cloud storage service" Section1
+Section "guardata : trustless data cloud storage" Section1
     SectionIn RO
     !include "${BUILD_DIR}\install_files.nsh"
 
@@ -290,7 +290,7 @@ SectionEnd
 # Add version info to installer properties.
 VIProductVersion "${GUARDATA_INSTALLER_VERSION}.0.0"
 VIAddVersionKey ProductName ${PROGRAM_NAME}
-VIAddVersionKey Comments "trustless data cloud storage service"
+VIAddVersionKey Comments "guardata : trustless data cloud storage"
 VIAddVersionKey CompanyName "BitLogiK"
 VIAddVersionKey LegalCopyright "BitLogiK"
 VIAddVersionKey FileDescription "${PROGRAM_NAME} Application Installer"
