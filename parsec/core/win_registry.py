@@ -17,7 +17,7 @@ ACROBAT_READER_DC_PRIVILEGED = "Software\\Adobe\\Acrobat Reader\\DC\\Privileged"
 ENABLE_APP_CONTAINER = "bEnableProtectedModeAppContainer"
 
 PROCESS_ID = "ProcessID"
-DRIVE_ICON_PATH = Path(resources.__file__).absolute().parent / "parsec.ico"
+DRIVE_ICON_PATH = Path(resources.__file__).absolute().parent / "guardata.ico"
 EXPLORER_DRIVES = "Software\\Classes\\Applications\\Explorer.exe\\Drives"
 EXPLORER_DRIVES_DEFAULT_ICON_TEMPLATE = EXPLORER_DRIVES + "\\{}\\DefaultIcon"
 
