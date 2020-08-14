@@ -1,20 +1,20 @@
-# Greatly inspired by Deluge NSIS installer
-# https://github.com/deluge-torrent/deluge/blob/develop/packaging/win32/Win32%20README.txt
+; Greatly inspired by Deluge NSIS installer
+; https://github.com/deluge-torrent/deluge/blob/develop/packaging/win32/Win32%20README.txt
 
 !addplugindir nsis_plugins
 !addincludedir nsis_plugins
 !include "WordFunc.nsh"
-;!include "FileFunc.nsh"
+!include "FileFunc.nsh"
 
-# Script version; displayed when running the installer
+; Script version; displayed when running the installer
 !define GUARDATA_INSTALLER_VERSION "1.0"
 
-# program information
+; program information
 !define PROGRAM_NAME "guardata"
 !define PROGRAM_WEB_SITE "https://guardata.app"
 !define APPGUID "631018D1-19CB-4B17-B249-154E6448D29A"
 
-# Detect version from file
+; Detect version from file
 !define BUILD_DIR "build"
 !searchparse /file ${BUILD_DIR}/BUILD.tmp `target = "` GUARDATA_FREEZE_BUILD_DIR `"`
 !ifndef GUARDATA_FREEZE_BUILD_DIR
@@ -29,20 +29,20 @@
    !error "Program Platform Undefined"
 !endif
 
-# Python files generated
+; Python files generated
 !define LICENSE_FILEPATH "${GUARDATA_FREEZE_BUILD_DIR}\LICENSE.txt"
 !define INSTALLER_FILENAME "guardata-${PROGRAM_VERSION}-${PROGRAM_PLATFORM}-setup.exe"
 
 !define WINFSP_INSTALLER "winfsp-1.7.20172.msi"
 
-# Set default compressor
+; Set default compressor
 SetCompressor /FINAL /SOLID lzma
 SetCompressorDictSize 64
 
-# --- Interface settings ---
-# Modern User Interface 2
+; --- Interface settings ---
+; Modern User Interface 2
 !include "MUI2.nsh"
-# Installer
+; Installer
 !define MUI_ICON "guardata.ico"
 !define MUI_HEADERIMAGE
 !define MUI_HEADERIMAGE_RIGHT
@@ -50,54 +50,54 @@ SetCompressorDictSize 64
 !define MUI_WELCOMEFINISHPAGE_BITMAP "installer-side.bmp"
 !define MUI_COMPONENTSPAGE_SMALLDESC
 !define MUI_ABORTWARNING
-# Start Menu Folder Page Configuration
+; Start Menu Folder Page Configuration
 !define MUI_STARTMENUPAGE_DEFAULTFOLDER ${PROGRAM_NAME}
 !define MUI_STARTMENUPAGE_REGISTRY_ROOT "HKCR"
 !define MUI_STARTMENUPAGE_REGISTRY_KEY "Software\${PROGRAM_NAME}"
 !define MUI_STARTMENUPAGE_REGISTRY_VALUENAME "Start Menu Folder"
-# Uninstaller
+; Uninstaller
 !define MUI_UNICON "${NSISDIR}\Contrib\Graphics\Icons\modern-uninstall.ico"
 !define MUI_HEADERIMAGE_UNBITMAP "installer-top.bmp"
 !define MUI_WELCOMEFINISHPAGE_UNBITMAP "installer-side.bmp"
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
-# Add shortcut
+; Add shortcut
 !define MUI_FINISHPAGE_SHOWREADME ""
 !define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
 !define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
 !define MUI_FINISHPAGE_SHOWREADME_FUNCTION CreateDesktopShortcut
-# Run guardata after install, using explorer.exe to un-elevate priviledges
+; Run guardata after install, using explorer.exe to un-elevate priviledges
 !define MUI_FINISHPAGE_RUN "$WINDIR\explorer.exe"
 !define MUI_FINISHPAGE_RUN_PARAMETERS "$INSTDIR\guardata.exe"
 !define MUI_FINISHPAGE_RUN_TEXT "Run guardata"
 !define MUI_FINISHPAGE_RUN_NOTCHECKED
 
-# --- Start of Modern User Interface ---
+; --- Start of Modern User Interface ---
 Var StartMenuFolder
 
-# Welcome, License
+; Welcome, License
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE ${LICENSE_FILEPATH}
 
-# Skipping the components page
-# !insertmacro MUI_PAGE_COMPONENTS
+; Skipping the components page
+; !insertmacro MUI_PAGE_COMPONENTS
 
-# Let the user select the installation directory
+; Let the user select the installation directory
 !insertmacro MUI_PAGE_DIRECTORY
 !insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
 
-# Run installation
+; Run installation
 !insertmacro MUI_PAGE_INSTFILES
-# Popup Message if VC Redist missing
-# Page Custom VCRedistMessage
-# Display 'finished' page
+; Popup Message if VC Redist missing
+; Page Custom VCRedistMessage
+; Display 'finished' page
 !insertmacro MUI_PAGE_FINISH
-# Uninstaller pages
+; Uninstaller pages
 !insertmacro MUI_UNPAGE_INSTFILES
-# Language files
+; Language files
 !insertmacro MUI_LANGUAGE "English"
 
 
-# --- Functions ---
+; --- Functions ---
 
 Function checkGuardataRunning
     check:
@@ -112,7 +112,7 @@ Function checkGuardataRunning
     notRunning:
 FunctionEnd
 
-# Check for running guardata instance.
+; Check for running guardata instance.
 Function .onInit
 
     UserInfo::GetAccountType
@@ -159,7 +159,7 @@ Function CreateDesktopShortcut
     CreateShortCut "$DESKTOP\guardata.lnk" "$INSTDIR\guardata.exe"
 FunctionEnd
 
-# --- Installation sections ---
+; --- Installation sections ---
 !define PROGRAM_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}"
 !define PROGRAM_UNINST_ROOT_KEY "HKLM"
 !define PROGRAM_UNINST_FILENAME "$INSTDIR\guardata-uninst.exe"
@@ -169,7 +169,7 @@ Name "${PROGRAM_NAME} ${PROGRAM_VERSION}"
 OutFile "${BUILD_DIR}\${INSTALLER_FILENAME}"
 InstallDir "$PROGRAMFILES64\guardata"
 
-# No need for such details
+; No need for such details
 ShowInstDetails hide
 ShowUnInstDetails hide
 
@@ -184,7 +184,7 @@ ${IfNot} ${RunningX64}
 ${EndIf}
 SectionEnd
 
-# Install main application
+; Install main application
 Section "guardata : trustless data cloud storage" Section1
     SectionIn RO
     !include "${BUILD_DIR}\install_files.nsh"
@@ -212,12 +212,12 @@ SectionEnd
     Delete ${WINFSP_INSTALLER}
 !macroend
 
-# Install winfsp if necessary
+; Install winfsp if necessary
 Section "WinFSP" Section2
     ClearErrors
     ReadRegStr $0 HKCR "Installer\Dependencies\WinFsp" "Version"
     ${If} ${Errors}
-      # WinFSP is not installed
+      ; WinFSP is not installed
       !insertmacro InstallWinFSP
     ${Else}
         ${VersionCompare} $0 "1.7.0" $R0
@@ -225,13 +225,13 @@ Section "WinFSP" Section2
         ${If} $R0 == 2
             ${OrIf} $R1 == 1
                 ${OrIf} $R1 == 0
-                  # Incorrect WinSFP version (<1.7.0 or >=2.0.0)
+                  ; Incorrect WinSFP version (<1.7.0 or >=2.0.0)
                   !insertmacro InstallWinFSP
         ${EndIf}
     ${EndIf}
 SectionEnd
 
-# Create parsec:// uri association.
+; Create parsec:// uri association.
 Section "Associate parsec:// URI links with guardata" Section3
     DeleteRegKey HKCR "parsec"
     WriteRegStr HKCR "parsec" "" "URL:parsec"
@@ -239,9 +239,9 @@ Section "Associate parsec:// URI links with guardata" Section3
     WriteRegStr HKCR "parsec\shell\open\command" "" '"$INSTDIR\guardata.exe" "%1"'
 SectionEnd
 
-# Hidden: Remove obsolete entries
+; Hidden: Remove obsolete entries
 Section "-Remove obsolete entries" Section4
-    # Remove obsolete guardata registry configuration
+    ; Remove obsolete guardata registry configuration
     DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
     DeleteRegKey HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}"
     DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}"
@@ -250,13 +250,13 @@ Section "-Remove obsolete entries" Section4
 SectionEnd
 
 Section "Finish installation"
-  # Fixes Windows broken size estimates
+  ; Fixes Windows broken size estimates
   ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
   IntFmt $0 "0x%08X" $0
   WriteRegDWORD HKCU "${PROGRAM_UNINST_KEY}" "EstimatedSize" "$0"
 SectionEnd
 
-# Create uninstaller.
+; Create uninstaller.
 Section -Uninstaller
     WriteUninstaller ${PROGRAM_UNINST_FILENAME}
     WriteRegStr HKCU "${PROGRAM_UNINST_KEY}" "DisplayName" "$(^Name)"
@@ -266,15 +266,15 @@ Section -Uninstaller
     WriteRegStr HKCU "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\site-packages\parsec\core\resources\guardata.ico"
 SectionEnd
 
-# --- Uninstallation section ---
+; --- Uninstallation section ---
 Section Uninstall
-    # Delete guardata files.
+    ; Delete guardata files.
     Delete "$INSTDIR\homepage.url"
     Delete ${PROGRAM_UNINST_FILENAME}
     !include "${BUILD_DIR}\uninstall_files.nsh"
     RmDir "$INSTDIR"
 
-    # Delete Start Menu items.
+    ; Delete Start Menu items.
     !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
         SetShellVarContext all
         Delete "$SMPROGRAMS\$StartMenuFolder\guardata.lnk"
@@ -285,12 +285,12 @@ Section Uninstall
         SetShellVarContext current
     Delete "$DESKTOP\guardata.lnk"
 
-    # Delete registry keys.
+    ; Delete registry keys.
     DeleteRegKey ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}"
-    # This key is only used by guardata, so we should always delete it
+    ; This key is only used by guardata, so we should always delete it
     DeleteRegKey HKCR "guardata"
 
-  # Explorer shortcut keys potentially set by the application's settings
+  ; Explorer shortcut keys potentially set by the application's settings
   DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
   DeleteRegKey HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}"
   DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}"
@@ -298,7 +298,7 @@ Section Uninstall
 
 SectionEnd
 
-# Add version info to installer properties.
+; Add version info to installer properties.
 VIProductVersion "${GUARDATA_INSTALLER_VERSION}.0.0"
 VIAddVersionKey ProductName ${PROGRAM_NAME}
 VIAddVersionKey Comments "guardata : trustless data cloud storage"
