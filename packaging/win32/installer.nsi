@@ -4,6 +4,7 @@
 !addplugindir nsis_plugins
 !addincludedir nsis_plugins
 !include "WordFunc.nsh"
+;!include "FileFunc.nsh"
 
 # Script version; displayed when running the installer
 !define GUARDATA_INSTALLER_VERSION "1.0"
@@ -40,7 +41,7 @@ SetCompressorDictSize 64
 
 # --- Interface settings ---
 # Modern User Interface 2
-!include MUI2.nsh
+!include "MUI2.nsh"
 # Installer
 !define MUI_ICON "guardata.ico"
 !define MUI_HEADERIMAGE
@@ -177,9 +178,9 @@ ShowUnInstDetails hide
 !include x64.nsh
 Section
 ${IfNot} ${RunningX64}
-	MessageBox mb_iconstop "Sorry, this requires a 64 bits Windows."
-	SetErrorLevel 1637 ;ERROR_INSTALL_PLATFORM_UNSUPPORTED
-	Quit
+    MessageBox mb_iconstop "Sorry, this requires a 64 bits Windows."
+    SetErrorLevel 1637 ;ERROR_INSTALL_PLATFORM_UNSUPPORTED
+    Quit
 ${EndIf}
 SectionEnd
 
