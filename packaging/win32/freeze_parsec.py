@@ -154,7 +154,7 @@ END
     delete_assets_list = [
             "site-packages/pip",
             "site-packages/setuptools"
-    ] + list(dirlistinfo)
+    ] + ["site-packages/"+dir for dir in dirlistinfo]
     for remdir in delete_assets_list:
         shutil.rmtree(target_dir / remdir)
 
