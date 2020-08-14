@@ -3,6 +3,7 @@
 from parsec.backend.backend_events import BackendEvent
 import parsec.backend.sendgrid
 import attr
+import os
 import trio
 import ssl
 from enum import Enum
