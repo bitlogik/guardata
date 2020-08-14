@@ -161,8 +161,23 @@ async def test_open_right(alice_workspace, trio_file, random_text, tmp_path):
     triof = await trio.open_file(trio_file, "rb")
     f = await alice_workspace.open_file("/foo/new", "rb")
     await compare_read(triof, f)
+
+    # Test creating file with x mode
+    triopath = tmp_path / "new2"
+    f = await alice_workspace.open_file("/foo/new2", "xb")
+    triof = await trio.open_file(triopath, "xb")
+    assert triof.writable() == f.writable()
+    assert triof.readable() == f.readable()
+    assert triof.mode == f.mode
     await triof.aclose()
     await f.aclose()
+
+    # Test creating file with x mode file already exist
+    triopath = tmp_path / "new2"
+    with pytest.raises(FileExistsError):
+        f = await alice_workspace.open_file("/foo/new2", "xb")
+    with pytest.raises(FileExistsError):
+        triof = await trio.open_file(triopath, "xb")
 
 
 @pytest.mark.trio
