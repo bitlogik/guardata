@@ -2087,7 +2087,7 @@ msgid "TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS"
 msgstr "Si votre groupe n'existe pas encore, vous devez le\n"
 "créer sur le site web de guardata.\n\n"
 "<a href=\"https://guardata.app/create\" "
-"title=\"Enregistrer votre groupe\">
+"title=\"Enregistrer votre groupe\">"
 "CREER MON GROUPE"
 "</a>"
 "\n\nEnsuite, vous pourrez effectuer une première connexion\n"
