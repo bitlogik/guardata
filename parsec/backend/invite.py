@@ -231,8 +231,8 @@ class BaseInviteComponent:
         msg = invite_new_serializer.req_load(msg)
 
         def _to_http_redirection_url(client_ctx, invitation):
+            print(self._config.backend_addr)
             return BackendInvitationAddr.build(
-                print(self._config.backend_addr)
                 backend_addr=self._config.backend_addr,
                 organization_id=client_ctx.organization_id,
                 invitation_type=invitation.TYPE,
