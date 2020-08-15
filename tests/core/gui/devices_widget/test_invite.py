@@ -78,24 +78,14 @@ async def test_invite_device_send_email(
 
     await aqtbot.wait_until(_greet_device_displayed)
 
-    if online:
+    with running_backend.offline():
         await aqtbot.mouse_click(gdi_w.button_send_email, QtCore.Qt.LeftButton)
 
-        def _email_sent():
-            assert email_letterbox.emails == [(bob.human_handle.email, ANY)]
+        def _email_send_failed():
+            assert autoclose_dialog.dialogs == [("Error", "Could not send the email.")]
 
-        await aqtbot.wait_until(_email_sent)
-        assert not autoclose_dialog.dialogs
-
-    else:
-        with running_backend.offline():
-            await aqtbot.mouse_click(gdi_w.button_send_email, QtCore.Qt.LeftButton)
-
-            def _email_send_failed():
-                assert autoclose_dialog.dialogs == [("Error", "Could not send the email.")]
-
-            await aqtbot.wait_until(_email_send_failed)
-            assert not email_letterbox.emails
+        await aqtbot.wait_until(_email_send_failed)
+        assert not email_letterbox.emails
 
 
 @pytest.mark.gui
