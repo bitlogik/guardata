@@ -7,10 +7,10 @@ python3 setup.py bdist_wheel
 rm -Rf parsec
 pip3 install $(ls dist/guardata-*.whl)[all]
 
-mkdir -p empty
-cp -R tests empty
-cp setup.cfg empty
-cd empty
+mkdir -p dir4tests
+cp -R tests dir4tests
+cp setup.cfg dir4tests
+cd dir4tests
 
 /home/testuser/.local/bin/py.test --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow -n auto --max-worker-restart=0 -x
 /home/testuser/.local/bin/py.test --log-level=DEBUG --durations=10 -v tests/backend tests/test_cli.py --postgresql --runslow -n auto --max-worker-restart=0
