@@ -26,43 +26,16 @@ async def test_invite_user(
         lambda *args, **kwargs: "hubert.farnsworth@pe.com",
     )
 
-    if online:
+    with running_backend.offline():
         await aqtbot.mouse_click(u_w.button_add_user, QtCore.Qt.LeftButton)
 
-        def _new_invitation_displayed():
-            assert u_w.layout_users.count() == 4
-            inv_btn = u_w.layout_users.itemAt(3).widget()
-            assert isinstance(inv_btn, UserInvitationButton)
-            assert inv_btn.email == "hubert.farnsworth@pe.com"
-            assert email_letterbox.emails == [(inv_btn.email, ANY)]
-
-        await aqtbot.wait_until(_new_invitation_displayed)
-        assert not autoclose_dialog.dialogs
-
-        monkeypatch.setattr(
-            "parsec.core.gui.users_widget.get_text_input",
-            lambda *args, **kwargs: bob.human_handle.email,
-        )
-        await aqtbot.mouse_click(u_w.button_add_user, QtCore.Qt.LeftButton)
-
-        def _already_member():
+        def _email_send_failed():
             assert autoclose_dialog.dialogs == [
-                ("Error", _("TEXT_INVITE_USER_ALREADY_MEMBER_ERROR"))
+                ("Error", "The server is offline or you have no access to the internet.")
             ]
 
-        await aqtbot.wait_until(_already_member)
-
-    else:
-        with running_backend.offline():
-            await aqtbot.mouse_click(u_w.button_add_user, QtCore.Qt.LeftButton)
-
-            def _email_send_failed():
-                assert autoclose_dialog.dialogs == [
-                    ("Error", "The server is offline or you have no access to the internet.")
-                ]
-
-            await aqtbot.wait_until(_email_send_failed)
-            assert not email_letterbox.emails
+        await aqtbot.wait_until(_email_send_failed)
+        assert not email_letterbox.emails
 
 
 @pytest.mark.gui
