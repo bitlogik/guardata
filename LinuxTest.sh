@@ -4,6 +4,7 @@ set -eux
 pip3 install -U testresources psutil
 pip3 install -r pre-requirements.txt
 python3 setup.py bdist_wheel
+rm -Rf parsec
 pip3 install $(ls dist/guardata-*.whl)[all]
 
 mkdir -p empty
