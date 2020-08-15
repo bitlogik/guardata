@@ -3,7 +3,7 @@
 import pytest
 import trio
 from unittest.mock import ANY
-# from pendulum import Pendulum, now as pendulum_now
+from pendulum import Pendulum, now as pendulum_now
 
 # from parsec.api.data import RevokedUserCertificateContent
 from parsec.backend.backend_events import BackendEvent
