@@ -474,4 +474,4 @@ def run_cmd(
         try:
             trio_run(_run_backend, use_asyncio=True)
         except KeyboardInterrupt:
-            click.echo("bye ;-)")
+            click.echo("bye")
