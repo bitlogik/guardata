@@ -272,6 +272,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
             f" --administration-token={administration_token}"
             f" --port={unused_tcp_port}"
             f" {ssl_conf.backend_opts}"
+            f" --email-sender=aaa@mydomain.com"
         ),
         wait_for="Starting guardata server",
     ):
@@ -409,6 +410,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
             f" --administration-token={administration_token}"
             f" --port={unused_tcp_port}"
             f" {ssl_conf.backend_opts}"
+            f" --email-sender=aaa@mydomain.com"
         ),
         wait_for="Starting guardata server",
     ):
