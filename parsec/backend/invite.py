@@ -5,15 +5,11 @@ import parsec.backend.sendgrid as sg
 import attr
 import os
 import trio
-import ssl
 from enum import Enum
 from uuid import UUID, uuid4
 from collections import defaultdict
 from typing import Dict, List, Optional, Union, Set
 from pendulum import Pendulum, now as pendulum_now
-from email.message import Message
-from email.mime.text import MIMEText
-from email.mime.multipart import MIMEMultipart
 from structlog import get_logger
 
 from parsec.crypto import PublicKey
