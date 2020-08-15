@@ -1678,7 +1678,7 @@ msgid "ACTION_NEXT"
 msgstr "Retour"
 
 msgid "TEXT_ORG_WIZARD_TITLE"
-msgstr "Enregistrement"
+msgstr "Création d'un nouveau groupe"
 
 msgid "ACTION_SYSTRAY_SHOW_WINDOW"
 msgstr "Afficher guardata"
@@ -1845,7 +1845,7 @@ msgid "ACTION_MAIN_MENU_ADD_INSTANCE"
 msgstr "Ouvrir un nouvel onglet"
 
 msgid "ACTION_MAIN_MENU_CREATE_ORGANIZATION"
-msgstr "S'enregistrer pour commencer"
+msgstr "Créer un groupe"
 
 msgid "ACTION_MAIN_MENU_JOIN_ORGANIZATION"
 msgstr "Première connexion"
@@ -1911,7 +1911,7 @@ msgid "TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_INSTRUCTIONS"
 msgstr "Vous semblez être un nouvel utilisateur. Que souhaitez-vous faire ?"
 
 msgid "ACTION_NO_DEVICE_CREATE_ORGANIZATION"
-msgstr "Je souhaite m'enregistrer pour commencer à utiliser guardata"
+msgstr "Je souhaite enregistrer un nouveau groupe"
 
 msgid "ACTION_NO_DEVICE_JOIN_ORGANIZATION"
 msgstr "Je souhaite effectuer une première connexion et rejoindre un groupe existant"
