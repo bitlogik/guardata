@@ -1,7 +1,7 @@
 {% if greeter %}
-You have received an invitation from {{ greeter }} to join the {{ organization_id }} organization on guardata.
+You have received an invitation from {{ greeter }} to join the {{ organization_id }} group on guardata.
 {% else %}
-You have received an invitation to add an new device to the {{ organization_id}} organization on guardata.
+You have received an invitation to add an new device in the {{ organization_id}} group on guardata.
 {% endif %}
 
 If you don't already have it, you should Download the guardata client via the following link: https://guardata.app/preview
@@ -9,10 +9,10 @@ If you don't already have it, you should Download the guardata client via the fo
 Once installed, click on the following link to proceed to guardata : {{ invitation_url }}
 
 {% if greeter %}
-You should then get in touch with {{ greeter }} and follow the next steps on
+You should then get in touch with {{ greeter }} and follow the next steps in
 the guardata client.
 {% else %}
-You should then start the invitation process from a device already part of the organization,
-then follow the steps on the guardata client.
+You should then start the invitation process from a device already part of the 
+organization group, then follow the steps in the guardata client.
 {% endif %}
 
