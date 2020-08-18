@@ -77,12 +77,13 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
         )
         self.bootstrap_job = None
         self.button_bootstrap.clicked.connect(self.bootstrap_clicked)
-        pwd_str_widget = PasswordStrengthWidget()
+        pwd_str_widget = PasswordStrengthWidget(main_pwd = self.line_edit_password)
         self.layout_password_strength.addWidget(pwd_str_widget)
         self.line_edit_password.textChanged.connect(pwd_str_widget.on_password_change)
         self.line_edit_login.textChanged.connect(self.check_infos)
         self.line_edit_device.textChanged.connect(self.check_infos)
         self.line_edit_password.textChanged.connect(self.check_infos)
+        self.line_edit_password_check.textChanged.connect(pwd_str_widget.on_otherpwd_change)
         self.line_edit_password_check.textChanged.connect(self.check_infos)
         self.line_edit_device.setValidator(validators.DeviceNameValidator())
         self.bootstrap_success.connect(self.on_bootstrap_success)
@@ -191,9 +192,9 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
             and len(self.line_edit_device.text())
             and not self.bootstrap_job
             and len(self.line_edit_password.text())
-            and get_password_strength(self.line_edit_password.text()) > 0
+            and get_password_strength(self.line_edit_password.text()) > 2
             and len(self.line_edit_password_check.text())
-            and len(self.line_edit_email.text())
+            and self.line_edit_password_check.text() == self.line_edit_email.text()
         ):
             self.button_bootstrap.setDisabled(False)
         else:

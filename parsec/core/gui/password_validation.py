@@ -9,10 +9,10 @@ from parsec.core.gui.ui.password_strength_widget import Ui_PasswordStrengthWidge
 
 
 PASSWORD_CSS = {
-    0: "color: #333333; background-color: none;",
+    0: "color: #F44336; background-color: none;",
     1: "color: #F44336; background-color: none;",
-    2: "color: #F44336; background-color: none;",
-    3: "color: #F1962B; background-color: none;",
+    2: "color: #F46122; background-color: none;",
+    3: "color: #BCD83C; background-color: none;",
     4: "color: #8BC34A; background-color: none;",
     5: "color: #8BC34A; background-color: none;",
 }
@@ -38,9 +38,10 @@ def get_password_strength(password):
 
 
 class PasswordStrengthWidget(QWidget, Ui_PasswordStrengthWidget):
-    def __init__(self, parent=None):
+    def __init__(self, parent=None, main_pwd):
         super().__init__(parent)
         self.setupUi(self)
+        self.main_pwd = main_pwd
 
     def on_password_change(self, text):
         if not text:
@@ -54,3 +55,11 @@ class PasswordStrengthWidget(QWidget, Ui_PasswordStrengthWidget):
         )
         self.label.setStyleSheet(PASSWORD_CSS[score])
         self.show()
+
+    def on_otherpwd_change(self, text):
+        main_text = self.main_pwd.text()
+        if text and get_password_strength(main_text) > 2:
+            if text != main_text:
+                self.label.setText(_("TEXT_BOOTSTRAP_ORG_PASSWORD_MISMATCH"))
+                self.label.setStyleSheet(PASSWORD_CSS[2])
+                self.show() 
