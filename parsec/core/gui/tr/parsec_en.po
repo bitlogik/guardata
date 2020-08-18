@@ -1907,7 +1907,7 @@ msgstr "Quit"
 msgid "TEXT_GUARDATA_DEVELOPMENT_INFO"
 msgstr ""
 "Developed by <a href=\"https://bitlogik.fr\" title=\"BitLogiK\" "
-"style=\"color: #0092FF; font-weight: bold;\">BitLogiK</a><br/>and <a href=\"https://scille.eu\" title=\"Scille\">Scille</a>"
+"style=\"color: #0092FF; font-weight: bold;\">BitLogiK</a><br/>and <a href=\"https://scille.eu\" title=\"Scille\" style=\"color: #0092FF; font-weight: bold;\">Scille</a>"
 
 msgid "TEXT_ATTRIBUTE_LIC"
 msgstr "AGPL License"
