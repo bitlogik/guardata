@@ -16,32 +16,32 @@ logger = get_logger()
 
 def get_default_data_base_dir(environ: dict) -> Path:
     if os.name == "nt":
-        return Path(environ["APPDATA"]) / "parsec/data"
+        return Path(environ["APPDATA"]) / "guardata/data"
     else:
         path = environ.get("XDG_DATA_HOME")
         if not path:
             path = f"{environ['HOME']}/.local/share"
-        return Path(path) / "parsec"
+        return Path(path) / "guardata"
 
 
 def get_default_cache_base_dir(environ: dict) -> Path:
     if os.name == "nt":
-        return Path(environ["APPDATA"]) / "parsec/cache"
+        return Path(environ["APPDATA"]) / "guardata/cache"
     else:
         path = environ.get("XDG_CACHE_HOME")
         if not path:
             path = f"{environ.get('HOME')}/.cache"
-        return Path(path) / "parsec"
+        return Path(path) / "guardata"
 
 
 def get_default_config_dir(environ: dict) -> Path:
     if os.name == "nt":
-        return Path(environ["APPDATA"]) / "parsec/config"
+        return Path(environ["APPDATA"]) / "guardata/config"
     else:
         path = environ.get("XDG_CONFIG_HOME")
         if not path:
             path = f"{environ.get('HOME')}/.config"
-        return Path(path) / "parsec"
+        return Path(path) / "guardata"
 
 
 def get_default_mountpoint_base_dir(environ: dict) -> Path:
@@ -183,10 +183,6 @@ def load_config(config_dir: Path, **extra_config) -> CoreConfig:
     except (KeyError, ValueError):
         pass
 
-    # Work around versionning issue with parsec releases:
-    # - v1.12.0, v1.11.4, v1.11.3, v1.11.2, v1.11.1, v1.11.0 and v1.10.0
-    # A `v` has been incorrectly added to `parsec.__version__`, potentially
-    # affecting the `gui_last_version` entry in the configuration file.
     if data_conf.get("gui_last_version"):
         data_conf["gui_last_version"] = data_conf["gui_last_version"].lstrip("v")
 
