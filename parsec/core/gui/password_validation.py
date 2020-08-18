@@ -38,7 +38,7 @@ def get_password_strength(password):
 
 
 class PasswordStrengthWidget(QWidget, Ui_PasswordStrengthWidget):
-    def __init__(self, parent=None, main_pwd):
+    def __init__(self, parent=None, main_pwd=None):
         super().__init__(parent)
         self.setupUi(self)
         self.main_pwd = main_pwd

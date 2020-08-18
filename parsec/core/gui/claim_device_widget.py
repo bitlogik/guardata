@@ -367,7 +367,9 @@ class ClaimDeviceProvideInfoWidget(QWidget, Ui_ClaimDeviceProvideInfoWidget):
         self.line_edit_password.textChanged.connect(
             self.password_strength_widget.on_password_change
         )
+        self.password_strength_widget.main_pwd = self.line_edit_password
         self.line_edit_password.textChanged.connect(self.check_infos)
+        self.line_edit_password_check.textChanged.connect(self.password_strength_widget.on_otherpwd_change)
         self.line_edit_password_check.textChanged.connect(self.check_infos)
         self.claim_success.connect(self._on_claim_success)
         self.claim_error.connect(self._on_claim_error)
@@ -379,7 +381,7 @@ class ClaimDeviceProvideInfoWidget(QWidget, Ui_ClaimDeviceProvideInfoWidget):
             self.line_edit_device.text()
             and self.line_edit_password.text()
             and self.line_edit_password.text() == self.line_edit_password_check.text()
-            and get_password_strength(self.line_edit_password.text()) > 0
+            and get_password_strength(self.line_edit_password.text()) > 2
         ):
             self.button_ok.setDisabled(False)
         else:
