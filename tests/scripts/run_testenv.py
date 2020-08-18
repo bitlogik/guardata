@@ -86,9 +86,9 @@ Your environment will be configured with the following commands:
 async def generate_gui_config():
     config_dir = None
     if os.name == "nt":
-        config_dir = trio.Path(os.environ["APPDATA"]) / "parsec/config"
+        config_dir = trio.Path(os.environ["APPDATA"]) / "guardata/config"
     else:
-        config_dir = trio.Path(os.environ["XDG_CONFIG_HOME"]) / "parsec"
+        config_dir = trio.Path(os.environ["XDG_CONFIG_HOME"]) / "guardata"
     await config_dir.mkdir(parents=True, exist_ok=True)
 
     config_file = config_dir / "config.json"

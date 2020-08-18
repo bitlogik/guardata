@@ -42,14 +42,14 @@ def run_testenv():
         # Retrieve the testenv path
         testenv_path = pathlib.Path(output.splitlines()[-1].decode())
         if os.name == "nt":
-            data_path = testenv_path / "parsec" / "data"
-            cache_path = testenv_path / "parsec" / "cache"
-            config_path = testenv_path / "parsec" / "config"
+            data_path = testenv_path / "guardata" / "data"
+            cache_path = testenv_path / "guardata" / "cache"
+            config_path = testenv_path / "guardata" / "config"
         else:
             testenv_path = testenv_path.parent
-            data_path = testenv_path / "share" / "parsec"
-            cache_path = testenv_path / "cache" / "parsec"
-            config_path = testenv_path / "config" / "parsec"
+            data_path = testenv_path / "share" / "guardata"
+            cache_path = testenv_path / "cache" / "guardata"
+            config_path = testenv_path / "config" / "guardata"
 
         # Make sure the corresponding directories exist
         assert testenv_path.exists()
