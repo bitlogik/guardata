@@ -14,7 +14,7 @@
     </message>
     <message>
         <location filename="../forms/about_widget.ui" line="130"/>
-        <source>TEXT_ATTRIBUTE_ICONS</source>
+        <source>TEXT_ATTRIBUTE_LIC</source>
         <translation type="unfinished"></translation>
     </message>
 </context>

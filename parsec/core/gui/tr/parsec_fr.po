@@ -1961,7 +1961,7 @@ msgid "TEXT_GUARDATA_DEVELOPMENT_INFO"
 msgstr "Développé par <a href=\"https://bitlogik.fr\" title=\"BitLogiK\" "
 "style=\"color: #0092FF; font-weight: bold;\">BitLogiK</a></br>et <a href=\"https://scille.eu\" title=\"Scille\">Scille</a>"
 
-msgid "TEXT_ATTRIBUTE_ICONS"
+msgid "TEXT_ATTRIBUTE_LIC"
 msgstr "Licence AGPL"
 
 msgid "TEXT_LABEL_DEVICE_NAME"

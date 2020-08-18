@@ -1909,7 +1909,7 @@ msgstr ""
 "Developed by <a href=\"https://bitlogik.fr\" title=\"BitLogiK\" "
 "style=\"color: #0092FF; font-weight: bold;\">BitLogiK</a><br/>and <a href=\"https://scille.eu\" title=\"Scille\">Scille</a>"
 
-msgid "TEXT_ATTRIBUTE_ICONS"
+msgid "TEXT_ATTRIBUTE_LIC"
 msgstr "AGPL License"
 
 msgid "TEXT_LABEL_DEVICE_NAME"
