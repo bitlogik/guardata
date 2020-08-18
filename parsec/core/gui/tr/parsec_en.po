@@ -1922,13 +1922,13 @@ msgid "TEXT_LABEL_PASSWORD_CONFIRMATION"
 msgstr "Password confirmation"
 
 msgid "TEXT_BOOTSTRAP_ORG_TOOLTIP"
-msgstr "Bootstrap the organization"
+msgstr "Start the organization"
 
 msgid "ACTION_BOOTSTRAP_ORG"
-msgstr "Bootstrap the organization"
+msgstr "Start the organization"
 
 msgid "TEXT_LABEL_USER_EMAIL"
-msgstr "Email"
+msgstr "Email (must be valid)"
 
 msgid "TEXT_LABEL_USER_FULL_NAME"
 msgstr "Full name"

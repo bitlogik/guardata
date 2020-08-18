@@ -1980,7 +1980,7 @@ msgid "ACTION_BOOTSTRAP_ORG"
 msgstr "Démarrer l'organisation"
 
 msgid "TEXT_LABEL_USER_EMAIL"
-msgstr "Email"
+msgstr "Email (doit être valide)"
 
 msgid "TEXT_LABEL_USER_FULL_NAME"
 msgstr "Nom complet"
