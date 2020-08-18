@@ -163,7 +163,7 @@ Function CreateDesktopShortcut
 FunctionEnd
 
 ; --- Installation sections ---
-!define PROGRAM_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}"
+!define PROGRAM_UNINST_KEY "Software\Microsoft\Windows\CurrentVersion\Uninstall\{${APPGUID}}"
 !define PROGRAM_UNINST_ROOT_KEY "HKLM"
 !define PROGRAM_UNINST_FILENAME "$INSTDIR\guardata-uninst.exe"
 
@@ -253,21 +253,17 @@ Section "-Remove obsolete entries" Section4
     ClearErrors
 SectionEnd
 
-Section "Finish installation"
-  ; Fixes Windows broken size estimates
-  ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
-  IntFmt $0 "0x%08X" $0
-  WriteRegDWORD HKCU "${PROGRAM_UNINST_KEY}" "EstimatedSize" "$0"
-SectionEnd
-
 ; Create uninstaller.
 Section -Uninstaller
     WriteUninstaller ${PROGRAM_UNINST_FILENAME}
-    WriteRegStr HKCU "${PROGRAM_UNINST_KEY}" "DisplayName" "$(^Name)"
-    WriteRegStr HKCU "${PROGRAM_UNINST_KEY}" "UninstallString" "${PROGRAM_UNINST_FILENAME}"
-    WriteRegStr HKCU "${PRODUCT_UNINST_KEY}" "DisplayVersion" "${PROGRAM_VERSION}"
-    WriteRegStr HKCU "${PRODUCT_UNINST_KEY}" "Publisher" "BitLogiK"
-    WriteRegStr HKCU "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\site-packages\parsec\core\resources\guardata.ico"
+    ${GetSize} "$INSTDIR" "/S=0K" $0 $1 $2
+    IntFmt $0 "0x%08X" $0
+    WriteRegDWORD ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "EstimatedSize" "$0"
+    WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "DisplayName" ${PROGRAM_NAME}
+    WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "UninstallString" ${PROGRAM_UNINST_FILENAME}
+    WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayVersion" ${PROGRAM_VERSION}
+    WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "Publisher" "BitLogiK"
+    WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PRODUCT_UNINST_KEY}" "DisplayIcon" "$INSTDIR\site-packages\parsec\core\resources\guardata.ico"
 SectionEnd
 
 ; --- Uninstallation section ---
