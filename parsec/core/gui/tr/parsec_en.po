@@ -1536,7 +1536,7 @@ msgid "TEXT_BOOTSTRAP_ORG_USER_EXISTS"
 msgstr "This user already exists within this organization."
 
 msgid "TEXT_BOOTSTRAP_ORG_PASSWORD_MISMATCH"
-msgstr "The password and the password confirmation do no match."
+msgstr "The password and confirmation do not match."
 
 msgid "TEXT_BOOTSTRAP_ORG_PASSWORD_COMPLEXITY_TOO_LOW"
 msgstr "The password is not complex enough."
