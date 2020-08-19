@@ -262,7 +262,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
     alice1 = DeviceID("alice@pc1")
     alice2 = DeviceID("alice@pc2")
     bob1 = DeviceID("bob@laptop")
-    password = "P@ssw0rd."
+    password = "P2ssxdor!s3."
     administration_token = "9e57754ddfe62f7f8780edc0"
 
     print("######## START BACKEND #########")
@@ -400,7 +400,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
     alice2_device_label = "PC2"
     bob_device_label = "Desktop"
 
-    password = "P@ssw0rd."
+    password = "P2ssxdor!s3."
     administration_token = "9e57754ddfe62f7f8780edc0"
 
     print("######## START BACKEND #########")

@@ -47,7 +47,7 @@ def ClaimUserTestBed(
         def __init__(self):
             self.requested_human_handle = HumanHandle(email="pfry@pe.com", label="Philip J. Fry")
             self.requested_device_label = "PC1"
-            self.password = "P@s4sw0rd."
+            self.password = "P2ssxdor!s3."
             self.steps_done = []
 
             self.author = alice

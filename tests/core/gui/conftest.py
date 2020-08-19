@@ -333,7 +333,7 @@ async def logged_gui(aqtbot, gui_factory, core_config, alice, bob, fixtures_cust
     else:
         device = bob
 
-    save_device_with_password(core_config.config_dir, device, "P@ssw0rd")
+    save_device_with_password(core_config.config_dir, device, "P2ssxdor!s3")
 
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
@@ -354,7 +354,7 @@ async def logged_gui(aqtbot, gui_factory, core_config, alice, bob, fixtures_cust
 
     password_w = lw.widget.layout().itemAt(0).widget()
 
-    await aqtbot.key_clicks(password_w.line_edit_password, "P@ssw0rd")
+    await aqtbot.key_clicks(password_w.line_edit_password, "P2ssxdor!s3")
 
     async with aqtbot.wait_signals([lw.login_with_password_clicked, tabw.logged_in]):
         await aqtbot.mouse_click(password_w.button_login, QtCore.Qt.LeftButton)

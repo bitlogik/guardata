@@ -14,7 +14,7 @@ PORT = 6778
 ORGNAME = "Org42"
 TOKEN = "CCDCC27B6108438D99EF8AF5E847C3BB"
 DEVICE = "alice@dev1"
-PASSWORD = "P@ssw0rd."
+PASSWORD = "P2ssxdor!s3."
 
 GUARDATA_CLI = "python -m parsec.cli"
 GUARDATA_PROFILE_CLI = "python -m cProfile -o bench.prof -m parsec.cli"

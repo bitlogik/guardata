@@ -48,9 +48,9 @@ async def proceed_to_bootstrap(aqtbot, bo_w):
     await aqtbot.key_clicks(bo_w.line_edit_login, "Zack")
     await aqtbot.key_clicks(bo_w.line_edit_email, "zack@host.com")
     await aqtbot.key_clicks(bo_w.line_edit_device, "pc1")
-    await aqtbot.key_clicks(bo_w.line_edit_password, "S3cr3tP@ss")
-    await aqtbot.key_clicks(bo_w.line_edit_password_check, "S3cr3tP@ss")
-    await aqtbot.wait(250)
+    await aqtbot.key_clicks(bo_w.line_edit_password, "S4cr3t!P@ss")
+    await aqtbot.key_clicks(bo_w.line_edit_password_check, "S4cr3t!P@ss")
+    await aqtbot.wait(100)
     await aqtbot.mouse_click(bo_w.button_bootstrap, QtCore.Qt.LeftButton)
 
 

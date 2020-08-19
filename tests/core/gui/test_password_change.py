@@ -25,8 +25,8 @@ async def test_change_password_invalid_old_password(
     pc_w = await catch_password_change_widget()
 
     await aqtbot.key_clicks(pc_w.line_edit_old_password, "0123456789")
-    await aqtbot.key_clicks(pc_w.line_edit_password, "P@ssw0rd2")
-    await aqtbot.key_clicks(pc_w.line_edit_password_check, "P@ssw0rd2")
+    await aqtbot.key_clicks(pc_w.line_edit_password, "P2ssxdor!s32")
+    await aqtbot.key_clicks(pc_w.line_edit_password_check, "P2ssxdor!s32")
     await aqtbot.wait(250)
     await aqtbot.mouse_click(pc_w.button_change, QtCore.Qt.LeftButton)
 
@@ -49,9 +49,9 @@ async def test_change_password_invalid_password_check(
     await aqtbot.run(db_w.change_password_clicked.emit)
     pc_w = await catch_password_change_widget()
 
-    await aqtbot.key_clicks(pc_w.line_edit_old_password, "P@ssw0rd")
-    await aqtbot.key_clicks(pc_w.line_edit_password, "P@ssw0rd2")
-    await aqtbot.key_clicks(pc_w.line_edit_password_check, "P@ssw0rd3")
+    await aqtbot.key_clicks(pc_w.line_edit_old_password, "P2ssxdor!s3")
+    await aqtbot.key_clicks(pc_w.line_edit_password, "P2ssxdor!s32")
+    await aqtbot.key_clicks(pc_w.line_edit_password_check, "P2ssxdor!s33")
     await aqtbot.wait(250)
 
 
@@ -74,9 +74,9 @@ async def test_change_password_success(
     await aqtbot.run(db_w.change_password_clicked.emit)
     pc_w = await catch_password_change_widget()
 
-    await aqtbot.key_clicks(pc_w.line_edit_old_password, "P@ssw0rd")
-    await aqtbot.key_clicks(pc_w.line_edit_password, "P@ssw0rd2")
-    await aqtbot.key_clicks(pc_w.line_edit_password_check, "P@ssw0rd2")
+    await aqtbot.key_clicks(pc_w.line_edit_old_password, "P2ssxdor!s3")
+    await aqtbot.key_clicks(pc_w.line_edit_password, "P2ssxdor!s32")
+    await aqtbot.key_clicks(pc_w.line_edit_password_check, "P2ssxdor!s32")
     await aqtbot.wait(250)
     await aqtbot.mouse_click(pc_w.button_change, QtCore.Qt.LeftButton)
 
@@ -87,7 +87,7 @@ async def test_change_password_success(
     await logged_gui.test_logout_and_switch_to_login_widget()
 
     # ...with old password...
-    await logged_gui.test_proceed_to_login("P@ssw0rd", error=True)
+    await logged_gui.test_proceed_to_login("P2ssxdor!s3", error=True)
     assert autoclose_dialog.dialogs == [("Error", "The password is incorrect.")]
 
     # ...and new password
@@ -95,7 +95,7 @@ async def test_change_password_success(
     password_w = l_w.widget.layout().itemAt(0).widget()
     assert isinstance(password_w, LoginPasswordInputWidget)
 
-    await aqtbot.key_clicks(password_w.line_edit_password, "P@ssw0rd2")
+    await aqtbot.key_clicks(password_w.line_edit_password, "P2ssxdor!s32")
 
     print(password_w.line_edit_password.text())
 
