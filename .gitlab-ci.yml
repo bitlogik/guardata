@@ -20,7 +20,7 @@ linux-tests:
     - adduser --disabled-password --gecos "" testuser
     - chmod -R 777 ..
   script:
-    - su testuser LinuxTest.sh
+    - su testuser tests/LinuxTest.sh
 
 windows-tests:
   extends:
