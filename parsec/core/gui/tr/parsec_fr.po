@@ -1502,7 +1502,7 @@ msgid "TEXT_FILE_SIZE_B"
 msgstr "o"
 
 msgid "TEXT_GUARDATA_NEW_VERSION_AVAILABLE_version"
-msgstr "La version <b>{version}</b> de guardata est disponible !"
+msgstr "Une nouvelle version <b>{version}</b> de guardata est disponible !"
 
 msgid "TEXT_CHANGE_PASSWORD_PASSWORD_MISMATCH"
 msgstr "Le mot de passe et la confirmation ne correspondent pas."

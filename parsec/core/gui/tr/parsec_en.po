@@ -1459,7 +1459,7 @@ msgid "TEXT_FILE_SIZE_B"
 msgstr "B"
 
 msgid "TEXT_GUARDATA_NEW_VERSION_AVAILABLE_version"
-msgstr "The version <b>{version}</b> of guardata is available!"
+msgstr "A new guardata version <b>{version}</b> is available!"
 
 msgid "TEXT_CHANGE_PASSWORD_PASSWORD_MISMATCH"
 msgstr "The password and the password confirmation do no match."
