@@ -177,14 +177,16 @@ class ClaimUserFinalizeWidget(QWidget, Ui_ClaimUserFinalizeWidget):
         self.line_edit_password.textChanged.connect(
             self.password_strength_widget.on_password_change
         )
+        self.password_strength_widget.main_pwd = self.line_edit_password
         self.line_edit_password.textChanged.connect(self.check_infos)
+        self.line_edit_password_check.textChanged.connect(self.password_strength_widget.on_otherpwd_change)
         self.line_edit_password_check.textChanged.connect(self.check_infos)
         self.button_finalize.clicked.connect(self._on_finalize_clicked)
 
     def check_infos(self, _=""):
         if (
             len(self.line_edit_password.text())
-            and get_password_strength(self.line_edit_password.text()) > 0
+            and get_password_strength(self.line_edit_password.text()) > 2
             and self.line_edit_password.text() == self.line_edit_password_check.text()
         ):
             self.button_finalize.setDisabled(False)

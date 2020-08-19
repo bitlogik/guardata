@@ -22,10 +22,11 @@ class PasswordChangeWidget(QWidget, Ui_PasswordChangeWidget):
         self.setupUi(self)
         self.core = core
         self.dialog = None
-        pwd_str_widget = PasswordStrengthWidget()
+        pwd_str_widget = PasswordStrengthWidget(main_pwd=self.line_edit_password)
         self.line_edit_old_password.textChanged.connect(self.check_infos)
         self.line_edit_password.textChanged.connect(pwd_str_widget.on_password_change)
         self.line_edit_password.textChanged.connect(self.check_infos)
+        self.line_edit_password_check.textChanged.connect(pwd_str_widget.on_otherpwd_change)
         self.line_edit_password_check.textChanged.connect(self.check_infos)
         self.layout_password_strength.addWidget(pwd_str_widget)
         self.button_change.clicked.connect(self.change_password)
@@ -35,8 +36,8 @@ class PasswordChangeWidget(QWidget, Ui_PasswordChangeWidget):
         if (
             len(self.line_edit_old_password.text())
             and len(self.line_edit_password.text())
-            and get_password_strength(self.line_edit_password.text()) > 0
-            and len(self.line_edit_password_check.text())
+            and get_password_strength(self.line_edit_password.text()) > 2
+            and self.line_edit_password_check.text() == self.line_edit_password.text()
         ):
             self.button_change.setDisabled(False)
         else:
