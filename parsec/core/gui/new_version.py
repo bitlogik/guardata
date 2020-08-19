@@ -21,78 +21,29 @@ from parsec.core.gui.ui.new_version_info import Ui_NewVersionInfo
 from parsec.core.gui.ui.new_version_available import Ui_NewVersionAvailable
 
 
-RELEASE_REGEX = (
-    r"([0-9]+)\.([0-9]+)\.([0-9]+)" r"(?:-((?:a|b|rc)[0-9]+))?" r"(\+dev|(?:-[0-9]+-g[0-9a-f]+))?"
-)
+async def _do_check_new_version(url):
+    current_version = Version(__version__)
 
-
-def _extract_version(raw):
-    match = re.search(RELEASE_REGEX, raw)
-    if match:
-        return Version(match.group())
-    else:
-        return None
-
-
-async def _do_check_new_version(url, api_url, check_pre=False):
-    current_version = _extract_version(__version__)
-
-    def _fetch_json_releases():
-        # urlopen automatically follows redirections
+    def _fetch_latest_release():
+        # try:
         with urlopen(Request(url, method="GET")) as req:
-            resolved_url = req.geturl()
-            latest_from_head = _extract_version(resolved_url)
-            if (
-                latest_from_head
-                and current_version
-                and current_version < latest_from_head
-                or check_pre  # As latest doesn't include GitHub prerelease
-            ):
-                with urlopen(Request(api_url, method="GET")) as req_api:
-                    try:
-                        return latest_from_head, json.loads(req_api.read())
-                    except JSONDecodeError:
-                        return latest_from_head, None
-            else:
-                return latest_from_head, None
+            latest_v = req.read()
+            return Version(latest_v.decode("ascii"))
+        # except Exception as e:
+            # print("ERROR GETTING NEW VERSION")
+            # print(str(e))
+            # return None
 
-    latest_from_head, json_releases = await trio.to_thread.run_sync(_fetch_json_releases)
-    if json_releases:
-        current_arch = QSysInfo().currentCpuArchitecture()
-        if current_arch == "x86_64":
-            win_version = "win64"
-        elif current_arch == "i386":
-            win_version = "win32"
-        else:
-            return latest_from_head, url
-
-        latest_version = Version("0.0.0")
-        latest_url = ""
-
-        try:
-            for release in json_releases:
-                if release["draft"]:
-                    continue
-                if release["prerelease"] and not check_pre:
-                    continue
-                for asset in release["assets"]:
-                    if asset["name"].endswith(f"-{win_version}-setup.exe"):
-                        asset_version = _extract_version(release["tag_name"])
-                        if (
-                            asset_version
-                            and asset_version > latest_version
-                            and (not asset_version.is_prerelease or check_pre)
-                        ):
-                            latest_version = asset_version
-                            latest_url = asset["browser_download_url"]
-        # In case something went wrong, still better to redirect to GitHub
-        except (KeyError, TypeError):
-            return latest_from_head, url
+    latest_version = await trio.to_thread.run_sync(_fetch_latest_release)
+    if latest_version:
         if latest_version > current_version:
-            return latest_version, latest_url
-    elif latest_from_head > current_version:
-        # There is a new release flagged as stable on GitHub, but we failed to load the json
-        return latest_from_head, url
+            current_arch = QSysInfo().currentCpuArchitecture()
+            if current_arch == "x86_64":
+                win_version = "win64"
+                return latest_version, f"https://dl.guardata.app/guardata-{latest_version.public}-{win_version}-setup.exe"
+            # elif current_arch == "i386":
+                # win_version = "win32"
+
     return None
 
 
@@ -148,6 +99,7 @@ class CheckNewVersion(QDialog, Ui_NewVersionDialog):
 
         if platform.system() != "Windows":
             return
+        # "Linux", "Darwin"
 
         self.widget_info = NewVersionInfo(parent=self)
         self.widget_available = NewVersionAvailable(parent=self)
@@ -171,8 +123,6 @@ class CheckNewVersion(QDialog, Ui_NewVersionDialog):
             ThreadSafeQtSignal(self, "check_new_version_error"),
             _do_check_new_version,
             url=self.config.gui_check_version_url,
-            api_url=self.config.gui_check_version_api_url,
-            check_pre=self.config.gui_check_version_allow_pre_release,
         )
         self.setWindowFlags(Qt.SplashScreen)
 
@@ -197,14 +147,9 @@ class CheckNewVersion(QDialog, Ui_NewVersionDialog):
             self.widget_info.show_up_to_date()
 
     def on_check_new_version_error(self):
-        assert self.version_job.is_finished()
-        assert self.version_job.status != "ok"
         self.version_job = None
         if not self.isVisible():
             self.ignore()
-        self.widget_available.hide()
-        self.widget_info.show()
-        self.widget_info.show_error()
 
     def download(self):
         desktop.open_url(self.download_url)
