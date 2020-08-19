@@ -28,7 +28,7 @@ async def _do_check_new_version(url):
         # try:
         with urlopen(Request(url, method="GET")) as req:
             latest_v = req.read()
-            return Version(latest_v)
+            return Version(latest_v.decode("ascii"))
         # except Exception as e:
             # print("ERROR GETTING NEW VERSION")
             # print(str(e))
