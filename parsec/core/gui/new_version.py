@@ -40,7 +40,7 @@ async def _do_check_new_version(url):
             current_arch = QSysInfo().currentCpuArchitecture()
             if current_arch == "x86_64":
                 win_version = "win64"
-                return latest_version, f"https://dl.guardata.app/guardata-${latest_version.public}-{win_version}-setup.exe"
+                return latest_version, f"https://dl.guardata.app/guardata-{latest_version.public}-{win_version}-setup.exe"
             # elif current_arch == "i386":
                 # win_version = "win32"
 
