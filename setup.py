@@ -262,9 +262,6 @@ class build_py_with_pyqt_resource_bundle_generation(build_py):
 with open("README.rst") as readme_file:
     readme = readme_file.read()
 
-with open("HISTORY.rst") as history_file:
-    history = history_file.read()
-
 
 requirements = [
     "attrs==19.2.0",
@@ -348,7 +345,7 @@ setup(
     name="guardata",
     version=__version__,
     description="Desktop client for a modern and trustless data cloud storage service",
-    long_description=readme + "\n\n" + history,
+    long_description=readme + "\n\n",
     author="BitLogiK",
     author_email="contact@bitlogik.fr",
     url="https://guardata.app",
