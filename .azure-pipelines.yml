@@ -14,8 +14,7 @@ variables:
   winfsp.version: '1.7.20172'
   pytest.base_args: |
     --log-level=DEBUG \
-    --durations=10 -v \
-    --cov=parsec --cov-config=setup.cfg --cov-append --cov-report= \
+    --durations=10 -v
   debug.stress_flaky_tests: 0  # Repeat all flaky tests X times
 
 jobs:
@@ -130,9 +129,9 @@ jobs:
     displayName: 'Bootstrap'
   - bash: |
       set -eux
-      # Remove the parsec folder from the source to force use of the wheel
-      rm -rf parsec
-      # Install the parsec wheel with all dependencies
+      # Remove the guardata folder from the source to force use of the wheel
+      rm -rf guardata
+      # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
       echo $WHEEL
       pip install $WHEEL[all]
@@ -207,8 +206,8 @@ jobs:
     displayName: 'Bootstrap'
   - bash: |
       set -eux
-      # Remove the parsec folder from the source to force use of the wheel
-      rm -rf parsec
+      # Remove the guardata folder from the source to force use of the wheel
+      rm -rf guardata
       # Install the guardata wheel with all dependencies
       WHEEL_DIRECTORY=`python -c 'print(r"$(Pipeline.Workspace)/wheel".replace("\\\\", "/"))'`
       WHEEL=$(ls $WHEEL_DIRECTORY/guardata-*.whl)
@@ -291,12 +290,12 @@ jobs:
       cp -R $(Build.SourcesDirectory)/packaging/snap snapbuild
       cd snapbuild
       mkdir src
-      cp -R $(Build.SourcesDirectory)/parsec src
+      cp -R $(Build.SourcesDirectory)/guardata src
       cp $(Build.SourcesDirectory)/setup.py src
       cp $(Build.SourcesDirectory)/README.rst src
       cp $(Build.SourcesDirectory)/HISTORY.rst src
       VERBOSE_TAG=`git -C $(Build.SourcesDirectory) describe --tag`
-      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" src/parsec/_version.py
+      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" src/guardata/_version.py
       sed -i "s/__GUARDATA_VERSION__/$VERBOSE_TAG/" snap/snapcraft.yaml
       snapcraft --destructive-mode
       mkdir dist
@@ -342,7 +341,7 @@ jobs:
       SOURCES_DIRECTORY=`python -c 'print(r"$(Build.SourcesDirectory)".replace("\\\\", "/"))'`
       TEMP_DIRECTORY=`python -c 'print(r"$(Agent.TempDirectory)".replace("\\\\", "/"))'`
       VERBOSE_TAG=`git -C $SOURCES_DIRECTORY describe --tag`
-      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" $SOURCES_DIRECTORY/parsec/_version.py
+      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" $SOURCES_DIRECTORY/guardata/_version.py
       cp -R $SOURCES_DIRECTORY/packaging/win32/ winbuild
     displayName: 'Prepare build'
     workingDirectory: $(Agent.TempDirectory)
