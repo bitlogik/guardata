@@ -2,7 +2,6 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-import os
 
 from setuptools import setup, find_packages, distutils, Command
 from setuptools.command.build_py import build_py

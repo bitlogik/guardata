@@ -2,10 +2,8 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from guardata.core.core_events import CoreEvent
-import platform
 from typing import Optional
 from structlog import get_logger
-from distutils.version import LooseVersion
 
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, Qt, QSize
 from PyQt5.QtGui import QColor, QIcon, QKeySequence
@@ -26,7 +24,6 @@ from guardata.core.gui.lang import translate as _
 from guardata.core.gui.instance_widget import InstanceWidget
 from guardata.core.gui.guardata_application import guardataApp
 from guardata.core.gui import desktop
-from guardata.core import win_registry
 # from guardata.core.gui.changelog_widget import ChangelogWidget
 from guardata.core.gui.bootstrap_organization_widget import BootstrapOrganizationWidget
 from guardata.core.gui.claim_user_widget import ClaimUserWidget
