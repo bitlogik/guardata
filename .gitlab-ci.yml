@@ -12,7 +12,8 @@ linux-tests:
     - tags
   before_script:
     - apt-get -y update
-    - DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install python3-pip python3-venv fuse postgresql postgresql-contrib desktop-file-utils libgl1-mesa-glx xdg-utils libffi-dev
+    #  libgl1-mesa-glx xdg-utils
+    - DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install python3-pip python3-venv fuse postgresql postgresql-contrib desktop-file-utils libffi-dev
     - apt-get install -y python3-cairo-dev
     - /sbin/ldconfig
     - ln -s /usr/bin/python3 /usr/bin/python
@@ -61,8 +62,8 @@ pip-build:
   stage: build
   before_script:
     - apt-get -y update
-    # apt-get install -y xvfb xorg
-    - DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install python3-pip python3-venv fuse postgresql postgresql-contrib desktop-file-utils libgl1-mesa-glx xdg-utils libffi-dev
+    # apt-get install -y xvfb xorg, libgl1-mesa-glx xdg-utils
+    - DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install python3-pip python3-venv fuse postgresql postgresql-contrib desktop-file-utils libffi-dev
     - /sbin/ldconfig
     - ln -s /usr/bin/python3 /usr/bin/python
     - rm -Rf docs
