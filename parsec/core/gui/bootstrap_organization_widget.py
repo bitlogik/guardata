@@ -194,7 +194,8 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
             and len(self.line_edit_password.text())
             and get_password_strength(self.line_edit_password.text()) > 2
             and len(self.line_edit_password_check.text())
-            and self.line_edit_password_check.text() == self.line_edit_email.text()
+            and len(self.line_edit_email.text()) > 5
+            and self.line_edit_password_check.text() == self.line_edit_password.text()
         ):
             self.button_bootstrap.setDisabled(False)
         else:
