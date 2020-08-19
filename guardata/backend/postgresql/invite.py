@@ -4,7 +4,7 @@ from pendulum import Pendulum, now as pendulum_now
 from uuid import UUID, uuid4
 from typing import List, Optional
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     OrganizationID,
     UserID,
     HumanHandle,
@@ -12,9 +12,9 @@ from parsec.api.protocol import (
     InvitationStatus,
     InvitationDeletedReason,
 )
-from parsec.backend.backend_events import BackendEvent
-from parsec.backend.postgresql.handler import send_signal, PGHandler
-from parsec.backend.invite import (
+from guardata.backend.backend_events import BackendEvent
+from guardata.backend.postgresql.handler import send_signal, PGHandler
+from guardata.backend.invite import (
     ConduitState,
     NEXT_CONDUIT_STATE,
     ConduitListenCtx,
@@ -27,14 +27,14 @@ from parsec.backend.invite import (
     InvitationInvalidStateError,
     InvitationAlreadyMemberError,
 )
-from parsec.backend.postgresql.utils import (
+from guardata.backend.postgresql.utils import (
     Q,
     q_organization_internal_id,
     q_user,
     q_user_internal_id,
     STR_TO_INVITATION_CONDUIT_STATE,
 )
-from parsec.backend.postgresql.user_queries.find import query_retrieve_active_human_by_email
+from guardata.backend.postgresql.user_queries.find import query_retrieve_active_human_by_email
 
 _q_retrieve_compatible_user_invitation = Q(
     f"""

@@ -2,9 +2,9 @@
 
 import pytest
 
-from parsec.api.protocol import DeviceID, UserID, DeviceName, OrganizationID
-from parsec.crypto import SigningKey, PrivateKey, SecretKey, export_root_verify_key
-from parsec.core.types import (
+from guardata.api.protocol import DeviceID, UserID, DeviceName, OrganizationID
+from guardata.crypto import SigningKey, PrivateKey, SecretKey, export_root_verify_key
+from guardata.core.types import (
     BackendAddr,
     BackendOrganizationAddr,
     BackendOrganizationBootstrapAddr,

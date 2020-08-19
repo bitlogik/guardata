@@ -2,9 +2,9 @@
 
 from enum import Enum
 
-from parsec.serde import BaseSchema, OneOfSchema, fields
-from parsec.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
-from parsec.api.protocol.types import HumanHandleField, UserIDField
+from guardata.serde import BaseSchema, OneOfSchema, fields
+from guardata.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
+from guardata.api.protocol.types import HumanHandleField, UserIDField
 
 
 __all__ = (

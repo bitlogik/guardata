@@ -8,8 +8,8 @@ from collections import defaultdict
 from random import randrange, choice
 from string import ascii_lowercase
 
-from parsec.core.fs import FSError
-from parsec.core.types import WorkspaceRole
+from guardata.core.fs import FSError
+from guardata.core.types import WorkspaceRole
 
 
 FUZZ_PARALLELISM = 10

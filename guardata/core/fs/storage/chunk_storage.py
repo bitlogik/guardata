@@ -5,10 +5,10 @@ import time
 import trio
 from async_generator import asynccontextmanager
 
-from parsec.core.types import ChunkID
-from parsec.core.fs.exceptions import FSLocalMissError
-from parsec.core.types import LocalDevice, DEFAULT_BLOCK_SIZE
-from parsec.core.fs.storage.local_database import LocalDatabase
+from guardata.core.types import ChunkID
+from guardata.core.fs.exceptions import FSLocalMissError
+from guardata.core.types import LocalDevice, DEFAULT_BLOCK_SIZE
+from guardata.core.fs.storage.local_database import LocalDatabase
 
 
 class ChunkStorage:

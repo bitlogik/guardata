@@ -3,10 +3,10 @@
 import pytest
 from uuid import uuid4
 
-from parsec.api.protocol import packb, unpackb, OrganizationID
-from parsec.api.version import ApiVersion, API_VERSION
-from parsec.api.transport import Transport
-from parsec.api.protocol import (
+from guardata.api.protocol import packb, unpackb, OrganizationID
+from guardata.api.version import ApiVersion, API_VERSION
+from guardata.api.transport import Transport
+from guardata.api.protocol import (
     AuthenticatedClientHandshake,
     InvitationType,
     InvitedClientHandshake,

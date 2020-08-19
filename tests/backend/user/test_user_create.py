@@ -3,9 +3,9 @@
 import pytest
 import pendulum
 
-from parsec.backend.user import INVITATION_VALIDITY, User, Device
-from parsec.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
-from parsec.api.protocol import DeviceID
+from guardata.backend.user import INVITATION_VALIDITY, User, Device
+from guardata.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
+from guardata.api.protocol import DeviceID
 
 from tests.common import freeze_time
 from tests.backend.common import user_get, user_create

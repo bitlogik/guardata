@@ -4,11 +4,11 @@ from pendulum import Pendulum
 
 from enum import Enum
 import attr
-from parsec.crypto import SecretKey
-from parsec.serde import fields, post_load, OneOfSchema
-from parsec.api.data.entry import EntryID, EntryIDField
-from parsec.api.data.base import BaseAPISignedData, BaseSignedDataSchema, DeviceIDField
-from parsec.api.protocol import DeviceID
+from guardata.crypto import SecretKey
+from guardata.serde import fields, post_load, OneOfSchema
+from guardata.api.data.entry import EntryID, EntryIDField
+from guardata.api.data.base import BaseAPISignedData, BaseSignedDataSchema, DeviceIDField
+from guardata.api.protocol import DeviceID
 
 
 class MessageContentType(Enum):

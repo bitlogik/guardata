@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import os
 import errno
 from typing import Optional
@@ -10,8 +10,8 @@ from stat import S_IRWXU, S_IFDIR, S_IFREG
 from fuse import FuseOSError, Operations, LoggingMixIn, fuse_get_context, fuse_exit
 
 
-from parsec.core.types import FsPath
-from parsec.core.fs import FSLocalOperationError, FSRemoteOperationError
+from guardata.core.types import FsPath
+from guardata.core.fs import FSLocalOperationError, FSRemoteOperationError
 
 
 logger = get_logger()

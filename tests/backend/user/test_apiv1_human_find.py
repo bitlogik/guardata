@@ -2,8 +2,8 @@
 
 import pytest
 
-from parsec.api.data import UserProfile
-from parsec.api.protocol import human_find_serializer
+from guardata.api.data import UserProfile
+from guardata.api.protocol import human_find_serializer
 
 from tests.common import freeze_time, customize_fixtures
 

@@ -4,12 +4,12 @@ from pathlib import Path
 from typing import Dict, Set, Tuple
 from async_generator import asynccontextmanager
 
-from parsec.core.fs.exceptions import FSLocalMissError
-from parsec.core.types import EntryID, LocalDevice, LocalUserManifest
+from guardata.core.fs.exceptions import FSLocalMissError
+from guardata.core.types import EntryID, LocalDevice, LocalUserManifest
 
-from parsec.core.fs.storage.version import USER_STORAGE_NAME
-from parsec.core.fs.storage.local_database import LocalDatabase
-from parsec.core.fs.storage.manifest_storage import ManifestStorage
+from guardata.core.fs.storage.version import USER_STORAGE_NAME
+from guardata.core.fs.storage.local_database import LocalDatabase
+from guardata.core.fs.storage.manifest_storage import ManifestStorage
 
 
 class UserStorage:

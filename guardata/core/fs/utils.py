@@ -3,8 +3,8 @@
 import enum
 
 from typing import Union
-from parsec.api.data import WorkspaceManifest, FileManifest, FolderManifest, BaseManifest
-from parsec.core.types import (
+from guardata.api.data import WorkspaceManifest, FileManifest, FolderManifest, BaseManifest
+from guardata.core.types import (
     LocalUserManifest,
     LocalWorkspaceManifest,
     LocalFolderManifest,

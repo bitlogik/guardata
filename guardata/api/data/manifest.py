@@ -4,18 +4,18 @@ import attr
 from typing import Optional, Tuple, FrozenDict
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.types import UUID4
-from parsec.crypto import SecretKey, HashDigest
-from parsec.serde import fields, validate, post_load, OneOfSchema, pre_load
-from parsec.api.protocol import RealmRole, RealmRoleField, DeviceID
-from parsec.api.data.base import (
+from guardata.types import UUID4
+from guardata.crypto import SecretKey, HashDigest
+from guardata.serde import fields, validate, post_load, OneOfSchema, pre_load
+from guardata.api.protocol import RealmRole, RealmRoleField, DeviceID
+from guardata.api.data.base import (
     BaseData,
     BaseSchema,
     BaseAPISignedData,
     BaseSignedDataSchema,
     DataValidationError,
 )
-from parsec.api.data.entry import EntryID, EntryIDField, EntryName, EntryNameField
+from guardata.api.data.entry import EntryID, EntryIDField, EntryName, EntryNameField
 from enum import Enum
 
 LOCAL_AUTHOR_LEGACY_PLACEHOLDER = DeviceID(

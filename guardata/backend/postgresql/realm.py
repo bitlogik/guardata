@@ -4,10 +4,10 @@ import pendulum
 from uuid import UUID
 from typing import Dict, List, Optional
 
-from parsec.api.protocol import DeviceID, UserID, OrganizationID, RealmRole
-from parsec.backend.realm import BaseRealmComponent, RealmStatus, RealmGrantedRole
-from parsec.backend.postgresql.handler import PGHandler
-from parsec.backend.postgresql.realm_queries import (
+from guardata.api.protocol import DeviceID, UserID, OrganizationID, RealmRole
+from guardata.backend.realm import BaseRealmComponent, RealmStatus, RealmGrantedRole
+from guardata.backend.postgresql.handler import PGHandler
+from guardata.backend.postgresql.realm_queries import (
     query_create,
     query_get_status,
     query_get_stats,

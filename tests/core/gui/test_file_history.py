@@ -6,7 +6,7 @@ from PyQt5 import QtWidgets
 
 @pytest.fixture
 def catch_file_history_widget(widget_catcher_factory):
-    return widget_catcher_factory("parsec.core.gui.file_history_widget.FileHistoryWidget")
+    return widget_catcher_factory("guardata.core.gui.file_history_widget.FileHistoryWidget")
 
 
 @pytest.mark.gui

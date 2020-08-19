@@ -3,8 +3,8 @@
 
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.ui.license_widget import Ui_LicenseWidget
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.ui.license_widget import Ui_LicenseWidget
 
 
 class LicenseWidget(QWidget, Ui_LicenseWidget):

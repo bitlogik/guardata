@@ -5,9 +5,9 @@ from uuid import UUID
 import pendulum
 import attr
 
-from parsec.utils import timestamps_in_the_ballpark
-from parsec.api.data import DataError, RealmRoleCertificateContent, UserProfile
-from parsec.api.protocol import (
+from guardata.utils import timestamps_in_the_ballpark
+from guardata.api.data import DataError, RealmRoleCertificateContent, UserProfile
+from guardata.api.protocol import (
     OrganizationID,
     UserID,
     DeviceID,
@@ -21,7 +21,7 @@ from parsec.api.protocol import (
     realm_start_reencryption_maintenance_serializer,
     realm_finish_reencryption_maintenance_serializer,
 )
-from parsec.backend.utils import catch_protocol_errors, api
+from guardata.backend.utils import catch_protocol_errors, api
 
 
 class RealmError(Exception):

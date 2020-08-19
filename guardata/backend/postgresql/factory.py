@@ -3,21 +3,21 @@
 import trio
 from async_generator import asynccontextmanager
 
-from parsec.event_bus import EventBus
-from parsec.backend.config import BackendConfig
-from parsec.backend.events import EventsComponent
-from parsec.backend.blockstore import blockstore_factory
-from parsec.backend.webhooks import WebhooksComponent
-from parsec.backend.http import HTTPComponent
-from parsec.backend.postgresql.handler import PGHandler
-from parsec.backend.postgresql.organization import PGOrganizationComponent
-from parsec.backend.postgresql.ping import PGPingComponent
-from parsec.backend.postgresql.user import PGUserComponent
-from parsec.backend.postgresql.invite import PGInviteComponent
-from parsec.backend.postgresql.message import PGMessageComponent
-from parsec.backend.postgresql.realm import PGRealmComponent
-from parsec.backend.postgresql.vlob import PGVlobComponent
-from parsec.backend.postgresql.block import PGBlockComponent
+from guardata.event_bus import EventBus
+from guardata.backend.config import BackendConfig
+from guardata.backend.events import EventsComponent
+from guardata.backend.blockstore import blockstore_factory
+from guardata.backend.webhooks import WebhooksComponent
+from guardata.backend.http import HTTPComponent
+from guardata.backend.postgresql.handler import PGHandler
+from guardata.backend.postgresql.organization import PGOrganizationComponent
+from guardata.backend.postgresql.ping import PGPingComponent
+from guardata.backend.postgresql.user import PGUserComponent
+from guardata.backend.postgresql.invite import PGInviteComponent
+from guardata.backend.postgresql.message import PGMessageComponent
+from guardata.backend.postgresql.realm import PGRealmComponent
+from guardata.backend.postgresql.vlob import PGVlobComponent
+from guardata.backend.postgresql.block import PGBlockComponent
 
 
 @asynccontextmanager

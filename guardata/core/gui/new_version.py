@@ -12,13 +12,13 @@ from packaging.version import Version
 from PyQt5.QtCore import Qt, pyqtSignal, QSysInfo
 from PyQt5.QtWidgets import QDialog, QWidget
 
-from parsec import __version__
-from parsec.core.gui import desktop
-from parsec.core.gui.trio_thread import ThreadSafeQtSignal
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.ui.new_version_dialog import Ui_NewVersionDialog
-from parsec.core.gui.ui.new_version_info import Ui_NewVersionInfo
-from parsec.core.gui.ui.new_version_available import Ui_NewVersionAvailable
+from guardata import __version__
+from guardata.core.gui import desktop
+from guardata.core.gui.trio_thread import ThreadSafeQtSignal
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.ui.new_version_dialog import Ui_NewVersionDialog
+from guardata.core.gui.ui.new_version_info import Ui_NewVersionInfo
+from guardata.core.gui.ui.new_version_available import Ui_NewVersionAvailable
 
 
 async def _do_check_new_version(url):

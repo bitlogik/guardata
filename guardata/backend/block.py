@@ -2,9 +2,9 @@
 
 from uuid import UUID
 
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.api.protocol import block_create_serializer, block_read_serializer
-from parsec.backend.utils import catch_protocol_errors, api
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.api.protocol import block_create_serializer, block_read_serializer
+from guardata.backend.utils import catch_protocol_errors, api
 
 
 class BlockError(Exception):

@@ -8,12 +8,12 @@ import pathlib
 import tempfile
 import subprocess
 
-from parsec.core.config import config_factory
-from parsec.core.local_device import list_available_devices
+from guardata.core.config import config_factory
+from guardata.core.local_device import list_available_devices
 
 
 def kill_local_backend(backend_port=6888):
-    pattern = f"parsec.* backend.* run.* -P {backend_port}"
+    pattern = f"guardata.* backend.* run.* -P {backend_port}"
     for proc in psutil.process_iter():
         if "python" in proc.name():
             arguments = " ".join(proc.cmdline())

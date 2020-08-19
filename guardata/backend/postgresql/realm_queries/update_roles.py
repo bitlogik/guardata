@@ -2,10 +2,10 @@
 
 from typing import Optional
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.api.data import UserProfile
-from parsec.api.protocol import OrganizationID, RealmRole
-from parsec.backend.realm import (
+from guardata.backend.backend_events import BackendEvent
+from guardata.api.data import UserProfile
+from guardata.api.protocol import OrganizationID, RealmRole
+from guardata.backend.realm import (
     RealmGrantedRole,
     RealmAccessError,
     RealmIncompatibleProfileError,
@@ -13,9 +13,9 @@ from parsec.backend.realm import (
     RealmNotFoundError,
     RealmInMaintenanceError,
 )
-from parsec.backend.postgresql.handler import send_signal
-from parsec.backend.postgresql.message import send_message
-from parsec.backend.postgresql.utils import (
+from guardata.backend.postgresql.handler import send_signal
+from guardata.backend.postgresql.message import send_message
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_user,

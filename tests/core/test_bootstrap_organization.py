@@ -2,11 +2,11 @@
 
 import pytest
 
-from parsec.api.data import UserProfile
-from parsec.api.protocol import OrganizationID, HumanHandle
-from parsec.core.backend_connection import apiv1_backend_anonymous_cmds_factory
-from parsec.core.types import BackendOrganizationBootstrapAddr
-from parsec.core.invite import bootstrap_organization, InviteNotFoundError, InviteAlreadyUsedError
+from guardata.api.data import UserProfile
+from guardata.api.protocol import OrganizationID, HumanHandle
+from guardata.core.backend_connection import apiv1_backend_anonymous_cmds_factory
+from guardata.core.types import BackendOrganizationBootstrapAddr
+from guardata.core.invite import bootstrap_organization, InviteNotFoundError, InviteAlreadyUsedError
 
 
 @pytest.mark.trio

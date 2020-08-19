@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from parsec.core.fs.storage import UserStorage
-from parsec.core.types import LocalUserManifest, EntryID
+from guardata.core.fs.storage import UserStorage
+from guardata.core.types import LocalUserManifest, EntryID
 
 
 @pytest.fixture

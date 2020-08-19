@@ -5,11 +5,11 @@ import trio
 from unittest.mock import ANY
 from pendulum import Pendulum, now as pendulum_now
 
-# from parsec.api.data import RevokedUserCertificateContent
-from parsec.backend.backend_events import BackendEvent
-# from parsec.api.transport import TransportError
-from parsec.api.data import UserProfile
-from parsec.api.protocol import (
+# from guardata.api.data import RevokedUserCertificateContent
+from guardata.backend.backend_events import BackendEvent
+# from guardata.api.transport import TransportError
+from guardata.api.data import UserProfile
+from guardata.api.protocol import (
     InvitationStatus,
     InvitationDeletedReason,
     InvitationType,

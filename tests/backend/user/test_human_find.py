@@ -2,7 +2,7 @@
 
 import pytest
 
-from parsec.api.data import UserProfile
+from guardata.api.data import UserProfile
 
 from tests.common import freeze_time, customize_fixtures
 from tests.backend.common import human_find

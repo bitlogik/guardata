@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import sys
 import trio
 import errno
@@ -13,9 +13,9 @@ from structlog import get_logger
 from contextlib import contextmanager
 from itertools import count
 
-from parsec.core.mountpoint.fuse_operations import FuseOperations
-from parsec.core.mountpoint.thread_fs_access import ThreadFSAccess
-from parsec.core.mountpoint.exceptions import MountpointDriverCrash
+from guardata.core.mountpoint.fuse_operations import FuseOperations
+from guardata.core.mountpoint.thread_fs_access import ThreadFSAccess
+from guardata.core.mountpoint.exceptions import MountpointDriverCrash
 
 
 __all__ = ("fuse_mountpoint_runner",)
@@ -120,7 +120,7 @@ async def fuse_mountpoint_runner(
 
             # Let fusepy decode the paths using the current file system encoding
             # Note that this does not prevent the user from using a certain encoding
-            # in the context of the parsec app and another encoding in the context of
+            # in the context of the guardata app and another encoding in the context of
             # an application accessing the mountpoint. In this case, an encoding error
             # might be raised while fuspy tries to decode the path. If that happends,
             # fuspy will log the error and simply return EINVAL, which is acceptable.

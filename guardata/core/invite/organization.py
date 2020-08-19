@@ -3,13 +3,13 @@
 from typing import Optional
 from pendulum import now as pendulum_now
 
-from parsec.crypto import SigningKey
-from parsec.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
-from parsec.api.protocol import HumanHandle, DeviceID
-from parsec.core.types import LocalDevice, BackendOrganizationAddr
-from parsec.core.local_device import generate_new_device
-from parsec.core.backend_connection import APIV1_BackendAnonymousCmds
-from parsec.core.invite.exceptions import (
+from guardata.crypto import SigningKey
+from guardata.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
+from guardata.api.protocol import HumanHandle, DeviceID
+from guardata.core.types import LocalDevice, BackendOrganizationAddr
+from guardata.core.local_device import generate_new_device
+from guardata.core.backend_connection import APIV1_BackendAnonymousCmds
+from guardata.core.invite.exceptions import (
     InviteError,
     InviteNotFoundError,
     InviteAlreadyUsedError,

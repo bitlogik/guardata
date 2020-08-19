@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import pytest
 from pendulum import Pendulum
 from unittest.mock import ANY
 
-from parsec.core.types import WorkspaceEntry, WorkspaceRole
-from parsec.core.backend_connection import BackendNotAvailable
-from parsec.core.fs.exceptions import FSBackendOfflineError
+from guardata.core.types import WorkspaceEntry, WorkspaceRole
+from guardata.core.backend_connection import BackendNotAvailable
+from guardata.core.fs.exceptions import FSBackendOfflineError
 
 from tests.common import freeze_time, create_shared_workspace
 

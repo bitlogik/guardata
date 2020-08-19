@@ -6,11 +6,11 @@ import functools
 from typing import Optional, Tuple, TypeVar, Type, Union, NoReturn, FrozenSet, Pattern
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.types import UUID4, FrozenDict
-from parsec.crypto import SecretKey, HashDigest
-from parsec.serde import fields, OneOfSchema, validate, post_load
-from parsec.api.protocol import DeviceID, RealmRole
-from parsec.api.data import (
+from guardata.types import UUID4, FrozenDict
+from guardata.crypto import SecretKey, HashDigest
+from guardata.serde import fields, OneOfSchema, validate, post_load
+from guardata.api.protocol import DeviceID, RealmRole
+from guardata.api.data import (
     BaseSchema,
     BaseData,
     WorkspaceEntry,
@@ -26,7 +26,7 @@ from parsec.api.data import (
     EntryNameField,
     EntryIDField,
 )
-from parsec.core.types.base import BaseLocalData
+from guardata.core.types.base import BaseLocalData
 from enum import Enum
 
 __all__ = (

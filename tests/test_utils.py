@@ -3,7 +3,7 @@
 import trio
 import pytest
 
-from parsec.utils import start_task
+from guardata.utils import start_task
 
 
 async def job(fail=0, task_status=trio.TASK_STATUS_IGNORED):

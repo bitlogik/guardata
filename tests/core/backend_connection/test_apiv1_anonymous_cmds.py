@@ -3,9 +3,9 @@
 import pytest
 import trio
 
-from parsec.api.protocol import APIV1_ANONYMOUS_CMDS
-from parsec.core.types import BackendOrganizationAddr
-from parsec.core.backend_connection import (
+from guardata.api.protocol import APIV1_ANONYMOUS_CMDS
+from guardata.core.types import BackendOrganizationAddr
+from guardata.core.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     apiv1_backend_anonymous_cmds_factory,

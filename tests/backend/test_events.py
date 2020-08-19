@@ -3,9 +3,9 @@
 import pytest
 import trio
 
-from parsec.api.protocol import APIEvent
-from parsec.api.transport import TransportError
-from parsec.backend.backend_events import BackendEvent
+from guardata.api.protocol import APIEvent
+from guardata.api.transport import TransportError
+from guardata.backend.backend_events import BackendEvent
 
 from tests.backend.common import (
     events_subscribe,

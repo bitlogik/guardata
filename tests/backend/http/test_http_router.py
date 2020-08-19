@@ -1,11 +1,9 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-# # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
-
 # import pytest
-# from parsec.backend.http.router import (
+# from guardata.backend.http.router import (
 #     _http_404,
-#     _redirect_to_parsec,
+#     _redirect_to_guardata,
 #     _is_route,
 #     _get_method,
 #     get_method_and_execute,
@@ -25,7 +23,7 @@
 # async def test_get_method():
 #     # test get_method with existent route
 #     method = _get_method("/api/redirect")
-#     assert method == _redirect_to_parsec
+#     assert method == _redirect_to_guardata
 #     # test get_method with non existent route
 #     method = _get_method("fakeroute")
 #     assert method == _http_404

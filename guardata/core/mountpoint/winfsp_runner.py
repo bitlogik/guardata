@@ -10,11 +10,11 @@ from structlog import get_logger
 from winfspy import FileSystem, enable_debug_log
 from winfspy.plumbing import filetime_now
 
-from parsec.core.core_events import CoreEvent
-from parsec.core.win_registry import parsec_drive_icon_context
-from parsec.core.mountpoint.thread_fs_access import ThreadFSAccess
-from parsec.core.mountpoint.winfsp_operations import WinFSPOperations, winify_entry_name
-from parsec.core.mountpoint.exceptions import MountpointDriverCrash, MountpointNoDriveAvailable
+from guardata.core.core_events import CoreEvent
+from guardata.core.win_registry import guardata_drive_icon_context
+from guardata.core.mountpoint.thread_fs_access import ThreadFSAccess
+from guardata.core.mountpoint.winfsp_operations import WinFSPOperations, winify_entry_name
+from guardata.core.mountpoint.exceptions import MountpointDriverCrash, MountpointNoDriveAvailable
 
 
 __all__ = ("winfsp_mountpoint_runner",)
@@ -23,7 +23,7 @@ __all__ = ("winfsp_mountpoint_runner",)
 logger = get_logger()
 
 
-# The drive letters that parsec can use for mounting workspaces, sorted by priority.
+# The drive letters that guardata can use for mounting workspaces, sorted by priority.
 # For instance, if a device has 3 workspaces, they will preferably be mounted on
 # `P:\`, `Q:\` and `R:\` respectively. Make sure its length is a prime number so it
 # plays well with the algorithm in `sorted_drive_letters`.
@@ -177,7 +177,7 @@ async def winfsp_mountpoint_runner(
 
         # Manage drive icon
         drive_letter, *_ = mountpoint_path.drive
-        with parsec_drive_icon_context(drive_letter):
+        with guardata_drive_icon_context(drive_letter):
 
             # Run fs start in a thread
             await trio.to_thread.run_sync(fs.start)

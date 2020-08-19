@@ -18,8 +18,8 @@ from marshmallow.fields import (
     Field,
 )
 
-from parsec.types import FrozenDict as _FrozenDict
-from parsec.crypto import (
+from guardata.types import FrozenDict as _FrozenDict
+from guardata.crypto import (
     SecretKey as _SecretKey,
     HashDigest as _HashDigest,
     SigningKey as _SigningKey,

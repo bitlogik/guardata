@@ -1,8 +1,8 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.backend.ping import BasePingComponent
-from parsec.backend.backend_events import BackendEvent
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.backend.ping import BasePingComponent
+from guardata.backend.backend_events import BackendEvent
 
 
 class MemoryPingComponent(BasePingComponent):

@@ -6,7 +6,7 @@ import bisect
 from functools import partial
 from typing import Tuple, List, Set, Iterator, Callable, Union
 
-from parsec.core.types import BlockID, LocalFileManifest, Chunk, ChunkID
+from guardata.core.types import BlockID, LocalFileManifest, Chunk, ChunkID
 
 
 Chunks = Tuple[Chunk, ...]

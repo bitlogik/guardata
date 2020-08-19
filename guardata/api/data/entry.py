@@ -2,7 +2,7 @@
 
 from uuid import UUID, uuid4
 
-from parsec.serde import fields
+from guardata.serde import fields
 
 
 __all__ = ("EntryID", "EntryIDField", "EntryName", "EntryNameField")

@@ -2,7 +2,7 @@
 
 import io
 
-from parsec.core.gui.babel_qt_extractor import extract_qt
+from guardata.core.gui.babel_qt_extractor import extract_qt
 
 
 def test_qt_babel_extractor():

@@ -3,12 +3,12 @@
 import os
 import click
 
-from parsec.utils import trio_run
-from parsec.api.protocol import OrganizationID
-from parsec.logging import configure_logging
-from parsec.cli_utils import cli_exception_handler
-from parsec.core.types import BackendAddr
-from parsec.core.backend_connection import apiv1_backend_administration_cmds_factory
+from guardata.utils import trio_run
+from guardata.api.protocol import OrganizationID
+from guardata.logging import configure_logging
+from guardata.cli_utils import cli_exception_handler
+from guardata.core.types import BackendAddr
+from guardata.core.backend_connection import apiv1_backend_administration_cmds_factory
 
 
 async def _status_organization(name, backend_addr, administration_token):

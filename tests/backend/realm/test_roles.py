@@ -5,9 +5,9 @@ from uuid import UUID
 from pendulum import Pendulum, now as pendulum_now
 from unittest.mock import ANY
 
-from parsec.api.protocol import RealmRole
-from parsec.api.data import RealmRoleCertificateContent, UserProfile
-from parsec.backend.realm import RealmGrantedRole
+from guardata.api.protocol import RealmRole
+from guardata.api.data import RealmRoleCertificateContent, UserProfile
+from guardata.backend.realm import RealmGrantedRole
 
 from tests.common import freeze_time, customize_fixtures
 from tests.backend.common import realm_update_roles, realm_get_role_certificates

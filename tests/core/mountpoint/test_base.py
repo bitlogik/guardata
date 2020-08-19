@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import os
 import errno
 from uuid import uuid4
@@ -9,7 +9,7 @@ import trio
 import pytest
 from pathlib import Path, PurePath
 
-from parsec.core.mountpoint import (
+from guardata.core.mountpoint import (
     mountpoint_manager_factory,
     MountpointConfigurationError,
     MountpointAlreadyMounted,
@@ -17,8 +17,8 @@ from parsec.core.mountpoint import (
     MountpointFuseNotAvailable,
     MountpointWinfspNotAvailable,
 )
-from parsec.core import logged_core_factory
-from parsec.core.types import FsPath, WorkspaceRole
+from guardata.core import logged_core_factory
+from guardata.core.types import FsPath, WorkspaceRole
 
 from tests.common import create_shared_workspace
 
@@ -40,7 +40,7 @@ async def test_runner_not_available(monkeypatch, alice_user_fs, event_bus):
         else:
             raise ImportError()
 
-    monkeypatch.setattr("parsec.core.mountpoint.manager.import_function", _import)
+    monkeypatch.setattr("guardata.core.mountpoint.manager.import_function", _import)
     with pytest.raises((MountpointFuseNotAvailable, MountpointWinfspNotAvailable)):
         async with mountpoint_manager_factory(alice_user_fs, event_bus, base_mountpoint):
             pass
@@ -291,7 +291,7 @@ async def test_get_path_in_mountpoint(base_mountpoint, alice_user_fs, event_bus)
 
 @pytest.mark.mountpoint
 def test_unhandled_crash_in_fs_operation(caplog, mountpoint_service, monkeypatch):
-    from parsec.core.mountpoint.thread_fs_access import ThreadFSAccess
+    from guardata.core.mountpoint.thread_fs_access import ThreadFSAccess
 
     vanilla_entry_info = ThreadFSAccess.entry_info
 
@@ -302,7 +302,7 @@ def test_unhandled_crash_in_fs_operation(caplog, mountpoint_service, monkeypatch
             return vanilla_entry_info(self, path)
 
     monkeypatch.setattr(
-        "parsec.core.mountpoint.thread_fs_access.ThreadFSAccess.entry_info", _entry_info_crash
+        "guardata.core.mountpoint.thread_fs_access.ThreadFSAccess.entry_info", _entry_info_crash
     )
 
     with pytest.raises(OSError) as exc:
@@ -311,12 +311,12 @@ def test_unhandled_crash_in_fs_operation(caplog, mountpoint_service, monkeypatch
     assert exc.value.errno == errno.EINVAL
     if os.name == "nt":
         caplog.assert_occured(
-            "[exception] Unhandled exception in winfsp mountpoint [parsec.core.mountpoint.winfsp_operations]"
+            "[exception] Unhandled exception in winfsp mountpoint [guardata.core.mountpoint.winfsp_operations]"
         )
 
     else:
         caplog.assert_occured(
-            "[exception] Unhandled exception in fuse mountpoint [parsec.core.mountpoint.fuse_operations]"
+            "[exception] Unhandled exception in fuse mountpoint [guardata.core.mountpoint.fuse_operations]"
         )
 
 

@@ -9,8 +9,8 @@ from botocore.exceptions import (
 )
 import pytest
 
-from parsec.backend.s3_blockstore import S3BlockStoreComponent
-from parsec.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
+from guardata.backend.s3_blockstore import S3BlockStoreComponent
+from guardata.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
 
 
 @pytest.mark.trio

@@ -4,10 +4,10 @@ import pendulum
 from uuid import UUID
 from typing import List, Tuple, Dict, Optional
 
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.backend.vlob import BaseVlobComponent
-from parsec.backend.postgresql.handler import PGHandler, retry_on_unique_violation
-from parsec.backend.postgresql.vlob_queries import (
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.backend.vlob import BaseVlobComponent
+from guardata.backend.postgresql.handler import PGHandler, retry_on_unique_violation
+from guardata.backend.postgresql.vlob_queries import (
     query_update,
     query_maintenance_save_reencryption_batch,
     query_maintenance_get_reencryption_batch,

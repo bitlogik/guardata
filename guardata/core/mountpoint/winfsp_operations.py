@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import functools
 from contextlib import contextmanager
 from trio import Cancelled, RunFinishedError
@@ -13,10 +13,10 @@ from winfspy import (
 )
 from winfspy.plumbing import dt_to_filetime, NTSTATUS, SecurityDescriptor
 
-from parsec.core.types import FsPath
-from parsec.core.fs import FSLocalOperationError, FSRemoteOperationError
-from parsec.core.fs.workspacefs.sync_transactions import DEFAULT_BLOCK_SIZE
-from parsec.core.mountpoint.winify import winify_entry_name, unwinify_entry_name
+from guardata.core.types import FsPath
+from guardata.core.fs import FSLocalOperationError, FSRemoteOperationError
+from guardata.core.fs.workspacefs.sync_transactions import DEFAULT_BLOCK_SIZE
+from guardata.core.mountpoint.winify import winify_entry_name, unwinify_entry_name
 
 
 logger = get_logger()
@@ -26,7 +26,7 @@ FILE_READ_DATA = 1 << 0
 FILE_WRITE_DATA = 1 << 1
 
 
-def _winpath_to_parsec(path: str) -> FsPath:
+def _winpath_to_guardata(path: str) -> FsPath:
     # Given / is not allowed, no need to check if path already contains it
     return FsPath(unwinify_entry_name(path.replace("\\", "/")))
 
@@ -131,7 +131,7 @@ def handle_error(func):
 
     @functools.wraps(func)
     def wrapper(self, arg, *args, **kwargs):
-        path = arg.path if isinstance(arg, (OpenedFile, OpenedFolder)) else _winpath_to_parsec(arg)
+        path = arg.path if isinstance(arg, (OpenedFile, OpenedFolder)) else _winpath_to_guardata(arg)
         with translate_error(self.event_bus, operation, path):
             return func.__get__(self)(arg, *args, **kwargs)
 
@@ -166,7 +166,7 @@ class WinFSPOperations(BaseFileSystemOperations):
 
     @handle_error
     def get_security_by_name(self, file_name):
-        file_name = _winpath_to_parsec(file_name)
+        file_name = _winpath_to_guardata(file_name)
         stat = self.fs_access.entry_info(file_name)
         return (
             stat_to_file_attributes(stat),
@@ -187,7 +187,7 @@ class WinFSPOperations(BaseFileSystemOperations):
         # `granted_access` is already handle by winfsp
         # `allocation_size` useless for us
         # `security_descriptor` is not supported yet
-        file_name = _winpath_to_parsec(file_name)
+        file_name = _winpath_to_guardata(file_name)
 
         if create_options & CREATE_FILE_CREATE_OPTIONS.FILE_DIRECTORY_FILE:
             self.fs_access.folder_create(file_name)
@@ -208,13 +208,13 @@ class WinFSPOperations(BaseFileSystemOperations):
 
     @handle_error
     def rename(self, file_context, file_name, new_file_name, replace_if_exists):
-        file_name = _winpath_to_parsec(file_name)
-        new_file_name = _winpath_to_parsec(new_file_name)
+        file_name = _winpath_to_guardata(file_name)
+        new_file_name = _winpath_to_guardata(new_file_name)
         self.fs_access.entry_rename(file_name, new_file_name, overwrite=replace_if_exists)
 
     @handle_error
     def open(self, file_name, create_options, granted_access):
-        file_name = _winpath_to_parsec(file_name)
+        file_name = _winpath_to_guardata(file_name)
         granted_access = granted_access & (FILE_READ_DATA | FILE_WRITE_DATA)
         if granted_access == FILE_READ_DATA:
             mode = "r"
@@ -364,7 +364,7 @@ class WinFSPOperations(BaseFileSystemOperations):
         FspCleanupDelete = 0x1
         if flags & FspCleanupDelete:
             # The file name is only provided for a delete operation, it is `None` otherwise
-            file_name = _winpath_to_parsec(file_name)
+            file_name = _winpath_to_guardata(file_name)
             if isinstance(file_context, OpenedFile):
                 self.fs_access.file_delete(file_name)
             else:

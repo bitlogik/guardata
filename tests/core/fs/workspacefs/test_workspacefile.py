@@ -5,9 +5,9 @@ import trio
 from enum import IntEnum
 from typing import Union
 import io
-from parsec.core.fs.exceptions import FSUnsupportedOperation, FSOffsetError
-from parsec.core.fs.workspacefs.workspacefile import WorkspaceFile
-from parsec.core.types import FsPath
+from guardata.core.fs.exceptions import FSUnsupportedOperation, FSOffsetError
+from guardata.core.fs.workspacefs.workspacefile import WorkspaceFile
+from guardata.core.types import FsPath
 
 AnyPath = Union[FsPath, str]
 

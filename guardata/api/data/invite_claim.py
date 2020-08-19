@@ -1,10 +1,10 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.crypto import VerifyKey, PublicKey, PrivateKey, SecretKey
-from parsec.serde import fields, post_load
-from parsec.api.protocol import DeviceID, DeviceIDField
-from parsec.api.data.base import BaseAPIData, BaseSchema
-from parsec.api.data.entry import EntryID, EntryIDField
+from guardata.crypto import VerifyKey, PublicKey, PrivateKey, SecretKey
+from guardata.serde import fields, post_load
+from guardata.api.protocol import DeviceID, DeviceIDField
+from guardata.api.data.base import BaseAPIData, BaseSchema
+from guardata.api.data.entry import EntryID, EntryIDField
 import attr
 
 

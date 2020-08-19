@@ -3,13 +3,13 @@
 import pytest
 from pendulum import Pendulum
 
-from parsec.api.data import (
+from guardata.api.data import (
     UserCertificateContent,
     DeviceCertificateContent,
     RevokedUserCertificateContent,
     UserProfile,
 )
-from parsec.core.trustchain import TrustchainContext, TrustchainError
+from guardata.core.trustchain import TrustchainContext, TrustchainError
 
 
 class TrustchainData:

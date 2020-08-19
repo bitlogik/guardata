@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.serde import (
+from guardata.serde import (
     BaseSchema,
     fields,
     post_load,
@@ -12,7 +12,7 @@ from parsec.serde import (
 )
 
 
-from parsec.serde.schema import OneOfSchemaLegacy
+from guardata.serde.schema import OneOfSchemaLegacy
 
 
 __all__ = ("ProtocolError", "BaseReqSchema", "BaseRepSchema", "CmdSerializer")

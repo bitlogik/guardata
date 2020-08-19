@@ -5,9 +5,9 @@ import trio
 from PyQt5 import QtCore
 from unittest.mock import ANY
 
-from parsec.core.backend_connection import backend_invited_cmds_factory
-from parsec.core.invite import claimer_retrieve_info
-from parsec.core.gui.greet_device_widget import (
+from guardata.core.backend_connection import backend_invited_cmds_factory
+from guardata.core.invite import claimer_retrieve_info
+from guardata.core.gui.greet_device_widget import (
     GreetDeviceInstructionsWidget,
     GreetDeviceCodeExchangeWidget,
     GreetDeviceWidget,
@@ -19,9 +19,9 @@ from tests.common import customize_fixtures
 @pytest.fixture
 def catch_greet_device_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "parsec.core.gui.greet_device_widget.GreetDeviceInstructionsWidget",
-        "parsec.core.gui.greet_device_widget.GreetDeviceCodeExchangeWidget",
-        "parsec.core.gui.greet_device_widget.GreetDeviceWidget",
+        "guardata.core.gui.greet_device_widget.GreetDeviceInstructionsWidget",
+        "guardata.core.gui.greet_device_widget.GreetDeviceCodeExchangeWidget",
+        "guardata.core.gui.greet_device_widget.GreetDeviceWidget",
     )
 
 

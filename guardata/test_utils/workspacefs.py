@@ -2,8 +2,8 @@
 
 import string
 
-from parsec.core.fs import UserFS, WorkspaceFS, FSFileNotFoundError
-from parsec.core.types import FsPath, EntryID
+from guardata.core.fs import UserFS, WorkspaceFS, FSFileNotFoundError
+from guardata.core.types import FsPath, EntryID
 
 
 async def make_workspace_dir_inconsistent(workspace: WorkspaceFS, dir: FsPath):

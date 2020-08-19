@@ -1,12 +1,12 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import os
 import trio
 import pytest
 from unittest.mock import patch
 
-from parsec.core.mountpoint import mountpoint_manager_factory, MountpointDriverCrash
+from guardata.core.mountpoint import mountpoint_manager_factory, MountpointDriverCrash
 
 
 @pytest.mark.linux  # win32 doesn't allow to remove an opened file
@@ -76,7 +76,7 @@ async def test_hard_crash_in_fuse_thread(base_mountpoint, alice_user_fs):
     def _crash_fuse(*args, **kwargs):
         raise ToughLuckError("Tough luck...")
 
-    with patch("parsec.core.mountpoint.fuse_runner.FUSE", new=_crash_fuse):
+    with patch("guardata.core.mountpoint.fuse_runner.FUSE", new=_crash_fuse):
         async with mountpoint_manager_factory(
             alice_user_fs, alice_user_fs.event_bus, base_mountpoint
         ) as mountpoint_manager:
@@ -131,7 +131,7 @@ async def test_mountpoint_path_already_in_use_concurrent_with_non_empty_dir(
         return mountpoint_path, st_dev
 
     monkeypatch.setattr(
-        "parsec.core.mountpoint.fuse_runner._bootstrap_mountpoint", _mocked_bootstrap_mountpoint
+        "guardata.core.mountpoint.fuse_runner._bootstrap_mountpoint", _mocked_bootstrap_mountpoint
     )
 
     # Now we can start fuse
@@ -176,7 +176,7 @@ async def test_mountpoint_path_already_in_use_concurrent_with_mountpoint(
             return mountpoint_path, st_dev
 
         monkeypatch.setattr(
-            "parsec.core.mountpoint.fuse_runner._bootstrap_mountpoint", _mocked_bootstrap_mountpoint
+            "guardata.core.mountpoint.fuse_runner._bootstrap_mountpoint", _mocked_bootstrap_mountpoint
         )
 
         # Now we can start fuse

@@ -2,7 +2,7 @@
 
 import pytest
 
-from parsec.core.types import FsPath
+from guardata.core.types import FsPath
 
 
 @pytest.mark.parametrize(

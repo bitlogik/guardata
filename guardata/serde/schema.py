@@ -16,7 +16,7 @@ try:
 except ImportError:
     BaseSchema = Schema
 
-from parsec.serde.fields import String
+from guardata.serde.fields import String
 
 
 class BaseCmdSchema(BaseSchema):

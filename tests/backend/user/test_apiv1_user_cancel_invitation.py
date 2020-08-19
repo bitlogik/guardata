@@ -4,9 +4,9 @@ import pytest
 from pendulum import Pendulum
 import trio
 
-from parsec.backend.user import UserInvitation
-from parsec.api.data import UserProfile
-from parsec.api.protocol import apiv1_user_cancel_invitation_serializer, apiv1_user_claim_serializer
+from guardata.backend.user import UserInvitation
+from guardata.api.data import UserProfile
+from guardata.api.protocol import apiv1_user_cancel_invitation_serializer, apiv1_user_claim_serializer
 
 from tests.common import freeze_time
 

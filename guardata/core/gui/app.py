@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 
 import sys
 import signal
@@ -13,9 +13,9 @@ from structlog import get_logger
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QApplication
 
-from parsec.core.config import CoreConfig
-from parsec.event_bus import EventBus
-from parsec.core.ipcinterface import (
+from guardata.core.config import CoreConfig
+from guardata.event_bus import EventBus
+from guardata.core.ipcinterface import (
     run_ipc_server,
     send_to_ipc_server,
     IPCServerAlreadyRunning,
@@ -24,12 +24,12 @@ from parsec.core.ipcinterface import (
 )
 
 try:
-    from parsec.core.gui import lang
-    from parsec.core.gui.parsec_application import guardataApp
-    from parsec.core.gui.new_version import CheckNewVersion
-    from parsec.core.gui.systray import systray_available, Systray
-    from parsec.core.gui.main_window import MainWindow
-    from parsec.core.gui.trio_thread import ThreadSafeQtSignal, run_trio_thread
+    from guardata.core.gui import lang
+    from guardata.core.gui.guardata_application import guardataApp
+    from guardata.core.gui.new_version import CheckNewVersion
+    from guardata.core.gui.systray import systray_available, Systray
+    from guardata.core.gui.main_window import MainWindow
+    from guardata.core.gui.trio_thread import ThreadSafeQtSignal, run_trio_thread
 except ImportError as exc:
     raise ModuleNotFoundError(
         """PyQt forms haven't been generated.

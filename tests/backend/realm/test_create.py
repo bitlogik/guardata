@@ -4,10 +4,10 @@ import pytest
 import pendulum
 from uuid import UUID
 
-from parsec.utils import TIMESTAMP_MAX_DT
-from parsec.api.data import RealmRoleCertificateContent, UserProfile
-from parsec.api.protocol import RealmRole
-from parsec.backend.backend_events import BackendEvent
+from guardata.utils import TIMESTAMP_MAX_DT
+from guardata.api.data import RealmRoleCertificateContent, UserProfile
+from guardata.api.protocol import RealmRole
+from guardata.backend.backend_events import BackendEvent
 
 from tests.common import freeze_time, customize_fixtures
 from tests.backend.test_events import events_subscribe

@@ -5,8 +5,8 @@ import json
 
 from marshmallow import ValidationError
 
-from parsec.serde.packing import packb, unpackb, SerdePackingError
-from parsec.serde.exceptions import SerdeValidationError
+from guardata.serde.packing import packb, unpackb, SerdePackingError
+from guardata.serde.exceptions import SerdeValidationError
 
 
 class BaseSerializer:

@@ -7,27 +7,27 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget
 
-from parsec.api.protocol import HumanHandle
-from parsec.core.types import LocalDevice
-from parsec.core.local_device import LocalDeviceAlreadyExistsError, save_device_with_password
-from parsec.core.invite import claimer_retrieve_info, InvitePeerResetError, InviteAlreadyUsedError
+from guardata.api.protocol import HumanHandle
+from guardata.core.types import LocalDevice
+from guardata.core.local_device import LocalDeviceAlreadyExistsError, save_device_with_password
+from guardata.core.invite import claimer_retrieve_info, InvitePeerResetError, InviteAlreadyUsedError
 
-from parsec.core.backend_connection import (
+from guardata.core.backend_connection import (
     backend_invited_cmds_factory,
     BackendConnectionRefused,
     BackendNotAvailable,
 )
-from parsec.core.gui import validators
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
-from parsec.core.gui.desktop import get_default_device
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.password_validation import get_password_strength
-from parsec.core.gui.ui.claim_user_widget import Ui_ClaimUserWidget
-from parsec.core.gui.ui.claim_user_code_exchange_widget import Ui_ClaimUserCodeExchangeWidget
-from parsec.core.gui.ui.claim_user_provide_info_widget import Ui_ClaimUserProvideInfoWidget
-from parsec.core.gui.ui.claim_user_instructions_widget import Ui_ClaimUserInstructionsWidget
-from parsec.core.gui.ui.claim_user_finalize_widget import Ui_ClaimUserFinalizeWidget
+from guardata.core.gui import validators
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui.desktop import get_default_device
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.password_validation import get_password_strength
+from guardata.core.gui.ui.claim_user_widget import Ui_ClaimUserWidget
+from guardata.core.gui.ui.claim_user_code_exchange_widget import Ui_ClaimUserCodeExchangeWidget
+from guardata.core.gui.ui.claim_user_provide_info_widget import Ui_ClaimUserProvideInfoWidget
+from guardata.core.gui.ui.claim_user_instructions_widget import Ui_ClaimUserInstructionsWidget
+from guardata.core.gui.ui.claim_user_finalize_widget import Ui_ClaimUserFinalizeWidget
 
 
 logger = get_logger()

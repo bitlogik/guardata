@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from unittest.mock import ANY
 from enum import Enum
 
-from parsec.event_bus import EventBus
+from guardata.event_bus import EventBus
 
 
 class PartialDict(dict):

@@ -5,16 +5,16 @@ import click
 import pendulum
 from pathlib import Path
 
-from parsec.utils import trio_run
-from parsec.logging import configure_logging
-from parsec.cli_utils import spinner, operation, cli_exception_handler
-from parsec.crypto import SigningKey
-from parsec.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
-from parsec.api.protocol import DeviceID
-from parsec.core.types import BackendOrganizationBootstrapAddr
-from parsec.core.config import get_default_config_dir
-from parsec.core.backend_connection import apiv1_backend_anonymous_cmds_factory
-from parsec.core.local_device import generate_new_device, save_device_with_password
+from guardata.utils import trio_run
+from guardata.logging import configure_logging
+from guardata.cli_utils import spinner, operation, cli_exception_handler
+from guardata.crypto import SigningKey
+from guardata.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
+from guardata.api.protocol import DeviceID
+from guardata.core.types import BackendOrganizationBootstrapAddr
+from guardata.core.config import get_default_config_dir
+from guardata.core.backend_connection import apiv1_backend_anonymous_cmds_factory
+from guardata.core.local_device import generate_new_device, save_device_with_password
 
 
 async def _bootstrap_organization(

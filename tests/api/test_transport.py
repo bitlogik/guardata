@@ -4,9 +4,9 @@ import pytest
 import trio
 from functools import partial
 
-from parsec.serde import BaseSchema, fields
-from parsec.api.transport import Transport, TransportClosedByPeer
-from parsec.api.protocol.base import MsgpackSerializer
+from guardata.serde import BaseSchema, fields
+from guardata.api.transport import Transport, TransportClosedByPeer
+from guardata.api.protocol.base import MsgpackSerializer
 
 
 @pytest.fixture

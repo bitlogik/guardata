@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import os
 import trio
 import logging
@@ -12,11 +12,11 @@ from importlib import __import__ as import_function
 
 from async_generator import asynccontextmanager
 
-from parsec.utils import start_task
-from parsec.core.types import FsPath, EntryID
-from parsec.core.fs.workspacefs import WorkspaceFSTimestamped
-from parsec.core.fs.exceptions import FSWorkspaceNotFoundError, FSWorkspaceTimestampedTooEarly
-from parsec.core.mountpoint.exceptions import (
+from guardata.utils import start_task
+from guardata.core.types import FsPath, EntryID
+from guardata.core.fs.workspacefs import WorkspaceFSTimestamped
+from guardata.core.fs.exceptions import FSWorkspaceNotFoundError, FSWorkspaceTimestampedTooEarly
+from guardata.core.mountpoint.exceptions import (
     MountpointConfigurationError,
     MountpointConfigurationWorkspaceFSTimestampedError,
     MountpointAlreadyMounted,
@@ -25,8 +25,8 @@ from parsec.core.mountpoint.exceptions import (
     MountpointFuseNotAvailable,
     MountpointError,
 )
-from parsec.core.mountpoint.winify import winify_entry_name
-from parsec.core.win_registry import cleanup_parsec_drive_icons
+from guardata.core.mountpoint.winify import winify_entry_name
+from guardata.core.win_registry import cleanup_guardata_drive_icons
 
 
 # Importing winfspy can take some time (about 0.4 seconds)
@@ -55,7 +55,7 @@ def get_mountpoint_runner():
             raise MountpointWinfspNotAvailable(exc) from exc
 
         logging.getLogger("winfspy").setLevel(logging.WARNING)
-        from parsec.core.mountpoint.winfsp_runner import winfsp_mountpoint_runner
+        from guardata.core.mountpoint.winfsp_runner import winfsp_mountpoint_runner
 
         return winfsp_mountpoint_runner
 
@@ -68,7 +68,7 @@ def get_mountpoint_runner():
             raise MountpointFuseNotAvailable(exc) from exc
 
         logging.getLogger("fuse").setLevel(logging.WARNING)
-        from parsec.core.mountpoint.fuse_runner import fuse_mountpoint_runner
+        from guardata.core.mountpoint.fuse_runner import fuse_mountpoint_runner
 
         return fuse_mountpoint_runner
 
@@ -283,7 +283,7 @@ async def mountpoint_manager_factory(
 
     # Now is a good time to perform some cleanup in the registry
     if os.name == "nt":
-        cleanup_parsec_drive_icons()
+        cleanup_guardata_drive_icons()
 
     def on_event(event, new_entry, previous_entry=None):
         # Workspace created

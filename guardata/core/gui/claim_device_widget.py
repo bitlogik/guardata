@@ -7,24 +7,24 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.types import LocalDevice
-from parsec.core.local_device import save_device_with_password
-from parsec.core.invite import claimer_retrieve_info, InvitePeerResetError, InviteAlreadyUsedError
-from parsec.core.backend_connection import (
+from guardata.core.types import LocalDevice
+from guardata.core.local_device import save_device_with_password
+from guardata.core.invite import claimer_retrieve_info, InvitePeerResetError, InviteAlreadyUsedError
+from guardata.core.backend_connection import (
     backend_invited_cmds_factory,
     BackendConnectionRefused,
     BackendNotAvailable,
 )
-from parsec.core.gui import validators
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
-from parsec.core.gui.desktop import get_default_device
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.password_validation import get_password_strength
-from parsec.core.gui.ui.claim_device_widget import Ui_ClaimDeviceWidget
-from parsec.core.gui.ui.claim_device_code_exchange_widget import Ui_ClaimDeviceCodeExchangeWidget
-from parsec.core.gui.ui.claim_device_provide_info_widget import Ui_ClaimDeviceProvideInfoWidget
-from parsec.core.gui.ui.claim_device_instructions_widget import Ui_ClaimDeviceInstructionsWidget
+from guardata.core.gui import validators
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui.desktop import get_default_device
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.password_validation import get_password_strength
+from guardata.core.gui.ui.claim_device_widget import Ui_ClaimDeviceWidget
+from guardata.core.gui.ui.claim_device_code_exchange_widget import Ui_ClaimDeviceCodeExchangeWidget
+from guardata.core.gui.ui.claim_device_provide_info_widget import Ui_ClaimDeviceProvideInfoWidget
+from guardata.core.gui.ui.claim_device_instructions_widget import Ui_ClaimDeviceInstructionsWidget
 
 
 logger = get_logger()

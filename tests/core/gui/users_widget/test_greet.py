@@ -7,14 +7,14 @@ from PyQt5 import QtCore
 from async_generator import asynccontextmanager
 from functools import partial
 
-from parsec.utils import start_task
-from parsec.core.gui.lang import translate
-from parsec.api.protocol import InvitationType, HumanHandle, InvitationDeletedReason
-from parsec.core.types import BackendInvitationAddr
-from parsec.core.backend_connection import backend_invited_cmds_factory
-from parsec.core.invite import claimer_retrieve_info
-from parsec.core.gui.users_widget import UserInvitationButton, UserButton
-from parsec.core.gui.greet_user_widget import (
+from guardata.utils import start_task
+from guardata.core.gui.lang import translate
+from guardata.api.protocol import InvitationType, HumanHandle, InvitationDeletedReason
+from guardata.core.types import BackendInvitationAddr
+from guardata.core.backend_connection import backend_invited_cmds_factory
+from guardata.core.invite import claimer_retrieve_info
+from guardata.core.gui.users_widget import UserInvitationButton, UserButton
+from guardata.core.gui.greet_user_widget import (
     GreetUserInstructionsWidget,
     GreetUserCheckInfoWidget,
     GreetUserCodeExchangeWidget,
@@ -27,10 +27,10 @@ from tests.common import customize_fixtures
 @pytest.fixture
 def catch_greet_user_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "parsec.core.gui.greet_user_widget.GreetUserInstructionsWidget",
-        "parsec.core.gui.greet_user_widget.GreetUserCheckInfoWidget",
-        "parsec.core.gui.greet_user_widget.GreetUserCodeExchangeWidget",
-        "parsec.core.gui.greet_user_widget.GreetUserWidget",
+        "guardata.core.gui.greet_user_widget.GreetUserInstructionsWidget",
+        "guardata.core.gui.greet_user_widget.GreetUserCheckInfoWidget",
+        "guardata.core.gui.greet_user_widget.GreetUserCodeExchangeWidget",
+        "guardata.core.gui.greet_user_widget.GreetUserWidget",
     )
 
 

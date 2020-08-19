@@ -1,25 +1,25 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 from typing import Tuple, List, Callable, Dict
 
 from collections import defaultdict
 from async_generator import asynccontextmanager
 
-from parsec.event_bus import EventBus
-from parsec.core.types import FileDescriptor, EntryID, LocalDevice
+from guardata.event_bus import EventBus
+from guardata.core.types import FileDescriptor, EntryID, LocalDevice
 
-from parsec.core.fs.remote_loader import RemoteLoader
-from parsec.core.fs.storage import WorkspaceStorage
-from parsec.core.fs.exceptions import FSLocalMissError, FSInvalidFileDescriptor, FSEndOfFileError
-from parsec.core.types import Chunk, LocalFileManifest
-from parsec.core.fs.workspacefs.file_operations import (
+from guardata.core.fs.remote_loader import RemoteLoader
+from guardata.core.fs.storage import WorkspaceStorage
+from guardata.core.fs.exceptions import FSLocalMissError, FSInvalidFileDescriptor, FSEndOfFileError
+from guardata.core.types import Chunk, LocalFileManifest
+from guardata.core.fs.workspacefs.file_operations import (
     prepare_read,
     prepare_write,
     prepare_resize,
     prepare_reshape,
 )
-from parsec.api.data import BlockAccess
+from guardata.api.data import BlockAccess
 
 
 __all__ = ("FSInvalidFileDescriptor", "FileTransactions")

@@ -3,14 +3,14 @@
 import click
 import platform
 
-from parsec.utils import trio_run
-from parsec.cli_utils import spinner, operation, cli_exception_handler, aprompt
-from parsec.api.protocol import HumanHandle
-from parsec.core.types import BackendOrganizationBootstrapAddr
-from parsec.core.backend_connection import apiv1_backend_anonymous_cmds_factory
-from parsec.core.local_device import save_device_with_password
-from parsec.core.invite import bootstrap_organization as do_bootstrap_organization
-from parsec.core.cli.utils import core_config_options
+from guardata.utils import trio_run
+from guardata.cli_utils import spinner, operation, cli_exception_handler, aprompt
+from guardata.api.protocol import HumanHandle
+from guardata.core.types import BackendOrganizationBootstrapAddr
+from guardata.core.backend_connection import apiv1_backend_anonymous_cmds_factory
+from guardata.core.local_device import save_device_with_password
+from guardata.core.invite import bootstrap_organization as do_bootstrap_organization
+from guardata.core.cli.utils import core_config_options
 
 
 async def _bootstrap_organization(config, addr, password, force):

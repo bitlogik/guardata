@@ -6,7 +6,7 @@ import psutil
 from PyQt5.QtCore import QUrl, QFileInfo, QSysInfo, QLocale
 from PyQt5.QtGui import QDesktopServices, QGuiApplication, QClipboard
 
-from parsec.api.protocol import DeviceName
+from guardata.api.protocol import DeviceName
 
 
 def open_file(path):
@@ -49,7 +49,7 @@ def is_process_running(pid):
     return psutil.pid_exists(pid)
 
 
-def parsec_instances_count():
+def guardata_instances_count():
     inst_count = 0
     for proc in psutil.process_iter():
         try:

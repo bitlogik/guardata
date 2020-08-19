@@ -3,9 +3,9 @@
 
 import click
 
-from parsec.utils import trio_run
-from parsec.cli_utils import spinner, cli_exception_handler, ok, ko
-from parsec.backend.postgresql import apply_migrations, retrieve_migrations
+from guardata.utils import trio_run
+from guardata.cli_utils import spinner, cli_exception_handler, ok, ko
+from guardata.backend.postgresql import apply_migrations, retrieve_migrations
 
 
 def _validate_postgres_db_url(ctx, param, value):

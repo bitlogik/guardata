@@ -5,22 +5,22 @@ import platform
 from uuid import UUID
 from functools import partial
 
-from parsec.utils import trio_run
-from parsec.cli_utils import cli_exception_handler, spinner, operation, aprompt
-from parsec.api.data import UserProfile
-from parsec.api.protocol import (
+from guardata.utils import trio_run
+from guardata.cli_utils import cli_exception_handler, spinner, operation, aprompt
+from guardata.api.data import UserProfile
+from guardata.api.protocol import (
     HumanHandle,
     InvitationStatus,
     InvitationType,
     InvitationDeletedReason,
 )
-from parsec.core.types import BackendInvitationAddr
-from parsec.core.backend_connection import (
+from guardata.core.types import BackendInvitationAddr
+from guardata.core.backend_connection import (
     backend_authenticated_cmds_factory,
     backend_invited_cmds_factory,
     BackendConnectionRefused,
 )
-from parsec.core.invite import (
+from guardata.core.invite import (
     InviteError,
     DeviceClaimInitialCtx,
     DeviceGreetInitialCtx,
@@ -28,8 +28,8 @@ from parsec.core.invite import (
     UserGreetInitialCtx,
     claimer_retrieve_info,
 )
-from parsec.core.local_device import save_device_with_password
-from parsec.core.cli.utils import core_config_and_device_options, core_config_options
+from guardata.core.local_device import save_device_with_password
+from guardata.core.cli.utils import core_config_and_device_options, core_config_options
 
 
 async def _invite_device(config, device):

@@ -5,9 +5,9 @@ from uuid import UUID
 from enum import Enum
 from marshmallow import ValidationError
 
-from parsec.crypto import VerifyKey, PublicKey
-from parsec.serde import fields, post_load
-from parsec.api.protocol import (
+from guardata.crypto import VerifyKey, PublicKey
+from guardata.serde import fields, post_load
+from guardata.api.protocol import (
     DeviceID,
     UserID,
     HumanHandle,
@@ -17,7 +17,7 @@ from parsec.api.protocol import (
     HumanHandleField,
     RealmRoleField,
 )
-from parsec.api.data.base import DataValidationError, BaseAPISignedData, BaseSignedDataSchema
+from guardata.api.data.base import DataValidationError, BaseAPISignedData, BaseSignedDataSchema
 import attr
 
 

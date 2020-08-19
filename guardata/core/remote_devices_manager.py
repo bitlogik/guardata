@@ -2,20 +2,20 @@
 
 from typing import Tuple, Optional, List
 
-from parsec.crypto import VerifyKey
-from parsec.api.protocol import DeviceID, UserID
-from parsec.api.data import (
+from guardata.crypto import VerifyKey
+from guardata.api.protocol import DeviceID, UserID
+from guardata.api.data import (
     UserCertificateContent,
     DeviceCertificateContent,
     RevokedUserCertificateContent,
 )
-from parsec.core.backend_connection import (
+from guardata.core.backend_connection import (
     BackendAuthenticatedCmds,
     APIV1_BackendAnonymousCmds,
     BackendConnectionError,
     BackendNotAvailable,
 )
-from parsec.core.trustchain import TrustchainContext, TrustchainError
+from guardata.core.trustchain import TrustchainContext, TrustchainError
 
 
 DEFAULT_CACHE_VALIDITY = 60 * 60  # 1h

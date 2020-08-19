@@ -4,16 +4,16 @@ from PyQt5.QtCore import pyqtSignal, Qt, QTimer
 from PyQt5.QtWidgets import QWidget, QMenu, QGraphicsDropShadowEffect, QLabel
 from PyQt5.QtGui import QColor
 
-from parsec.core.backend_connection import BackendNotAvailable, BackendConnectionError
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
-from parsec.core.gui.greet_device_widget import GreetDeviceWidget
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.custom_widgets import ensure_string_size
-from parsec.core.gui.custom_dialogs import show_error
-from parsec.core.gui.password_change_widget import PasswordChangeWidget
-from parsec.core.gui.flow_layout import FlowLayout
-from parsec.core.gui.ui.devices_widget import Ui_DevicesWidget
-from parsec.core.gui.ui.device_button import Ui_DeviceButton
+from guardata.core.backend_connection import BackendNotAvailable, BackendConnectionError
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui.greet_device_widget import GreetDeviceWidget
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.custom_widgets import ensure_string_size
+from guardata.core.gui.custom_dialogs import show_error
+from guardata.core.gui.password_change_widget import PasswordChangeWidget
+from guardata.core.gui.flow_layout import FlowLayout
+from guardata.core.gui.ui.devices_widget import Ui_DevicesWidget
+from guardata.core.gui.ui.device_button import Ui_DeviceButton
 
 
 class DeviceButton(QWidget, Ui_DeviceButton):

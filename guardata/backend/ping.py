@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     DeviceID,
     OrganizationID,
     HandshakeType,
     APIV1_HandshakeType,
     ping_serializer,
 )
-from parsec.backend.utils import catch_protocol_errors, api
+from guardata.backend.utils import catch_protocol_errors, api
 
 
 class BasePingComponent:

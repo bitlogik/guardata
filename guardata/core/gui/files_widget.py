@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import pathlib
 from uuid import UUID
 import trio
@@ -11,29 +11,29 @@ from structlog import get_logger
 from PyQt5.QtCore import Qt, pyqtSignal, QTimer
 from PyQt5.QtWidgets import QFileDialog, QWidget
 
-from parsec.core.types import FsPath, WorkspaceEntry, WorkspaceRole, BackendOrganizationFileLinkAddr
-from parsec.core.fs import WorkspaceFS, WorkspaceFSTimestamped
-from parsec.core.fs.exceptions import (
+from guardata.core.types import FsPath, WorkspaceEntry, WorkspaceRole, BackendOrganizationFileLinkAddr
+from guardata.core.fs import WorkspaceFS, WorkspaceFSTimestamped
+from guardata.core.fs.exceptions import (
     FSRemoteManifestNotFound,
     FSInvalidArgumentError,
     FSFileNotFoundError,
 )
 
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
-from parsec.core.gui import desktop
-from parsec.core.gui.file_items import FileType, TYPE_DATA_INDEX, UUID_DATA_INDEX
-from parsec.core.gui.custom_dialogs import (
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui import desktop
+from guardata.core.gui.file_items import FileType, TYPE_DATA_INDEX, UUID_DATA_INDEX
+from guardata.core.gui.custom_dialogs import (
     ask_question,
     show_error,
     get_text_input,
     show_info,
     GreyedDialog,
 )
-from parsec.core.gui.file_history_widget import FileHistoryWidget
-from parsec.core.gui.loading_widget import LoadingWidget
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.ui.files_widget import Ui_FilesWidget
-from parsec.core.types import DEFAULT_BLOCK_SIZE
+from guardata.core.gui.file_history_widget import FileHistoryWidget
+from guardata.core.gui.loading_widget import LoadingWidget
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.ui.files_widget import Ui_FilesWidget
+from guardata.core.types import DEFAULT_BLOCK_SIZE
 
 
 logger = get_logger()

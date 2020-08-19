@@ -7,8 +7,8 @@ from pathlib import Path
 from inspect import iscoroutinefunction
 from queue import Queue
 
-from parsec.utils import start_task
-from parsec.core.mountpoint import mountpoint_manager_factory
+from guardata.utils import start_task
+from guardata.core.mountpoint import mountpoint_manager_factory
 
 
 @pytest.fixture

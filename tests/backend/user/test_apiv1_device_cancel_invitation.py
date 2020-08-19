@@ -4,8 +4,8 @@ import pytest
 from pendulum import Pendulum
 import trio
 
-from parsec.backend.user import DeviceInvitation
-from parsec.api.protocol import (
+from guardata.backend.user import DeviceInvitation
+from guardata.api.protocol import (
     apiv1_device_cancel_invitation_serializer,
     apiv1_device_claim_serializer,
 )

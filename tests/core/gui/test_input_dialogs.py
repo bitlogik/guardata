@@ -3,7 +3,7 @@
 import pytest
 from PyQt5 import QtCore, QtWidgets
 
-from parsec.core.gui import custom_dialogs
+from guardata.core.gui import custom_dialogs
 
 
 @pytest.mark.gui

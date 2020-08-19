@@ -1,12 +1,12 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.backend_events import BackendEvent
 import pytest
 import trio
 from pendulum import Pendulum
 
-from parsec.crypto import PrivateKey
-from parsec.api.protocol import InvitationType
+from guardata.crypto import PrivateKey
+from guardata.api.protocol import InvitationType
 
 from tests.backend.common import (
     invite_1_claimer_wait_peer,

@@ -10,7 +10,7 @@ from pendulum import Pendulum
 from structlog import get_logger
 from async_generator import asynccontextmanager
 
-from parsec.core.types import (
+from guardata.core.types import (
     EntryID,
     BlockID,
     ChunkID,
@@ -19,12 +19,12 @@ from parsec.core.types import (
     BaseLocalManifest,
     LocalFileManifest,
 )
-from parsec.core.fs.exceptions import FSError, FSLocalMissError, FSInvalidFileDescriptor
+from guardata.core.fs.exceptions import FSError, FSLocalMissError, FSInvalidFileDescriptor
 
-from parsec.core.fs.storage.local_database import LocalDatabase
-from parsec.core.fs.storage.manifest_storage import ManifestStorage
-from parsec.core.fs.storage.chunk_storage import ChunkStorage, BlockStorage
-from parsec.core.fs.storage.version import WORKSPACE_DATA_STORAGE_NAME, WORKSPACE_CACHE_STORAGE_NAME
+from guardata.core.fs.storage.local_database import LocalDatabase
+from guardata.core.fs.storage.manifest_storage import ManifestStorage
+from guardata.core.fs.storage.chunk_storage import ChunkStorage, BlockStorage
+from guardata.core.fs.storage.version import WORKSPACE_DATA_STORAGE_NAME, WORKSPACE_CACHE_STORAGE_NAME
 
 
 logger = get_logger()

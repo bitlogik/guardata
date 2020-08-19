@@ -5,8 +5,8 @@ import errno
 import pytest
 import trio
 
-from parsec.core.mountpoint import mountpoint_manager_factory
-from parsec.test_utils import create_inconsistent_workspace
+from guardata.core.mountpoint import mountpoint_manager_factory
+from guardata.test_utils import create_inconsistent_workspace
 
 
 # winerror codes corresponding to ntstatus errors

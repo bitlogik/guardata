@@ -3,7 +3,7 @@
 import attr
 from typing import Union, Optional, List, Tuple
 
-from parsec.crypto import (
+from guardata.crypto import (
     generate_shared_secret_key,
     generate_nonce,
     SecretKey,
@@ -11,7 +11,7 @@ from parsec.crypto import (
     SigningKey,
     HashDigest,
 )
-from parsec.api.data import (
+from guardata.api.data import (
     DataError,
     SASCode,
     generate_sas_codes,
@@ -21,11 +21,11 @@ from parsec.api.data import (
     InviteDeviceData,
     InviteDeviceConfirmation,
 )
-from parsec.api.protocol import UserID, HumanHandle, InvitationType
-from parsec.core.local_device import generate_new_device
-from parsec.core.backend_connection import BackendInvitedCmds
-from parsec.core.types import LocalDevice, BackendOrganizationAddr
-from parsec.core.invite.exceptions import (
+from guardata.api.protocol import UserID, HumanHandle, InvitationType
+from guardata.core.local_device import generate_new_device
+from guardata.core.backend_connection import BackendInvitedCmds
+from guardata.core.types import LocalDevice, BackendOrganizationAddr
+from guardata.core.invite.exceptions import (
     InviteError,
     InviteNotFoundError,
     InviteAlreadyUsedError,

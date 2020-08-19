@@ -3,12 +3,12 @@
 import os
 import click
 
-from parsec.utils import trio_run
-from parsec.cli_utils import spinner, operation, cli_exception_handler
-from parsec.core.types import BackendOrganizationClaimDeviceAddr
-from parsec.core.cli.utils import core_config_options
-from parsec.core.local_device import save_device_with_password
-from parsec.core.invite_claim import claim_device as actual_claim_device
+from guardata.utils import trio_run
+from guardata.cli_utils import spinner, operation, cli_exception_handler
+from guardata.core.types import BackendOrganizationClaimDeviceAddr
+from guardata.core.cli.utils import core_config_options
+from guardata.core.local_device import save_device_with_password
+from guardata.core.invite_claim import claim_device as actual_claim_device
 
 
 async def _claim_device(config, organization_addr, new_device_id, token, password):

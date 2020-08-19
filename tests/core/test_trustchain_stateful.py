@@ -13,14 +13,14 @@ from hypothesis.stateful import (
     RuleBasedStateMachine,
 )
 
-from parsec.api.protocol import UserID
-from parsec.api.data import (
+from guardata.api.protocol import UserID
+from guardata.api.data import (
     UserProfile,
     UserCertificateContent,
     RevokedUserCertificateContent,
     DeviceCertificateContent,
 )
-from parsec.core.trustchain import TrustchainContext
+from guardata.core.trustchain import TrustchainContext
 
 
 @pytest.mark.slow

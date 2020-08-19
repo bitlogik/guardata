@@ -1,27 +1,27 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPixmap, QColor, QIcon
 from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QWidget, QMenu
 
-from parsec.core.gui.mount_widget import MountWidget
-from parsec.core.gui.users_widget import UsersWidget
-from parsec.core.gui.devices_widget import DevicesWidget
-from parsec.core.gui.menu_widget import MenuWidget
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.custom_widgets import Pixmap
-from parsec.core.gui.custom_dialogs import show_error
-from parsec.core.gui.ui.central_widget import Ui_CentralWidget
+from guardata.core.gui.mount_widget import MountWidget
+from guardata.core.gui.users_widget import UsersWidget
+from guardata.core.gui.devices_widget import DevicesWidget
+from guardata.core.gui.menu_widget import MenuWidget
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.custom_widgets import Pixmap
+from guardata.core.gui.custom_dialogs import show_error
+from guardata.core.gui.ui.central_widget import Ui_CentralWidget
 
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     HandshakeAPIVersionError,
     HandshakeRevokedDevice,
     HandshakeOrganizationExpired,
 )
-from parsec.core.backend_connection import BackendConnStatus
-from parsec.core.fs import (
+from guardata.core.backend_connection import BackendConnStatus
+from guardata.core.fs import (
     FSWorkspaceNoReadAccess,
     FSWorkspaceNoWriteAccess,
     FSWorkspaceInMaintenance,

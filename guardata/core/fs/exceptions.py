@@ -15,8 +15,8 @@ import os
 import errno
 import io
 
-from parsec.core.types import EntryID, ChunkID
-from parsec.core.fs.utils import ntstatus
+from guardata.core.types import EntryID, ChunkID
+from guardata.core.fs.utils import ntstatus
 
 from typing import Optional, Union
 

@@ -3,7 +3,7 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.gui.ui.loading_widget import Ui_LoadingWidget
+from guardata.core.gui.ui.loading_widget import Ui_LoadingWidget
 
 
 class LoadingWidget(QWidget, Ui_LoadingWidget):

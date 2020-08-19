@@ -1,16 +1,16 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import platform
 
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.gui import lang
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.custom_dialogs import show_info
-from parsec.core.gui.new_version import CheckNewVersion
-from parsec.core.gui.ui.settings_widget import Ui_SettingsWidget
+from guardata.core.gui import lang
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.custom_dialogs import show_info
+from guardata.core.gui.new_version import CheckNewVersion
+from guardata.core.gui.ui.settings_widget import Ui_SettingsWidget
 
 
 class SettingsWidget(QWidget, Ui_SettingsWidget):

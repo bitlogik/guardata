@@ -12,9 +12,9 @@ from hypothesis_trio.stateful import (
 )
 from pendulum import now as pendulum_now
 
-from parsec.api.protocol import RealmRole
-from parsec.api.data import RealmRoleCertificateContent
-from parsec.backend.realm import RealmGrantedRole
+from guardata.api.protocol import RealmRole
+from guardata.api.data import RealmRoleCertificateContent
+from guardata.backend.realm import RealmGrantedRole
 
 from tests.common import call_with_control
 

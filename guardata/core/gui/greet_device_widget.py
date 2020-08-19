@@ -6,15 +6,15 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.backend_connection import BackendNotAvailable, BackendConnectionError
-from parsec.core.invite import InviteError, InvitePeerResetError, InviteAlreadyUsedError
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui import desktop
-from parsec.core.gui.ui.greet_device_widget import Ui_GreetDeviceWidget
-from parsec.core.gui.ui.greet_device_code_exchange_widget import Ui_GreetDeviceCodeExchangeWidget
-from parsec.core.gui.ui.greet_device_instructions_widget import Ui_GreetDeviceInstructionsWidget
+from guardata.core.backend_connection import BackendNotAvailable, BackendConnectionError
+from guardata.core.invite import InviteError, InvitePeerResetError, InviteAlreadyUsedError
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui import desktop
+from guardata.core.gui.ui.greet_device_widget import Ui_GreetDeviceWidget
+from guardata.core.gui.ui.greet_device_code_exchange_widget import Ui_GreetDeviceCodeExchangeWidget
+from guardata.core.gui.ui.greet_device_instructions_widget import Ui_GreetDeviceInstructionsWidget
 
 
 class Greeter:

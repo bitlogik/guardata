@@ -7,12 +7,12 @@ from logging import DEBUG as LOG_LEVEL_DEBUG
 from async_generator import asynccontextmanager
 import h11
 
-from parsec._version import __version__ as parsec_version
-from parsec.backend.backend_events import BackendEvent
-from parsec.event_bus import EventBus
-from parsec.logging import get_log_level
-from parsec.api.transport import TransportError, TransportClosedByPeer, Transport
-from parsec.api.protocol import (
+from guardata._version import __version__ as guardata_version
+from guardata.backend.backend_events import BackendEvent
+from guardata.event_bus import EventBus
+from guardata.logging import get_log_level
+from guardata.api.transport import TransportError, TransportClosedByPeer, Transport
+from guardata.api.protocol import (
     packb,
     unpackb,
     ProtocolError,
@@ -20,13 +20,13 @@ from parsec.api.protocol import (
     InvalidMessageError,
     InvitationStatus,
 )
-from parsec.backend.utils import CancelledByNewRequest, collect_apis
-from parsec.backend.config import BackendConfig
-from parsec.backend.client_context import AuthenticatedClientContext, InvitedClientContext
-from parsec.backend.handshake import do_handshake
-from parsec.backend.memory import components_factory as mocked_components_factory
-from parsec.backend.postgresql import components_factory as postgresql_components_factory
-from parsec.backend.http import HTTPRequest
+from guardata.backend.utils import CancelledByNewRequest, collect_apis
+from guardata.backend.config import BackendConfig
+from guardata.backend.client_context import AuthenticatedClientContext, InvitedClientContext
+from guardata.backend.handshake import do_handshake
+from guardata.backend.memory import components_factory as mocked_components_factory
+from guardata.backend.postgresql import components_factory as postgresql_components_factory
+from guardata.backend.http import HTTPRequest
 
 
 logger = get_logger()
@@ -249,9 +249,9 @@ class BackendApp:
         rep = await self.http.handle_request(req)
 
         if self.config.debug:
-            server_header = f"parsec/{parsec_version} {h11.PRODUCT_ID}"
+            server_header = f"guardata/{guardata_version} {h11.PRODUCT_ID}"
         else:
-            server_header = "parsec"
+            server_header = "guardata"
         rep.headers.append(("server", server_header))
 
         # TODO: Specify reason ? (currently we have `HTTP/1.1 200 \r\n` instead of `HTTP/1.1 200 OK\r\n`)

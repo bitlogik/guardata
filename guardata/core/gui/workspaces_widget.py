@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 from uuid import UUID
 
 from PyQt5.QtCore import pyqtSignal, QTimer, Qt
@@ -8,34 +8,34 @@ from PyQt5.QtWidgets import QWidget, QLabel
 
 import pendulum
 
-from parsec.core.types import (
+from guardata.core.types import (
     WorkspaceEntry,
     FsPath,
     EntryID,
     EntryName,
     BackendOrganizationFileLinkAddr,
 )
-from parsec.core.fs import WorkspaceFS, WorkspaceFSTimestamped, FSBackendOfflineError
-from parsec.core.mountpoint.exceptions import (
+from guardata.core.fs import WorkspaceFS, WorkspaceFSTimestamped, FSBackendOfflineError
+from guardata.core.mountpoint.exceptions import (
     MountpointAlreadyMounted,
     MountpointNotMounted,
     MountpointError,
 )
 
-from parsec.core.gui.trio_thread import (
+from guardata.core.gui.trio_thread import (
     JobResultError,
     ThreadSafeQtSignal,
     QtToTrioJob,
     JobSchedulerNotAvailable,
 )
-from parsec.core.gui import desktop
-from parsec.core.gui.custom_dialogs import show_error, get_text_input, ask_question
-from parsec.core.gui.flow_layout import FlowLayout
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.workspace_button import WorkspaceButton
-from parsec.core.gui.timestamped_workspace_widget import TimestampedWorkspaceWidget
-from parsec.core.gui.ui.workspaces_widget import Ui_WorkspacesWidget
-from parsec.core.gui.workspace_sharing_widget import WorkspaceSharingWidget
+from guardata.core.gui import desktop
+from guardata.core.gui.custom_dialogs import show_error, get_text_input, ask_question
+from guardata.core.gui.flow_layout import FlowLayout
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.workspace_button import WorkspaceButton
+from guardata.core.gui.timestamped_workspace_widget import TimestampedWorkspaceWidget
+from guardata.core.gui.ui.workspaces_widget import Ui_WorkspacesWidget
+from guardata.core.gui.workspace_sharing_widget import WorkspaceSharingWidget
 
 
 async def _get_reencryption_needs(workspace_fs):

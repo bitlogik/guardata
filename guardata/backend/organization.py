@@ -7,9 +7,9 @@ from secrets import token_hex
 
 from pendulum import Pendulum
 
-from parsec.utils import timestamps_in_the_ballpark
-from parsec.crypto import VerifyKey
-from parsec.api.protocol import (
+from guardata.utils import timestamps_in_the_ballpark
+from guardata.crypto import VerifyKey
+from guardata.api.protocol import (
     OrganizationID,
     APIV1_HandshakeType,
     apiv1_organization_create_serializer,
@@ -18,10 +18,10 @@ from parsec.api.protocol import (
     apiv1_organization_status_serializer,
     apiv1_organization_update_serializer,
 )
-from parsec.api.data import UserCertificateContent, DeviceCertificateContent, DataError, UserProfile
-from parsec.backend.user import User, Device
-from parsec.backend.webhooks import WebhooksComponent
-from parsec.backend.utils import catch_protocol_errors, api
+from guardata.api.data import UserCertificateContent, DeviceCertificateContent, DataError, UserProfile
+from guardata.backend.user import User, Device
+from guardata.backend.webhooks import WebhooksComponent
+from guardata.backend.utils import catch_protocol_errors, api
 
 
 class OrganizationError(Exception):

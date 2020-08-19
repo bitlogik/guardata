@@ -10,7 +10,7 @@ from structlog import get_logger
 from pathlib import Path
 from enum import Enum
 
-from parsec.serde import (
+from guardata.serde import (
     BaseSchema,
     OneOfSchema,
     fields,
@@ -84,7 +84,7 @@ DEFAULT_WIN32_MUTEX_NAME = "guardata"
 @contextmanager
 def _install_win32_mutex(mutex_name: str):
 
-    from parsec.win32 import CreateMutex, CloseHandle, GetLastError, ERROR_ALREADY_EXISTS
+    from guardata.win32 import CreateMutex, CloseHandle, GetLastError, ERROR_ALREADY_EXISTS
 
     try:
         mutex = CreateMutex(None, False, mutex_name)

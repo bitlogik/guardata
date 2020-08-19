@@ -3,10 +3,10 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.gui.files_widget import FilesWidget
-from parsec.core.gui.workspaces_widget import WorkspacesWidget
+from guardata.core.gui.files_widget import FilesWidget
+from guardata.core.gui.workspaces_widget import WorkspacesWidget
 
-from parsec.core.gui.ui.mount_widget import Ui_MountWidget
+from guardata.core.gui.ui.mount_widget import Ui_MountWidget
 
 
 class MountWidget(QWidget, Ui_MountWidget):

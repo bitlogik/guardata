@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.event_bus import MetaEvent
+from guardata.backend.backend_events import BackendEvent
+from guardata.event_bus import MetaEvent
 import pytest
 import trio
 
-from parsec.api.protocol import DeviceID
-from parsec.api.data import UserCertificateContent, DeviceCertificateContent
-from parsec.core.invite_claim import (
+from guardata.api.protocol import DeviceID
+from guardata.api.data import UserCertificateContent, DeviceCertificateContent
+from guardata.core.invite_claim import (
     InviteClaimError,
     InviteClaimCryptoError,
     InviteClaimInvalidTokenError,
@@ -17,7 +17,7 @@ from parsec.core.invite_claim import (
     invite_and_create_device,
     claim_device,
 )
-from parsec.core.backend_connection import backend_authenticated_cmds_factory
+from guardata.core.backend_connection import backend_authenticated_cmds_factory
 
 
 async def _invite_and_claim(
@@ -209,7 +209,7 @@ async def test_invite_claim_multiple_devices_from_chained_user(running_backend, 
 
 @pytest.fixture
 def backend_claim_response_hook(monkeypatch):
-    from parsec.core.backend_connection.cmds import _send_cmd as vanilla_send_cmd
+    from guardata.core.backend_connection.cmds import _send_cmd as vanilla_send_cmd
 
     # Mock to patch user_claim response messages
     hooks = {"user_certificate": None, "device_certificate": None}
@@ -222,7 +222,7 @@ def backend_claim_response_hook(monkeypatch):
             ret["device_certificate"] = hooks["device_certificate"](ret["device_certificate"])
         return ret
 
-    monkeypatch.setattr("parsec.core.backend_connection.cmds._send_cmd", _mocked_send_cmd)
+    monkeypatch.setattr("guardata.core.backend_connection.cmds._send_cmd", _mocked_send_cmd)
 
     return hooks
 

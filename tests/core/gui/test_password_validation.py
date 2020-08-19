@@ -2,8 +2,8 @@
 
 import pytest
 
-from parsec.core.gui.password_validation import get_password_strength, get_password_strength_text
-from parsec.core.gui.lang import switch_language
+from guardata.core.gui.password_validation import get_password_strength, get_password_strength_text
+from guardata.core.gui.lang import switch_language
 
 
 @pytest.mark.gui

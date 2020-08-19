@@ -1,19 +1,19 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import pytest
 from unittest.mock import ANY
 from pendulum import Pendulum
 
-from parsec.api.data import UserManifest, WorkspaceEntry
-from parsec.core.types import WorkspaceRole, LocalUserManifest, EntryID
-from parsec.core.fs import (
+from guardata.api.data import UserManifest, WorkspaceEntry
+from guardata.core.types import WorkspaceRole, LocalUserManifest, EntryID
+from guardata.core.fs import (
     FSError,
     FSWorkspaceNotFoundError,
     FSBackendOfflineError,
     FSSharingNotAllowedError,
 )
-from parsec.backend.realm import RealmGrantedRole, RealmRole
+from guardata.backend.realm import RealmGrantedRole, RealmRole
 
 from tests.common import freeze_time, create_shared_workspace
 

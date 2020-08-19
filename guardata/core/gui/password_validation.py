@@ -3,9 +3,9 @@
 from zxcvbn import zxcvbn
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.gui.lang import translate as _
+from guardata.core.gui.lang import translate as _
 
-from parsec.core.gui.ui.password_strength_widget import Ui_PasswordStrengthWidget
+from guardata.core.gui.ui.password_strength_widget import Ui_PasswordStrengthWidget
 
 
 PASSWORD_CSS = {

@@ -7,11 +7,11 @@ from PyQt5 import QtCore
 from async_generator import asynccontextmanager
 from functools import partial
 
-from parsec.api.protocol import InvitationType, InvitationDeletedReason
-from parsec.core.types import BackendInvitationAddr
-from parsec.core.invite import DeviceGreetInitialCtx
-from parsec.core.gui.lang import translate
-from parsec.core.gui.claim_device_widget import (
+from guardata.api.protocol import InvitationType, InvitationDeletedReason
+from guardata.core.types import BackendInvitationAddr
+from guardata.core.invite import DeviceGreetInitialCtx
+from guardata.core.gui.lang import translate
+from guardata.core.gui.claim_device_widget import (
     ClaimDeviceCodeExchangeWidget,
     ClaimDeviceProvideInfoWidget,
     ClaimDeviceInstructionsWidget,
@@ -22,10 +22,10 @@ from parsec.core.gui.claim_device_widget import (
 @pytest.fixture
 def catch_claim_device_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "parsec.core.gui.claim_device_widget.ClaimDeviceCodeExchangeWidget",
-        "parsec.core.gui.claim_device_widget.ClaimDeviceProvideInfoWidget",
-        "parsec.core.gui.claim_device_widget.ClaimDeviceInstructionsWidget",
-        "parsec.core.gui.claim_device_widget.ClaimDeviceWidget",
+        "guardata.core.gui.claim_device_widget.ClaimDeviceCodeExchangeWidget",
+        "guardata.core.gui.claim_device_widget.ClaimDeviceProvideInfoWidget",
+        "guardata.core.gui.claim_device_widget.ClaimDeviceInstructionsWidget",
+        "guardata.core.gui.claim_device_widget.ClaimDeviceWidget",
     )
 
 
@@ -542,7 +542,7 @@ async def test_claim_device_invitation_cancelled(
 async def test_claim_device_with_bad_start_arg(
     event_bus, core_config, gui_factory, autoclose_dialog
 ):
-    bad_start_arg = "parsec://parsec.example.com/my_org?action=dummy&device_id=John%40pc&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss&token=1234ABCD"
+    bad_start_arg = "parsec://guardata.example.com/my_org?action=dummy&device_id=John%40pc&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss&token=1234ABCD"
 
     _ = await gui_factory(event_bus=event_bus, core_config=core_config, start_arg=bad_start_arg)
 

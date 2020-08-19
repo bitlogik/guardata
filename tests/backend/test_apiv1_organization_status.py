@@ -4,7 +4,7 @@ from unittest.mock import ANY
 from pendulum import Pendulum
 import pytest
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     apiv1_organization_status_serializer,
     apiv1_organization_update_serializer,
 )

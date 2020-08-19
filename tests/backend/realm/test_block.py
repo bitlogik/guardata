@@ -7,14 +7,14 @@ import pendulum
 from uuid import UUID, uuid4
 from hypothesis import given, strategies as st
 
-from parsec.backend.block import BlockTimeoutError
-from parsec.backend.realm import RealmGrantedRole
-from parsec.backend.raid5_blockstore import (
+from guardata.backend.block import BlockTimeoutError
+from guardata.backend.realm import RealmGrantedRole
+from guardata.backend.raid5_blockstore import (
     split_block_in_chunks,
     generate_checksum_chunk,
     rebuild_block_from_chunks,
 )
-from parsec.api.protocol import block_create_serializer, block_read_serializer, packb, RealmRole
+from guardata.api.protocol import block_create_serializer, block_read_serializer, packb, RealmRole
 
 from tests.backend.common import block_create, block_read
 
@@ -199,7 +199,7 @@ async def test_raid5_block_create_single_failure(
     # Should be notified of blockstore malfunction
     caplog.assert_occured(
         f"[warning  ] Cannot reach RAID5 blockstore #{failing_blockstore} to "
-        f"create block {BLOCK_ID} [parsec.backend.raid5_blockstore]"
+        f"create block {BLOCK_ID} [guardata.backend.raid5_blockstore]"
     )
 
 
@@ -224,15 +224,15 @@ async def test_raid5_block_create_multiple_failure(
     # Should be notified of blockstore malfunction
     caplog.assert_occured(
         f"[warning  ] Cannot reach RAID5 blockstore #{fb1} to "
-        f"create block {BLOCK_ID} [parsec.backend.raid5_blockstore]"
+        f"create block {BLOCK_ID} [guardata.backend.raid5_blockstore]"
     )
     caplog.assert_occured(
         f"[warning  ] Cannot reach RAID5 blockstore #{fb2} to "
-        f"create block {BLOCK_ID} [parsec.backend.raid5_blockstore]"
+        f"create block {BLOCK_ID} [guardata.backend.raid5_blockstore]"
     )
     caplog.assert_occured(
         f"[error    ] Block {BLOCK_ID} cannot be created: Too many failing "
-        "blockstores in the RAID5 cluster [parsec.backend.raid5_blockstore]"
+        "blockstores in the RAID5 cluster [guardata.backend.raid5_blockstore]"
     )
 
 
@@ -262,7 +262,7 @@ async def test_raid5_block_read_single_failure(
     # Should be notified of blockstore malfunction
     caplog.assert_occured(
         f"[warning  ] Cannot reach RAID5 blockstore #{failing_blockstore} to "
-        f"read block {block} [parsec.backend.raid5_blockstore]"
+        f"read block {block} [guardata.backend.raid5_blockstore]"
     )
 
 
@@ -302,15 +302,15 @@ async def test_raid5_block_read_multiple_failure(
     # Should be notified of blockstore malfunction
     caplog.assert_occured(
         f"[warning  ] Cannot reach RAID5 blockstore #{fb1} to "
-        f"read block {block} [parsec.backend.raid5_blockstore]"
+        f"read block {block} [guardata.backend.raid5_blockstore]"
     )
     caplog.assert_occured(
         f"[warning  ] Cannot reach RAID5 blockstore #{fb2} to "
-        f"read block {block} [parsec.backend.raid5_blockstore]"
+        f"read block {block} [guardata.backend.raid5_blockstore]"
     )
     caplog.assert_occured(
         f"[error    ] Block {block} cannot be read: Too many failing "
-        "blockstores in the RAID5 cluster [parsec.backend.raid5_blockstore]"
+        "blockstores in the RAID5 cluster [guardata.backend.raid5_blockstore]"
     )
 
 

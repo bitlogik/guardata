@@ -6,9 +6,9 @@ from hashlib import sha256
 from marshmallow import ValidationError
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.crypto import SecretKey, PrivateKey, SigningKey
-from parsec.serde import fields, post_load
-from parsec.api.protocol import (
+from guardata.crypto import SecretKey, PrivateKey, SigningKey
+from guardata.serde import fields, post_load
+from guardata.api.protocol import (
     UserID,
     DeviceID,
     OrganizationID,
@@ -16,9 +16,9 @@ from parsec.api.protocol import (
     DeviceIDField,
     HumanHandleField,
 )
-from parsec.api.data import BaseSchema, EntryID, EntryIDField, UserProfile, UserProfileField
-from parsec.core.types.base import BaseLocalData
-from parsec.core.types.backend_address import BackendOrganizationAddr, BackendOrganizationAddrField
+from guardata.api.data import BaseSchema, EntryID, EntryIDField, UserProfile, UserProfileField
+from guardata.core.types.base import BaseLocalData
+from guardata.core.types.backend_address import BackendOrganizationAddr, BackendOrganizationAddrField
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)

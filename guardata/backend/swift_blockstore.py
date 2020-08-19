@@ -23,9 +23,9 @@ pbr.version.VersionInfo = Mock(side_effect=side_effect)
 import swiftclient
 from swiftclient.exceptions import ClientException
 
-from parsec.api.protocol import OrganizationID
-from parsec.backend.blockstore import BaseBlockStoreComponent
-from parsec.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
+from guardata.api.protocol import OrganizationID
+from guardata.backend.blockstore import BaseBlockStoreComponent
+from guardata.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
 
 
 class SwiftBlockStoreComponent(BaseBlockStoreComponent):

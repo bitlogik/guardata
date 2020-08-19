@@ -3,7 +3,7 @@
 from typing import Tuple, cast, Optional, AsyncIterator
 from async_generator import asynccontextmanager
 
-from parsec.core.types import (
+from guardata.core.types import (
     EntryID,
     FsPath,
     WorkspaceRole,
@@ -15,10 +15,10 @@ from parsec.core.types import (
 )
 
 
-from parsec.core.core_events import CoreEvent
-from parsec.core.fs.workspacefs.file_transactions import FileTransactions
-from parsec.core.fs.utils import is_file_manifest, is_folder_manifest, is_folderish_manifest
-from parsec.core.fs.exceptions import (
+from guardata.core.core_events import CoreEvent
+from guardata.core.fs.workspacefs.file_transactions import FileTransactions
+from guardata.core.fs.utils import is_file_manifest, is_folder_manifest, is_folderish_manifest
+from guardata.core.fs.exceptions import (
     FSPermissionError,
     FSNoAccessError,
     FSReadOnlyError,

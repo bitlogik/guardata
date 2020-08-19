@@ -3,15 +3,15 @@
 import pytest
 import trio
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.api.protocol import RealmRole
-from parsec.core.backend_connection import (
+from guardata.backend.backend_events import BackendEvent
+from guardata.api.protocol import RealmRole
+from guardata.core.backend_connection import (
     BackendAuthenticatedConn,
     BackendConnStatus,
     BackendNotAvailable,
     BackendConnectionRefused,
 )
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 
 
 @pytest.fixture

@@ -5,7 +5,7 @@ import pendulum
 import uuid
 from collections import namedtuple
 
-from parsec.serde import (
+from guardata.serde import (
     packb,
     unpackb,
     BaseSchema,
@@ -15,7 +15,7 @@ from parsec.serde import (
     SerdeError,
 )
 
-from parsec.serde.schema import OneOfSchemaLegacy
+from guardata.serde.schema import OneOfSchemaLegacy
 
 from enum import Enum
 

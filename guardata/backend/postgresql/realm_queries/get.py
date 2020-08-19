@@ -4,9 +4,9 @@ import pendulum
 from uuid import UUID
 from typing import Dict, List
 
-from parsec.api.protocol import DeviceID, UserID, OrganizationID, RealmRole
-from parsec.backend.realm import RealmStatus, RealmAccessError, RealmNotFoundError
-from parsec.backend.postgresql.utils import (
+from guardata.api.protocol import DeviceID, UserID, OrganizationID, RealmRole
+from guardata.backend.realm import RealmStatus, RealmAccessError, RealmNotFoundError
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_organization_internal_id,
@@ -19,7 +19,7 @@ from parsec.backend.postgresql.utils import (
     STR_TO_REALM_ROLE,
     STR_TO_REALM_MAINTENANCE_TYPE,
 )
-from parsec.backend.realm import RealmStats
+from guardata.backend.realm import RealmStats
 
 _q_get_realm_status = Q(
     f"""

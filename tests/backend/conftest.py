@@ -5,8 +5,8 @@ from uuid import UUID, uuid4
 from pendulum import Pendulum, now as pendulum_now
 from async_generator import asynccontextmanager
 
-from parsec.api.data import RealmRoleCertificateContent
-from parsec.api.protocol import (
+from guardata.api.data import RealmRoleCertificateContent
+from guardata.api.protocol import (
     OrganizationID,
     RealmRole,
     InvitationType,
@@ -16,10 +16,10 @@ from parsec.api.protocol import (
     APIV1_AnonymousClientHandshake,
     APIV1_AdministrationClientHandshake,
 )
-from parsec.api.transport import Transport
-from parsec.backend.realm import RealmGrantedRole
-from parsec.backend.backend_events import BackendEvent
-from parsec.core.types import LocalDevice
+from guardata.api.transport import Transport
+from guardata.backend.realm import RealmGrantedRole
+from guardata.backend.backend_events import BackendEvent
+from guardata.core.types import LocalDevice
 
 from tests.common import FreezeTestOnTransportError
 

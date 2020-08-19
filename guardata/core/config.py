@@ -8,7 +8,7 @@ from typing import Optional, FrozenSet
 from pathlib import Path
 from structlog import get_logger
 
-from parsec.api.data import EntryID
+from guardata.api.data import EntryID
 
 
 logger = get_logger()

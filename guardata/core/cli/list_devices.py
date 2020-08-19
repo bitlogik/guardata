@@ -4,9 +4,9 @@ import os
 import click
 from pathlib import Path
 
-from parsec.core.config import get_default_config_dir
-from parsec.core.local_device import list_available_devices
-from parsec.core.cli.utils import format_available_devices
+from guardata.core.config import get_default_config_dir
+from guardata.core.local_device import list_available_devices
+from guardata.core.cli.utils import format_available_devices
 
 
 @click.command()

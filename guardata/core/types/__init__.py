@@ -2,11 +2,11 @@
 
 from typing import Union, NewType
 
-from parsec.api.data import EntryID, EntryIDField, EntryName, EntryNameField
+from guardata.api.data import EntryID, EntryIDField, EntryName, EntryNameField
 
-from parsec.core.types.base import FsPath
+from guardata.core.types.base import FsPath
 
-from parsec.core.types.backend_address import (
+from guardata.core.types.backend_address import (
     BackendAddr,
     BackendOrganizationAddr,
     BackendActionAddr,
@@ -17,14 +17,14 @@ from parsec.core.types.backend_address import (
     BackendOrganizationFileLinkAddr,
     BackendInvitationAddr,
 )
-from parsec.core.types.local_device import LocalDevice, UserInfo, DeviceInfo
-from parsec.core.types.manifest import (
+from guardata.core.types.local_device import LocalDevice, UserInfo, DeviceInfo
+from guardata.core.types.manifest import (
     DEFAULT_BLOCK_SIZE,
     LocalFileManifest,
     LocalFolderManifest,
     LocalWorkspaceManifest,
 )
-from parsec.core.types.manifest import (
+from guardata.core.types.manifest import (
     LocalUserManifest,
     BaseLocalManifest,
     WorkspaceEntry,
@@ -34,8 +34,8 @@ from parsec.core.types.manifest import (
     Chunk,
     ChunkID,
 )
-from parsec.api.data import WorkspaceManifest as RemoteWorkspaceManifest
-from parsec.api.data import FolderManifest as RemoteFolderManifest
+from guardata.api.data import WorkspaceManifest as RemoteWorkspaceManifest
+from guardata.api.data import FolderManifest as RemoteFolderManifest
 
 FileDescriptor = NewType("FileDescriptor", int)
 LocalFolderishManifests = Union[LocalFolderManifest, LocalWorkspaceManifest]

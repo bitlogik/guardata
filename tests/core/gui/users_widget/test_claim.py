@@ -7,12 +7,12 @@ from PyQt5 import QtCore
 from async_generator import asynccontextmanager
 from functools import partial
 
-from parsec.api.data import UserProfile
-from parsec.api.protocol import InvitationType, HumanHandle, InvitationDeletedReason
-from parsec.core.types import BackendInvitationAddr
-from parsec.core.invite import UserGreetInitialCtx
-from parsec.core.gui.lang import translate
-from parsec.core.gui.claim_user_widget import (
+from guardata.api.data import UserProfile
+from guardata.api.protocol import InvitationType, HumanHandle, InvitationDeletedReason
+from guardata.core.types import BackendInvitationAddr
+from guardata.core.invite import UserGreetInitialCtx
+from guardata.core.gui.lang import translate
+from guardata.core.gui.claim_user_widget import (
     ClaimUserFinalizeWidget,
     ClaimUserCodeExchangeWidget,
     ClaimUserProvideInfoWidget,
@@ -24,11 +24,11 @@ from parsec.core.gui.claim_user_widget import (
 @pytest.fixture
 def catch_claim_user_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "parsec.core.gui.claim_user_widget.ClaimUserFinalizeWidget",
-        "parsec.core.gui.claim_user_widget.ClaimUserCodeExchangeWidget",
-        "parsec.core.gui.claim_user_widget.ClaimUserProvideInfoWidget",
-        "parsec.core.gui.claim_user_widget.ClaimUserInstructionsWidget",
-        "parsec.core.gui.claim_user_widget.ClaimUserWidget",
+        "guardata.core.gui.claim_user_widget.ClaimUserFinalizeWidget",
+        "guardata.core.gui.claim_user_widget.ClaimUserCodeExchangeWidget",
+        "guardata.core.gui.claim_user_widget.ClaimUserProvideInfoWidget",
+        "guardata.core.gui.claim_user_widget.ClaimUserInstructionsWidget",
+        "guardata.core.gui.claim_user_widget.ClaimUserWidget",
     )
 
 
@@ -591,7 +591,7 @@ async def test_claim_user_invitation_cancelled(
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_claim_user_with_bad_start_arg(event_bus, core_config, gui_factory, autoclose_dialog):
-    bad_start_arg = "parsec://parsec.example.com/my_org?action=dummy&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss&token=1234ABCD&user_id=John"
+    bad_start_arg = "parsec://guardata.example.com/my_org?action=dummy&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss&token=1234ABCD&user_id=John"
 
     await gui_factory(event_bus=event_bus, core_config=core_config, start_arg=bad_start_arg)
 

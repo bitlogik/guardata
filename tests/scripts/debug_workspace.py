@@ -9,12 +9,12 @@ import trio
 from tqdm import tqdm
 from humanize import naturalsize
 
-from parsec.logging import configure_logging
-from parsec.core.logged_core import logged_core_factory
-from parsec.core.types import FsPath
-from parsec.core.config import get_default_config_dir, load_config
-from parsec.core.local_device import list_available_devices, load_device_with_password
-from parsec.test_utils import (
+from guardata.logging import configure_logging
+from guardata.core.logged_core import logged_core_factory
+from guardata.core.types import FsPath
+from guardata.core.config import get_default_config_dir, load_config
+from guardata.core.local_device import list_available_devices, load_device_with_password
+from guardata.test_utils import (
     make_workspace_dir_inconsistent as make_workspace_dir_inconsistent_helper,
     make_workspace_dir_complex_versions as make_workspace_dir_complex_versions_helper,
     make_workspace_dir_simple_versions as make_workspace_dir_simple_versions_helper,

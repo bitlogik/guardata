@@ -4,8 +4,8 @@ from typing import List, Tuple, Dict, Optional
 from uuid import UUID
 import pendulum
 
-from parsec.utils import timestamps_in_the_ballpark
-from parsec.api.protocol import (
+from guardata.utils import timestamps_in_the_ballpark
+from guardata.api.protocol import (
     DeviceID,
     OrganizationID,
     vlob_create_serializer,
@@ -16,7 +16,7 @@ from parsec.api.protocol import (
     vlob_maintenance_get_reencryption_batch_serializer,
     vlob_maintenance_save_reencryption_batch_serializer,
 )
-from parsec.backend.utils import catch_protocol_errors, api
+from guardata.backend.utils import catch_protocol_errors, api
 
 
 class VlobError(Exception):

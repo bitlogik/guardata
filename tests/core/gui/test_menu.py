@@ -3,7 +3,7 @@
 import pytest
 from PyQt5 import QtCore
 
-from parsec.core.gui.menu_widget import MenuWidget
+from guardata.core.gui.menu_widget import MenuWidget
 
 
 @pytest.mark.gui

@@ -7,9 +7,9 @@ from async_generator import asynccontextmanager
 from structlog import get_logger
 from typing import Optional, Union
 
-from parsec.crypto import SigningKey
-from parsec.api.transport import Transport, TransportError, TransportClosedByPeer
-from parsec.api.protocol import (
+from guardata.crypto import SigningKey
+from guardata.api.transport import Transport, TransportError, TransportClosedByPeer
+from guardata.api.protocol import (
     DeviceID,
     ProtocolError,
     HandshakeError,
@@ -20,13 +20,13 @@ from parsec.api.protocol import (
     APIV1_AuthenticatedClientHandshake,
     APIV1_AdministrationClientHandshake,
 )
-from parsec.core.types import (
+from guardata.core.types import (
     BackendAddr,
     BackendOrganizationAddr,
     BackendOrganizationBootstrapAddr,
     BackendInvitationAddr,
 )
-from parsec.core.backend_connection.exceptions import (
+from guardata.core.backend_connection.exceptions import (
     BackendConnectionError,
     BackendNotAvailable,
     BackendConnectionRefused,

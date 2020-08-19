@@ -4,9 +4,9 @@ import pytest
 import trio
 from uuid import uuid4
 
-from parsec.api.protocol import INVITED_CMDS, InvitationType
-from parsec.core.types import BackendInvitationAddr
-from parsec.core.backend_connection import (
+from guardata.api.protocol import INVITED_CMDS, InvitationType
+from guardata.core.types import BackendInvitationAddr
+from guardata.core.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     backend_invited_cmds_factory,

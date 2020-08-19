@@ -4,10 +4,10 @@ import pathlib
 import pytest
 from PyQt5 import QtCore, QtWidgets
 
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.file_items import FileType, NAME_DATA_INDEX, TYPE_DATA_INDEX
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.file_items import FileType, NAME_DATA_INDEX, TYPE_DATA_INDEX
 
-from parsec.test_utils import create_inconsistent_workspace
+from guardata.test_utils import create_inconsistent_workspace
 
 
 @pytest.fixture
@@ -45,7 +45,7 @@ async def logged_gui_with_workspace(
     assert add_button is not None
 
     monkeypatch.setattr(
-        "parsec.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: ("Workspace")
+        "guardata.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: ("Workspace")
     )
 
     async with aqtbot.wait_signals(
@@ -96,7 +96,7 @@ async def logged_gui_with_files(
     assert add_button is not None
 
     monkeypatch.setattr(
-        "parsec.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("dir1")
+        "guardata.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("dir1")
     )
     async with aqtbot.wait_signal(w_f.folder_create_success):
         await aqtbot.mouse_click(add_button, QtCore.Qt.LeftButton)
@@ -122,7 +122,7 @@ async def create_directories(logged_gui_with_workspace, aqtbot, monkeypatch, dir
 
     for dir_name in dir_names:
         monkeypatch.setattr(
-            "parsec.core.gui.files_widget.get_text_input", lambda *args, **kwargs: (dir_name)
+            "guardata.core.gui.files_widget.get_text_input", lambda *args, **kwargs: (dir_name)
         )
         async with aqtbot.wait_signal(w_f.folder_create_success):
             await aqtbot.mouse_click(add_button, QtCore.Qt.LeftButton)
@@ -183,7 +183,7 @@ async def test_create_dir_already_exists(
     add_button = w_f.button_create_folder
 
     monkeypatch.setattr(
-        "parsec.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Dir1")
+        "guardata.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Dir1")
     )
     async with aqtbot.wait_signals(
         [w_f.folder_create_success, w_f.folder_stat_success, w_f.fs_synced_qt], timeout=3000
@@ -338,7 +338,7 @@ async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
     )
     assert len(w_f.table_files.selected_files()) == 1
     monkeypatch.setattr(
-        "parsec.core.gui.files_widget.ask_question", lambda *args: _("ACTION_FILE_DELETE")
+        "guardata.core.gui.files_widget.ask_question", lambda *args: _("ACTION_FILE_DELETE")
     )
     async with aqtbot.wait_signals([w_f.delete_success, w_f.folder_stat_success]):
         w_f.table_files.delete_clicked.emit()
@@ -356,7 +356,7 @@ async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
     )
     assert len(w_f.table_files.selected_files()) == 2
     monkeypatch.setattr(
-        "parsec.core.gui.files_widget.ask_question", lambda *args: _("ACTION_FILE_DELETE_MULTIPLE")
+        "guardata.core.gui.files_widget.ask_question", lambda *args: _("ACTION_FILE_DELETE_MULTIPLE")
     )
     async with aqtbot.wait_signals([w_f.delete_success, w_f.folder_stat_success]):
         w_f.table_files.delete_clicked.emit()
@@ -392,7 +392,7 @@ async def test_rename_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
     )
     assert len(w_f.table_files.selected_files()) == 1
     monkeypatch.setattr(
-        "parsec.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Abcd")
+        "guardata.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Abcd")
     )
     # Rename Dir1 to Abcd
     async with aqtbot.wait_signals([w_f.rename_success, w_f.folder_stat_success]):
@@ -414,7 +414,7 @@ async def test_rename_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
     )
     assert len(w_f.table_files.selected_files()) == 2
     monkeypatch.setattr(
-        "parsec.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("NewName")
+        "guardata.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("NewName")
     )
     async with aqtbot.wait_signals([w_f.rename_success, w_f.folder_stat_success]):
         w_f.table_files.rename_clicked.emit()
@@ -462,7 +462,7 @@ async def test_rename_dir_already_exists(
     )
     assert len(w_f.table_files.selected_files()) == 1
     monkeypatch.setattr(
-        "parsec.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Dir2")
+        "guardata.core.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Dir2")
     )
     async with aqtbot.wait_signal(w_f.rename_error):
         w_f.table_files.rename_clicked.emit()

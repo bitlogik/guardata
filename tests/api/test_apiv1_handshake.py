@@ -3,8 +3,8 @@
 import pytest
 from unittest.mock import ANY
 
-from parsec.api.protocol.base import packb, unpackb, InvalidMessageError
-from parsec.api.protocol.handshake import (
+from guardata.api.protocol.base import packb, unpackb, InvalidMessageError
+from guardata.api.protocol.handshake import (
     HandshakeFailedChallenge,
     HandshakeBadIdentity,
     HandshakeBadAdministrationToken,
@@ -19,7 +19,7 @@ from parsec.api.protocol.handshake import (
     APIV1_HandshakeType,
     HandshakeOrganizationExpired,
 )
-from parsec.api.version import API_V1_VERSION, ApiVersion
+from guardata.api.version import API_V1_VERSION, ApiVersion
 
 
 def test_good_handshake(alice):

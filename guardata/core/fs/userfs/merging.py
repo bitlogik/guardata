@@ -2,9 +2,9 @@
 
 from typing import Tuple, Optional, Dict
 
-from parsec.api.data import UserManifest, WorkspaceEntry
-from parsec.core.types import LocalUserManifest
-from parsec.api.data.entry import EntryID
+from guardata.api.data import UserManifest, WorkspaceEntry
+from guardata.core.types import LocalUserManifest
+from guardata.api.data.entry import EntryID
 
 
 # TODO: replace sanity asserts by cleaner exceptions given they could be

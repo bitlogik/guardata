@@ -1,14 +1,14 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.backend_events import BackendEvent
 import attr
 from uuid import UUID
 from typing import List, Optional, Tuple
 from collections import defaultdict
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.api.protocol import OrganizationID, UserID, InvitationStatus, InvitationDeletedReason
-from parsec.backend.invite import (
+from guardata.api.protocol import OrganizationID, UserID, InvitationStatus, InvitationDeletedReason
+from guardata.backend.invite import (
     ConduitState,
     NEXT_CONDUIT_STATE,
     ConduitListenCtx,

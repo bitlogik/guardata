@@ -1,21 +1,21 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.postgresql.utils import (
+from guardata.backend.postgresql.utils import (
     Q,
     q_realm_internal_id,
     q_user_internal_id,
     q_organization_internal_id,
     STR_TO_REALM_ROLE,
 )
-from parsec.backend.realm import RealmRole
-from parsec.backend.vlob import (
+from guardata.backend.realm import RealmRole
+from guardata.backend.vlob import (
     VlobNotFoundError,
     VlobInMaintenanceError,
     VlobNotInMaintenanceError,
     VlobEncryptionRevisionError,
     VlobAccessError,
 )
-from parsec.backend.postgresql.realm_queries.maintenance import get_realm_status, RealmNotFoundError
+from guardata.backend.postgresql.realm_queries.maintenance import get_realm_status, RealmNotFoundError
 
 
 async def _check_realm(

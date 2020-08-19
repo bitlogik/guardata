@@ -2,10 +2,10 @@
 
 import trio
 
-from parsec.api.protocol import events_subscribe_serializer, events_listen_serializer, APIEvent
-from parsec.backend.utils import catch_protocol_errors, run_with_breathing_transport, api
-from parsec.backend.realm import BaseRealmComponent
-from parsec.backend.backend_events import BackendEvent
+from guardata.api.protocol import events_subscribe_serializer, events_listen_serializer, APIEvent
+from guardata.backend.utils import catch_protocol_errors, run_with_breathing_transport, api
+from guardata.backend.realm import BaseRealmComponent
+from guardata.backend.backend_events import BackendEvent
 from functools import partial
 
 

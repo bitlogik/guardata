@@ -5,7 +5,7 @@ from typing import Optional
 from structlog import get_logger
 from urllib.request import urlopen, Request, URLError
 
-from parsec.api.protocol import OrganizationID, DeviceID, organization_bootstrap_webhook_serializer
+from guardata.api.protocol import OrganizationID, DeviceID, organization_bootstrap_webhook_serializer
 
 
 logger = get_logger()

@@ -5,14 +5,14 @@ import trio
 from unittest.mock import ANY
 from pendulum import Pendulum
 
-from parsec.core import logged_core_factory
-from parsec.core.types import UserInfo, DeviceInfo
-from parsec.core.backend_connection import (
+from guardata.core import logged_core_factory
+from guardata.core.types import UserInfo, DeviceInfo
+from guardata.core.backend_connection import (
     BackendConnStatus,
     BackendNotAvailable,
     BackendNotFoundError,
 )
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 
 
 @pytest.mark.trio

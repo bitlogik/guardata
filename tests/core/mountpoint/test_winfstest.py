@@ -55,5 +55,5 @@ def test_winfstest(test_module_path, file_system_path, process_runner):
     if "GetSetSecurity" in test_module_path.name:
         pytest.xfail()
 
-    # Run winfstest with the parsec mountpoint
+    # Run winfstest with the guardata mountpoint
     winfstest.test_winfs(test_module_path, file_system_path, process_runner)

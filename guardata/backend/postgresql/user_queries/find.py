@@ -3,9 +3,9 @@ from pendulum import now as pendulum_now
 from functools import lru_cache
 from typing import Tuple, List, Optional
 
-from parsec.api.protocol import UserID, OrganizationID, HumanHandle
-from parsec.backend.user import HumanFindResultItem
-from parsec.backend.postgresql.utils import Q, q_organization_internal_id, query
+from guardata.api.protocol import UserID, OrganizationID, HumanHandle
+from guardata.backend.user import HumanFindResultItem
+from guardata.backend.postgresql.utils import Q, q_organization_internal_id, query
 
 _q_retrieve_active_human_by_email = Q(
     f"""

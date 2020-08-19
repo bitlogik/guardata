@@ -5,18 +5,18 @@ import click
 import sys
 import os
 
-from parsec._version import __version__
-from parsec.cli_utils import generate_not_available_cmd
+from guardata._version import __version__
+from guardata.cli_utils import generate_not_available_cmd
 
 
 try:
-    from parsec.core.cli import core_cmd
+    from guardata.core.cli import core_cmd
 except ImportError as exc:
     core_cmd = generate_not_available_cmd(exc)
 
 
 try:
-    from parsec.backend.cli import backend_cmd
+    from guardata.backend.cli import backend_cmd
 except ImportError as exc:
     backend_cmd = generate_not_available_cmd(exc)
 

@@ -3,10 +3,10 @@
 import pytest
 import trio
 
-from parsec.api.transport import Transport, BytesMessage, Ping, Pong
-from parsec.api.protocol import InvitationType
-from parsec.core.types import BackendInvitationAddr
-from parsec.core.backend_connection import (
+from guardata.api.transport import Transport, BytesMessage, Ping, Pong
+from guardata.api.protocol import InvitationType
+from guardata.core.types import BackendInvitationAddr
+from guardata.core.backend_connection import (
     backend_authenticated_cmds_factory,
     backend_invited_cmds_factory,
     apiv1_backend_authenticated_cmds_factory,

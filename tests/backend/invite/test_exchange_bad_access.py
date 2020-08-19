@@ -6,10 +6,10 @@ from uuid import uuid4
 from pendulum import Pendulum
 from functools import partial
 
-from parsec.crypto import PrivateKey
-from parsec.api.transport import TransportError
-from parsec.api.protocol import InvitationDeletedReason, InvitationType
-from parsec.backend.backend_events import BackendEvent
+from guardata.crypto import PrivateKey
+from guardata.api.transport import TransportError
+from guardata.api.protocol import InvitationDeletedReason, InvitationType
+from guardata.backend.backend_events import BackendEvent
 
 from tests.backend.common import (
     ping,

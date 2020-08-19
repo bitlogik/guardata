@@ -6,10 +6,10 @@ from uuid import UUID
 import pendulum
 from unittest.mock import ANY
 
-from parsec.api.data import WorkspaceEntry
-from parsec.core.core_events import CoreEvent
-from parsec.core.fs import FSWorkspaceNoReadAccess
-from parsec.core.gui.workspace_button import WorkspaceButton
+from guardata.api.data import WorkspaceEntry
+from guardata.core.core_events import CoreEvent
+from guardata.core.fs import FSWorkspaceNoReadAccess
+from guardata.core.gui.workspace_button import WorkspaceButton
 
 
 @pytest.mark.gui
@@ -27,7 +27,7 @@ async def test_add_workspace(
     # Add (or try to) a new workspace
     workspace_name = ".." if invalid_name else "Workspace1"
     monkeypatch.setattr(
-        "parsec.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: (workspace_name)
+        "guardata.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: (workspace_name)
     )
     await aqtbot.mouse_click(w_w.button_add_workspace, QtCore.Qt.LeftButton)
 
@@ -77,7 +77,7 @@ async def test_rename_workspace(
     # Now do the rename
     workspace_name = ".." if invalid_name else "Workspace1_Renamed"
     monkeypatch.setattr(
-        "parsec.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: (workspace_name)
+        "guardata.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: (workspace_name)
     )
     await aqtbot.mouse_click(wk_button.button_rename, QtCore.Qt.LeftButton)
 

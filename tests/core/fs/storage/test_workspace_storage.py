@@ -5,11 +5,11 @@ from pathlib import Path
 import pytest
 from pendulum import now
 
-from parsec.api.data.manifest import LOCAL_AUTHOR_LEGACY_PLACEHOLDER
-from parsec.core.fs.storage import WorkspaceStorage
-from parsec.core.fs import FSError, FSInvalidFileDescriptor
-from parsec.core.fs.exceptions import FSLocalMissError
-from parsec.core.types import (
+from guardata.api.data.manifest import LOCAL_AUTHOR_LEGACY_PLACEHOLDER
+from guardata.core.fs.storage import WorkspaceStorage
+from guardata.core.fs import FSError, FSInvalidFileDescriptor
+from guardata.core.fs.exceptions import FSLocalMissError
+from guardata.core.types import (
     DEFAULT_BLOCK_SIZE,
     LocalUserManifest,
     LocalWorkspaceManifest,
@@ -246,9 +246,6 @@ async def test_serialize_types(tmpdir, alice, workspace_id, type):
 )
 @pytest.mark.trio
 async def test_deserialize_legacy_types(tmpdir, alice, workspace_id, type):
-    # In parsec < 1.15, the author field used to be None for placeholders
-    # That means those manifests can still exist in the local storage
-    # However, they should not appear anywhere in the new code bases
 
     # Create legacy manifests to dump and save them in the local storage
     manifest = create_manifest(alice, type, use_legacy_none_author=True)

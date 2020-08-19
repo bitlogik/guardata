@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.invite.exceptions import (
+from guardata.core.invite.exceptions import (
     InviteError,
     InvitePeerResetError,
     InviteNotFoundError,
     InviteAlreadyUsedError,
     InviteAlreadyMemberError,
 )
-from parsec.core.invite.claimer import (
+from guardata.core.invite.claimer import (
     claimer_retrieve_info,
     BaseClaimInitialCtx,
     UserClaimInitialCtx,
@@ -21,7 +21,7 @@ from parsec.core.invite.claimer import (
     UserClaimInProgress3Ctx,
     DeviceClaimInProgress3Ctx,
 )
-from parsec.core.invite.greeter import (
+from guardata.core.invite.greeter import (
     BaseGreetInitialCtx,
     UserGreetInitialCtx,
     DeviceGreetInitialCtx,
@@ -36,7 +36,7 @@ from parsec.core.invite.greeter import (
     UserGreetInProgress4Ctx,
     DeviceGreetInProgress4Ctx,
 )
-from parsec.core.invite.organization import bootstrap_organization
+from guardata.core.invite.organization import bootstrap_organization
 
 
 __all__ = (

@@ -5,12 +5,12 @@ from uuid import UUID
 from enum import Enum
 from secrets import token_bytes
 
-from parsec.crypto import SigningKey, VerifyKey, CryptoError
-from parsec.serde import BaseSchema, OneOfSchema, fields, validate
-from parsec.api.protocol.base import ProtocolError, InvalidMessageError, serializer_factory
-from parsec.api.protocol.types import OrganizationID, DeviceID, OrganizationIDField, DeviceIDField
-from parsec.api.protocol.invite import InvitationType, InvitationTypeField
-from parsec.api.version import ApiVersion, API_V1_VERSION, API_V2_VERSION
+from guardata.crypto import SigningKey, VerifyKey, CryptoError
+from guardata.serde import BaseSchema, OneOfSchema, fields, validate
+from guardata.api.protocol.base import ProtocolError, InvalidMessageError, serializer_factory
+from guardata.api.protocol.types import OrganizationID, DeviceID, OrganizationIDField, DeviceIDField
+from guardata.api.protocol.invite import InvitationType, InvitationTypeField
+from guardata.api.version import ApiVersion, API_V1_VERSION, API_V2_VERSION
 
 
 class HandshakeError(ProtocolError):

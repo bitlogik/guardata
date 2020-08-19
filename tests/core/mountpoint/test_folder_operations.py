@@ -66,7 +66,7 @@ def oracle_rename(src, dst):
 @attr.s
 class PathElement:
     absolute_path = attr.ib()
-    parsec_root = attr.ib()
+    guardata_root = attr.ib()
     oracle_root = attr.ib()
 
     def is_workspace(self):
@@ -75,13 +75,13 @@ class PathElement:
     def to_oracle(self):
         return self.oracle_root / self.absolute_path[1:]
 
-    def to_parsec(self):
-        return self.parsec_root / self.absolute_path[1:]
+    def to_guardata(self):
+        return self.guardata_root / self.absolute_path[1:]
 
     def __truediv__(self, path):
         assert isinstance(path, str) and path[0] != "/"
         absolute_path = f"/{path}" if self.absolute_path == "/" else f"{self.absolute_path}/{path}"
-        return PathElement(absolute_path, self.parsec_root, self.oracle_root)
+        return PathElement(absolute_path, self.guardata_root, self.oracle_root)
 
 
 @pytest.mark.slow
@@ -105,7 +105,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
 
             async def _bootstrap(user_fs, mountpoint_manager):
                 wid = await user_fs.workspace_create("w")
-                self.parsec_root = await mountpoint_manager.mount_workspace(wid)
+                self.guardata_root = await mountpoint_manager.mount_workspace(wid)
 
             self.mountpoint_service = mountpoint_service_factory(_bootstrap)
 
@@ -117,7 +117,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
             (oracle_root / "w").mkdir()
             oracle_root.chmod(0o500)  # Also protect workspace from deletion
 
-            return PathElement(f"/", self.parsec_root, oracle_root / "w")
+            return PathElement(f"/", self.guardata_root, oracle_root / "w")
 
         def teardown(self):
             if hasattr(self, "mountpoint_service"):
@@ -134,7 +134,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                path.to_parsec().touch(exist_ok=False)
+                path.to_guardata().touch(exist_ok=False)
 
             return path
 
@@ -149,7 +149,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                path.to_parsec().mkdir(exist_ok=False)
+                path.to_guardata().mkdir(exist_ok=False)
 
             return path
 
@@ -162,7 +162,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                path.to_parsec().unlink()
+                path.to_guardata().unlink()
 
         @rule(path=Files, length=st.integers(min_value=0, max_value=16))
         def resize(self, path, length):
@@ -173,7 +173,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                os.truncate(path.to_parsec(), length)
+                os.truncate(path.to_guardata(), length)
 
         @rule(path=NonRootFolder)
         def rmdir(self, path):
@@ -184,7 +184,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                path.to_parsec().rmdir()
+                path.to_guardata().rmdir()
 
         def _move(self, src, dst_parent, dst_name):
             dst = dst_parent / dst_name
@@ -196,7 +196,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                src.to_parsec().rename(str(dst.to_parsec()))
+                src.to_guardata().rename(str(dst.to_guardata()))
 
             return dst
 
@@ -217,7 +217,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                children = {x.name for x in path.to_parsec().iterdir()}
+                children = {x.name for x in path.to_guardata().iterdir()}
 
             if not expected_exc:
                 assert children == expected_children

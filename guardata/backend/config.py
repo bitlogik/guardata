@@ -3,7 +3,7 @@
 import attr
 from typing import List, Optional
 
-from parsec.core.types import BackendAddr
+from guardata.core.types import BackendAddr
 
 
 class BaseBlockStoreConfig:

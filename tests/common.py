@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 from unittest.mock import Mock
 from inspect import iscoroutinefunction
 from contextlib import ExitStack, contextmanager
@@ -9,10 +9,10 @@ import trio
 import attr
 import pendulum
 
-from parsec.core.types import WorkspaceRole
-from parsec.core.logged_core import LoggedCore
-from parsec.core.fs import UserFS
-from parsec.api.transport import Transport, TransportError
+from guardata.core.types import WorkspaceRole
+from guardata.core.logged_core import LoggedCore
+from guardata.core.fs import UserFS
+from guardata.api.transport import Transport, TransportError
 
 
 def addr_with_device_subdomain(addr, device_id):

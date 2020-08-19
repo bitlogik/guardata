@@ -5,7 +5,7 @@ from uuid import UUID
 from typing import Optional, List, Tuple
 from pendulum import now as pendulum_now
 
-from parsec.crypto import (
+from guardata.crypto import (
     generate_shared_secret_key,
     generate_nonce,
     SecretKey,
@@ -14,7 +14,7 @@ from parsec.crypto import (
     PublicKey,
     VerifyKey,
 )
-from parsec.api.data import (
+from guardata.api.data import (
     DataError,
     SASCode,
     UserProfile,
@@ -27,10 +27,10 @@ from parsec.api.data import (
     DeviceCertificateContent,
     UserCertificateContent,
 )
-from parsec.api.protocol import DeviceName, DeviceID, HumanHandle, InvitationDeletedReason
-from parsec.core.backend_connection import BackendInvitedCmds
-from parsec.core.types import LocalDevice
-from parsec.core.invite.exceptions import (
+from guardata.api.protocol import DeviceName, DeviceID, HumanHandle, InvitationDeletedReason
+from guardata.core.backend_connection import BackendInvitedCmds
+from guardata.core.types import LocalDevice
+from guardata.core.invite.exceptions import (
     InviteError,
     InvitePeerResetError,
     InviteNotFoundError,

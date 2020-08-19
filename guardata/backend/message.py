@@ -3,9 +3,9 @@
 from typing import List, Tuple
 from pendulum import Pendulum
 
-from parsec.api.protocol import DeviceID, UserID, OrganizationID
-from parsec.api.protocol import message_get_serializer
-from parsec.backend.utils import catch_protocol_errors, api
+from guardata.api.protocol import DeviceID, UserID, OrganizationID
+from guardata.api.protocol import message_get_serializer
+from guardata.backend.utils import catch_protocol_errors, api
 
 
 class MessageError(Exception):

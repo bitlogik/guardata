@@ -4,10 +4,10 @@ from typing import Optional
 
 from pendulum import Pendulum
 
-from parsec.api.protocol import OrganizationID
-from parsec.crypto import VerifyKey
-from parsec.backend.user import BaseUserComponent, UserError, User, Device
-from parsec.backend.organization import (
+from guardata.api.protocol import OrganizationID
+from guardata.crypto import VerifyKey
+from guardata.backend.user import BaseUserComponent, UserError, User, Device
+from guardata.backend.organization import (
     BaseOrganizationComponent,
     Organization,
     OrganizationStats,
@@ -17,8 +17,8 @@ from parsec.backend.organization import (
     OrganizationNotFoundError,
     OrganizationFirstUserCreationError,
 )
-from parsec.backend.memory.vlob import MemoryVlobComponent
-from parsec.backend.memory.block import MemoryBlockComponent
+from guardata.backend.memory.vlob import MemoryVlobComponent
+from guardata.backend.memory.block import MemoryBlockComponent
 
 
 class MemoryOrganizationComponent(BaseOrganizationComponent):

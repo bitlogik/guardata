@@ -5,31 +5,31 @@ from typing import Dict, Optional, List, Tuple, cast
 
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.utils import timestamps_in_the_ballpark
-from parsec.crypto import HashDigest, CryptoError
-from parsec.api.protocol import UserID, DeviceID, RealmRole
-from parsec.api.data import (
+from guardata.utils import timestamps_in_the_ballpark
+from guardata.crypto import HashDigest, CryptoError
+from guardata.api.protocol import UserID, DeviceID, RealmRole
+from guardata.api.data import (
     DataError,
     BlockAccess,
     RealmRoleCertificateContent,
     BaseManifest as BaseRemoteManifest,
 )
 
-from parsec.core.types import EntryID, ChunkID
-from parsec.core.backend_connection import BackendConnectionError, BackendNotAvailable
-from parsec.api.data import (
+from guardata.core.types import EntryID, ChunkID
+from guardata.core.backend_connection import BackendConnectionError, BackendNotAvailable
+from guardata.api.data import (
     UserCertificateContent,
     DeviceCertificateContent,
     RevokedUserCertificateContent,
 )
-from parsec.core.remote_devices_manager import (
+from guardata.core.remote_devices_manager import (
     RemoteDevicesManagerBackendOfflineError,
     RemoteDevicesManagerError,
     RemoteDevicesManagerUserNotFoundError,
     RemoteDevicesManagerDeviceNotFoundError,
     RemoteDevicesManagerInvalidTrustchainError,
 )
-from parsec.core.fs.exceptions import (
+from guardata.core.fs.exceptions import (
     FSError,
     FSRemoteSyncError,
     FSRemoteOperationError,

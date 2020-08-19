@@ -2,12 +2,12 @@
 
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
-from parsec.core.gui.lang import translate as _, format_datetime
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog
-from parsec.core.gui.trio_thread import ThreadSafeQtSignal
-from parsec.core.gui.file_size import get_filesize
-from parsec.core.gui.ui.file_history_widget import Ui_FileHistoryWidget
-from parsec.core.gui.ui.file_history_button import Ui_FileHistoryButton
+from guardata.core.gui.lang import translate as _, format_datetime
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog
+from guardata.core.gui.trio_thread import ThreadSafeQtSignal
+from guardata.core.gui.file_size import get_filesize
+from guardata.core.gui.ui.file_history_widget import Ui_FileHistoryWidget
+from guardata.core.gui.ui.file_history_button import Ui_FileHistoryButton
 
 
 async def _do_workspace_version(version_lister, path, core):

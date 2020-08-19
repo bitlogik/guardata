@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     AUTHENTICATED_CMDS,
     INVITED_CMDS,
     APIV1_ADMINISTRATION_CMDS,

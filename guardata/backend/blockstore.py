@@ -2,8 +2,8 @@
 
 from uuid import UUID
 
-from parsec.api.protocol import OrganizationID
-from parsec.backend.config import BaseBlockStoreConfig
+from guardata.api.protocol import OrganizationID
+from guardata.backend.config import BaseBlockStoreConfig
 
 
 class BaseBlockStoreComponent:
@@ -28,12 +28,12 @@ def blockstore_factory(
     config: BaseBlockStoreConfig, postgresql_dbh=None
 ) -> BaseBlockStoreComponent:
     if config.type == "MOCKED":
-        from parsec.backend.memory import MemoryBlockStoreComponent
+        from guardata.backend.memory import MemoryBlockStoreComponent
 
         return MemoryBlockStoreComponent()
 
     elif config.type == "POSTGRESQL":
-        from parsec.backend.postgresql import PGBlockStoreComponent
+        from guardata.backend.postgresql import PGBlockStoreComponent
 
         if not postgresql_dbh:
             raise ValueError("PostgreSQL block store is not available")
@@ -41,7 +41,7 @@ def blockstore_factory(
 
     elif config.type == "S3":
         try:
-            from parsec.backend.s3_blockstore import S3BlockStoreComponent
+            from guardata.backend.s3_blockstore import S3BlockStoreComponent
 
             return S3BlockStoreComponent(
                 config.s3_region,
@@ -55,7 +55,7 @@ def blockstore_factory(
 
     elif config.type == "SWIFT":
         try:
-            from parsec.backend.swift_blockstore import SwiftBlockStoreComponent
+            from guardata.backend.swift_blockstore import SwiftBlockStoreComponent
 
             return SwiftBlockStoreComponent(
                 config.swift_authurl,
@@ -68,21 +68,21 @@ def blockstore_factory(
             raise ValueError("Swift block store is not available") from exc
 
     elif config.type == "RAID1":
-        from parsec.backend.raid1_blockstore import RAID1BlockStoreComponent
+        from guardata.backend.raid1_blockstore import RAID1BlockStoreComponent
 
         blocks = [blockstore_factory(subconf, postgresql_dbh) for subconf in config.blockstores]
 
         return RAID1BlockStoreComponent(blocks)
 
     elif config.type == "RAID0":
-        from parsec.backend.raid0_blockstore import RAID0BlockStoreComponent
+        from guardata.backend.raid0_blockstore import RAID0BlockStoreComponent
 
         blocks = [blockstore_factory(subconf, postgresql_dbh) for subconf in config.blockstores]
 
         return RAID0BlockStoreComponent(blocks)
 
     elif config.type == "RAID5":
-        from parsec.backend.raid5_blockstore import RAID5BlockStoreComponent
+        from guardata.backend.raid5_blockstore import RAID5BlockStoreComponent
 
         if len(config.blockstores) < 3:
             raise ValueError(f"RAID5 block store needs at least 3 nodes")

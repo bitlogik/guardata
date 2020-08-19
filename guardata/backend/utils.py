@@ -4,13 +4,13 @@ import trio
 from functools import wraps
 from typing import Union, List
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     ProtocolError,
     InvalidMessageError,
     HandshakeType,
     APIV1_HandshakeType,
 )
-from parsec.api.version import API_V1_VERSION, API_V2_VERSION
+from guardata.api.version import API_V1_VERSION, API_V2_VERSION
 
 
 ALLOWED_API_VERSIONS = {API_V1_VERSION.version, API_V2_VERSION.version}

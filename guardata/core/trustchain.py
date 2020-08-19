@@ -3,9 +3,9 @@
 from typing import Tuple, List, Sequence, Optional
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.crypto import VerifyKey
-from parsec.api.protocol import UserID, DeviceID
-from parsec.api.data import (
+from guardata.crypto import VerifyKey
+from guardata.api.protocol import UserID, DeviceID
+from guardata.api.data import (
     DataError,
     UserCertificateContent,
     UserProfile,

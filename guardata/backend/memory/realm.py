@@ -5,10 +5,10 @@ import pendulum
 from uuid import UUID
 from typing import List, Dict, Optional
 
-from parsec.api.data import UserProfile
-from parsec.api.protocol import DeviceID, UserID, OrganizationID
-from parsec.backend.backend_events import BackendEvent
-from parsec.backend.realm import (
+from guardata.api.data import UserProfile
+from guardata.api.protocol import DeviceID, UserID, OrganizationID
+from guardata.backend.backend_events import BackendEvent
+from guardata.backend.realm import (
     MaintenanceType,
     RealmGrantedRole,
     BaseRealmComponent,
@@ -26,10 +26,10 @@ from parsec.backend.realm import (
     RealmInMaintenanceError,
     RealmNotInMaintenanceError,
 )
-from parsec.backend.user import BaseUserComponent, UserNotFoundError
-from parsec.backend.message import BaseMessageComponent
-from parsec.backend.memory.vlob import MemoryVlobComponent
-from parsec.backend.memory.block import MemoryBlockComponent
+from guardata.backend.user import BaseUserComponent, UserNotFoundError
+from guardata.backend.message import BaseMessageComponent
+from guardata.backend.memory.vlob import MemoryVlobComponent
+from guardata.backend.memory.block import MemoryBlockComponent
 
 
 @attr.s

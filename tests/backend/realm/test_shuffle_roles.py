@@ -15,8 +15,8 @@ from hypothesis_trio.stateful import (
 from unittest.mock import ANY
 from pendulum import now as pendulum_now
 
-from parsec.api.data import RealmRoleCertificateContent
-from parsec.api.protocol import RealmRole
+from guardata.api.data import RealmRoleCertificateContent
+from guardata.api.protocol import RealmRole
 
 from tests.common import call_with_control
 from tests.backend.common import realm_get_role_certificates, realm_update_roles

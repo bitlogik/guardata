@@ -16,8 +16,8 @@ TOKEN = "CCDCC27B6108438D99EF8AF5E847C3BB"
 DEVICE = "alice@dev1"
 PASSWORD = "P2ssxdor!s3."
 
-GUARDATA_CLI = "python -m parsec.cli"
-GUARDATA_PROFILE_CLI = "python -m cProfile -o bench.prof -m parsec.cli"
+GUARDATA_CLI = "python -m guardata.cli"
+GUARDATA_PROFILE_CLI = "python -m cProfile -o bench.prof -m guardata.cli"
 
 
 def run_cmd(cmd):

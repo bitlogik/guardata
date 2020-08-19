@@ -2,9 +2,9 @@
 
 from typing import Tuple
 
-from parsec.api.protocol import OrganizationID, UserID, DeviceID, HumanHandle
-from parsec.backend.user import User, Device, Trustchain, UserNotFoundError, GetUserAndDevicesResult
-from parsec.backend.postgresql.utils import (
+from guardata.api.protocol import OrganizationID, UserID, DeviceID, HumanHandle
+from guardata.backend.user import User, Device, Trustchain, UserNotFoundError, GetUserAndDevicesResult
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_organization_internal_id,

@@ -13,8 +13,8 @@ from hypothesis_trio.stateful import (
     multiple,
 )
 
-from parsec.core.types import WorkspaceRole
-from parsec.core.fs import FSWorkspaceNotFoundError, FSWorkspaceNoAccess
+from guardata.core.types import WorkspaceRole
+from guardata.core.fs import FSWorkspaceNotFoundError, FSWorkspaceNoAccess
 
 from tests.common import call_with_control
 
@@ -65,9 +65,9 @@ def test_sync_monitor_stateful(
     async def mockpoint_sleep():
         await trio.sleep(0.01)
 
-    monkeypatch.setattr("parsec.core.sync_monitor.freeze_sync_monitor_mockpoint", mockpoint_sleep)
+    monkeypatch.setattr("guardata.core.sync_monitor.freeze_sync_monitor_mockpoint", mockpoint_sleep)
     monkeypatch.setattr(
-        "parsec.core.messages_monitor.freeze_messages_monitor_mockpoint", mockpoint_sleep
+        "guardata.core.messages_monitor.freeze_messages_monitor_mockpoint", mockpoint_sleep
     )
 
     class SyncMonitorStateful(TrioAsyncioRuleBasedStateMachine):

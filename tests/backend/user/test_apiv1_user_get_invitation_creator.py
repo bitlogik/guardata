@@ -2,8 +2,8 @@
 
 import pytest
 
-from parsec.api.protocol import apiv1_user_get_invitation_creator_serializer
-from parsec.backend.user import UserInvitation, INVITATION_VALIDITY
+from guardata.api.protocol import apiv1_user_get_invitation_creator_serializer
+from guardata.backend.user import UserInvitation, INVITATION_VALIDITY
 
 from tests.common import freeze_time
 

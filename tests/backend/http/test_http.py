@@ -7,9 +7,9 @@ from uuid import uuid4
 from tests.common import customize_fixtures
 import h11
 
-from parsec import __version__ as parsec_version
-from parsec.api.protocol import OrganizationID, InvitationType
-from parsec.core.types.backend_address import BackendInvitationAddr
+from guardata import __version__ as guardata_version
+from guardata.api.protocol import OrganizationID, InvitationType
+from guardata.core.types.backend_address import BackendInvitationAddr
 
 
 @pytest.fixture
@@ -94,13 +94,13 @@ async def test_default_response_headers(backend_factory, server_factory, backend
             await stream.send_all(req)
             rep = await stream.receive_some()
             if debug:
-                val = b"server: parsec/%s %s\r\n" % (
-                    parsec_version.encode(),
+                val = b"server: guardata/%s %s\r\n" % (
+                    guardata_version.encode(),
                     h11.PRODUCT_ID.encode(),
                 )
                 assert val in rep
             else:
-                assert b"server: parsec\r\n" in rep
+                assert b"server: guardata\r\n" in rep
             assert b"content-type: text/html;charset=utf-8\r\n" in rep
             assert b"date: " in rep
 

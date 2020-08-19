@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.api.data.base import (
+from guardata.api.data.base import (
     DataError,
     BaseData,
     BaseAPIData,
@@ -9,8 +9,8 @@ from parsec.api.data.base import (
     BaseAPISignedData,
     BaseSignedDataSchema,
 )
-from parsec.api.data.entry import EntryID, EntryIDField, EntryName, EntryNameField
-from parsec.api.data.certif import (
+from guardata.api.data.entry import EntryID, EntryIDField, EntryName, EntryNameField
+from guardata.api.data.certif import (
     UserProfile,
     UserProfileField,
     UserCertificateContent,
@@ -18,12 +18,12 @@ from parsec.api.data.certif import (
     RevokedUserCertificateContent,
     RealmRoleCertificateContent,
 )
-from parsec.api.data.invite_claim import (
+from guardata.api.data.invite_claim import (
     APIV1_UserClaimContent,
     APIV1_DeviceClaimContent,
     APIV1_DeviceClaimAnswerContent,
 )
-from parsec.api.data.invite import (
+from guardata.api.data.invite import (
     SASCode,
     generate_sas_codes,
     generate_sas_code_candidates,
@@ -32,14 +32,14 @@ from parsec.api.data.invite import (
     InviteDeviceData,
     InviteDeviceConfirmation,
 )
-from parsec.api.data.message import (
+from guardata.api.data.message import (
     BaseMessageContent,
     SharingGrantedMessageContent,
     SharingReencryptedMessageContent,
     SharingRevokedMessageContent,
     PingMessageContent,
 )
-from parsec.api.data.manifest import (
+from guardata.api.data.manifest import (
     BlockID,
     BlockIDField,
     BlockAccess,

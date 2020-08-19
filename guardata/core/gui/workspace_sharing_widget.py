@@ -5,17 +5,17 @@ from collections import namedtuple
 from PyQt5.QtCore import QCoreApplication, pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.types import UserInfo
-from parsec.core.fs import FSError, FSBackendOfflineError
-from parsec.core.types import WorkspaceRole
-from parsec.core.backend_connection import BackendNotAvailable
+from guardata.core.types import UserInfo
+from guardata.core.fs import FSError, FSBackendOfflineError
+from guardata.core.types import WorkspaceRole
+from guardata.core.backend_connection import BackendNotAvailable
 
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
 
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.ui.workspace_sharing_widget import Ui_WorkspaceSharingWidget
-from parsec.core.gui.ui.sharing_widget import Ui_SharingWidget
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.ui.workspace_sharing_widget import Ui_WorkspaceSharingWidget
+from guardata.core.gui.ui.sharing_widget import Ui_SharingWidget
 
 
 NOT_SHARED_KEY = "NOT_SHARED"

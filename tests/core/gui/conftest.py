@@ -11,16 +11,16 @@ from concurrent import futures
 from importlib import import_module
 from PyQt5 import QtCore
 
-from parsec.event_bus import EventBus
-from parsec import __version__ as parsec_version
-from parsec.core.local_device import save_device_with_password
-from parsec.core.gui.main_window import MainWindow
-from parsec.core.gui.workspaces_widget import WorkspaceButton
-from parsec.core.gui.trio_thread import QtToTrioJobScheduler
-from parsec.core.gui.login_widget import LoginWidget, LoginPasswordInputWidget, LoginAccountsWidget
-from parsec.core.gui.central_widget import CentralWidget
-from parsec.core.gui.lang import switch_language
-from parsec.core.gui.parsec_application import guardataApp
+from guardata.event_bus import EventBus
+from guardata import __version__ as guardata_version
+from guardata.core.local_device import save_device_with_password
+from guardata.core.gui.main_window import MainWindow
+from guardata.core.gui.workspaces_widget import WorkspaceButton
+from guardata.core.gui.trio_thread import QtToTrioJobScheduler
+from guardata.core.gui.login_widget import LoginWidget, LoginPasswordInputWidget, LoginAccountsWidget
+from guardata.core.gui.central_widget import CentralWidget
+from guardata.core.gui.lang import switch_language
+from guardata.core.gui.guardata_application import guardataApp
 
 
 class ThreadedTrioTestRunner:
@@ -230,7 +230,7 @@ def autoclose_dialog(monkeypatch):
             spy.dialogs.append((dialog.label_title.text(), dialog.center_widget))
 
     monkeypatch.setattr(
-        "parsec.core.gui.custom_dialogs.GreyedDialog.exec_", _dialog_exec, raising=False
+        "guardata.core.gui.custom_dialogs.GreyedDialog.exec_", _dialog_exec, raising=False
     )
     return spy
 
@@ -278,7 +278,7 @@ def gui_factory(
         core_config = core_config.evolve(
             gui_check_version_at_startup=False,
             gui_first_launch=False,
-            gui_last_version=parsec_version,
+            gui_last_version=guardata_version,
             mountpoint_enabled=True,
             gui_language="en",
             gui_show_confined=False,
@@ -293,7 +293,7 @@ def gui_factory(
 
             switch_language(core_config, "en")
             monkeypatch.setattr(
-                "parsec.core.gui.main_window.list_available_devices",
+                "guardata.core.gui.main_window.list_available_devices",
                 lambda *args, **kwargs: (["a"]),
             )
             main_w = testing_main_window_cls(

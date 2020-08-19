@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.backend_connection import cmds
-from parsec.core.backend_connection.exceptions import BackendNotAvailable
+from guardata.core.backend_connection import cmds
+from guardata.core.backend_connection.exceptions import BackendNotAvailable
 
 
 def expose_cmds(name: str, apiv1: bool = False):

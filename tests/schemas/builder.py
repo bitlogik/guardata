@@ -4,15 +4,15 @@ import json
 import pkgutil
 import importlib
 
-from parsec.serde import BaseSerializer, JSONSerializer, MsgpackSerializer, ZipMsgpackSerializer
-from parsec.serde.fields import List, Map, Tuple, Nested, CheckedConstant, EnumCheckedConstant
+from guardata.serde import BaseSerializer, JSONSerializer, MsgpackSerializer, ZipMsgpackSerializer
+from guardata.serde.fields import List, Map, Tuple, Nested, CheckedConstant, EnumCheckedConstant
 
-from parsec.api.data.base import BaseData, BaseAPIData, BaseSignedData, BaseAPISignedData
-from parsec.api.data.manifest import BaseManifest
-from parsec.api.data.message import BaseMessageContent
+from guardata.api.data.base import BaseData, BaseAPIData, BaseSignedData, BaseAPISignedData
+from guardata.api.data.manifest import BaseManifest
+from guardata.api.data.message import BaseMessageContent
 
-from parsec.core.types.base import BaseLocalData
-from parsec.core.types.manifest import BaseLocalManifest
+from guardata.core.types.base import BaseLocalData
+from guardata.core.types.manifest import BaseLocalManifest
 
 
 _SERIALIZER_TO_STR = {
@@ -90,7 +90,7 @@ def collect_data_classes_from_module(mod):
             continue
         # Ignore imported classes (avoid to populate current module collection
         # with extenal imported schema.
-        # Example: Avoid to add imported api schemas while generating parsec.core.types)
+        # Example: Avoid to add imported api schemas while generating guardata.core.types)
         if not item.__module__.startswith(mod.__name__):
             continue
         data_classes.append(item)
@@ -98,16 +98,16 @@ def collect_data_classes_from_module(mod):
 
 
 def generate_api_data_specs():
-    import parsec.api.data
+    import guardata.api.data
 
-    data_classes = collect_data_classes_from_module(parsec.api.data)
+    data_classes = collect_data_classes_from_module(guardata.api.data)
     return {data_cls.__name__: data_class_to_spec(data_cls) for data_cls in data_classes}
 
 
 def generate_core_data_specs():
-    import parsec.core.types
+    import guardata.core.types
 
-    package = parsec.core.types
+    package = guardata.core.types
 
     data_classes = set()
     for submod_info in pkgutil.walk_packages(package.__path__, prefix=f"{package.__name__}."):

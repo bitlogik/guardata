@@ -25,11 +25,11 @@ from typing import List, Tuple, NamedTuple, Optional, Union, cast, Dict
 from pendulum import Pendulum
 from collections import defaultdict
 
-from parsec.api.protocol import DeviceID
-from parsec.core.types import FsPath, EntryID
-from parsec.core.fs.utils import is_file_manifest, is_folder_manifest, is_workspace_manifest
-from parsec.core.fs.exceptions import FSRemoteManifestNotFound
-from parsec.api.data import FileManifest, UserManifest, FolderManifest, WorkspaceManifest
+from guardata.api.protocol import DeviceID
+from guardata.core.types import FsPath, EntryID
+from guardata.core.fs.utils import is_file_manifest, is_folder_manifest, is_workspace_manifest
+from guardata.core.fs.exceptions import FSRemoteManifestNotFound
+from guardata.api.data import FileManifest, UserManifest, FolderManifest, WorkspaceManifest
 
 RemoteManifest = Union[FileManifest, FolderManifest, UserManifest, WorkspaceManifest]
 

@@ -1,20 +1,20 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import trio
 from trio.hazmat import current_clock
 import math
 from structlog import get_logger
 
-from parsec.core.types import EntryID, WorkspaceRole
-from parsec.core.fs import (
+from guardata.core.types import EntryID, WorkspaceRole
+from guardata.core.fs import (
     FSBackendOfflineError,
     FSWorkspaceNotFoundError,
     FSWorkspaceNoReadAccess,
     FSWorkspaceNoWriteAccess,
     FSWorkspaceInMaintenance,
 )
-from parsec.core.backend_connection import BackendConnectionError, BackendNotAvailable
+from guardata.core.backend_connection import BackendConnectionError, BackendNotAvailable
 
 
 logger = get_logger()

@@ -3,8 +3,8 @@
 import pendulum
 from typing import Tuple, List
 
-from parsec.api.protocol import UserID, DeviceID, OrganizationID
-from parsec.backend.user import (
+from guardata.api.protocol import UserID, DeviceID, OrganizationID
+from guardata.backend.user import (
     BaseUserComponent,
     User,
     Device,
@@ -14,8 +14,8 @@ from parsec.backend.user import (
     DeviceInvitation,
     HumanFindResultItem,
 )
-from parsec.backend.postgresql.handler import PGHandler
-from parsec.backend.postgresql.user_queries import (
+from guardata.backend.postgresql.handler import PGHandler
+from guardata.backend.postgresql.user_queries import (
     query_create_user,
     query_create_device,
     query_find,

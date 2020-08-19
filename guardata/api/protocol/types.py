@@ -6,7 +6,7 @@ from uuid import uuid4
 from collections import namedtuple
 from email.utils import parseaddr
 
-from parsec.serde import fields
+from guardata.serde import fields
 
 
 def _bytes_size(txt: str) -> int:

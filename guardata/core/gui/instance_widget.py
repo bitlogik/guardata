@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import trio
 
 from structlog import get_logger
@@ -8,22 +8,22 @@ from structlog import get_logger
 from PyQt5.QtCore import pyqtSignal, pyqtSlot
 from PyQt5.QtWidgets import QWidget, QVBoxLayout, QApplication
 
-from parsec.core import logged_core_factory
-from parsec.api.protocol import HandshakeRevokedDevice
-from parsec.core.local_device import LocalDeviceError, load_device_with_password
-from parsec.core.mountpoint import (
+from guardata.core import logged_core_factory
+from guardata.api.protocol import HandshakeRevokedDevice
+from guardata.core.local_device import LocalDeviceError, load_device_with_password
+from guardata.core.mountpoint import (
     MountpointConfigurationError,
     MountpointDriverCrash,
     MountpointFuseNotAvailable,
     MountpointWinfspNotAvailable,
 )
 
-from parsec.core.gui.trio_thread import QtToTrioJobScheduler, ThreadSafeQtSignal
-from parsec.core.gui.parsec_application import guardataApp
-from parsec.core.gui.custom_dialogs import show_error
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.login_widget import LoginWidget
-from parsec.core.gui.central_widget import CentralWidget
+from guardata.core.gui.trio_thread import QtToTrioJobScheduler, ThreadSafeQtSignal
+from guardata.core.gui.guardata_application import guardataApp
+from guardata.core.gui.custom_dialogs import show_error
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.login_widget import LoginWidget
+from guardata.core.gui.central_widget import CentralWidget
 
 
 logger = get_logger()

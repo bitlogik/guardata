@@ -1,8 +1,8 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.mountpoint.manager import mountpoint_manager_factory
+from guardata.core.mountpoint.manager import mountpoint_manager_factory
 
-from parsec.core.mountpoint.exceptions import (
+from guardata.core.mountpoint.exceptions import (
     MountpointError,
     MountpointDriverCrash,
     MountpointAlreadyMounted,

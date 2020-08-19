@@ -14,8 +14,8 @@ from PyQt5.QtWidgets import (
 )
 from PyQt5.QtSvg import QSvgWidget
 
-from parsec.core.gui.ui.code_input_widget import Ui_CodeInputWidget
-from parsec.core.gui.ui.spinner_widget import Ui_SpinnerWidget
+from guardata.core.gui.ui.code_input_widget import Ui_CodeInputWidget
+from guardata.core.gui.ui.spinner_widget import Ui_SpinnerWidget
 
 
 class SpinnerWidget(QWidget, Ui_SpinnerWidget):

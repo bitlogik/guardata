@@ -5,10 +5,10 @@ from typing import Optional
 from pendulum import Pendulum
 from triopg import UniqueViolationError
 
-from parsec.api.protocol import OrganizationID
-from parsec.crypto import VerifyKey
-from parsec.backend.user import UserError, User, Device
-from parsec.backend.organization import (
+from guardata.api.protocol import OrganizationID
+from guardata.crypto import VerifyKey
+from guardata.backend.user import UserError, User, Device
+from guardata.backend.organization import (
     BaseOrganizationComponent,
     OrganizationStats,
     Organization,
@@ -19,9 +19,9 @@ from parsec.backend.organization import (
     OrganizationNotFoundError,
     OrganizationFirstUserCreationError,
 )
-from parsec.backend.postgresql.handler import PGHandler
-from parsec.backend.postgresql.user_queries.create import _create_user
-from parsec.backend.postgresql.utils import Q, q_organization_internal_id
+from guardata.backend.postgresql.handler import PGHandler
+from guardata.backend.postgresql.user_queries.create import _create_user
+from guardata.backend.postgresql.utils import Q, q_organization_internal_id
 
 
 _q_insert_organization = Q(

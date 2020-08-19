@@ -13,7 +13,7 @@ from msgpack import (
 )
 from msgpack.exceptions import ExtraData, FormatError, StackError
 
-from parsec.serde.exceptions import SerdePackingError
+from guardata.serde.exceptions import SerdePackingError
 
 
 MAX_BIN_LEN = 8 * 1024 * 1024  # 2*4 MB (>150% 4MB)

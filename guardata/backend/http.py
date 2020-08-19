@@ -12,9 +12,9 @@ from wsgiref.handlers import format_date_time
 import importlib_resources
 import h11
 
-from parsec.backend.config import BackendConfig
-from parsec.backend import static as http_static_module
-from parsec.backend.templates import get_template
+from guardata.backend.config import BackendConfig
+from guardata.backend import static as http_static_module
+from guardata.backend.templates import get_template
 
 
 ACAO_domain = "https://guardata.app" # use "" to disable ACAO

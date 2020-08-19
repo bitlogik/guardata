@@ -4,7 +4,7 @@ import pytest
 from uuid import uuid4
 from unittest.mock import ANY
 
-from parsec.api.protocol import apiv1_organization_stats_serializer
+from guardata.api.protocol import apiv1_organization_stats_serializer
 from tests.backend.common import vlob_create, block_create
 
 

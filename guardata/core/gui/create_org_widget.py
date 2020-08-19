@@ -11,15 +11,15 @@ from http.client import HTTPException
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QApplication, QDialog
 
-from parsec.core.types import BackendOrganizationBootstrapAddr
+from guardata.core.types import BackendOrganizationBootstrapAddr
 
-from parsec.core.gui.custom_dialogs import GreyedDialog, show_error
-from parsec.core.gui.trio_thread import JobResultError #, ThreadSafeQtSignal
-from parsec.core.gui.lang import translate as _
+from guardata.core.gui.custom_dialogs import GreyedDialog, show_error
+from guardata.core.gui.trio_thread import JobResultError #, ThreadSafeQtSignal
+from guardata.core.gui.lang import translate as _
 
-from parsec.core.gui.ui.create_org_widget import Ui_CreateOrgWidget
-from parsec.core.gui.ui.create_org_first_page_widget import Ui_CreateOrgFirstPageWidget
-from parsec.core.gui.ui.create_org_second_page_widget import Ui_CreateOrgSecondPageWidget
+from guardata.core.gui.ui.create_org_widget import Ui_CreateOrgWidget
+from guardata.core.gui.ui.create_org_first_page_widget import Ui_CreateOrgFirstPageWidget
+from guardata.core.gui.ui.create_org_second_page_widget import Ui_CreateOrgSecondPageWidget
 
 
 logger = get_logger()
@@ -27,7 +27,7 @@ logger = get_logger()
 
 async def _do_api_request(email, organization_id):
     data = json.dumps({"email": email, "organization_id": organization_id}).encode("utf-8")
-    url = os.environ.get("BOOTSTRAP_API_URL", "https://bms.parsec.cloud/api/quickjoin")
+    url = os.environ.get("BOOTSTRAP_API_URL", "quickjoin")
     req = Request(url, method="POST", data=data, headers={"Content-Type": "application/json"})
     try:
         response = await trio.to_thread.run_sync(lambda: urlopen(req))
@@ -39,7 +39,7 @@ async def _do_api_request(email, organization_id):
             if content.get("error", None):
                 raise JobResultError(content["error"])
             return (
-                content["parsec_id"],
+                content["gid"],
                 BackendOrganizationBootstrapAddr.from_url(content["bootstrap_link"]),
             )
         except (TypeError, KeyError) as exc:

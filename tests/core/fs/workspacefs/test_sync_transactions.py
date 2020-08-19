@@ -3,13 +3,13 @@
 import re
 import pytest
 
-from parsec.api.protocol import DeviceID
-from parsec.core.core_events import CoreEvent
-from parsec.core.types import FsPath, EntryID, Chunk, LocalFolderManifest, LocalFileManifest
+from guardata.api.protocol import DeviceID
+from guardata.core.core_events import CoreEvent
+from guardata.core.types import FsPath, EntryID, Chunk, LocalFolderManifest, LocalFileManifest
 
-from parsec.core.fs.workspacefs.sync_transactions import merge_manifests
-from parsec.core.fs.workspacefs.sync_transactions import merge_folder_children
-from parsec.core.fs.exceptions import FSFileConflictError
+from guardata.core.fs.workspacefs.sync_transactions import merge_manifests
+from guardata.core.fs.workspacefs.sync_transactions import merge_folder_children
+from guardata.core.fs.exceptions import FSFileConflictError
 
 
 empty_filter = re.compile(r"^\b$")

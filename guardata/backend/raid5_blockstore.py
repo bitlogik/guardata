@@ -7,9 +7,9 @@ from structlog import get_logger
 from sys import byteorder
 from typing import List, Optional
 
-from parsec.api.protocol import OrganizationID
-from parsec.backend.blockstore import BaseBlockStoreComponent
-from parsec.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
+from guardata.api.protocol import OrganizationID
+from guardata.backend.blockstore import BaseBlockStoreComponent
+from guardata.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
 
 
 logger = get_logger()

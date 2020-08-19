@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.fs.userfs import UserFS
-from parsec.core.fs.exceptions import (
+from guardata.core.fs.userfs import UserFS
+from guardata.core.fs.exceptions import (
     # Generic classes
     FSError,
     FSOperationError,
@@ -41,7 +41,7 @@ from parsec.core.fs.exceptions import (
     FSDeviceNotFoundError,
     FSInvalidTrustchainEror,
 )
-from parsec.core.fs.workspacefs import WorkspaceFS, WorkspaceFSTimestamped
+from guardata.core.fs.workspacefs import WorkspaceFS, WorkspaceFSTimestamped
 
 
 __all__ = (

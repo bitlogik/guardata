@@ -18,10 +18,10 @@ from hypothesis_trio.stateful import (
 )
 from hypothesis import strategies as st
 
-from parsec.core.types import FsPath, EntryID
-from parsec.core.fs.utils import is_folder_manifest
-from parsec.core.fs.storage import WorkspaceStorage
-from parsec.core.fs.exceptions import FSRemoteManifestNotFound
+from guardata.core.types import FsPath, EntryID
+from guardata.core.fs.utils import is_folder_manifest
+from guardata.core.fs.storage import WorkspaceStorage
+from guardata.core.fs.exceptions import FSRemoteManifestNotFound
 
 from tests.common import freeze_time, call_with_control
 
@@ -237,7 +237,7 @@ class PathElement:
     def to_oracle(self):
         return self.oracle_root / self.absolute_path[1:]
 
-    def to_parsec(self):
+    def to_guardata(self):
         return FsPath(self.absolute_path)
 
     def __truediv__(self, path):
@@ -313,7 +313,7 @@ def test_entry_transactions(
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                _, fd = await self.entry_transactions.file_create(path.to_parsec())
+                _, fd = await self.entry_transactions.file_create(path.to_guardata())
                 await self.file_transactions.fd_close(fd)
             return path
 
@@ -328,7 +328,7 @@ def test_entry_transactions(
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                await self.entry_transactions.folder_create(path.to_parsec())
+                await self.entry_transactions.folder_create(path.to_guardata())
 
             return path
 
@@ -341,7 +341,7 @@ def test_entry_transactions(
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                await self.entry_transactions.file_delete(path.to_parsec())
+                await self.entry_transactions.file_delete(path.to_guardata())
 
         @rule(path=Files, length=st.integers(min_value=0, max_value=32))
         async def resize(self, path, length):
@@ -352,7 +352,7 @@ def test_entry_transactions(
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                await self.entry_transactions.file_resize(path.to_parsec(), length)
+                await self.entry_transactions.file_resize(path.to_guardata(), length)
 
         @rule(path=Folders)
         async def rmdir(self, path):
@@ -363,7 +363,7 @@ def test_entry_transactions(
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                await self.entry_transactions.folder_delete(path.to_parsec())
+                await self.entry_transactions.folder_delete(path.to_guardata())
 
         async def _rename(self, src, dst_parent, dst_name):
             dst = dst_parent / dst_name
@@ -375,7 +375,7 @@ def test_entry_transactions(
                 expected_exc = exc
 
             with expect_raises(expected_exc):
-                await self.entry_transactions.entry_rename(src.to_parsec(), dst.to_parsec())
+                await self.entry_transactions.entry_rename(src.to_guardata(), dst.to_guardata())
 
             return dst
 

@@ -1,14 +1,14 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.memory.organization import MemoryOrganizationComponent
-from parsec.backend.memory.ping import MemoryPingComponent
-from parsec.backend.memory.user import MemoryUserComponent
-from parsec.backend.memory.invite import MemoryInviteComponent
-from parsec.backend.memory.message import MemoryMessageComponent
-from parsec.backend.memory.realm import MemoryRealmComponent
-from parsec.backend.memory.vlob import MemoryVlobComponent
-from parsec.backend.memory.block import MemoryBlockComponent, MemoryBlockStoreComponent
-from parsec.backend.memory.factory import components_factory
+from guardata.backend.memory.organization import MemoryOrganizationComponent
+from guardata.backend.memory.ping import MemoryPingComponent
+from guardata.backend.memory.user import MemoryUserComponent
+from guardata.backend.memory.invite import MemoryInviteComponent
+from guardata.backend.memory.message import MemoryMessageComponent
+from guardata.backend.memory.realm import MemoryRealmComponent
+from guardata.backend.memory.vlob import MemoryVlobComponent
+from guardata.backend.memory.block import MemoryBlockComponent, MemoryBlockStoreComponent
+from guardata.backend.memory.factory import components_factory
 
 __all__ = [
     "MemoryOrganizationComponent",

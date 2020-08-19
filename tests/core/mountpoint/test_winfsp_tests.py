@@ -37,7 +37,7 @@ XFAIL_LIST = [
     "setfileinfo_test",
     # Setting allocation size is not supported at the moment
     "create_allocation_test",
-    # Renaming has a special behavior in parsec
+    # Renaming has a special behavior in guardata
     "rename_test",
     "rename_mmap_test",
     "rename_standby_test",
@@ -74,7 +74,7 @@ def test_winfsp_tests(test_case, file_system_tempdir):
     if test_case in XFAIL_LIST:
         pytest.xfail()
 
-    # Run winfstest with the parsec mountpoint
+    # Run winfstest with the guardata mountpoint
     winfsp_tests.test_winfsp_tests(
         test_case, file_system_tempdir, enable_stream_tests=False, memfs_tests=False, as_drive=False
     )

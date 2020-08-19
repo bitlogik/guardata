@@ -1,22 +1,22 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.backend_events import BackendEvent
 import trio
 import attr
 from typing import List, Optional, Tuple
 import pendulum
 
-from parsec.utils import timestamps_in_the_ballpark
-from parsec.crypto import VerifyKey, PublicKey
-from parsec.event_bus import EventBus
-from parsec.api.data import (
+from guardata.utils import timestamps_in_the_ballpark
+from guardata.crypto import VerifyKey, PublicKey
+from guardata.event_bus import EventBus
+from guardata.api.data import (
     UserProfile,
     UserCertificateContent,
     DeviceCertificateContent,
     RevokedUserCertificateContent,
     DataError,
 )
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     OrganizationID,
     UserID,
     DeviceID,
@@ -40,7 +40,7 @@ from parsec.api.protocol import (
     apiv1_device_create_serializer,
     device_create_serializer,
 )
-from parsec.backend.utils import catch_protocol_errors, run_with_breathing_transport, api
+from guardata.backend.utils import catch_protocol_errors, run_with_breathing_transport, api
 
 
 class UserError(Exception):

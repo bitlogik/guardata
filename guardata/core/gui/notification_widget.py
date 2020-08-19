@@ -6,8 +6,8 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget, QStyle, QStyleOption
 from PyQt5.QtGui import QPixmap, QPainter
 
-from parsec.core.gui.ui.notification_widget import Ui_NotificationWidget
-from parsec.core.gui.lang import format_datetime
+from guardata.core.gui.ui.notification_widget import Ui_NotificationWidget
+from guardata.core.gui.lang import format_datetime
 
 
 class NotificationWidget(QWidget, Ui_NotificationWidget):

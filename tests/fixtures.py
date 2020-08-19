@@ -9,8 +9,8 @@ from typing import Union, Optional, Tuple
 from async_generator import asynccontextmanager
 from pendulum import Pendulum
 
-from parsec.crypto import SigningKey
-from parsec.api.data import (
+from guardata.crypto import SigningKey
+from guardata.api.data import (
     UserProfile,
     UserCertificateContent,
     UserManifest,
@@ -18,12 +18,12 @@ from parsec.api.data import (
     DeviceCertificateContent,
     RealmRoleCertificateContent,
 )
-from parsec.api.protocol import OrganizationID, UserID, DeviceID, HumanHandle, RealmRole
-from parsec.backend.backend_events import BackendEvent
-from parsec.core.types import LocalDevice, LocalUserManifest, BackendOrganizationBootstrapAddr
-from parsec.core.local_device import generate_new_device
-from parsec.backend.user import User as BackendUser, Device as BackendDevice
-from parsec.backend.realm import RealmGrantedRole
+from guardata.api.protocol import OrganizationID, UserID, DeviceID, HumanHandle, RealmRole
+from guardata.backend.backend_events import BackendEvent
+from guardata.core.types import LocalDevice, LocalUserManifest, BackendOrganizationBootstrapAddr
+from guardata.core.local_device import generate_new_device
+from guardata.backend.user import User as BackendUser, Device as BackendDevice
+from guardata.backend.realm import RealmGrantedRole
 
 from tests.common import freeze_time, addr_with_device_subdomain
 

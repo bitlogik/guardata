@@ -5,14 +5,14 @@ from uuid import uuid4
 from pendulum import Pendulum
 from unittest.mock import ANY
 
-from parsec.api.data import UserManifest
-from parsec.core.types import (
+from guardata.api.data import UserManifest
+from guardata.core.types import (
     WorkspaceEntry,
     WorkspaceRole,
     LocalUserManifest,
     LocalWorkspaceManifest,
 )
-from parsec.core.fs import FSWorkspaceNotFoundError, FSBackendOfflineError
+from guardata.core.fs import FSWorkspaceNotFoundError, FSBackendOfflineError
 
 from tests.common import freeze_time
 

@@ -2,8 +2,8 @@
 
 import pytest
 
-from parsec.api.protocol import InvitationType
-from parsec.core.types import (
+from guardata.api.protocol import InvitationType
+from guardata.core.types import (
     BackendAddr,
     BackendOrganizationAddr,
     BackendOrganizationBootstrapAddr,

@@ -2,7 +2,7 @@
 
 import pytest
 
-from parsec.core.gui.color import StringToColor
+from guardata.core.gui.color import StringToColor
 
 
 @pytest.mark.gui

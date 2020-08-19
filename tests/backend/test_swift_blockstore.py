@@ -6,8 +6,8 @@ import swiftclient
 from swiftclient.exceptions import ClientException
 import pytest
 
-from parsec.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
-from parsec.backend.swift_blockstore import SwiftBlockStoreComponent
+from guardata.backend.block import BlockAlreadyExistsError, BlockNotFoundError, BlockTimeoutError
+from guardata.backend.swift_blockstore import SwiftBlockStoreComponent
 
 import swiftclient  # noqa
 from swiftclient.exceptions import ClientException  # noqa

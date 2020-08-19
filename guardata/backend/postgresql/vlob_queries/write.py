@@ -4,8 +4,8 @@ import pendulum
 from uuid import UUID
 from triopg import UniqueViolationError
 
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.backend.postgresql.utils import (
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_organization_internal_id,
@@ -13,18 +13,18 @@ from parsec.backend.postgresql.utils import (
     q_realm_internal_id,
     q_vlob_encryption_revision_internal_id,
 )
-from parsec.backend.vlob import (
+from guardata.backend.vlob import (
     VlobVersionError,
     VlobTimestampError,
     VlobNotFoundError,
     VlobAlreadyExistsError,
 )
-from parsec.backend.postgresql.handler import send_signal
-from parsec.backend.postgresql.vlob_queries.utils import (
+from guardata.backend.postgresql.handler import send_signal
+from guardata.backend.postgresql.vlob_queries.utils import (
     _get_realm_id_from_vlob_id,
     _check_realm_and_write_access,
 )
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.backend_events import BackendEvent
 
 
 q_vlob_updated = Q(

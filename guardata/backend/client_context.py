@@ -3,11 +3,11 @@
 import trio
 from typing import Optional
 
-from parsec.crypto import VerifyKey, PublicKey
-from parsec.api.version import ApiVersion
-from parsec.api.transport import Transport
-from parsec.api.data import UserProfile
-from parsec.api.protocol import (
+from guardata.crypto import VerifyKey, PublicKey
+from guardata.api.version import ApiVersion
+from guardata.api.transport import Transport
+from guardata.api.data import UserProfile
+from guardata.api.protocol import (
     ServerHandshake,
     OrganizationID,
     UserID,
@@ -15,7 +15,7 @@ from parsec.api.protocol import (
     DeviceID,
     HumanHandle,
 )
-from parsec.backend.invite import Invitation
+from guardata.backend.invite import Invitation
 
 
 class BaseClientContext:

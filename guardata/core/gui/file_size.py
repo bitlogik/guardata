@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.core.gui.lang import translate as _
+from guardata.core.gui.lang import translate as _
 
 
 traditional = [

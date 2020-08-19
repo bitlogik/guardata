@@ -8,10 +8,10 @@ from structlog import get_logger
 
 import pendulum
 
-from parsec.core.gui.lang import get_qlocale, translate as _
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog
-from parsec.core.gui.trio_thread import ThreadSafeQtSignal
-from parsec.core.gui.ui.timestamped_workspace_widget import Ui_TimestampedWorkspaceWidget
+from guardata.core.gui.lang import get_qlocale, translate as _
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog
+from guardata.core.gui.trio_thread import ThreadSafeQtSignal
+from guardata.core.gui.ui.timestamped_workspace_widget import Ui_TimestampedWorkspaceWidget
 
 
 logger = get_logger()

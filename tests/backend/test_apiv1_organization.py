@@ -4,13 +4,13 @@ import pytest
 import pendulum
 from unittest.mock import ANY
 
-from parsec.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
-from parsec.api.protocol import (
+from guardata.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
+from guardata.api.protocol import (
     UserID,
     apiv1_organization_create_serializer,
     apiv1_organization_bootstrap_serializer,
 )
-from parsec.api.protocol.handshake import HandshakeOrganizationExpired
+from guardata.api.protocol.handshake import HandshakeOrganizationExpired
 
 from tests.common import freeze_time, customize_fixtures
 from tests.backend.common import ping

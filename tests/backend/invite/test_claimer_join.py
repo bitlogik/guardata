@@ -4,7 +4,7 @@ import pytest
 import trio
 from pendulum import Pendulum
 
-from parsec.api.protocol import InvitationType, InvitationStatus, APIEvent
+from guardata.api.protocol import InvitationType, InvitationStatus, APIEvent
 
 from tests.backend.common import (
     events_subscribe,

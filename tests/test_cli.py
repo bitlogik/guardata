@@ -21,11 +21,11 @@ import trustme
 from click.testing import CliRunner
 from async_generator import asynccontextmanager
 
-from parsec import __version__ as guardata_version
-from parsec.api.protocol import OrganizationID, DeviceID
-from parsec.backend.postgresql import MigrationItem
-from parsec.core.local_device import save_device_with_password, list_available_devices
-from parsec.cli import cli
+from guardata import __version__ as guardata_version
+from guardata.api.protocol import OrganizationID, DeviceID
+from guardata.backend.postgresql import MigrationItem
+from guardata.core.local_device import save_device_with_password, list_available_devices
+from guardata.cli import cli
 
 CWD = Path(__file__).parent.parent
 
@@ -56,7 +56,7 @@ def test_share_workspace(tmpdir, alice, bob):
     password = "S3cr3t"
     save_device_with_password(Path(config_dir), bob, password)
 
-    with patch("parsec.core.cli.share_workspace.logged_core_factory", logged_core_factory):
+    with patch("guardata.core.cli.share_workspace.logged_core_factory", logged_core_factory):
         runner = CliRunner()
         args = (
             f"core share_workspace --password {password} "
@@ -83,7 +83,7 @@ def _short_cmd(cmd):
 def _run(cmd, env={}, timeout=20.0, capture=True):
     print(f"========= RUN {cmd} ==============")
     env = {**os.environ.copy(), "DEBUG": "true", **env}
-    cooked_cmd = ("python -m parsec.cli " + cmd).split()
+    cooked_cmd = ("python -m guardata.cli " + cmd).split()
     kwargs = {}
     if capture:
         kwargs["stdout"] = kwargs["stderr"] = subprocess.PIPE
@@ -111,7 +111,7 @@ class LivingStream:
 @contextmanager
 def _running(cmd, wait_for=None, env={}):
     env = {**os.environ.copy(), "DEBUG": "true", **env}
-    cooked_cmd = ("python -m parsec.cli " + cmd).split()
+    cooked_cmd = ("python -m guardata.cli " + cmd).split()
     p = subprocess.Popen(
         cooked_cmd,
         stdout=subprocess.PIPE,
@@ -177,7 +177,7 @@ def test_migrate_backend(postgresql_url, unused_tcp_port):
     dry_run_args = f"backend migrate --db {postgresql_url} --dry-run"
     apply_args = f"backend migrate --db {postgresql_url}"
 
-    with patch("parsec.backend.cli.migration.retrieve_migrations") as retrieve_migrations:
+    with patch("guardata.backend.cli.migration.retrieve_migrations") as retrieve_migrations:
         retrieve_migrations.return_value = [
             MigrationItem(
                 idx=100001, name="migration1", file_name="100001_migration1.sql", sql=sql

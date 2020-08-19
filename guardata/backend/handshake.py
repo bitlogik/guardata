@@ -3,24 +3,24 @@
 from typing import Tuple, Dict, Optional
 from pendulum import now as pendulum_now
 
-from parsec.api.transport import Transport
-from parsec.api.protocol import (
+from guardata.api.transport import Transport
+from guardata.api.protocol import (
     ProtocolError,
     InvitationType,
     HandshakeType,
     APIV1_HandshakeType,
     ServerHandshake,
 )
-from parsec.backend.client_context import (
+from guardata.backend.client_context import (
     BaseClientContext,
     AuthenticatedClientContext,
     InvitedClientContext,
     APIV1_AnonymousClientContext,
     APIV1_AdministrationClientContext,
 )
-from parsec.backend.user import UserNotFoundError
-from parsec.backend.organization import OrganizationNotFoundError, OrganizationAlreadyExistsError
-from parsec.backend.invite import InvitationError, UserInvitation, DeviceInvitation
+from guardata.backend.user import UserNotFoundError
+from guardata.backend.organization import OrganizationNotFoundError, OrganizationAlreadyExistsError
+from guardata.backend.invite import InvitationError, UserInvitation, DeviceInvitation
 
 
 async def do_handshake(

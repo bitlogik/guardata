@@ -4,9 +4,9 @@ from typing import List, Tuple
 from collections import defaultdict
 from pendulum import Pendulum
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.api.protocol import UserID, DeviceID, OrganizationID
-from parsec.backend.message import BaseMessageComponent
+from guardata.backend.backend_events import BackendEvent
+from guardata.api.protocol import UserID, DeviceID, OrganizationID
+from guardata.backend.message import BaseMessageComponent
 
 
 class MemoryMessageComponent(BaseMessageComponent):

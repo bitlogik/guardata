@@ -7,8 +7,8 @@ from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QTableWidgetItem
 from PyQt5.QtGui import QIcon, QPainter, QColor
 
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.custom_widgets import Pixmap
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.custom_widgets import Pixmap
 
 NAME_DATA_INDEX = Qt.UserRole
 TYPE_DATA_INDEX = Qt.UserRole + 1

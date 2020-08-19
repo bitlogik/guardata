@@ -6,17 +6,17 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
 from PyQt5.QtWidgets import QWidget
 
-from parsec.api.data import UserProfile
-from parsec.api.protocol import HumanHandle
-from parsec.core.backend_connection import BackendNotAvailable
-from parsec.core.invite import InviteError, InvitePeerResetError, InviteAlreadyUsedError
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.ui.greet_user_widget import Ui_GreetUserWidget
-from parsec.core.gui.ui.greet_user_code_exchange_widget import Ui_GreetUserCodeExchangeWidget
-from parsec.core.gui.ui.greet_user_check_info_widget import Ui_GreetUserCheckInfoWidget
-from parsec.core.gui.ui.greet_user_instructions_widget import Ui_GreetUserInstructionsWidget
+from guardata.api.data import UserProfile
+from guardata.api.protocol import HumanHandle
+from guardata.core.backend_connection import BackendNotAvailable
+from guardata.core.invite import InviteError, InvitePeerResetError, InviteAlreadyUsedError
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.ui.greet_user_widget import Ui_GreetUserWidget
+from guardata.core.gui.ui.greet_user_code_exchange_widget import Ui_GreetUserCodeExchangeWidget
+from guardata.core.gui.ui.greet_user_check_info_widget import Ui_GreetUserCheckInfoWidget
+from guardata.core.gui.ui.greet_user_instructions_widget import Ui_GreetUserInstructionsWidget
 
 
 class Greeter:

@@ -5,11 +5,11 @@ import errno
 import pytest
 from unittest.mock import ANY
 
-from parsec.api.protocol import DeviceID, RealmRole
-from parsec.api.data import BaseManifest as BaseRemoteManifest
-from parsec.core.types import FsPath, EntryID
-from parsec.core.fs.exceptions import FSError, FSBackendOfflineError
-from parsec.core.fs.workspacefs.workspacefs import ReencryptionNeed
+from guardata.api.protocol import DeviceID, RealmRole
+from guardata.api.data import BaseManifest as BaseRemoteManifest
+from guardata.core.types import FsPath, EntryID
+from guardata.core.fs.exceptions import FSError, FSBackendOfflineError
+from guardata.core.fs.workspacefs.workspacefs import ReencryptionNeed
 
 
 @pytest.mark.trio

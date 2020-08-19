@@ -2,16 +2,16 @@
 
 import re
 from functools import wraps
-from parsec.api.data import UserProfile
-from parsec.api.protocol import (
+from guardata.api.data import UserProfile
+from guardata.api.protocol import (
     RealmRole,
     MaintenanceType,
     InvitationType,
     InvitationStatus,
     InvitationDeletedReason,
 )
-from parsec.backend.invite import ConduitState
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.invite import ConduitState
+from guardata.backend.backend_events import BackendEvent
 
 
 STR_TO_INVITATION_TYPE = {x.value: x for x in InvitationType}

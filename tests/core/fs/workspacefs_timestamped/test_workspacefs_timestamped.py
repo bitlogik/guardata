@@ -3,8 +3,8 @@
 import pytest
 from unittest.mock import ANY
 
-from parsec.core.types import FsPath
-from parsec.core.fs.exceptions import FSWorkspaceTimestampedTooEarly
+from guardata.core.types import FsPath
+from guardata.core.fs.exceptions import FSWorkspaceTimestampedTooEarly
 
 
 @pytest.mark.trio

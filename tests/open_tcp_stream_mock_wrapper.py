@@ -5,7 +5,7 @@ from unittest.mock import patch
 import inspect
 import trio
 
-from parsec.core.types import BackendAddr
+from guardata.core.types import BackendAddr
 
 
 def addr_to_netloc(addr):

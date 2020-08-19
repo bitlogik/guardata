@@ -45,7 +45,7 @@ def main(guardata_source):
 
     # Retrieve version
     global_dict = {}
-    exec((guardata_source / "parsec/_version.py").read_text(), global_dict)
+    exec((guardata_source / "guardata/_version.py").read_text(), global_dict)
     guardata_version = global_dict.get("__version__")
     print(f"### Detected version {guardata_version} ###")
 

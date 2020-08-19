@@ -2,7 +2,7 @@
 
 import pytest
 
-from parsec.core.fs import FSWorkspaceNoAccess
+from guardata.core.fs import FSWorkspaceNoAccess
 
 from tests.common import create_shared_workspace
 

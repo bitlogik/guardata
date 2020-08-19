@@ -8,10 +8,10 @@ from structlog import get_logger
 
 from async_generator import asynccontextmanager
 
-from parsec.core.core_events import CoreEvent
-from parsec.event_bus import EventBus
-from parsec.crypto import SecretKey
-from parsec.api.data import (
+from guardata.core.core_events import CoreEvent
+from guardata.event_bus import EventBus
+from guardata.crypto import SecretKey
+from guardata.api.data import (
     DataError,
     RealmRoleCertificateContent,
     BaseMessageContent,
@@ -21,8 +21,8 @@ from parsec.api.data import (
     PingMessageContent,
     UserManifest,
 )
-from parsec.api.protocol import UserID, DeviceID, MaintenanceType
-from parsec.core.types import (
+from guardata.api.protocol import UserID, DeviceID, MaintenanceType
+from guardata.core.types import (
     EntryID,
     EntryName,
     LocalDevice,
@@ -33,19 +33,19 @@ from parsec.core.types import (
 )
 
 # TODO: handle exceptions status...
-from parsec.core.backend_connection import (
+from guardata.core.backend_connection import (
     APIV1_BackendAuthenticatedCmds,
     BackendAuthenticatedCmds,
     BackendConnectionError,
     BackendNotAvailable,
 )
-from parsec.core.remote_devices_manager import RemoteDevicesManager
+from guardata.core.remote_devices_manager import RemoteDevicesManager
 
-from parsec.core.fs.workspacefs import WorkspaceFS
-from parsec.core.fs.remote_loader import RemoteLoader
-from parsec.core.fs.storage import UserStorage, WorkspaceStorage
-from parsec.core.fs.userfs.merging import merge_local_user_manifests, merge_workspace_entry
-from parsec.core.fs.exceptions import (
+from guardata.core.fs.workspacefs import WorkspaceFS
+from guardata.core.fs.remote_loader import RemoteLoader
+from guardata.core.fs.storage import UserStorage, WorkspaceStorage
+from guardata.core.fs.userfs.merging import merge_local_user_manifests, merge_workspace_entry
+from guardata.core.fs.exceptions import (
     FSError,
     FSWorkspaceNoAccess,
     FSWorkspaceNotFoundError,

@@ -1,10 +1,10 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.api.protocol import RealmRole, OrganizationID
-from parsec.backend.backend_events import BackendEvent
-from parsec.backend.realm import RealmGrantedRole, RealmAlreadyExistsError
-from parsec.backend.postgresql.handler import send_signal
-from parsec.backend.postgresql.utils import (
+from guardata.api.protocol import RealmRole, OrganizationID
+from guardata.backend.backend_events import BackendEvent
+from guardata.backend.realm import RealmGrantedRole, RealmAlreadyExistsError
+from guardata.backend.postgresql.handler import send_signal
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_organization_internal_id,

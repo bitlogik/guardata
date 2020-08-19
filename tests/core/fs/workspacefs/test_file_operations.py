@@ -5,10 +5,10 @@ from typing import Tuple
 from hypothesis import strategies
 from hypothesis.stateful import RuleBasedStateMachine, rule, invariant, run_state_machine_as_test
 
-from parsec.api.protocol import DeviceID
-from parsec.core.types import EntryID, ChunkID, Chunk, LocalFileManifest
-from parsec.core.fs.workspacefs.file_transactions import padded_data
-from parsec.core.fs.workspacefs.file_operations import (
+from guardata.api.protocol import DeviceID
+from guardata.core.types import EntryID, ChunkID, Chunk, LocalFileManifest
+from guardata.core.fs.workspacefs.file_transactions import padded_data
+from guardata.core.fs.workspacefs.file_operations import (
     prepare_read,
     prepare_write,
     prepare_resize,

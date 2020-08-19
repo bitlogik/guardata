@@ -5,24 +5,24 @@ from PyQt5.QtWidgets import QWidget, QApplication, QDialog
 
 from structlog import get_logger
 
-from parsec.api.protocol import HumanHandle
-from parsec.core.types import BackendOrganizationBootstrapAddr
-from parsec.core.backend_connection import (
+from guardata.api.protocol import HumanHandle
+from guardata.core.types import BackendOrganizationBootstrapAddr
+from guardata.core.backend_connection import (
     apiv1_backend_anonymous_cmds_factory,
     BackendNotAvailable,
     BackendConnectionRefused,
     BackendConnectionError,
 )
-from parsec.core.invite import bootstrap_organization
-from parsec.core.invite.exceptions import InviteNotFoundError, InviteAlreadyUsedError
-from parsec.core.local_device import save_device_with_password
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal
-from parsec.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
-from parsec.core.gui.desktop import get_default_device
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui import validators
-from parsec.core.gui.password_validation import PasswordStrengthWidget, get_password_strength
-from parsec.core.gui.ui.bootstrap_organization_widget import Ui_BootstrapOrganizationWidget
+from guardata.core.invite import bootstrap_organization
+from guardata.core.invite.exceptions import InviteNotFoundError, InviteAlreadyUsedError
+from guardata.core.local_device import save_device_with_password
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal
+from guardata.core.gui.custom_dialogs import show_error, GreyedDialog, show_info
+from guardata.core.gui.desktop import get_default_device
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui import validators
+from guardata.core.gui.password_validation import PasswordStrengthWidget, get_password_strength
+from guardata.core.gui.ui.bootstrap_organization_widget import Ui_BootstrapOrganizationWidget
 
 logger = get_logger()
 

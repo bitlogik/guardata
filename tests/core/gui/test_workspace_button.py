@@ -4,9 +4,9 @@ import pytest
 
 from PyQt5 import QtCore
 
-from parsec.core.types import WorkspaceRole, UserInfo
-from parsec.core.gui.workspace_button import WorkspaceButton
-from parsec.core.gui.lang import switch_language
+from guardata.core.types import WorkspaceRole, UserInfo
+from guardata.core.gui.workspace_button import WorkspaceButton
+from guardata.core.gui.lang import switch_language
 
 
 @pytest.fixture

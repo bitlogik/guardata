@@ -3,7 +3,7 @@
 import pytest
 from PyQt5 import QtCore
 
-from parsec.core.gui.custom_widgets import CodeInputWidget
+from guardata.core.gui.custom_widgets import CodeInputWidget
 
 
 @pytest.mark.gui

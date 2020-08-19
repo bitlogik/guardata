@@ -3,9 +3,9 @@
 import pytest
 from pendulum import Pendulum
 
-from parsec.api.data import UserManifest, WorkspaceEntry
-from parsec.core.types import LocalUserManifest
-from parsec.core.fs.userfs.merging import merge_local_user_manifests
+from guardata.api.data import UserManifest, WorkspaceEntry
+from guardata.core.types import LocalUserManifest
+from guardata.core.fs.userfs.merging import merge_local_user_manifests
 
 
 @pytest.fixture

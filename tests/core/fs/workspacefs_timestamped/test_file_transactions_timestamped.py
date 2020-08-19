@@ -2,8 +2,8 @@
 
 import pytest
 
-from parsec.core.types import FsPath
-from parsec.core.fs import FSError, FSInvalidFileDescriptor
+from guardata.core.types import FsPath
+from guardata.core.fs import FSError, FSInvalidFileDescriptor
 
 
 @pytest.mark.trio

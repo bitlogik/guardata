@@ -4,10 +4,10 @@ import pendulum
 from uuid import UUID
 from typing import Dict, Tuple, Optional
 
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.backend.vlob import VlobVersionError, VlobNotFoundError
-from parsec.backend.realm import RealmRole
-from parsec.backend.postgresql.utils import (
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.backend.vlob import VlobVersionError, VlobNotFoundError
+from guardata.backend.realm import RealmRole
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_device,
@@ -15,7 +15,7 @@ from parsec.backend.postgresql.utils import (
     q_organization_internal_id,
     q_vlob_encryption_revision_internal_id,
 )
-from parsec.backend.postgresql.vlob_queries.utils import (
+from guardata.backend.postgresql.vlob_queries.utils import (
     _get_realm_id_from_vlob_id,
     _check_realm,
     _check_realm_access,

@@ -9,35 +9,35 @@ from structlog import get_logger
 from functools import partial
 from async_generator import asynccontextmanager
 
-from parsec.event_bus import EventBus
-from parsec.api.protocol import UserID, InvitationType, InvitationDeletedReason
-from parsec.api.data import RevokedUserCertificateContent
-from parsec.core.types import LocalDevice, UserInfo, DeviceInfo, BackendInvitationAddr
-from parsec.core.config import CoreConfig
-from parsec.core.backend_connection import (
+from guardata.event_bus import EventBus
+from guardata.api.protocol import UserID, InvitationType, InvitationDeletedReason
+from guardata.api.data import RevokedUserCertificateContent
+from guardata.core.types import LocalDevice, UserInfo, DeviceInfo, BackendInvitationAddr
+from guardata.core.config import CoreConfig
+from guardata.core.backend_connection import (
     BackendAuthenticatedConn,
     BackendConnectionError,
     BackendNotFoundError,
     BackendConnStatus,
     BackendNotAvailable,
 )
-from parsec.core.invite import (
+from guardata.core.invite import (
     UserGreetInitialCtx,
     UserGreetInProgress1Ctx,
     DeviceGreetInitialCtx,
     DeviceGreetInProgress1Ctx,
     InviteAlreadyMemberError,
 )
-from parsec.core.remote_devices_manager import (
+from guardata.core.remote_devices_manager import (
     RemoteDevicesManager,
     RemoteDevicesManagerError,
     RemoteDevicesManagerBackendOfflineError,
     RemoteDevicesManagerNotFoundError,
 )
-from parsec.core.mountpoint import mountpoint_manager_factory
-from parsec.core.messages_monitor import monitor_messages
-from parsec.core.sync_monitor import monitor_sync
-from parsec.core.fs import UserFS
+from guardata.core.mountpoint import mountpoint_manager_factory
+from guardata.core.messages_monitor import monitor_messages
+from guardata.core.sync_monitor import monitor_sync
+from guardata.core.fs import UserFS
 
 
 logger = get_logger()

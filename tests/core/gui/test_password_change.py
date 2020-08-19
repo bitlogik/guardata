@@ -2,12 +2,12 @@
 
 import pytest
 from PyQt5 import QtCore
-from parsec.core.gui.login_widget import LoginPasswordInputWidget
+from guardata.core.gui.login_widget import LoginPasswordInputWidget
 
 
 @pytest.fixture
 def catch_password_change_widget(widget_catcher_factory):
-    return widget_catcher_factory("parsec.core.gui.password_change_widget.PasswordChangeWidget")
+    return widget_catcher_factory("guardata.core.gui.password_change_widget.PasswordChangeWidget")
 
 
 @pytest.mark.gui

@@ -4,20 +4,20 @@ import trio
 import math
 from async_generator import asynccontextmanager
 
-from parsec.event_bus import EventBus
-from parsec.backend.config import BackendConfig
-from parsec.backend.blockstore import blockstore_factory
-from parsec.backend.events import EventsComponent
-from parsec.backend.memory.organization import MemoryOrganizationComponent
-from parsec.backend.memory.ping import MemoryPingComponent
-from parsec.backend.memory.user import MemoryUserComponent
-from parsec.backend.memory.invite import MemoryInviteComponent
-from parsec.backend.memory.message import MemoryMessageComponent
-from parsec.backend.memory.realm import MemoryRealmComponent
-from parsec.backend.memory.vlob import MemoryVlobComponent
-from parsec.backend.memory.block import MemoryBlockComponent
-from parsec.backend.webhooks import WebhooksComponent
-from parsec.backend.http import HTTPComponent
+from guardata.event_bus import EventBus
+from guardata.backend.config import BackendConfig
+from guardata.backend.blockstore import blockstore_factory
+from guardata.backend.events import EventsComponent
+from guardata.backend.memory.organization import MemoryOrganizationComponent
+from guardata.backend.memory.ping import MemoryPingComponent
+from guardata.backend.memory.user import MemoryUserComponent
+from guardata.backend.memory.invite import MemoryInviteComponent
+from guardata.backend.memory.message import MemoryMessageComponent
+from guardata.backend.memory.realm import MemoryRealmComponent
+from guardata.backend.memory.vlob import MemoryVlobComponent
+from guardata.backend.memory.block import MemoryBlockComponent
+from guardata.backend.webhooks import WebhooksComponent
+from guardata.backend.http import HTTPComponent
 
 
 @asynccontextmanager

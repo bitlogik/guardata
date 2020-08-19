@@ -7,16 +7,16 @@ from typing import Optional, List, AsyncGenerator, Callable
 from structlog import get_logger
 from functools import partial
 
-from parsec.crypto import SigningKey
-from parsec.event_bus import EventBus
-from parsec.api.data import EntryID
-from parsec.api.protocol import DeviceID, APIEvent, AUTHENTICATED_CMDS
-from parsec.core.types import BackendOrganizationAddr
-from parsec.core.backend_connection import cmds
-from parsec.core.backend_connection.transport import connect_as_authenticated, TransportPool
-from parsec.core.backend_connection.exceptions import BackendNotAvailable, BackendConnectionRefused
-from parsec.core.backend_connection.expose_cmds import expose_cmds_with_retrier
-from parsec.core.core_events import CoreEvent
+from guardata.crypto import SigningKey
+from guardata.event_bus import EventBus
+from guardata.api.data import EntryID
+from guardata.api.protocol import DeviceID, APIEvent, AUTHENTICATED_CMDS
+from guardata.core.types import BackendOrganizationAddr
+from guardata.core.backend_connection import cmds
+from guardata.core.backend_connection.transport import connect_as_authenticated, TransportPool
+from guardata.core.backend_connection.exceptions import BackendNotAvailable, BackendConnectionRefused
+from guardata.core.backend_connection.expose_cmds import expose_cmds_with_retrier
+from guardata.core.core_events import CoreEvent
 
 
 logger = get_logger()

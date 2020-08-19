@@ -4,7 +4,7 @@ import attr
 from typing import Optional, Any, TypeVar, Type
 from pendulum import Pendulum
 
-from parsec.serde import (
+from guardata.serde import (
     BaseSchema,
     fields,
     SerdeValidationError,
@@ -12,8 +12,8 @@ from parsec.serde import (
     BaseSerializer,
     ZipMsgpackSerializer,
 )
-from parsec.crypto import CryptoError, PrivateKey, PublicKey, SigningKey, VerifyKey, SecretKey
-from parsec.api.protocol import DeviceID, DeviceIDField
+from guardata.crypto import CryptoError, PrivateKey, PublicKey, SigningKey, VerifyKey, SecretKey
+from guardata.api.protocol import DeviceID, DeviceIDField
 
 
 class DataError(Exception):

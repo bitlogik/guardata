@@ -3,15 +3,15 @@
 from uuid import UUID
 from typing import List, Tuple
 
-from parsec.backend.realm import RealmRole
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.backend.postgresql.utils import (
+from guardata.backend.realm import RealmRole
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_vlob_encryption_revision_internal_id,
     q_organization_internal_id,
 )
-from parsec.backend.postgresql.vlob_queries.utils import _check_realm, _check_realm_access
+from guardata.backend.postgresql.vlob_queries.utils import _check_realm, _check_realm_access
 
 
 _q_maintenance_get_reencryption_batch = Q(

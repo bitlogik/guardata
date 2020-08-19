@@ -2,10 +2,10 @@
 
 import trio
 import pytest
-import parsec
+import guardata
 
-# Importing parsec is enough to add open_service_nursery to trio
-parsec
+# Importing guardata is not enough to add open_service_nursery to trio
+guardata
 
 
 @pytest.mark.trio

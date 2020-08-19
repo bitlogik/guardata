@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.backend_events import BackendEvent
 import attr
 import pendulum
 from typing import Tuple, List, Dict
 from collections import defaultdict
 
-from parsec.api.protocol import OrganizationID, UserID, DeviceID, DeviceName, HumanHandle
-from parsec.backend.user import (
+from guardata.api.protocol import OrganizationID, UserID, DeviceID, DeviceName, HumanHandle
+from guardata.backend.user import (
     BaseUserComponent,
     User,
     Device,

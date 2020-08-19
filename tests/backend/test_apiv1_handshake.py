@@ -2,9 +2,9 @@
 
 import pytest
 
-from parsec.api.version import ApiVersion
-from parsec.api.transport import Transport
-from parsec.api.protocol import (
+from guardata.api.version import ApiVersion
+from guardata.api.transport import Transport
+from guardata.api.protocol import (
     packb,
     unpackb,
     ServerHandshake,

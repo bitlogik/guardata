@@ -6,11 +6,11 @@ from typing import Tuple, Optional
 from urllib.parse import urlsplit, urlunsplit, parse_qs, quote_plus, unquote_plus, urlencode
 from marshmallow import ValidationError
 
-from parsec.serde import fields
-from parsec.crypto import VerifyKey, export_root_verify_key, import_root_verify_key
-from parsec.api.protocol import OrganizationID, UserID, DeviceID, InvitationType
-from parsec.api.data import EntryID
-from parsec.core.types.base import FsPath
+from guardata.serde import fields
+from guardata.crypto import VerifyKey, export_root_verify_key, import_root_verify_key
+from guardata.api.protocol import OrganizationID, UserID, DeviceID, InvitationType
+from guardata.api.data import EntryID
+from guardata.core.types.base import FsPath
 
 
 PARSEC_SCHEME = "parsec"
@@ -19,7 +19,7 @@ PARSEC_SCHEME = "parsec"
 class BackendAddr:
     """
     Represent the URL to reach a backend
-    (e.g. ``parsec://parsec.example.com/``)
+    (e.g. ``parsec://guardata.example.com/``)
     """
 
     __slots__ = ("_hostname", "_port", "_use_ssl")
@@ -175,7 +175,7 @@ class OrganizationParamsFixture(BackendAddr):
 class BackendOrganizationAddr(OrganizationParamsFixture, BackendAddr):
     """
     Represent the URL to access an organization within a backend
-    (e.g. ``parsec://parsec.example.com/MyOrg?rvk=7NFDS4VQLP3XPCMTSEN34ZOXKGGIMTY2W2JI2SPIHB2P3M6K4YWAssss``)
+    (e.g. ``parsec://guardata.example.com/MyOrg?rvk=7NFDS4VQLP3XPCMTSEN34ZOXKGGIMTY2W2JI2SPIHB2P3M6K4YWAssss``)
     """
 
     @classmethod
@@ -218,7 +218,7 @@ class BackendActionAddr(BackendAddr):
 class BackendOrganizationBootstrapAddr(BackendActionAddr):
     """
     Represent the URL to bootstrap an organization within a backend
-    (e.g. ``parsec://parsec.example.com/my_org?action=bootstrap_organization&token=1234ABCD``)
+    (e.g. ``parsec://guardata.example.com/my_org?action=bootstrap_organization&token=1234ABCD``)
     """
 
     __slots__ = ("_organization_id", "_token")
@@ -293,7 +293,7 @@ class BackendOrganizationBootstrapAddr(BackendActionAddr):
 class BackendOrganizationClaimUserAddr(OrganizationParamsFixture, BackendActionAddr):
     """
     Represent the URL to bootstrap claim a user
-    (e.g. ``parsec://parsec.example.com/my_org?action=claim_user&user_id=John&token=1234ABCD&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss``)
+    (e.g. ``parsec://guardata.example.com/my_org?action=claim_user&user_id=John&token=1234ABCD&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss``)
     """
 
     __slots__ = ("_user_id", "_token")
@@ -372,7 +372,7 @@ class BackendOrganizationClaimUserAddr(OrganizationParamsFixture, BackendActionA
 class BackendOrganizationClaimDeviceAddr(OrganizationParamsFixture, BackendActionAddr):
     """
     Represent the URL to bootstrap claim a device
-    (e.g. ``parsec://parsec.example.com/my_org?action=claim_device&device_id=John%40pc&token=1234ABCD&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss``)
+    (e.g. ``parsec://guardata.example.com/my_org?action=claim_device&device_id=John%40pc&token=1234ABCD&rvk=P25GRG3XPSZKBEKXYQFBOLERWQNEDY3AO43MVNZCLPXPKN63JRYQssss``)
     """
 
     __slots__ = ("_device_id", "_token")
@@ -451,7 +451,7 @@ class BackendOrganizationClaimDeviceAddr(OrganizationParamsFixture, BackendActio
 class BackendOrganizationFileLinkAddr(OrganizationParamsFixture, BackendActionAddr):
     """
     Represent the URL to share a file link
-    (e.g. ``parsec://parsec.example.com/my_org?action=file_link&workspace_id=xx&path=yy``)
+    (e.g. ``parsec://guardata.example.com/my_org?action=file_link&workspace_id=xx&path=yy``)
     """
 
     __slots__ = ("_workspace_id", "_path")
@@ -544,7 +544,7 @@ class BackendOrganizationAddrField(fields.Field):
 class BackendInvitationAddr(BackendActionAddr):
     """
     Represent the URL to invite a user or a device
-    (e.g. ``parsec://parsec.example.com/my_org?action=claim_user&token=1234ABCD``)
+    (e.g. ``parsec://guardata.example.com/my_org?action=claim_user&token=1234ABCD``)
     """
 
     __slots__ = ("_organization_id", "_invitation_type", "_token")

@@ -5,27 +5,27 @@ import click
 from pathlib import Path
 from pendulum import Pendulum, parse as pendulum_parse
 
-from parsec.utils import trio_run
-from parsec.cli_utils import cli_exception_handler, generate_not_available_cmd
-from parsec.core import logged_core_factory
-from parsec.core.cli.utils import core_config_and_device_options, core_config_options
+from guardata.utils import trio_run
+from guardata.cli_utils import cli_exception_handler, generate_not_available_cmd
+from guardata.core import logged_core_factory
+from guardata.core.cli.utils import core_config_and_device_options, core_config_options
 
 try:
-    from parsec.core.gui import run_gui as _run_gui
+    from guardata.core.gui import run_gui as _run_gui
 
 except ImportError as exc:
     run_gui = generate_not_available_cmd(exc)
 
 else:
 
-    @click.command(short_help="run parsec GUI")
+    @click.command(short_help="run guardata GUI")
     # Let the GUI handle the parsing of the url to display dialog on error
     @click.argument("url", required=False)
     @click.option("--diagnose", "-d", is_flag=True)
     @core_config_options
     def run_gui(config, url, diagnose, **kwargs):
         """
-        Run parsec GUI
+        Run guardata GUI
         """
         config = config.evolve(mountpoint_enabled=True)
         _run_gui(config, start_arg=url, diagnose=diagnose)
@@ -41,13 +41,13 @@ async def _run_mountpoint(config, device, timestamp: Pendulum = None):
         await trio.sleep_forever()
 
 
-@click.command(short_help="run parsec mountpoint")
+@click.command(short_help="run guardata mountpoint")
 @core_config_and_device_options
 @click.option("--mountpoint", "-m", type=click.Path(exists=False))
 @click.option("--timestamp", "-t", type=lambda t: pendulum_parse(t, tz="local"))
 def run_mountpoint(config, device, mountpoint, timestamp, **kwargs):
     """
-    Expose device's parsec drive on the given mountpoint.
+    Expose device's guardata drive on the given mountpoint.
     """
     config = config.evolve(mountpoint_enabled=True)
     if mountpoint:

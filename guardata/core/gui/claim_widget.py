@@ -3,7 +3,7 @@
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.gui.ui.claim_widget import Ui_ClaimWidget
+from guardata.core.gui.ui.claim_widget import Ui_ClaimWidget
 
 
 class ClaimWidget(QWidget, Ui_ClaimWidget):

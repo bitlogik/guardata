@@ -4,7 +4,7 @@ import pytest
 from uuid import UUID, uuid4
 from pendulum import Pendulum
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     packb,
     RealmRole,
     vlob_create_serializer,
@@ -12,7 +12,7 @@ from parsec.api.protocol import (
     vlob_update_serializer,
     vlob_list_versions_serializer,
 )
-from parsec.backend.realm import RealmGrantedRole
+from guardata.backend.realm import RealmGrantedRole
 
 from tests.common import freeze_time
 from tests.backend.common import vlob_create, vlob_update, vlob_read, vlob_list_versions

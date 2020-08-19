@@ -7,9 +7,9 @@ from structlog import get_logger
 from typing import Dict, Tuple, Set, Optional, Union, Pattern
 from async_generator import asynccontextmanager
 
-from parsec.core.fs.exceptions import FSLocalMissError
-from parsec.core.types import EntryID, ChunkID, LocalDevice, BaseLocalManifest, BlockID
-from parsec.core.fs.storage.local_database import LocalDatabase
+from guardata.core.fs.exceptions import FSLocalMissError
+from guardata.core.types import EntryID, ChunkID, LocalDevice, BaseLocalManifest, BlockID
+from guardata.core.fs.storage.local_database import LocalDatabase
 
 logger = get_logger()
 

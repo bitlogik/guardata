@@ -7,23 +7,23 @@ from PyQt5.QtCore import Qt, pyqtSignal, QTimer
 from PyQt5.QtWidgets import QWidget, QMenu, QGraphicsDropShadowEffect, QLabel
 from PyQt5.QtGui import QColor
 
-from parsec.api.protocol import InvitationType
-from parsec.api.data import UserProfile
-from parsec.core.types import BackendInvitationAddr, UserInfo
+from guardata.api.protocol import InvitationType
+from guardata.api.data import UserProfile
+from guardata.core.types import BackendInvitationAddr, UserInfo
 
-from parsec.core.invite import InviteAlreadyMemberError
-from parsec.core.backend_connection import BackendConnectionError, BackendNotAvailable
+from guardata.core.invite import InviteAlreadyMemberError
+from guardata.core.backend_connection import BackendConnectionError, BackendNotAvailable
 
-from parsec.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
-from parsec.core.gui.custom_dialogs import show_error, show_info, ask_question, get_text_input
-from parsec.core.gui.custom_widgets import ensure_string_size
-from parsec.core.gui.flow_layout import FlowLayout
-from parsec.core.gui import desktop
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.greet_user_widget import GreetUserWidget
-from parsec.core.gui.ui.user_button import Ui_UserButton
-from parsec.core.gui.ui.user_invitation_button import Ui_UserInvitationButton
-from parsec.core.gui.ui.users_widget import Ui_UsersWidget
+from guardata.core.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.core.gui.custom_dialogs import show_error, show_info, ask_question, get_text_input
+from guardata.core.gui.custom_widgets import ensure_string_size
+from guardata.core.gui.flow_layout import FlowLayout
+from guardata.core.gui import desktop
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.greet_user_widget import GreetUserWidget
+from guardata.core.gui.ui.user_button import Ui_UserButton
+from guardata.core.gui.ui.user_invitation_button import Ui_UserInvitationButton
+from guardata.core.gui.ui.users_widget import Ui_UsersWidget
 
 
 class UserInvitationButton(QWidget, Ui_UserInvitationButton):

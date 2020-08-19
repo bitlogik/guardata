@@ -18,10 +18,10 @@ from PyQt5.QtWidgets import (
     QGraphicsDropShadowEffect,
 )
 
-from parsec.core.types import WorkspaceRole
+from guardata.core.types import WorkspaceRole
 
-from parsec.core.gui.lang import translate as _, format_datetime
-from parsec.core.gui.file_items import (
+from guardata.core.gui.lang import translate as _, format_datetime
+from guardata.core.gui.file_items import (
     FileTableItem,
     CustomTableItem,
     FolderTableItem,
@@ -32,8 +32,8 @@ from parsec.core.gui.file_items import (
     UUID_DATA_INDEX,
     COPY_STATUS_DATA_INDEX,
 )
-from parsec.core.gui.custom_widgets import Pixmap
-from parsec.core.gui.file_size import get_filesize
+from guardata.core.gui.custom_widgets import Pixmap
+from guardata.core.gui.file_size import get_filesize
 
 
 class Column(IntEnum):

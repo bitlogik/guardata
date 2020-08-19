@@ -4,9 +4,9 @@ import pendulum
 from uuid import UUID
 from typing import Dict
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.api.protocol import DeviceID, UserID, OrganizationID, RealmRole
-from parsec.backend.realm import (
+from guardata.backend.backend_events import BackendEvent
+from guardata.api.protocol import DeviceID, UserID, OrganizationID, RealmRole
+from guardata.backend.realm import (
     RealmAccessError,
     RealmNotFoundError,
     RealmEncryptionRevisionError,
@@ -15,9 +15,9 @@ from parsec.backend.realm import (
     RealmInMaintenanceError,
     RealmNotInMaintenanceError,
 )
-from parsec.backend.postgresql.handler import send_signal
-from parsec.backend.postgresql.message import send_message
-from parsec.backend.postgresql.utils import (
+from guardata.backend.postgresql.handler import send_signal
+from guardata.backend.postgresql.message import send_message
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_organization_internal_id,

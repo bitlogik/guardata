@@ -5,7 +5,7 @@ from PyQt5.QtCore import QFile, QIODevice
 
 from structlog import get_logger
 
-from parsec.core.gui.ui.changelog_widget import Ui_ChangelogWidget
+from guardata.core.gui.ui.changelog_widget import Ui_ChangelogWidget
 
 
 logger = get_logger()

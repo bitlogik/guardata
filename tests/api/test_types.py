@@ -2,8 +2,8 @@
 
 import pytest
 
-from parsec.api.protocol import UserID, DeviceID, DeviceName, OrganizationID, HumanHandle
-from parsec.api.data import SASCode
+from guardata.api.protocol import UserID, DeviceID, DeviceName, OrganizationID, HumanHandle
+from guardata.api.data import SASCode
 
 
 @pytest.mark.parametrize("cls", (UserID, DeviceName, OrganizationID))

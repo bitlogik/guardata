@@ -4,7 +4,7 @@
 from PyQt5.QtGui import QIcon
 from PyQt5.QtWidgets import QMenu, QSystemTrayIcon
 
-from parsec.core.gui.lang import translate as _
+from guardata.core.gui.lang import translate as _
 
 
 def systray_available() -> bool:

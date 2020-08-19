@@ -1,15 +1,15 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.api.protocol import OrganizationID, DeviceID, UserID
-from parsec.backend.backend_events import BackendEvent
-from parsec.backend.user import (
+from guardata.api.protocol import OrganizationID, DeviceID, UserID
+from guardata.backend.backend_events import BackendEvent
+from guardata.backend.user import (
     UserError,
     UserNotFoundError,
     UserAlreadyExistsError,
     DeviceInvitation,
 )
-from parsec.backend.postgresql.handler import send_signal
-from parsec.backend.postgresql.utils import (
+from guardata.backend.postgresql.handler import send_signal
+from guardata.backend.postgresql.utils import (
     Q,
     query,
     q_organization_internal_id,

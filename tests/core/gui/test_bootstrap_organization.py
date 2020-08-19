@@ -4,16 +4,16 @@
 import pytest
 from PyQt5 import QtCore
 
-from parsec.api.protocol import OrganizationID
-from parsec.core.types import BackendOrganizationBootstrapAddr
-from parsec.core.invite.exceptions import InviteNotFoundError, InviteAlreadyUsedError
-from parsec.core.gui.bootstrap_organization_widget import BootstrapOrganizationWidget
+from guardata.api.protocol import OrganizationID
+from guardata.core.types import BackendOrganizationBootstrapAddr
+from guardata.core.invite.exceptions import InviteNotFoundError, InviteAlreadyUsedError
+from guardata.core.gui.bootstrap_organization_widget import BootstrapOrganizationWidget
 
 
 @pytest.fixture
 def catch_bootstrap_organization_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "parsec.core.gui.bootstrap_organization_widget.BootstrapOrganizationWidget"
+        "guardata.core.gui.bootstrap_organization_widget.BootstrapOrganizationWidget"
     )
 
 
@@ -148,7 +148,7 @@ async def test_bootstrap_organization_invite_already_used(
         raise InviteAlreadyUsedError()
 
     monkeypatch.setattr(
-        "parsec.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
+        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
     )
 
     await proceed_to_bootstrap(aqtbot, bo_w)
@@ -176,7 +176,7 @@ async def test_bootstrap_organization_invite_not_found(
         raise InviteNotFoundError()
 
     monkeypatch.setattr(
-        "parsec.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
+        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
     )
 
     await proceed_to_bootstrap(aqtbot, bo_w)
@@ -204,7 +204,7 @@ async def test_bootstrap_organization_unknown_error(
         raise RuntimeError()
 
     monkeypatch.setattr(
-        "parsec.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
+        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
     )
 
     await proceed_to_bootstrap(aqtbot, bo_w)

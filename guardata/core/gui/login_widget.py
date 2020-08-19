@@ -5,15 +5,15 @@ from pathlib import Path
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget
 
-from parsec.core.local_device import list_available_devices, AvailableDevice
+from guardata.core.local_device import list_available_devices, AvailableDevice
 
-from parsec.core.gui.lang import translate as _
-from parsec.core.gui.parsec_application import guardataApp
-from parsec.core.gui.ui.login_widget import Ui_LoginWidget
-from parsec.core.gui.ui.account_button import Ui_AccountButton
-from parsec.core.gui.ui.login_accounts_widget import Ui_LoginAccountsWidget
-from parsec.core.gui.ui.login_password_input_widget import Ui_LoginPasswordInputWidget
-from parsec.core.gui.ui.login_no_devices_widget import Ui_LoginNoDevicesWidget
+from guardata.core.gui.lang import translate as _
+from guardata.core.gui.guardata_application import guardataApp
+from guardata.core.gui.ui.login_widget import Ui_LoginWidget
+from guardata.core.gui.ui.account_button import Ui_AccountButton
+from guardata.core.gui.ui.login_accounts_widget import Ui_LoginAccountsWidget
+from guardata.core.gui.ui.login_password_input_widget import Ui_LoginPasswordInputWidget
+from guardata.core.gui.ui.login_no_devices_widget import Ui_LoginNoDevicesWidget
 
 
 class AccountButton(QWidget, Ui_AccountButton):

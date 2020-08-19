@@ -110,7 +110,7 @@ def del_acrobat_app_container_enabled():
 # Drive icon management
 
 
-def get_parsec_drive_icon(letter):
+def get_guardata_drive_icon(letter):
     winreg = get_winreg()
     hkcu = winreg.HKEY_CURRENT_USER
     assert len(letter) == 1 and letter.upper() in string.ascii_uppercase
@@ -132,7 +132,7 @@ def get_parsec_drive_icon(letter):
     return icon_path, pid
 
 
-def set_parsec_drive_icon(letter):
+def set_guardata_drive_icon(letter):
     winreg = get_winreg()
     hkcu = winreg.HKEY_CURRENT_USER
     assert len(letter) == 1 and letter.upper() in string.ascii_uppercase
@@ -143,7 +143,7 @@ def set_parsec_drive_icon(letter):
     winreg_write_user_dword(key, PROCESS_ID, os.getpid())
 
 
-def del_parsec_drive_icon(letter):
+def del_guardata_drive_icon(letter):
     winreg = get_winreg()
     hkcu = winreg.HKEY_CURRENT_USER
     assert len(letter) == 1 and letter.upper() in string.ascii_uppercase
@@ -157,7 +157,7 @@ def del_parsec_drive_icon(letter):
 
 
 @contextmanager
-def parsec_drive_icon_context(letter):
+def guardata_drive_icon_context(letter):
     # Winreg is not available for some reasons
     if platform.system() != "Windows" or not try_winreg():
         yield
@@ -165,13 +165,13 @@ def parsec_drive_icon_context(letter):
 
     # Safe context for removing the key after usage
     try:
-        set_parsec_drive_icon(letter)
+        set_guardata_drive_icon(letter)
         yield
     finally:
-        del_parsec_drive_icon(letter)
+        del_guardata_drive_icon(letter)
 
 
-def cleanup_parsec_drive_icons():
+def cleanup_guardata_drive_icons():
     # Winreg is not available for some reasons
     if platform.system() != "Windows" or not try_winreg():
         return
@@ -180,6 +180,6 @@ def cleanup_parsec_drive_icons():
     for letter in string.ascii_uppercase:
 
         # Perform some cleanup if necessary
-        _, pid = get_parsec_drive_icon(letter)
+        _, pid = get_guardata_drive_icon(letter)
         if pid and not psutil.pid_exists(pid):
-            del_parsec_drive_icon(letter)
+            del_guardata_drive_icon(letter)

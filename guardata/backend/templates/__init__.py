@@ -9,7 +9,7 @@ class PackageLoader(BaseLoader):
         self.path = path
 
     def get_source(self, environment, template):
-        from parsec.backend import templates  # Self import \o/
+        from guardata.backend import templates  # Self import \o/
 
         try:
             source = importlib_resources.read_text(templates, template)
@@ -18,7 +18,7 @@ class PackageLoader(BaseLoader):
         return source, self.path, lambda: True
 
 
-JINJA_ENV = Environment(loader=PackageLoader("parsec.backend.http.templates"))
+JINJA_ENV = Environment(loader=PackageLoader("guardata.backend.http.templates"))
 
 
 def get_template(name):

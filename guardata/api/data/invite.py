@@ -4,12 +4,12 @@ import re
 from typing import Optional, Tuple, List
 from random import randint, shuffle
 
-from parsec.crypto import VerifyKey, PublicKey, PrivateKey, SecretKey
-from parsec.serde import fields, post_load
-from parsec.api.protocol import DeviceID, DeviceIDField, HumanHandle, HumanHandleField
-from parsec.api.data.base import BaseAPIData, BaseSchema
-from parsec.api.data.entry import EntryID, EntryIDField
-from parsec.api.data.certif import UserProfile, UserProfileField
+from guardata.crypto import VerifyKey, PublicKey, PrivateKey, SecretKey
+from guardata.serde import fields, post_load
+from guardata.api.protocol import DeviceID, DeviceIDField, HumanHandle, HumanHandleField
+from guardata.api.data.base import BaseAPIData, BaseSchema
+from guardata.api.data.entry import EntryID, EntryIDField
+from guardata.api.data.certif import UserProfile, UserProfileField
 import attr
 
 

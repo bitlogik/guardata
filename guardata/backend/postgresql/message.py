@@ -3,11 +3,11 @@
 from pendulum import Pendulum
 from typing import List, Tuple
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.api.protocol import UserID, DeviceID, OrganizationID
-from parsec.backend.message import BaseMessageComponent
-from parsec.backend.postgresql.handler import send_signal, PGHandler
-from parsec.backend.postgresql.utils import (
+from guardata.backend.backend_events import BackendEvent
+from guardata.api.protocol import UserID, DeviceID, OrganizationID
+from guardata.backend.message import BaseMessageComponent
+from guardata.backend.postgresql.handler import send_signal, PGHandler
+from guardata.backend.postgresql.utils import (
     Q,
     q_organization_internal_id,
     q_user_internal_id,

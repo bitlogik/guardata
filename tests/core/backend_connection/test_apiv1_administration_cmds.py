@@ -3,8 +3,8 @@
 import pytest
 import trio
 
-from parsec.api.protocol import APIV1_ADMINISTRATION_CMDS
-from parsec.core.backend_connection import (
+from guardata.api.protocol import APIV1_ADMINISTRATION_CMDS
+from guardata.core.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     apiv1_backend_administration_cmds_factory,

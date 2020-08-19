@@ -6,11 +6,11 @@ from uuid import UUID
 from typing import List, Tuple, Dict, Optional
 from collections import defaultdict
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.api.protocol import RealmRole
-from parsec.backend.realm import BaseRealmComponent, RealmNotFoundError
-from parsec.backend.vlob import (
+from guardata.backend.backend_events import BackendEvent
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.api.protocol import RealmRole
+from guardata.backend.realm import BaseRealmComponent, RealmNotFoundError
+from guardata.backend.vlob import (
     BaseVlobComponent,
     VlobAccessError,
     VlobVersionError,

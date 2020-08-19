@@ -2,11 +2,11 @@
 
 from marshmallow import validate, pre_dump, post_load, pre_load  # noqa: republishing
 
-from parsec.serde import fields
-from parsec.serde.exceptions import SerdeError, SerdeValidationError, SerdePackingError
-from parsec.serde.schema import BaseSchema, OneOfSchema, BaseCmdSchema
-from parsec.serde.packing import packb, unpackb, Unpacker
-from parsec.serde.serializer import (
+from guardata.serde import fields
+from guardata.serde.exceptions import SerdeError, SerdeValidationError, SerdePackingError
+from guardata.serde.schema import BaseSchema, OneOfSchema, BaseCmdSchema
+from guardata.serde.packing import packb, unpackb, Unpacker
+from guardata.serde.serializer import (
     BaseSerializer,
     JSONSerializer,
     MsgpackSerializer,

@@ -10,7 +10,7 @@ from setuptools.command.build_py import build_py
 
 # Awesome hack to load `__version__`
 __version__ = None
-exec(open("parsec/_version.py", encoding="utf-8").read())
+exec(open("guardata/_version.py", encoding="utf-8").read())
 
 
 def fix_pyqt_import():
@@ -50,7 +50,7 @@ def fix_pyqt_import():
 
 
 class GeneratePyQtResourcesBundle(Command):
-    description = "Generates `parsec.core.gui._resource_rc` bundle module"
+    description = "Generates `guardata.core.gui._resource_rc` bundle module"
 
     user_options = []
 
@@ -65,12 +65,12 @@ class GeneratePyQtResourcesBundle(Command):
         try:
             from PyQt5.pyrcc_main import processResourceFile
 
-            self.announce("Generating `parsec.core.gui._resources_rc`", level=distutils.log.INFO)
+            self.announce("Generating `guardata.core.gui._resources_rc`", level=distutils.log.INFO)
             processResourceFile(
-                ["parsec/core/gui/rc/resources.qrc"], "parsec/core/gui/_resources_rc.py", False
+                ["guardata/core/gui/rc/resources.qrc"], "guardata/core/gui/_resources_rc.py", False
             )
         except ImportError:
-            print("PyQt5 not installed, skipping `parsec.core.gui._resources_rc` generation.")
+            print("PyQt5 not installed, skipping `guardata.core.gui._resources_rc` generation.")
 
 
 class GenerateChangelog(Command):
@@ -87,7 +87,7 @@ class GenerateChangelog(Command):
     def run(self):
         import docutils.core
 
-        destination_folder = "parsec/core/gui/rc/generated_misc"
+        destination_folder = "guardata/core/gui/rc/generated_misc"
         self.announce(
             f"Converting HISTORY.rst to {destination_folder}/history.html", level=distutils.log.INFO
         )
@@ -100,7 +100,7 @@ class GenerateChangelog(Command):
 
 
 class GeneratePyQtForms(Command):
-    description = "Generates `parsec.core.ui.*` forms module"
+    description = "Generates `guardata.core.ui.*` forms module"
 
     user_options = []
 
@@ -119,21 +119,21 @@ class GeneratePyQtForms(Command):
         try:
             from PyQt5.uic.driver import Driver
         except ImportError:
-            print("PyQt5 not installed, skipping `parsec.core.gui.ui` generation.")
+            print("PyQt5 not installed, skipping `guardata.core.gui.ui` generation.")
             return
 
-        self.announce("Generating `parsec.core.gui.ui`", level=distutils.log.INFO)
+        self.announce("Generating `guardata.core.gui.ui`", level=distutils.log.INFO)
         Options = namedtuple(
             "Options",
             ["output", "import_from", "debug", "preview", "execute", "indent", "resource_suffix"],
         )
-        ui_dir = pathlib.Path("parsec/core/gui/forms")
-        ui_path = "parsec/core/gui/ui"
+        ui_dir = pathlib.Path("guardata/core/gui/forms")
+        ui_path = "guardata/core/gui/ui"
         os.makedirs(ui_path, exist_ok=True)
         for f in ui_dir.iterdir():
             o = Options(
                 output=os.path.join(ui_path, "{}.py".format(f.stem)),
-                import_from="parsec.core.gui",
+                import_from="guardata.core.gui",
                 debug=False,
                 preview=False,
                 execute=False,
@@ -165,20 +165,20 @@ class ExtractTranslations(Command):
         try:
             from PyQt5.pylupdate_main import main as pylupdate_main
         except ImportError:
-            print("PyQt5 not installed, skipping `parsec.core.gui.ui` generation.")
+            print("PyQt5 not installed, skipping `guardata.core.gui.ui` generation.")
             return
 
         self.announce("Generating ui translation files", level=distutils.log.INFO)
-        ui_dir = pathlib.Path("parsec/core/gui")
+        ui_dir = pathlib.Path("guardata/core/gui")
         tr_dir = ui_dir / "tr"
         os.makedirs(tr_dir, exist_ok=True)
 
-        new_args = ["pylupdate", str(ui_dir / "parsec-gui.pro")]
+        new_args = ["pylupdate", str(ui_dir / "guardata-gui.pro")]
         with patch("sys.argv", new_args):
             pylupdate_main()
 
         files = [str(f) for f in ui_dir.iterdir() if f.is_file() and f.suffix == ".py"]
-        files.append(str(tr_dir / "parsec_en.ts"))
+        files.append(str(tr_dir / "guardata_en.ts"))
         args = [
             "_",
             "extract",
@@ -194,7 +194,7 @@ class ExtractTranslations(Command):
         CommandLineInterface().run(args)
         languages = ["fr", "en"]
         for lang in languages:
-            po_file = tr_dir / f"parsec_{lang}.po"
+            po_file = tr_dir / f"guardata_{lang}.po"
             if not po_file.is_file():
                 po_file.touch()
             args = [
@@ -227,7 +227,7 @@ class CompileTranslations(Command):
         from babel.messages.frontend import CommandLineInterface
 
         self.announce("Compiling ui translation files", level=distutils.log.INFO)
-        ui_dir = pathlib.Path("parsec/core/gui")
+        ui_dir = pathlib.Path("guardata/core/gui")
         tr_dir = ui_dir / "tr"
         rc_dir = ui_dir / "rc" / "translations"
         os.makedirs(rc_dir, exist_ok=True)
@@ -237,9 +237,9 @@ class CompileTranslations(Command):
                 "_",
                 "compile",
                 "-i",
-                str(tr_dir / f"parsec_{lang}.po"),
+                str(tr_dir / f"guardata_{lang}.po"),
                 "-o",
-                str(rc_dir / f"parsec_{lang}.mo"),
+                str(rc_dir / f"guardata_{lang}.mo"),
             ]
             CommandLineInterface().run(args)
 
@@ -353,7 +353,7 @@ setup(
     author_email="contact@bitlogik.fr",
     url="https://guardata.app",
     python_requires='>=3.6',
-    packages=find_packages(include=["parsec", "parsec.*"]),
+    packages=find_packages(include=["guardata", "guardata.*"]),
     package_dir={"guardata": "guardata"},
     setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP, DOCUTILS_DEP],  # To generate resources bundle
     install_requires=requirements,
@@ -367,15 +367,15 @@ setup(
         "generate_pyqt": build_py_with_pyqt,
         "build_py": build_py_with_pyqt,
     },
-    # Omitting GUI resources given they end up packaged in `parsec/core/gui/_resources_rc.py`
+    # Omitting GUI resources given they end up packaged in `guardata/core/gui/_resources_rc.py`
     package_data={
-        "parsec.backend.postgresql.migrations": ["*.sql"],
-        "parsec.backend.templates": ["*"],
-        "parsec.backend.static": ["*"],
-        "parsec.core.resources": ["*.ico"],
+        "guardata.backend.postgresql.migrations": ["*.sql"],
+        "guardata.backend.templates": ["*"],
+        "guardata.backend.static": ["*"],
+        "guardata.core.resources": ["*.ico"],
     },
     entry_points={
-        "console_scripts": ["guardata = parsec.cli:cli"],
+        "console_scripts": ["guardata = guardata.cli:cli"],
         "babel.extractors": ["extract_qt = misc.babel_qt_extractor.extract_qt"],
     },
     license="AGPLv3",

@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.serde import fields
-from parsec.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
+from guardata.serde import fields
+from guardata.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
 
 
 __all__ = ("ping_serializer",)

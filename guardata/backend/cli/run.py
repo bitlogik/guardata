@@ -8,11 +8,11 @@ from structlog import get_logger
 from itertools import count
 from collections import defaultdict
 
-from parsec.utils import trio_run
-from parsec.cli_utils import cli_exception_handler
-from parsec.logging import configure_logging
-from parsec.backend import backend_app_factory
-from parsec.backend.config import (
+from guardata.utils import trio_run
+from guardata.cli_utils import cli_exception_handler
+from guardata.logging import configure_logging
+from guardata.backend import backend_app_factory
+from guardata.backend.config import (
     BackendConfig,
     EmailConfig,
     MockedBlockStoreConfig,
@@ -23,7 +23,7 @@ from parsec.backend.config import (
     RAID1BlockStoreConfig,
     RAID5BlockStoreConfig,
 )
-from parsec.core.types import BackendAddr
+from guardata.core.types import BackendAddr
 
 
 logger = get_logger()
@@ -275,7 +275,7 @@ integer and `<config>` the MOCKED/POSTGRESQL/S3/SWIFT config.
     help="""Allow organization bootstrap without prior creation.
 
 Without this flag, an organization must be created by administration (see
- `parsec core create_organization` command) before bootstrap can occur.
+ `guardata core create_organization` command) before bootstrap can occur.
 
 With this flag, the server allows anybody to bootstrap an organanization
 by providing an empty bootstrap token given 1) the organization is not boostrapped yet

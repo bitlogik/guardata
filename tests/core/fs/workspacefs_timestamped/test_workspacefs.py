@@ -3,8 +3,8 @@
 import pytest
 from pendulum import Pendulum
 
-from parsec.core.types import FsPath
-from parsec.core.fs import FSError
+from guardata.core.types import FsPath
+from guardata.core.fs import FSError
 
 
 def _day(d):

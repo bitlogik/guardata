@@ -6,10 +6,10 @@ from typing import Optional, List, Dict, AsyncIterator, cast, Tuple, Any, Union,
 
 from pendulum import now as pendulum_now
 
-from parsec.api.protocol import DeviceID
-from parsec.core.core_events import CoreEvent
-from parsec.api.data import BaseManifest as BaseRemoteManifest
-from parsec.core.types import (
+from guardata.api.protocol import DeviceID
+from guardata.core.core_events import CoreEvent
+from guardata.api.data import BaseManifest as BaseRemoteManifest
+from guardata.core.types import (
     Chunk,
     EntryID,
     EntryName,
@@ -20,14 +20,14 @@ from parsec.core.types import (
     RemoteFolderishManifests,
 )
 
-from parsec.core.fs.workspacefs.entry_transactions import EntryTransactions
-from parsec.core.fs.exceptions import (
+from guardata.core.fs.workspacefs.entry_transactions import EntryTransactions
+from guardata.core.fs.exceptions import (
     FSFileConflictError,
     FSReshapingRequiredError,
     FSLocalMissError,
 )
 
-from parsec.core.fs.utils import is_file_manifest, is_workspace_manifest, is_folderish_manifest
+from guardata.core.fs.utils import is_file_manifest, is_workspace_manifest, is_folderish_manifest
 
 __all__ = "SyncTransactions"
 

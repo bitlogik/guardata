@@ -1,11 +1,11 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.backend.sendgrid.sendgrid import SendGridAPIClient
-from parsec.backend.sendgrid.helpers.mail.mail import Mail
-from parsec.backend.sendgrid.helpers.mail.email import Email
-from parsec.backend.sendgrid.helpers.mail.to_email import To
-from parsec.backend.sendgrid.helpers.mail.content import Content
+from guardata.backend.backend_events import BackendEvent
+from guardata.backend.sendgrid.sendgrid import SendGridAPIClient
+from guardata.backend.sendgrid.helpers.mail.mail import Mail
+from guardata.backend.sendgrid.helpers.mail.email import Email
+from guardata.backend.sendgrid.helpers.mail.to_email import To
+from guardata.backend.sendgrid.helpers.mail.content import Content
 import attr
 import os
 import trio
@@ -16,10 +16,10 @@ from typing import Dict, List, Optional, Union, Set
 from pendulum import Pendulum, now as pendulum_now
 from structlog import get_logger
 
-from parsec.crypto import PublicKey
-from parsec.event_bus import EventBus
-from parsec.api.data import UserProfile
-from parsec.api.protocol import (
+from guardata.crypto import PublicKey
+from guardata.event_bus import EventBus
+from guardata.api.data import UserProfile
+from guardata.api.protocol import (
     OrganizationID,
     UserID,
     HumanHandle,
@@ -44,10 +44,10 @@ from parsec.api.protocol import (
     invite_4_greeter_communicate_serializer,
     invite_4_claimer_communicate_serializer,
 )
-from parsec.backend.templates import get_template
-from parsec.backend.utils import catch_protocol_errors, api
-from parsec.backend.config import BackendConfig, EmailConfig
-from parsec.core.types import BackendInvitationAddr
+from guardata.backend.templates import get_template
+from guardata.backend.utils import catch_protocol_errors, api
+from guardata.backend.config import BackendConfig, EmailConfig
+from guardata.core.types import BackendInvitationAddr
 
 
 logger = get_logger()

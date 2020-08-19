@@ -4,9 +4,9 @@ import pytest
 import trio
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.api.protocol import RealmRole, MaintenanceType, APIEvent
-from parsec.backend.realm import RealmGrantedRole
+from guardata.backend.backend_events import BackendEvent
+from guardata.api.protocol import RealmRole, MaintenanceType, APIEvent
+from guardata.backend.realm import RealmGrantedRole
 
 from tests.common import freeze_time
 from tests.backend.test_message import message_get

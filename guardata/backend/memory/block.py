@@ -3,11 +3,11 @@
 from uuid import UUID
 import attr
 
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.api.protocol import RealmRole
-from parsec.backend.realm import BaseRealmComponent, RealmNotFoundError
-from parsec.backend.blockstore import BaseBlockStoreComponent
-from parsec.backend.block import (
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.api.protocol import RealmRole
+from guardata.backend.realm import BaseRealmComponent, RealmNotFoundError
+from guardata.backend.blockstore import BaseBlockStoreComponent
+from guardata.backend.block import (
     BaseBlockComponent,
     BlockAlreadyExistsError,
     BlockAccessError,

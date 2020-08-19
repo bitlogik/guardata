@@ -1,8 +1,8 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.serde import BaseSchema, fields, validate
-from parsec.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
-from parsec.api.protocol.types import DeviceIDField
+from guardata.serde import BaseSchema, fields, validate
+from guardata.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
+from guardata.api.protocol.types import DeviceIDField
 
 
 __all__ = (

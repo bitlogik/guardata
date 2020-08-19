@@ -14,16 +14,16 @@ from structlog import get_logger
 from base64 import b64decode, b64encode
 import importlib_resources
 
-from parsec.event_bus import EventBus
-from parsec.serde import packb, unpackb
-from parsec.utils import start_task, TaskStatus
-from parsec.backend.postgresql.utils import (
+from guardata.event_bus import EventBus
+from guardata.serde import packb, unpackb
+from guardata.utils import start_task, TaskStatus
+from guardata.backend.postgresql.utils import (
     STR_TO_REALM_ROLE,
     STR_TO_INVITATION_STATUS,
     STR_TO_BACKEND_EVENTS,
 )
-from parsec.backend.postgresql import migrations as migrations_module
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.postgresql import migrations as migrations_module
+from guardata.backend.backend_events import BackendEvent
 
 
 logger = get_logger()

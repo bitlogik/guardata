@@ -4,7 +4,7 @@ from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import QWidget, QStyle, QStyleOption
 
-from parsec.core.gui.ui.menu_widget import Ui_MenuWidget
+from guardata.core.gui.ui.menu_widget import Ui_MenuWidget
 
 
 class MenuWidget(QWidget, Ui_MenuWidget):

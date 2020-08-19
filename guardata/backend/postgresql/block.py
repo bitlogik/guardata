@@ -4,10 +4,10 @@ from triopg.exceptions import UniqueViolationError
 from uuid import UUID
 import pendulum
 
-from parsec.api.protocol import DeviceID, OrganizationID
-from parsec.backend.vlob import BaseVlobComponent
-from parsec.backend.blockstore import BaseBlockStoreComponent
-from parsec.backend.block import (
+from guardata.api.protocol import DeviceID, OrganizationID
+from guardata.backend.vlob import BaseVlobComponent
+from guardata.backend.blockstore import BaseBlockStoreComponent
+from guardata.backend.block import (
     BaseBlockComponent,
     BlockError,
     BlockAlreadyExistsError,
@@ -15,8 +15,8 @@ from parsec.backend.block import (
     BlockAccessError,
     BlockInMaintenanceError,
 )
-from parsec.backend.postgresql.handler import PGHandler
-from parsec.backend.postgresql.utils import (
+from guardata.backend.postgresql.handler import PGHandler
+from guardata.backend.postgresql.utils import (
     Q,
     q_organization_internal_id,
     q_user_internal_id,
@@ -27,7 +27,7 @@ from parsec.backend.postgresql.utils import (
     q_realm_internal_id,
     q_block,
 )
-from parsec.backend.postgresql.realm_queries.maintenance import get_realm_status, RealmNotFoundError
+from guardata.backend.postgresql.realm_queries.maintenance import get_realm_status, RealmNotFoundError
 
 
 _q_get_realm_id_from_block_id = Q(

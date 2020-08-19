@@ -4,7 +4,7 @@ import pytest
 from unittest.mock import ANY
 from uuid import uuid4
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     OrganizationID,
     packb,
     unpackb,
@@ -23,7 +23,7 @@ from parsec.api.protocol import (
     InvitedClientHandshake,
     HandshakeOrganizationExpired,
 )
-from parsec.api.version import API_V2_VERSION, ApiVersion
+from guardata.api.version import API_V2_VERSION, ApiVersion
 
 
 def test_good_authenticated_handshake(alice):

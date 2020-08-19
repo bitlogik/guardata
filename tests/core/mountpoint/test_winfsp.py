@@ -5,7 +5,7 @@ import os
 import time
 import threading
 
-from parsec.core.fs.utils import ntstatus
+from guardata.core.fs.utils import ntstatus
 
 
 @pytest.mark.win32
@@ -40,7 +40,7 @@ def test_teardown_during_fs_access(mountpoint_service, monkeypatch):
     mountpoint_winfsp_stop = threading.Event()
     mountpoint_stopped = threading.Event()
 
-    from parsec.core.mountpoint.thread_fs_access import ThreadFSAccess
+    from guardata.core.mountpoint.thread_fs_access import ThreadFSAccess
     from winfspy import FileSystem
 
     # Monkeypatch to trigger mountpoint teardown during an operation
@@ -60,7 +60,7 @@ def test_teardown_during_fs_access(mountpoint_service, monkeypatch):
         return vanilla_entry_info(self, path)
 
     monkeypatch.setattr(
-        "parsec.core.mountpoint.thread_fs_access.ThreadFSAccess.entry_info",
+        "guardata.core.mountpoint.thread_fs_access.ThreadFSAccess.entry_info",
         _entry_info_maybe_stop_loop,
     )
 

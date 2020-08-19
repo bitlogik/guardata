@@ -4,15 +4,15 @@ import pytest
 from pendulum import Pendulum
 from unittest.mock import ANY
 
-from parsec.core.types import EntryID
-from parsec.core.fs import (
+from guardata.core.types import EntryID
+from guardata.core.fs import (
     FSError,
     FSWorkspaceNotFoundError,
     FSWorkspaceNotInMaintenance,
     FSWorkspaceInMaintenance,
     FSBadEncryptionRevision,
 )
-from parsec.backend.backend_events import BackendEvent
+from guardata.backend.backend_events import BackendEvent
 from tests.common import freeze_time
 
 

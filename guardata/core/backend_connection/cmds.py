@@ -5,9 +5,9 @@ from uuid import UUID
 import pendulum
 from pendulum import Pendulum
 
-from parsec.crypto import VerifyKey, PublicKey
-from parsec.api.transport import Transport, TransportError
-from parsec.api.protocol import (
+from guardata.crypto import VerifyKey, PublicKey
+from guardata.api.transport import Transport, TransportError
+from guardata.api.protocol import (
     OrganizationID,
     UserID,
     DeviceName,
@@ -72,8 +72,8 @@ from parsec.api.protocol import (
     apiv1_device_create_serializer,
     device_create_serializer,
 )
-from parsec.core.types import EntryID
-from parsec.core.backend_connection.exceptions import BackendNotAvailable, BackendProtocolError
+from guardata.core.types import EntryID
+from guardata.core.backend_connection.exceptions import BackendNotAvailable, BackendProtocolError
 
 
 async def _send_cmd(transport: Transport, serializer, **req) -> dict:

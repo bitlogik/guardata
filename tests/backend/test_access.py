@@ -2,7 +2,7 @@
 
 import pytest
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     packb,
     unpackb,
     InvitationType,

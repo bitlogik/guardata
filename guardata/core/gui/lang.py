@@ -8,7 +8,7 @@ from structlog import get_logger
 
 from PyQt5.QtCore import QCoreApplication, QIODevice, QFile, QDataStream, QLocale
 
-from parsec.core.gui.desktop import get_locale_language
+from guardata.core.gui.desktop import get_locale_language
 
 
 LANGUAGES = {"English": "en", "Français": "fr"}
@@ -63,7 +63,7 @@ def switch_language(core_config, lang_key=None):
 
     _current_locale_language = lang_key
 
-    rc_file = QFile(f":/translations/translations/parsec_{lang_key}.mo")
+    rc_file = QFile(f":/translations/translations/guardata_{lang_key}.mo")
     if not rc_file.open(QIODevice.ReadOnly):
         logger.warning(f"Unable to read the translations for language '{lang_key}'")
         return None

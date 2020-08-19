@@ -2,8 +2,8 @@
 
 from uuid import UUID
 
-from parsec.api.protocol import OrganizationID
-from parsec.backend.blockstore import BaseBlockStoreComponent
+from guardata.api.protocol import OrganizationID
+from guardata.backend.blockstore import BaseBlockStoreComponent
 
 
 class RAID0BlockStoreComponent(BaseBlockStoreComponent):

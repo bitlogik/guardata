@@ -4,16 +4,16 @@ import trio
 import pytest
 import pendulum
 
-from parsec.api.transport import Transport, Ping, Pong
-from parsec.api.data import RevokedUserCertificateContent
-from parsec.api.protocol import (
+from guardata.api.transport import Transport, Ping, Pong
+from guardata.api.data import RevokedUserCertificateContent
+from guardata.api.protocol import (
     ServerHandshake,
     APIV1_HandshakeType,
     APIV1_AUTHENTICATED_CMDS,
     APIEvent,
 )
-from parsec.core.types import BackendOrganizationAddr
-from parsec.core.backend_connection import (
+from guardata.core.types import BackendOrganizationAddr
+from guardata.core.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     apiv1_backend_authenticated_cmds_factory,

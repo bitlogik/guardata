@@ -12,10 +12,10 @@ from hypothesis_trio.stateful import (
 )
 from hypothesis import strategies as st
 
-from parsec.core.types import EntryID, LocalFileManifest, Chunk
-from parsec.core.fs.storage import WorkspaceStorage
-from parsec.core.fs.workspacefs.file_transactions import FSInvalidFileDescriptor
-from parsec.core.fs.exceptions import FSRemoteBlockNotFound
+from guardata.core.types import EntryID, LocalFileManifest, Chunk
+from guardata.core.fs.storage import WorkspaceStorage
+from guardata.core.fs.workspacefs.file_transactions import FSInvalidFileDescriptor
+from guardata.core.fs.exceptions import FSRemoteBlockNotFound
 
 from tests.common import freeze_time, call_with_control
 

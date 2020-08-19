@@ -4,13 +4,13 @@ from PyQt5.QtWidgets import QWidget, QApplication
 
 from structlog import get_logger
 
-from parsec.core.local_device import get_key_file, change_device_password, LocalDeviceCryptoError
+from guardata.core.local_device import get_key_file, change_device_password, LocalDeviceCryptoError
 
-from parsec.core.gui.password_validation import PasswordStrengthWidget, get_password_strength
-from parsec.core.gui.custom_dialogs import show_error, show_info, GreyedDialog
-from parsec.core.gui.lang import translate as _
+from guardata.core.gui.password_validation import PasswordStrengthWidget, get_password_strength
+from guardata.core.gui.custom_dialogs import show_error, show_info, GreyedDialog
+from guardata.core.gui.lang import translate as _
 
-from parsec.core.gui.ui.password_change_widget import Ui_PasswordChangeWidget
+from guardata.core.gui.ui.password_change_widget import Ui_PasswordChangeWidget
 
 
 logger = get_logger()

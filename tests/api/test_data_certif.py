@@ -4,8 +4,8 @@ import pytest
 from pendulum import now as pendulum_now
 import zlib
 
-from parsec.serde import packb, unpackb
-from parsec.api.data import (
+from guardata.serde import packb, unpackb
+from guardata.api.data import (
     DataError,
     UserProfile,
     UserCertificateContent,

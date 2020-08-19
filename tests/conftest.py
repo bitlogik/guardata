@@ -1,7 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS - 2020 BitLogiK
 
-from parsec.core.core_events import CoreEvent
+from guardata.core.core_events import CoreEvent
 import pytest
 import os
 import re
@@ -24,16 +24,16 @@ import hypothesis
 from pathlib import Path
 import sqlite3
 
-from parsec.monitoring import TaskMonitoringInstrument
-from parsec.core import CoreConfig
-from parsec.core.types import BackendAddr
-from parsec.core.logged_core import logged_core_factory
-from parsec.core.backend_connection import BackendConnStatus
-from parsec.core.mountpoint.manager import get_mountpoint_runner
-from parsec.core.fs.storage import LocalDatabase, local_database, UserStorage
+from guardata.monitoring import TaskMonitoringInstrument
+from guardata.core import CoreConfig
+from guardata.core.types import BackendAddr
+from guardata.core.logged_core import logged_core_factory
+from guardata.core.backend_connection import BackendConnStatus
+from guardata.core.mountpoint.manager import get_mountpoint_runner
+from guardata.core.fs.storage import LocalDatabase, local_database, UserStorage
 
-from parsec.backend import backend_app_factory
-from parsec.backend.config import (
+from guardata.backend import backend_app_factory
+from guardata.backend.config import (
     BackendConfig,
     EmailConfig,
     MockedBlockStoreConfig,
@@ -228,14 +228,14 @@ def mock_crypto(request):
             data = password + salt
             return data[:size] + b"\x00" * (size - len(data))
 
-        from parsec.crypto import argon2id
+        from guardata.crypto import argon2id
 
         vanilla_kdf = argon2id.kdf
 
         def unmock():
-            return patch("parsec.crypto.argon2id.kdf", new=vanilla_kdf)
+            return patch("guardata.crypto.argon2id.kdf", new=vanilla_kdf)
 
-        with patch("parsec.crypto.argon2id.kdf", new=unsecure_but_fast_argon2id_kdf):
+        with patch("guardata.crypto.argon2id.kdf", new=unsecure_but_fast_argon2id_kdf):
             yield unmock
 
 
@@ -586,7 +586,7 @@ async def backend(backend_factory, request, fixtures_customization, backend_addr
             host_password=None,
             use_ssl=False,
             use_tls=False,
-            sender="Parsec <no-reply@parsec.com>",
+            sender="Parsec <no-reply@guardata.com>",
         )
         config["backend_addr"] = backend_addr
     if fixtures_customization.get("backend_spontaneous_organization_boostrap", False):
@@ -629,7 +629,7 @@ def email_letterbox(monkeypatch):
     async def _mocked_send_email(email_config, to_addr, message):
         letterbox._push(to_addr, message)
 
-    monkeypatch.setattr("parsec.backend.invite.send_email", _mocked_send_email)
+    monkeypatch.setattr("guardata.backend.invite.send_email", _mocked_send_email)
     return letterbox
 
 
@@ -650,7 +650,7 @@ def webhook_spy(monkeypatch):
         events.append((req.full_url, cooked_data))
         yield MockedRep()
 
-    monkeypatch.setattr("parsec.backend.webhooks.urlopen", _mock_urlopen)
+    monkeypatch.setattr("guardata.backend.webhooks.urlopen", _mock_urlopen)
     return events
 
 

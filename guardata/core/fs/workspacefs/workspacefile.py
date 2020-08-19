@@ -6,8 +6,8 @@ from typing import Union
 from enum import IntEnum
 import functools
 
-from parsec.core.fs.exceptions import FSUnsupportedOperation, FSOffsetError
-from parsec.core.types import FsPath, FileDescriptor
+from guardata.core.fs.exceptions import FSUnsupportedOperation, FSOffsetError
+from guardata.core.types import FsPath, FileDescriptor
 
 
 class FileState(IntEnum):

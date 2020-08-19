@@ -7,11 +7,11 @@ from uuid import UUID, uuid4
 from os import name as osname
 from os import fspath
 
-from parsec.crypto import SigningKey
-from parsec.serde import packb, unpackb
-from parsec.api.protocol import OrganizationID, DeviceID, HumanHandle
-from parsec.core.types import LocalDevice
-from parsec.core.local_device import (
+from guardata.crypto import SigningKey
+from guardata.serde import packb, unpackb
+from guardata.api.protocol import OrganizationID, DeviceID, HumanHandle
+from guardata.core.types import LocalDevice
+from guardata.core.local_device import (
     AvailableDevice,
     get_key_file,
     get_default_key_file,

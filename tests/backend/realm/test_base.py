@@ -3,8 +3,8 @@
 import pytest
 from pendulum import now as pendulum_now
 
-from parsec.api.data import RealmRoleCertificateContent
-from parsec.api.protocol import RealmRole
+from guardata.api.data import RealmRoleCertificateContent
+from guardata.api.protocol import RealmRole
 
 from tests.backend.common import realm_status, realm_update_roles
 

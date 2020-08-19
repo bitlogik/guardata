@@ -2,10 +2,10 @@
 
 from enum import Enum
 
-from parsec.serde import OneOfSchema, fields, validate
-from parsec.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
-from parsec.api.protocol.realm import RealmRoleField
-from parsec.api.protocol.invite import InvitationStatusField
+from guardata.serde import OneOfSchema, fields, validate
+from guardata.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
+from guardata.api.protocol.realm import RealmRoleField
+from guardata.api.protocol.invite import InvitationStatusField
 
 
 class APIEvent(Enum):

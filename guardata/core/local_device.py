@@ -8,15 +8,15 @@ from typing import List, Optional, Iterator
 from os import fspath
 from os import name as osname
 
-from parsec.serde import BaseSchema, fields, MsgpackSerializer
-from parsec.crypto import (
+from guardata.serde import BaseSchema, fields, MsgpackSerializer
+from guardata.crypto import (
     SecretKey,
     SigningKey,
     PrivateKey,
     CryptoError,
     derivate_secret_key_from_password,
 )
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     OrganizationID,
     DeviceID,
     HumanHandle,
@@ -24,8 +24,8 @@ from parsec.api.protocol import (
     OrganizationIDField,
     DeviceIDField,
 )
-from parsec.api.data import DataError, UserProfile
-from parsec.core.types import EntryID, LocalDevice, BackendOrganizationAddr
+from guardata.api.data import DataError, UserProfile
+from guardata.core.types import EntryID, LocalDevice, BackendOrganizationAddr
 
 
 class LocalDeviceError(Exception):

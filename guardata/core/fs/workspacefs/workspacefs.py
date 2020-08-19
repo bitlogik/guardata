@@ -6,10 +6,10 @@ from collections import defaultdict
 from typing import Union, List, Dict, Tuple, AsyncIterator, cast, Pattern
 from pendulum import Pendulum, now as pendulum_now
 
-from parsec.api.data import BaseManifest as BaseRemoteManifest
-from parsec.api.data import FileManifest as RemoteFileManifest
-from parsec.api.protocol import UserID
-from parsec.core.types import (
+from guardata.api.data import BaseManifest as BaseRemoteManifest
+from guardata.api.data import FileManifest as RemoteFileManifest
+from guardata.api.protocol import UserID
+from guardata.core.types import (
     FsPath,
     EntryID,
     LocalDevice,
@@ -17,12 +17,12 @@ from parsec.core.types import (
     RemoteFolderishManifests,
     DEFAULT_BLOCK_SIZE,
 )
-from parsec.core.fs.remote_loader import RemoteLoader
-from parsec.core.fs import workspacefs  # Needed to break cyclic import with WorkspaceFSTimestamped
-from parsec.core.fs.workspacefs.sync_transactions import SyncTransactions
-from parsec.core.fs.workspacefs.versioning_helpers import VersionLister
-from parsec.core.fs.utils import is_file_manifest, is_folderish_manifest
-from parsec.core.fs.exceptions import (
+from guardata.core.fs.remote_loader import RemoteLoader
+from guardata.core.fs import workspacefs  # Needed to break cyclic import with WorkspaceFSTimestamped
+from guardata.core.fs.workspacefs.sync_transactions import SyncTransactions
+from guardata.core.fs.workspacefs.versioning_helpers import VersionLister
+from guardata.core.fs.utils import is_file_manifest, is_folderish_manifest
+from guardata.core.fs.exceptions import (
     FSRemoteManifestNotFound,
     FSRemoteManifestNotFoundBadVersion,
     FSRemoteSyncError,
@@ -36,7 +36,7 @@ from parsec.core.fs.exceptions import (
     FSNotADirectoryError,
 )
 
-from parsec.core.fs.workspacefs.workspacefile import WorkspaceFile
+from guardata.core.fs.workspacefs.workspacefile import WorkspaceFile
 
 AnyPath = Union[FsPath, str]
 

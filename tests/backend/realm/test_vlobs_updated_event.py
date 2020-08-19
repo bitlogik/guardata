@@ -4,9 +4,9 @@ import pytest
 from uuid import UUID
 from pendulum import Pendulum
 
-from parsec.api.protocol import RealmRole, APIEvent
-from parsec.backend.realm import RealmGrantedRole
-from parsec.backend.backend_events import BackendEvent
+from guardata.api.protocol import RealmRole, APIEvent
+from guardata.backend.realm import RealmGrantedRole
+from guardata.backend.backend_events import BackendEvent
 
 from tests.backend.common import events_subscribe, events_listen_nowait
 

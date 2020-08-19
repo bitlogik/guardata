@@ -6,26 +6,26 @@ import trio
 from typing import Tuple
 from pathlib import Path
 
-from parsec.logging import configure_logging
-from parsec.core import logged_core_factory
-from parsec.api.data import UserProfile
-from parsec.api.protocol import OrganizationID, HumanHandle, InvitationType
-from parsec.core.types import (
+from guardata.logging import configure_logging
+from guardata.core import logged_core_factory
+from guardata.api.data import UserProfile
+from guardata.api.protocol import OrganizationID, HumanHandle, InvitationType
+from guardata.core.types import (
     WorkspaceRole,
     BackendAddr,
     BackendOrganizationBootstrapAddr,
     BackendInvitationAddr,
     LocalDevice,
 )
-from parsec.core.config import load_config
-from parsec.core.backend_connection import (
+from guardata.core.config import load_config
+from guardata.core.backend_connection import (
     apiv1_backend_administration_cmds_factory,
     apiv1_backend_anonymous_cmds_factory,
     backend_authenticated_cmds_factory,
     backend_invited_cmds_factory,
 )
-from parsec.core.local_device import save_device_with_password
-from parsec.core.invite import (
+from guardata.core.local_device import save_device_with_password
+from guardata.core.invite import (
     bootstrap_organization,
     DeviceGreetInitialCtx,
     UserGreetInitialCtx,

@@ -5,7 +5,7 @@ from functools import partial
 from pendulum import now as pendulum_now
 from async_generator import asynccontextmanager
 
-from parsec.api.protocol import (
+from guardata.api.protocol import (
     ping_serializer,
     block_create_serializer,
     block_read_serializer,

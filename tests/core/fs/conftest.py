@@ -6,12 +6,12 @@ from pendulum import Pendulum
 
 from hypothesis_trio.stateful import run_state_machine_as_test, TrioAsyncioRuleBasedStateMachine
 
-from parsec.core.fs.storage import WorkspaceStorage
-from parsec.core.fs.workspacefs.file_transactions import FileTransactions
-from parsec.core.fs.workspacefs.entry_transactions import EntryTransactions
-from parsec.core.fs.workspacefs.sync_transactions import SyncTransactions
-from parsec.core.fs.remote_loader import RemoteLoader
-from parsec.core.types import LocalWorkspaceManifest, WorkspaceEntry, EntryID
+from guardata.core.fs.storage import WorkspaceStorage
+from guardata.core.fs.workspacefs.file_transactions import FileTransactions
+from guardata.core.fs.workspacefs.entry_transactions import EntryTransactions
+from guardata.core.fs.workspacefs.sync_transactions import SyncTransactions
+from guardata.core.fs.remote_loader import RemoteLoader
+from guardata.core.types import LocalWorkspaceManifest, WorkspaceEntry, EntryID
 
 from tests.common import call_with_control
 

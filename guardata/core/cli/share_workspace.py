@@ -2,11 +2,11 @@
 
 import click
 
-from parsec.utils import trio_run
-from parsec.api.protocol import UserID
-from parsec.cli_utils import cli_exception_handler
-from parsec.core import logged_core_factory
-from parsec.core.cli.utils import core_config_and_device_options
+from guardata.utils import trio_run
+from guardata.api.protocol import UserID
+from guardata.cli_utils import cli_exception_handler
+from guardata.core import logged_core_factory
+from guardata.core.cli.utils import core_config_and_device_options
 
 
 async def _share_workspace(config, device, name, user_id):

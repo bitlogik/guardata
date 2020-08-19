@@ -4,7 +4,7 @@ import trio
 import threading
 from unittest.mock import MagicMock
 
-from parsec.core.gui.trio_thread import (
+from guardata.core.gui.trio_thread import (
     run_trio_thread,
     ThreadSafeQtSignal,
     JobSchedulerNotAvailable,

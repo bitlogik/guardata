@@ -4,14 +4,14 @@ import pytest
 from pathlib import Path
 from async_generator import asynccontextmanager
 
-from parsec.core.backend_connection import (
+from guardata.core.backend_connection import (
     backend_authenticated_cmds_factory,
     apiv1_backend_authenticated_cmds_factory,
     apiv1_backend_anonymous_cmds_factory,
 )
-from parsec.core.remote_devices_manager import RemoteDevicesManager
-from parsec.core.fs import UserFS
-from parsec.core.logged_core import DEFAULT_PATTERN_FILTER
+from guardata.core.remote_devices_manager import RemoteDevicesManager
+from guardata.core.fs import UserFS
+from guardata.core.logged_core import DEFAULT_PATTERN_FILTER
 
 
 @pytest.fixture

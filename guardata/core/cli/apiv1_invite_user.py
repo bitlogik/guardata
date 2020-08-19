@@ -2,12 +2,12 @@
 
 import click
 
-from parsec.utils import trio_run
-from parsec.cli_utils import spinner, cli_exception_handler
-from parsec.api.protocol import UserID
-from parsec.core.types import BackendOrganizationClaimUserAddr
-from parsec.core.invite_claim import generate_invitation_token, invite_and_create_user
-from parsec.core.cli.utils import core_config_and_device_options
+from guardata.utils import trio_run
+from guardata.cli_utils import spinner, cli_exception_handler
+from guardata.api.protocol import UserID
+from guardata.core.types import BackendOrganizationClaimUserAddr
+from guardata.core.invite_claim import generate_invitation_token, invite_and_create_user
+from guardata.core.cli.utils import core_config_and_device_options
 
 
 async def _invite_user(config, device, invited_user_id, admin):

@@ -1,19 +1,19 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from parsec.backend.backend_events import BackendEvent
-from parsec.event_bus import MetaEvent
+from guardata.backend.backend_events import BackendEvent
+from guardata.event_bus import MetaEvent
 import pytest
 import trio
 import pendulum
 
-from parsec.api.data import (
+from guardata.api.data import (
     UserCertificateContent,
     DeviceCertificateContent,
     APIV1_DeviceClaimContent,
     APIV1_DeviceClaimAnswerContent,
 )
-from parsec.crypto import PrivateKey, SigningKey
-from parsec.core.backend_connection import (
+from guardata.crypto import PrivateKey, SigningKey
+from guardata.core.backend_connection import (
     backend_authenticated_cmds_factory,
     apiv1_backend_anonymous_cmds_factory,
 )
