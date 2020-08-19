@@ -44,7 +44,7 @@ def generate_sas_codes(
 ) -> Tuple[SASCode, SASCode]:
     # Computes combined HMAC
     combined_nonce = claimer_nonce + greeter_nonce
-    # Digest size of 5 bytes so we can split it beween two 20bits SAS
+    # Digest size of 5 bytes so we can split it between two 20bits SAS
     combined_hmac = shared_secret_key.hmac(combined_nonce, digest_size=5)
 
     hmac_as_int = int.from_bytes(combined_hmac, "big")
