@@ -47,7 +47,7 @@ def ClaimUserTestBed(
         def __init__(self):
             self.requested_human_handle = HumanHandle(email="pfry@pe.com", label="Philip J. Fry")
             self.requested_device_label = "PC1"
-            self.password = "P@ssw0rd."
+            self.password = "P@s4sw0rd."
             self.steps_done = []
 
             self.author = alice
@@ -284,6 +284,7 @@ def ClaimUserTestBed(
 
             await aqtbot.key_clicks(cuf_w.line_edit_password, self.password)
             await aqtbot.key_clicks(cuf_w.line_edit_password_check, self.password)
+            await aqtbot.wait(250)
             await aqtbot.mouse_click(cuf_w.button_finalize, QtCore.Qt.LeftButton)
 
             def _claim_done():
