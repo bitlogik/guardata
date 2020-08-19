@@ -15,7 +15,7 @@ from parsec.core.gui.login_widget import (
 @pytest.mark.trio
 async def test_login(aqtbot, gui_factory, autoclose_dialog, core_config, alice):
     # Create an existing device before starting the gui
-    password = "P@ssw0rd"
+    password = "P2ssxdor!s3"
     save_device_with_password(core_config.config_dir, alice, password)
 
     gui = await gui_factory()
@@ -37,7 +37,7 @@ async def test_login(aqtbot, gui_factory, autoclose_dialog, core_config, alice):
 
     password_w = lw.widget.layout().itemAt(0).widget()
 
-    await aqtbot.key_clicks(password_w.line_edit_password, "P@ssw0rd")
+    await aqtbot.key_clicks(password_w.line_edit_password, "P2ssxdor!s3")
 
     async with aqtbot.wait_signals([lw.login_with_password_clicked, tabw.logged_in]):
         await aqtbot.mouse_click(password_w.button_login, QtCore.Qt.LeftButton)
@@ -55,7 +55,7 @@ async def test_login_back_to_account_list(
     aqtbot, gui_factory, autoclose_dialog, core_config, alice
 ):
     # Create an existing device before starting the gui
-    password = "P@ssw0rd"
+    password = "P2ssxdor!s3"
     save_device_with_password(core_config.config_dir, alice, password)
 
     gui = await gui_factory()
@@ -96,7 +96,7 @@ async def test_login_no_devices(aqtbot, gui_factory, autoclose_dialog, core_conf
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_login_device_list(aqtbot, gui_factory, autoclose_dialog, core_config, alice):
-    password = "P@ssw0rd"
+    password = "P2ssxdor!s3"
     save_device_with_password(core_config.config_dir, alice, password)
 
     gui = await gui_factory()

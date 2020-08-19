@@ -48,8 +48,9 @@ async def proceed_to_bootstrap(aqtbot, bo_w):
     await aqtbot.key_clicks(bo_w.line_edit_login, "Zack")
     await aqtbot.key_clicks(bo_w.line_edit_email, "zack@host.com")
     await aqtbot.key_clicks(bo_w.line_edit_device, "pc1")
-    await aqtbot.key_clicks(bo_w.line_edit_password, "S3cr3tP@ss")
-    await aqtbot.key_clicks(bo_w.line_edit_password_check, "S3cr3tP@ss")
+    await aqtbot.key_clicks(bo_w.line_edit_password, "S4cr3t!P@ss")
+    await aqtbot.key_clicks(bo_w.line_edit_password_check, "S4cr3t!P@ss")
+    await aqtbot.wait(100)
     await aqtbot.mouse_click(bo_w.button_bootstrap, QtCore.Qt.LeftButton)
 
 
@@ -106,8 +107,9 @@ async def test_bootstrap_org_missing_fields(aqtbot, gui_ready_for_bootstrap, aut
     await aqtbot.key_clicks(bo_w.line_edit_password, "d")
     assert bo_w.button_bootstrap.isEnabled() is False
 
-    await aqtbot.key_clicks(bo_w.line_edit_password_check, "password")
-    assert bo_w.button_bootstrap.isEnabled() is True
+    await aqtbot.key_clicks(bo_w.line_edit_password_check, "pass4wor11!d")
+    await aqtbot.wait(250)
+    assert bo_w.button_bootstrap.isEnabled() is False
 
     await aqtbot.key_click(bo_w.line_edit_password, QtCore.Qt.Key_Backspace)
     assert bo_w.button_bootstrap.isEnabled() is False

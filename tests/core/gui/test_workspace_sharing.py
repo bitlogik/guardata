@@ -79,7 +79,7 @@ async def test_share_workspace(
     catch_share_workspace_widget,
     qt_thread_gateway,
 ):
-    password = "P@ssw0rd"
+    password = "P2ssxdor!s3"
     save_device_with_password(core_config.config_dir, alice, password)
     save_device_with_password(core_config.config_dir, adam, password)
 
