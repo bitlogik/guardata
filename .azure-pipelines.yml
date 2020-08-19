@@ -349,7 +349,7 @@ jobs:
   # Must use cmd.exe here instead of bash otherwise `C:\Program Files\Git\bin\link.exe`
   # takes priority over visual studio link.exe in PATH
   - script: |
-      python freeze_parsec.py $(Build.SourcesDirectory)
+      python freeze_guardata.py $(Build.SourcesDirectory)
     displayName: 'Freeze Parsec'
     workingDirectory: $(Agent.TempDirectory)/winbuild
   - bash: |

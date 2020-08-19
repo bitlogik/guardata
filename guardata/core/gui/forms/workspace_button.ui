@@ -734,12 +734,12 @@ QWidget#widget_title {
   <customwidget>
    <class>Button</class>
    <extends>QPushButton</extends>
-   <header>parsec.core.gui.custom_widgets</header>
+   <header>guardata.core.gui.custom_widgets</header>
   </customwidget>
   <customwidget>
    <class>IconLabel</class>
    <extends>QLabel</extends>
-   <header>parsec.core.gui.custom_widgets</header>
+   <header>guardata.core.gui.custom_widgets</header>
   </customwidget>
  </customwidgets>
  <resources>

@@ -197,7 +197,7 @@
   <customwidget>
    <class>SpinnerWidget</class>
    <extends>QWidget</extends>
-   <header>parsec.core.gui.custom_widgets</header>
+   <header>guardata.core.gui.custom_widgets</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

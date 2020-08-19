@@ -398,12 +398,12 @@ QScrollBar:vertical {
   <customwidget>
    <class>Button</class>
    <extends>QPushButton</extends>
-   <header>parsec.core.gui.custom_widgets</header>
+   <header>guardata.core.gui.custom_widgets</header>
   </customwidget>
   <customwidget>
    <class>FileTable</class>
    <extends>QTableWidget</extends>
-   <header>parsec.core.gui.file_table</header>
+   <header>guardata.core.gui.file_table</header>
   </customwidget>
  </customwidgets>
  <resources>

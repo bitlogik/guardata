@@ -119,7 +119,7 @@ windows-build:
     - .\Invoke-Environment.ps1 '"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"'
     - $env:PATH+=";C:\Program Files (x86)\NSIS"
   script:
-    - python.exe freeze_parsec.py ..\\..
+    - python.exe freeze_guardata.py ..\\..
     - makensis.exe installer.nsi
   artifacts:
     paths:

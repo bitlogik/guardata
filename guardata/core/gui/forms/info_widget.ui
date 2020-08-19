@@ -218,7 +218,7 @@
   <customwidget>
    <class>IconLabel</class>
    <extends>QLabel</extends>
-   <header>parsec.core.gui.custom_widgets</header>
+   <header>guardata.core.gui.custom_widgets</header>
   </customwidget>
  </customwidgets>
  <resources>
