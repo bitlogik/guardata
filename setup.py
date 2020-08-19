@@ -73,32 +73,6 @@ class GeneratePyQtResourcesBundle(Command):
             print("PyQt5 not installed, skipping `guardata.core.gui._resources_rc` generation.")
 
 
-class GenerateChangelog(Command):
-    description = "Convert HISTORY.rst to HTML"
-
-    user_options = []
-
-    def initialize_options(self):
-        pass
-
-    def finalize_options(self):
-        pass
-
-    def run(self):
-        import docutils.core
-
-        destination_folder = "guardata/core/gui/rc/generated_misc"
-        self.announce(
-            f"Converting HISTORY.rst to {destination_folder}/history.html", level=distutils.log.INFO
-        )
-        os.makedirs(destination_folder, exist_ok=True)
-        docutils.core.publish_file(
-            source_path="HISTORY.rst",
-            destination_path=f"{destination_folder}/history.html",
-            writer_name="html",
-        )
-
-
 class GeneratePyQtForms(Command):
     description = "Generates `guardata.core.ui.*` forms module"
 
@@ -248,7 +222,6 @@ class build_py_with_pyqt(build_py):
     def run(self):
         self.run_command("generate_pyqt_forms")
         self.run_command("compile_translations")
-        self.run_command("generate_changelog")
         self.run_command("generate_pyqt_resources_bundle")
         return super().run()
 
@@ -357,7 +330,6 @@ setup(
     extras_require=extra_requirements,
     cmdclass={
         "generate_pyqt_resources_bundle": GeneratePyQtResourcesBundle,
-        "generate_changelog": GenerateChangelog,
         "generate_pyqt_forms": GeneratePyQtForms,
         "extract_translations": ExtractTranslations,
         "compile_translations": CompileTranslations,
