@@ -97,8 +97,8 @@ class CheckNewVersion(QDialog, Ui_NewVersionDialog):
         super().__init__(**kwargs)
         self.setupUi(self)
 
-        if platform.system() != "Windows":
-            return
+        # if platform.system() != "Windows":
+            # return
         # "Linux", "Darwin"
 
         self.widget_info = NewVersionInfo(parent=self)
