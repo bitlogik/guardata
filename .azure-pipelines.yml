@@ -15,12 +15,12 @@ variables:
   pytest.base_args: |
     --log-level=DEBUG \
     --durations=10 -v \
-  debug.stress_flaky_tests: 0  # Repeat all flaky tests X times
+  debug.stress_flaky_tests: 0
 
+jobs:
 
 #################################################################################
 # Step 0: Wheel build
-
 
 - job: 's0_build_wheel'
   displayName: 'Build wheel'
@@ -50,7 +50,6 @@ variables:
 #################################################################################
 # Step 1: Tests
 
-
 - job: 's1_qa'
   displayName: 'Q&A'
   timeoutInMinutes: 5
@@ -79,7 +78,6 @@ variables:
 
 
 #################################################################################
-
 
 - job: 's1_linux_test'
   displayName: 'Linux tests'
@@ -147,7 +145,6 @@ variables:
 
 
 #################################################################################
-
 
 - job: 's1_windows_test'
   displayName: 'Windows tests'
@@ -234,7 +231,6 @@ variables:
 #################################################################################
 # Step 2: Release packages build
 
-
 - job: 's2_linux_snap_build'
   displayName: 'Linux snap build'
   condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
@@ -273,7 +269,6 @@ variables:
 
 
 #################################################################################
-
 
 - job: 's2_windows_installer_build'
   displayName: 'Windows installer build'
@@ -332,7 +327,6 @@ variables:
 #################################################################################
 # Step 3: Release packages tests
 
-
 - job: 's3_linux_snap_test'
   displayName: 'Never trust a snap'
   dependsOn: s2_linux_snap_build
@@ -365,7 +359,6 @@ variables:
 #################################################################################
 # Step 4: Release packages upload
 
-
 - job: 's4_linux_snap_upload'
   displayName: 'Upload snap'
   condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
@@ -390,7 +383,6 @@ variables:
 
 
 #################################################################################
-
 
 - job: 's4_wheel_pypi_upload'
   displayName: 'Upload wheel on PyPI'
