@@ -1,18 +1,16 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="main-title" style="text-align: center">
-    <p class="text-secondary font-weight-bolder text-center">
-        Try to open directly in the guardata client with this button
-        <button onclick="window.location.href='{{ parsecurl }}';" class="openbtn">
+    <p class="font-weight-bolder text-center">
+        Try to open your invitation directly in the guardata client
+        <div><button onclick="window.location.href='{{ parsecurl }}';" class="openbtn">
             Open in guardata
-        </button>
+        </button></div>
     </p>
     <p class="text-muted text-center">
-        or copy and paste the following link in the first login (join an existing group)
-        <div class="parsecLink">
-            {{ parsecurl }}
-        </div>
+        or copy and paste the following link in the First Login (join an existing group)
     </p>
+    <div class="parsecLink">{{ parsecurl }}</div>
     <div class="main-title-spacer bg-primary"></div>
 </div>
 {% endblock %}
