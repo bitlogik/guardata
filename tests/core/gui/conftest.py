@@ -493,7 +493,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             central_widget = self.test_get_central_widget()
             w_w = self.test_get_workspaces_widget()
             signal = w_w.list_error if error else w_w.list_success
-            async with aqtbot.wait_exposed(w_w), aqtbot.wait_signal(signal):
+            async with aqtbot.wait_exposed(w_w, timeout=10000), aqtbot.wait_signal(signal, timeout=10000):
                 await aqtbot.mouse_click(central_widget.menu.button_files, QtCore.Qt.LeftButton)
             return w_w
 
