@@ -67,7 +67,7 @@ class BaseVlobComponent:
 
         now = pendulum.now()
         if not timestamps_in_the_ballpark(msg["timestamp"], now):
-            return {"status": "bad_timestamp", "reason": f"Timestamp is out of date."}
+            return {"status": "bad_timestamp", "reason": "Timestamp is out of date."}
 
         try:
             await self.create(client_ctx.organization_id, client_ctx.device_id, **msg)
@@ -131,7 +131,7 @@ class BaseVlobComponent:
 
         now = pendulum.now()
         if not timestamps_in_the_ballpark(msg["timestamp"], now):
-            return {"status": "bad_timestamp", "reason": f"Timestamp is out of date."}
+            return {"status": "bad_timestamp", "reason": "Timestamp is out of date."}
 
         try:
             await self.update(client_ctx.organization_id, client_ctx.device_id, **msg)

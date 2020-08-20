@@ -138,7 +138,7 @@ def _running(cmd, wait_for=None, env={}):
                     break
                 sleep(0.1)
             else:
-                raise RuntimeError(f"Command took too much time to start")
+                raise RuntimeError("Command took too much time to start")
 
         yield p
 
@@ -580,12 +580,12 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Claim device invitation #######")
         with _running(
-            "core claim_invitation "
+            f"core claim_invitation "
             f"--config-dir={config_dir} --password={password} {device_invitation_url} ",
             env=ssl_conf.client_env,
         ) as p_claimer:
             with _running(
-                "core greet_invitation "
+                f"core greet_invitation "
                 f"--config-dir={config_dir} --device={alice1_slughash} "
                 f"--password={password} {device_invitation_token}",
                 env=ssl_conf.client_env,
@@ -661,12 +661,12 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### New users can communicate with backend #######")
         _run(
-            "core create_workspace wksp1 "
+            f"core create_workspace wksp1 "
             f"--config-dir={config_dir} --device={bob1_slughash} --password={password}",
             env=ssl_conf.client_env,
         )
         _run(
-            "core create_workspace wksp2 "
+            f"core create_workspace wksp2 "
             f"--config-dir={config_dir} --device={alice2_slughash} --password={password}",
             env=ssl_conf.client_env,
         )
@@ -691,4 +691,4 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
     ],
 )
 def test_gui_with_diagnose_option(env):
-    _run(f"core gui --diagnose", env=env, capture=False)
+    _run("core gui --diagnose", env=env, capture=False)

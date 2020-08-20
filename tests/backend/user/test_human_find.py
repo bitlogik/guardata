@@ -196,12 +196,12 @@ async def test_search_with_non_humans(access_testbed, organization_factory, loca
     binder, org, godfrey1, sock = access_testbed
 
     richard = local_device_factory(
-        base_human_handle=f"Richard Harrison <ninja-richard@ninja-terminator.com>", org=org
+        base_human_handle="Richard Harrison <ninja-richard@ninja-terminator.com>", org=org
     )
     await binder.bind_device(richard, certifier=godfrey1)
 
     hwang = local_device_factory(
-        base_human_handle=f"Hwang Jang Lee <ninja-hwang@ninja-terminator.com>", org=org
+        base_human_handle="Hwang Jang Lee <ninja-hwang@ninja-terminator.com>", org=org
     )
     await binder.bind_device(hwang, certifier=godfrey1)
 
@@ -244,16 +244,16 @@ async def test_search_with_non_humans(access_testbed, organization_factory, loca
 async def test_pagination(access_testbed, organization_factory, local_device_factory):
     binder, org, godfrey1, sock = access_testbed
 
-    richard = local_device_factory(base_human_handle=f"Richard <richard@cobra.com>", org=org)
+    richard = local_device_factory(base_human_handle="Richard <richard@cobra.com>", org=org)
     await binder.bind_device(richard, certifier=godfrey1)
 
-    roger = local_device_factory(base_human_handle=f"Roger <roger@cobra.com>", org=org)
+    roger = local_device_factory(base_human_handle="Roger <roger@cobra.com>", org=org)
     await binder.bind_device(roger, certifier=godfrey1)
 
-    mike = local_device_factory(base_human_handle=f"Mike <mike@cobra.com>", org=org)
+    mike = local_device_factory(base_human_handle="Mike <mike@cobra.com>", org=org)
     await binder.bind_device(mike, certifier=godfrey1)
 
-    blacky = local_device_factory(base_human_handle=f"Blacky <blacky@cobra.com>", org=org)
+    blacky = local_device_factory(base_human_handle="Blacky <blacky@cobra.com>", org=org)
     await binder.bind_device(blacky, certifier=godfrey1)
 
     # Find all

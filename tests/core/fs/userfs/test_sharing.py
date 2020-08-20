@@ -493,7 +493,7 @@ async def test_share_workspace_then_conflict_on_rights(
     assert a_w_stat == a2_w_stat
 
     assert a_w_entry == WorkspaceEntry(
-        name=f"w",
+        name="w",
         id=wid,
         key=ANY,
         encryption_revision=1,

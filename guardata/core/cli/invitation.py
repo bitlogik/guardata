@@ -201,7 +201,7 @@ async def _greet_invitation(config, device, token):
             if invitation["token"] == token:
                 break
         else:
-            raise RuntimeError(f"Invitation not found")
+            raise RuntimeError("Invitation not found")
 
         if invitation["type"] == InvitationType.USER:
             initial_ctx = UserGreetInitialCtx(cmds=cmds, token=token)
