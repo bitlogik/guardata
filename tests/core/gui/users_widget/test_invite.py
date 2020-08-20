@@ -1,10 +1,10 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
-from unittest.mock import ANY
+# from unittest.mock import ANY
 from PyQt5 import QtCore
 
-from guardata.core.gui.users_widget import UserInvitationButton
+# from guardata.core.gui.users_widget import UserInvitationButton
 from guardata.core.gui.lang import translate as _
 
 from tests.common import customize_fixtures

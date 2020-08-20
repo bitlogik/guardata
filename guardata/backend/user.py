@@ -487,7 +487,7 @@ class BaseUserComponent:
         if not timestamps_in_the_ballpark(u_data.timestamp, now):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certificate.",
+                "reason": "Invalid timestamp in certificate.",
             }
 
         if u_data.user_id != d_data.device_id.user_id:
@@ -572,7 +572,7 @@ class BaseUserComponent:
         if not timestamps_in_the_ballpark(data.timestamp, pendulum.now()):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certification.",
+                "reason": "Invalid timestamp in certification.",
             }
 
         if data.user_id == client_ctx.user_id:
@@ -777,7 +777,7 @@ class BaseUserComponent:
         if not timestamps_in_the_ballpark(data.timestamp, pendulum.now()):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certification.",
+                "reason": "Invalid timestamp in certification.",
             }
 
         if data.device_label:
@@ -835,7 +835,7 @@ class BaseUserComponent:
         if not timestamps_in_the_ballpark(data.timestamp, pendulum.now()):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certification.",
+                "reason": "Invalid timestamp in certification.",
             }
 
         if data.device_id.user_id != client_ctx.user_id:

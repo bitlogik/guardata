@@ -114,7 +114,7 @@ async def _do_greet_user(device, initial_ctx):
         display_choice = click.style(choice, fg="yellow")
         click.echo(f" {i} - {display_choice}")
     code = await aprompt(
-        f"Select code provided by claimer",
+        "Select code provided by claimer",
         type=click.Choice([str(i) for i, _ in enumerate(choices)]),
     )
     if choices[int(code)] != in_progress_ctx.claimer_sas:
@@ -167,7 +167,7 @@ async def _do_greet_device(device, initial_ctx):
         display_choice = click.style(choice, fg="yellow")
         click.echo(f" {i} - {display_choice}")
     code = await aprompt(
-        f"Select code provided by claimer", type=click.Choice([str(x) for x in range(len(choices))])
+        "Select code provided by claimer", type=click.Choice([str(x) for x in range(len(choices))])
     )
     if choices[int(code)] != in_progress_ctx.claimer_sas:
         click.secho("Wrong code provided", fg="red")
@@ -242,7 +242,7 @@ async def _do_claim_user(initial_ctx):
         display_choice = click.style(choice, fg="yellow")
         click.echo(f" {i} - {display_choice}")
     code = await aprompt(
-        f"Select code provided by greeter", type=click.Choice([str(x) for x in range(len(choices))])
+        "Select code provided by greeter", type=click.Choice([str(x) for x in range(len(choices))])
     )
     if choices[int(code)] != in_progress_ctx.greeter_sas:
         click.secho("Wrong code provided", fg="red")
@@ -275,7 +275,7 @@ async def _do_claim_device(initial_ctx):
         display_choice = click.style(choice, fg="yellow")
         click.echo(f" {i} - {display_choice}")
     code = await aprompt(
-        f"Select code provided by greeter", type=click.Choice([str(x) for x in range(len(choices))])
+        "Select code provided by greeter", type=click.Choice([str(x) for x in range(len(choices))])
     )
     if choices[int(code)] != in_progress_ctx.greeter_sas:
         click.secho("Wrong code provided", fg="red")
@@ -363,7 +363,7 @@ async def _list_invitations(config, device):
             if invitation["type"] == InvitationType.USER:
                 display_type = f"user (email={invitation['claimer_email']})"
             else:  # Device
-                display_type = f"device"
+                display_type = "device"
             click.echo(f"{display_token}\t{display_status}\t{display_type}")
         if not rep["invitations"]:
             click.echo("No invitations.")

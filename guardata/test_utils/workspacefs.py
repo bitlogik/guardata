@@ -23,7 +23,7 @@ async def make_workspace_dir_simple_versions(workspace: WorkspaceFS, dir: FsPath
     await workspace.mkdir(dir)
     await workspace.sync()
     for i in range(0, 9):
-        file_name = f"hello.txt"
+        file_name = "hello.txt"
         path = f"{dir}/{file_name}"
         num_chars = (i % 4 + 4) * 100 * 1024
         text = "".join(

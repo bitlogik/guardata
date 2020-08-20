@@ -128,7 +128,7 @@ class BaseRealmComponent:
         if not timestamps_in_the_ballpark(data.timestamp, now):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certification.",
+                "reason": "Invalid timestamp in certification.",
             }
 
         granted_role = RealmGrantedRole(
@@ -142,12 +142,12 @@ class BaseRealmComponent:
         if granted_role.granted_by.user_id != granted_role.user_id:
             return {
                 "status": "invalid_data",
-                "reason": f"Initial realm role certificate must be self-signed.",
+                "reason": "Initial realm role certificate must be self-signed.",
             }
         if granted_role.role != RealmRole.OWNER:
             return {
                 "status": "invalid_data",
-                "reason": f"Initial realm role certificate must set OWNER role.",
+                "reason": "Initial realm role certificate must set OWNER role.",
             }
 
         try:
@@ -247,7 +247,7 @@ class BaseRealmComponent:
         if not timestamps_in_the_ballpark(data.timestamp, now):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certification.",
+                "reason": "Invalid timestamp in certification.",
             }
 
         granted_role = RealmGrantedRole(
@@ -261,7 +261,7 @@ class BaseRealmComponent:
         if granted_role.granted_by.user_id == granted_role.user_id:
             return {
                 "status": "invalid_data",
-                "reason": f"Realm role certificate cannot be self-signed.",
+                "reason": "Realm role certificate cannot be self-signed.",
             }
 
         try:

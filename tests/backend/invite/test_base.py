@@ -3,7 +3,7 @@
 import pytest
 import trio
 from unittest.mock import ANY
-from pendulum import Pendulum, now as pendulum_now
+from pendulum import Pendulum  #, now as pendulum_now
 
 # from guardata.api.data import RevokedUserCertificateContent
 from guardata.backend.backend_events import BackendEvent
@@ -12,9 +12,7 @@ from guardata.backend.backend_events import BackendEvent
 from guardata.api.data import UserProfile
 from guardata.api.protocol import (
     InvitationStatus,
-    InvitationDeletedReason,
     InvitationType,
-    HandshakeBadIdentity,
     APIEvent,
 )
 
@@ -22,11 +20,9 @@ from tests.common import freeze_time, customize_fixtures
 from tests.backend.common import (
     invite_new,
     invite_list,
-    invite_delete,
     invite_info,
     events_subscribe,
     events_listen_wait,
-    user_revoke,
 )
 
 

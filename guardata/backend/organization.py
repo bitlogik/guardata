@@ -219,7 +219,7 @@ class BaseOrganizationComponent:
         if not timestamps_in_the_ballpark(u_data.timestamp, now):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certification.",
+                "reason": "Invalid timestamp in certification.",
             }
 
         if ru_data:
