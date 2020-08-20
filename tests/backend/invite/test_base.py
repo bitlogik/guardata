@@ -3,7 +3,7 @@
 import pytest
 import trio
 from unittest.mock import ANY
-from pendulum import Pendulum  #, now as pendulum_now
+from pendulum import Pendulum  # , now as pendulum_now
 
 # from guardata.api.data import RevokedUserCertificateContent
 from guardata.backend.backend_events import BackendEvent

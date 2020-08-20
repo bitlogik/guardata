@@ -1,6 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
+
 # from unittest.mock import ANY
 from PyQt5 import QtCore
 
