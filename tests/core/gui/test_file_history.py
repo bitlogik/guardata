@@ -24,6 +24,7 @@ async def test_file_history(
         assert w_w.layout_workspaces.count() == 1
 
     await aqtbot.wait_until(_workspace_available)
+    await logged_gui.test_switch_to_users_widget()
 
     f_w = await logged_gui.test_switch_to_files_widget("wksp1")
 
