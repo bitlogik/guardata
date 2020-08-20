@@ -298,9 +298,10 @@ class WorkspaceStorage(BaseWorkspaceStorage):
     # Pattern filter interface
 
     async def _load_pattern_filter(self) -> None:
-        self._pattern_filter, self._pattern_filter_fully_applied = (
-            await self.manifest_storage.get_pattern_filter()
-        )
+        (
+            self._pattern_filter,
+            self._pattern_filter_fully_applied,
+        ) = await self.manifest_storage.get_pattern_filter()
 
     async def set_pattern_filter(self, pattern: Pattern) -> None:
         await self.manifest_storage.set_pattern_filter(pattern)

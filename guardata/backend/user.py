@@ -308,7 +308,11 @@ class BaseUserComponent:
             if not invitation.is_valid():
                 return {"status": "not_found"}
 
-            creator_user, creator_device, trustchain = await self.get_user_with_device_and_trustchain(
+            (
+                creator_user,
+                creator_device,
+                trustchain,
+            ) = await self.get_user_with_device_and_trustchain(
                 client_ctx.organization_id, invitation.creator
             )
 
@@ -647,7 +651,11 @@ class BaseUserComponent:
             if not invitation.is_valid():
                 return {"status": "not_found"}
 
-            creator_user, creator_device, trustchain = await self.get_user_with_device_and_trustchain(
+            (
+                creator_user,
+                creator_device,
+                trustchain,
+            ) = await self.get_user_with_device_and_trustchain(
                 client_ctx.organization_id, invitation.creator
             )
 

@@ -197,7 +197,7 @@ async def test_synchronization_step_transaction(alice_sync_transactions, type):
     children = []
     async for child in sync_transactions.get_placeholder_children(manifest):
         children.append(child)
-    a_entry_id, = children
+    (a_entry_id,) = children
     assert a_entry_id == a_id
 
     # Sync child
@@ -222,7 +222,7 @@ async def test_synchronization_step_transaction(alice_sync_transactions, type):
     children = []
     async for child in sync_transactions.get_placeholder_children(manifest):
         children.append(child)
-    b_entry_id, = children
+    (b_entry_id,) = children
     assert b_entry_id == b_id
 
     # Sync child

@@ -95,7 +95,10 @@ async def claim_user(
         ) as cmds:
             # 1) Retrieve invitation creator
             try:
-                invitation_creator_user, invitation_creator_device = await get_user_invitation_creator(
+                (
+                    invitation_creator_user,
+                    invitation_creator_device,
+                ) = await get_user_invitation_creator(
                     cmds, new_device.root_verify_key, new_device.user_id
                 )
 
@@ -175,7 +178,10 @@ async def claim_device(
         ) as cmds:
             # 1) Retrieve invitation creator
             try:
-                invitation_creator_user, invitation_creator_device = await get_device_invitation_creator(
+                (
+                    invitation_creator_user,
+                    invitation_creator_device,
+                ) = await get_device_invitation_creator(
                     cmds, organization_addr.root_verify_key, new_device_id
                 )
 

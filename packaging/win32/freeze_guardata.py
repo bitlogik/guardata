@@ -88,7 +88,7 @@ def main(guardata_source):
     print(f"### Move site-packages to embedded distribution ###")
     shutil.move(build_venv_dir / "Lib/site-packages", target_dir / "site-packages")
     shutil.rmtree(build_venv_dir)
-    pth_file, = target_dir.glob("*._pth")
+    (pth_file,) = target_dir.glob("*._pth")
     pth_file.write_text(pth_file.read_text() + "site-packages\n")
 
     # Include LICENSE file
