@@ -1,4 +1,4 @@
-# See https://aka.ms/yaml for documentation
+# Azure CI/CD for guardata
 
 trigger:
   branches:
@@ -16,8 +16,6 @@ variables:
     --log-level=DEBUG \
     --durations=10 -v \
   debug.stress_flaky_tests: 0  # Repeat all flaky tests X times
-
-jobs:
 
 
 #################################################################################
@@ -78,24 +76,6 @@ jobs:
       # Run all pre-commit hooks on all files
       pre-commit run --all-files --show-diff-on-failure
     displayName: 'Pre-commit hooks check'
-  - bash: |
-      if ([[ $(Build.SourceBranch) = "refs/heads/master" ]] || [[ $(Build.SourceBranch) = "refs/tags/"* ]])
-      then exit 0; fi
-      for FILENAME in newsfragments/*
-      do
-        # If file never existed in master, consider as a new newsfragment
-        # Cannot git diff against master branch here given newsfragments removed in master will be considered as
-        # new items in our branch
-        if git log origin/master --exit-code -- "$FILENAME" > /dev/null
-        then exit 0; fi
-      done
-      echo "NO NEW NEWSFRAGMENT FOUND" >&2
-    displayName: 'Newsfragment'
-    failOnStderr: true
-  - bash: |
-      git fetch --tags  # Needed by releaser.py to have a consistent `git describe`
-      python ./misc/releaser.py check --verbose
-    displayName: 'Version check'
 
 
 #################################################################################
