@@ -3,7 +3,13 @@
 from typing import Tuple
 
 from guardata.api.protocol import OrganizationID, UserID, DeviceID, HumanHandle
-from guardata.backend.user import User, Device, Trustchain, UserNotFoundError, GetUserAndDevicesResult
+from guardata.backend.user import (
+    User,
+    Device,
+    Trustchain,
+    UserNotFoundError,
+    GetUserAndDevicesResult,
+)
 from guardata.backend.postgresql.utils import (
     Q,
     query,

@@ -11,7 +11,12 @@ from structlog import get_logger
 from PyQt5.QtCore import Qt, pyqtSignal, QTimer
 from PyQt5.QtWidgets import QFileDialog, QWidget
 
-from guardata.core.types import FsPath, WorkspaceEntry, WorkspaceRole, BackendOrganizationFileLinkAddr
+from guardata.core.types import (
+    FsPath,
+    WorkspaceEntry,
+    WorkspaceRole,
+    BackendOrganizationFileLinkAddr,
+)
 from guardata.core.fs import WorkspaceFS, WorkspaceFSTimestamped
 from guardata.core.fs.exceptions import (
     FSRemoteManifestNotFound,

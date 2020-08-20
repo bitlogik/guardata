@@ -58,7 +58,7 @@ class PasswordStrengthWidget(QWidget, Ui_PasswordStrengthWidget):
 
     def on_otherpwd_change(self, text):
         main_text = self.main_pwd.text()
-        if len(text)>3 and get_password_strength(main_text) > 2:
+        if len(text) > 3 and get_password_strength(main_text) > 2:
             if text == main_text:
                 self.label.setText("")
             else:

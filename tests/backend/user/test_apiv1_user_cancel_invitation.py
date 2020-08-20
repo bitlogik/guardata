@@ -6,7 +6,10 @@ import trio
 
 from guardata.backend.user import UserInvitation
 from guardata.api.data import UserProfile
-from guardata.api.protocol import apiv1_user_cancel_invitation_serializer, apiv1_user_claim_serializer
+from guardata.api.protocol import (
+    apiv1_user_cancel_invitation_serializer,
+    apiv1_user_claim_serializer,
+)
 
 from tests.common import freeze_time
 

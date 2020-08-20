@@ -13,7 +13,9 @@ from guardata.core.gui.login_widget import LoginPasswordInputWidget
 
 @pytest.fixture
 def catch_share_workspace_widget(widget_catcher_factory):
-    return widget_catcher_factory("guardata.core.gui.workspace_sharing_widget.WorkspaceSharingWidget")
+    return widget_catcher_factory(
+        "guardata.core.gui.workspace_sharing_widget.WorkspaceSharingWidget"
+    )
 
 
 @pytest.fixture

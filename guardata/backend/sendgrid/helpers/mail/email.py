@@ -4,8 +4,10 @@ except ImportError:
     import email.utils as rfc822
 
 import sys
+
 if sys.version_info[:3] >= (3, 5, 0):
     import html
+
     html_entity_decode = html.unescape
 else:
     try:
@@ -27,13 +29,15 @@ except NameError:
 class Email(object):
     """An email address with an optional name."""
 
-    def __init__(self,
-                 email=None,
-                 name=None,
-                 substitutions=None,
-                 subject=None,
-                 p=0,
-                 dynamic_template_data=None):
+    def __init__(
+        self,
+        email=None,
+        name=None,
+        substitutions=None,
+        subject=None,
+        p=0,
+        dynamic_template_data=None,
+    ):
         """Create an Email with the given address and name.
 
         Either fill the separate name and email fields, or pass all information
@@ -89,11 +93,11 @@ class Email(object):
         :type value: string
         """
         if not (value is None or isinstance(value, basestring)):
-            raise TypeError('name must be of type string.')
+            raise TypeError("name must be of type string.")
 
         # Escape common CSV delimiters as workaround for
         # https://github.com/sendgrid/sendgrid-python/issues/578
-        if value is not None and (',' in value or ';' in value):
+        if value is not None and ("," in value or ";" in value):
             value = html_entity_decode(value)
             value = '"' + value + '"'
         self._name = value

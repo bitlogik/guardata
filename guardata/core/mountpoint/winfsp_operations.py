@@ -131,7 +131,9 @@ def handle_error(func):
 
     @functools.wraps(func)
     def wrapper(self, arg, *args, **kwargs):
-        path = arg.path if isinstance(arg, (OpenedFile, OpenedFolder)) else _winpath_to_guardata(arg)
+        path = (
+            arg.path if isinstance(arg, (OpenedFile, OpenedFolder)) else _winpath_to_guardata(arg)
+        )
         with translate_error(self.event_bus, operation, path):
             return func.__get__(self)(arg, *args, **kwargs)
 

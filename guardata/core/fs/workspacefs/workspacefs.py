@@ -18,7 +18,9 @@ from guardata.core.types import (
     DEFAULT_BLOCK_SIZE,
 )
 from guardata.core.fs.remote_loader import RemoteLoader
-from guardata.core.fs import workspacefs  # Needed to break cyclic import with WorkspaceFSTimestamped
+from guardata.core.fs import (
+    workspacefs,
+)  # Needed to break cyclic import with WorkspaceFSTimestamped
 from guardata.core.fs.workspacefs.sync_transactions import SyncTransactions
 from guardata.core.fs.workspacefs.versioning_helpers import VersionLister
 from guardata.core.fs.utils import is_file_manifest, is_folderish_manifest

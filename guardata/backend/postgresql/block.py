@@ -27,7 +27,10 @@ from guardata.backend.postgresql.utils import (
     q_realm_internal_id,
     q_block,
 )
-from guardata.backend.postgresql.realm_queries.maintenance import get_realm_status, RealmNotFoundError
+from guardata.backend.postgresql.realm_queries.maintenance import (
+    get_realm_status,
+    RealmNotFoundError,
+)
 
 
 _q_get_realm_id_from_block_id = Q(

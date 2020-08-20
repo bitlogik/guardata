@@ -12,7 +12,7 @@ Once installed, click on the following link to proceed to guardata : {{ invitati
 You should then get in touch with {{ greeter }} and follow the next steps in
 the guardata client.
 {% else %}
-You should then start the invitation process from a device already part of the 
+You should then start the invitation process from a device already part of the
 organization group, then follow the steps in the guardata client.
 {% endif %}
 

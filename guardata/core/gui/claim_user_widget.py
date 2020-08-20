@@ -179,7 +179,9 @@ class ClaimUserFinalizeWidget(QWidget, Ui_ClaimUserFinalizeWidget):
         )
         self.password_strength_widget.main_pwd = self.line_edit_password
         self.line_edit_password.textChanged.connect(self.check_infos)
-        self.line_edit_password_check.textChanged.connect(self.password_strength_widget.on_otherpwd_change)
+        self.line_edit_password_check.textChanged.connect(
+            self.password_strength_widget.on_otherpwd_change
+        )
         self.line_edit_password_check.textChanged.connect(self.check_infos)
         self.button_finalize.clicked.connect(self._on_finalize_clicked)
 

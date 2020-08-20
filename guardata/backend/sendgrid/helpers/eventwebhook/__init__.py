@@ -4,6 +4,7 @@ from ellipticcurve.signature import Signature
 
 from .eventwebhook_header import EventWebhookHeader
 
+
 class EventWebhook:
     """
     This class allows you to use the Event Webhook feature. Read the docs for

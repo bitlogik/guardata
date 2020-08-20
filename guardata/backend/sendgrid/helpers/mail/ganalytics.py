@@ -1,13 +1,15 @@
 class Ganalytics(object):
     """Allows you to enable tracking provided by Google Analytics."""
 
-    def __init__(self,
-                 enable=None,
-                 utm_source=None,
-                 utm_medium=None,
-                 utm_term=None,
-                 utm_content=None,
-                 utm_campaign=None):
+    def __init__(
+        self,
+        enable=None,
+        utm_source=None,
+        utm_medium=None,
+        utm_term=None,
+        utm_content=None,
+        utm_campaign=None,
+    ):
         """Create a GAnalytics to enable, customize Google Analytics tracking.
 
         :param enable: If this setting is enabled.
@@ -160,8 +162,7 @@ class Ganalytics(object):
         :returns: This Ganalytics, ready for use in a request body.
         :rtype: dict
         """
-        keys = ["enable", "utm_source", "utm_medium", "utm_term",
-                "utm_content", "utm_campaign"]
+        keys = ["enable", "utm_source", "utm_medium", "utm_term", "utm_content", "utm_campaign"]
 
         ganalytics = {}
 

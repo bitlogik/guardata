@@ -5,6 +5,7 @@ class BatchId(object):
        of that batch. For more information, see
        https://sendgrid.com/docs/API_Reference/Web_API_v3/cancel_schedule_send.
     """
+
     def __init__(self, batch_id=None):
         """Create a batch ID.
 

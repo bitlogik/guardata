@@ -299,7 +299,9 @@ organization_id, device_id, device_label (can be null), human_email (can be null
     type=BackendAddr.from_url,
     help="URL to reach this server (typically used in invitation emails)",
 )
-@click.option("--email-host", envvar="GUARDATA_EMAIL_HOST", help="The host to use for sending email")
+@click.option(
+    "--email-host", envvar="GUARDATA_EMAIL_HOST", help="The host to use for sending email"
+)
 @click.option(
     "--email-port",
     envvar="GUARDATA_EMAIL_PORT",

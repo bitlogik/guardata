@@ -149,12 +149,12 @@ END
     # Clean up deleting not required files
     def filter_info_dirs(dirname):
         return dirname.endswith("-info")
+
     dirlist = next(os.walk(target_dir / "site-packages"))[1]
     dirlistinfo = filter(filter_info_dirs, dirlist)
-    delete_assets_list = [
-            "site-packages/pip",
-            "site-packages/setuptools"
-    ] + ["site-packages/"+dir for dir in dirlistinfo]
+    delete_assets_list = ["site-packages/pip", "site-packages/setuptools"] + [
+        "site-packages/" + dir for dir in dirlistinfo
+    ]
     for remdir in delete_assets_list:
         shutil.rmtree(target_dir / remdir)
 

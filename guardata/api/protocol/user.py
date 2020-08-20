@@ -2,7 +2,12 @@
 
 from guardata.serde import BaseSchema, fields
 from guardata.api.protocol.base import BaseReqSchema, BaseRepSchema, CmdSerializer
-from guardata.api.protocol.types import UserIDField, DeviceNameField, DeviceIDField, HumanHandleField
+from guardata.api.protocol.types import (
+    UserIDField,
+    DeviceNameField,
+    DeviceIDField,
+    HumanHandleField,
+)
 
 
 __all__ = (

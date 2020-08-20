@@ -5,15 +5,14 @@
 
 class SendGridException(Exception):
     """Wrapper/default SendGrid-related exception"""
+
     pass
 
 
 class ApiKeyIncludedException(SendGridException):
     """Exception raised for when Twilio SendGrid API Key included in message text"""
 
-    def __init__(self,
-                 expression="Email body",
-                 message="Twilio SendGrid API Key detected"):
+    def __init__(self, expression="Email body", message="Twilio SendGrid API Key detected"):
         """Create an exception for when Twilio SendGrid API Key included in message text
 
             :param expression: Input expression in which the error occurred

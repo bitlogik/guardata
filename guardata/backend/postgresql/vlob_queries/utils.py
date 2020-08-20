@@ -15,7 +15,10 @@ from guardata.backend.vlob import (
     VlobEncryptionRevisionError,
     VlobAccessError,
 )
-from guardata.backend.postgresql.realm_queries.maintenance import get_realm_status, RealmNotFoundError
+from guardata.backend.postgresql.realm_queries.maintenance import (
+    get_realm_status,
+    RealmNotFoundError,
+)
 
 
 async def _check_realm(

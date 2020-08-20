@@ -27,9 +27,9 @@ async def _do_check_new_version(url):
             latest_v = req.read()
             return Version(latest_v.decode("ascii"))
         # except Exception as e:
-            # print("ERROR GETTING NEW VERSION")
-            # print(str(e))
-            # return None
+        # print("ERROR GETTING NEW VERSION")
+        # print(str(e))
+        # return None
 
     latest_version = await trio.to_thread.run_sync(_fetch_latest_release)
     if latest_version:
@@ -37,9 +37,12 @@ async def _do_check_new_version(url):
             current_arch = QSysInfo().currentCpuArchitecture()
             if current_arch == "x86_64":
                 win_version = "win64"
-                return latest_version, f"https://dl.guardata.app/guardata-{latest_version.public}-{win_version}-setup.exe"
+                return (
+                    latest_version,
+                    f"https://dl.guardata.app/guardata-{latest_version.public}-{win_version}-setup.exe",
+                )
             # elif current_arch == "i386":
-                # win_version = "win32"
+            # win_version = "win32"
 
     return None
 

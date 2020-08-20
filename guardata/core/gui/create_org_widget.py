@@ -14,7 +14,7 @@ from PyQt5.QtWidgets import QWidget, QApplication, QDialog
 from guardata.core.types import BackendOrganizationBootstrapAddr
 
 from guardata.core.gui.custom_dialogs import GreyedDialog, show_error
-from guardata.core.gui.trio_thread import JobResultError #, ThreadSafeQtSignal
+from guardata.core.gui.trio_thread import JobResultError  # , ThreadSafeQtSignal
 from guardata.core.gui.lang import translate as _
 
 from guardata.core.gui.ui.create_org_widget import Ui_CreateOrgWidget
@@ -144,35 +144,35 @@ class CreateOrgWidget(QWidget, Ui_CreateOrgWidget):
         self.button_previous.show()
 
     # def _validate_clicked(self):
-        # if isinstance(self.current_widget, CreateOrgFirstPageWidget):
-            # if self.current_widget.radio_bootstrap_org.isChecked():
-                # self.status = ""
-                # if self.dialog:
-                    # self.dialog.accept()
-                # elif QApplication.activeModalWidget():
-                    # QApplication.activeModalWidget().accept()
-                # else:
-                    # logger.warning("Cannot close dialog when org wizard")
-            # else:
-                # self.button_validate.setText(_("ACTION_CREATE_ORGANIZATION"))
-                # self.button_previous.show()
-                # self._clear_page()
-                # self.current_widget = CreateOrgSecondPageWidget()
-                # self.main_layout.addWidget(self.current_widget)
-                # self.current_widget.line_edit_user_email.textChanged.connect(self._check_infos)
-                # self.current_widget.line_edit_org_name.textChanged.connect(self._check_infos)
-                # self.current_widget.check_accept_contract.clicked.connect(self._check_infos)
-                # self.button_validate.setEnabled(False)
-        # elif isinstance(self.current_widget, CreateOrgSecondPageWidget):
-            # self.req_job = self.jobs_ctx.submit_job(
-                # ThreadSafeQtSignal(self, "req_success"),
-                # ThreadSafeQtSignal(self, "req_error"),
-                # _do_api_request,
-                # email=self.current_widget.line_edit_user_email.text(),
-                # organization_id=self.current_widget.line_edit_org_name.text(),
-            # )
-            # self.button_validate.setEnabled(False)
-            # self.button_previous.hide()
+    # if isinstance(self.current_widget, CreateOrgFirstPageWidget):
+    # if self.current_widget.radio_bootstrap_org.isChecked():
+    # self.status = ""
+    # if self.dialog:
+    # self.dialog.accept()
+    # elif QApplication.activeModalWidget():
+    # QApplication.activeModalWidget().accept()
+    # else:
+    # logger.warning("Cannot close dialog when org wizard")
+    # else:
+    # self.button_validate.setText(_("ACTION_CREATE_ORGANIZATION"))
+    # self.button_previous.show()
+    # self._clear_page()
+    # self.current_widget = CreateOrgSecondPageWidget()
+    # self.main_layout.addWidget(self.current_widget)
+    # self.current_widget.line_edit_user_email.textChanged.connect(self._check_infos)
+    # self.current_widget.line_edit_org_name.textChanged.connect(self._check_infos)
+    # self.current_widget.check_accept_contract.clicked.connect(self._check_infos)
+    # self.button_validate.setEnabled(False)
+    # elif isinstance(self.current_widget, CreateOrgSecondPageWidget):
+    # self.req_job = self.jobs_ctx.submit_job(
+    # ThreadSafeQtSignal(self, "req_success"),
+    # ThreadSafeQtSignal(self, "req_error"),
+    # _do_api_request,
+    # email=self.current_widget.line_edit_user_email.text(),
+    # organization_id=self.current_widget.line_edit_org_name.text(),
+    # )
+    # self.button_validate.setEnabled(False)
+    # self.button_previous.hide()
 
     def _previous_clicked(self):
         self._clear_page()

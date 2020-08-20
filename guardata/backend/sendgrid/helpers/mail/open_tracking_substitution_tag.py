@@ -12,8 +12,7 @@ class OpenTrackingSubstitutionTag(object):
         self._open_tracking_substitution_tag = None
 
         if open_tracking_substitution_tag is not None:
-            self.open_tracking_substitution_tag = \
-                open_tracking_substitution_tag
+            self.open_tracking_substitution_tag = open_tracking_substitution_tag
 
     @property
     def open_tracking_substitution_tag(self):

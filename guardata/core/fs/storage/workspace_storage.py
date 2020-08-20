@@ -24,7 +24,10 @@ from guardata.core.fs.exceptions import FSError, FSLocalMissError, FSInvalidFile
 from guardata.core.fs.storage.local_database import LocalDatabase
 from guardata.core.fs.storage.manifest_storage import ManifestStorage
 from guardata.core.fs.storage.chunk_storage import ChunkStorage, BlockStorage
-from guardata.core.fs.storage.version import WORKSPACE_DATA_STORAGE_NAME, WORKSPACE_CACHE_STORAGE_NAME
+from guardata.core.fs.storage.version import (
+    WORKSPACE_DATA_STORAGE_NAME,
+    WORKSPACE_CACHE_STORAGE_NAME,
+)
 
 
 logger = get_logger()

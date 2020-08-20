@@ -4,8 +4,7 @@ class SubscriptionTracking(object):
     location of the link within your email, you may use the substitution_tag.
     """
 
-    def __init__(
-            self, enable=None, text=None, html=None, substitution_tag=None):
+    def __init__(self, enable=None, text=None, html=None, substitution_tag=None):
         """Create a SubscriptionTracking to customize subscription management.
 
         :param enable: Whether this setting is enabled.
@@ -137,6 +136,5 @@ class SubscriptionTracking(object):
             subscription_tracking["html"] = self.html.get()
 
         if self.substitution_tag is not None:
-            subscription_tracking["substitution_tag"] = \
-                self.substitution_tag.get()
+            subscription_tracking["substitution_tag"] = self.substitution_tag.get()
         return subscription_tracking

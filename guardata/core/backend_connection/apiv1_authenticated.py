@@ -13,7 +13,10 @@ from guardata.api.protocol import DeviceID, APIEvent, APIV1_AUTHENTICATED_CMDS
 from guardata.core.types import BackendOrganizationAddr
 from guardata.core.backend_connection import cmds
 from guardata.core.backend_connection.transport import apiv1_connect, TransportPool
-from guardata.core.backend_connection.exceptions import BackendNotAvailable, BackendConnectionRefused
+from guardata.core.backend_connection.exceptions import (
+    BackendNotAvailable,
+    BackendConnectionRefused,
+)
 from guardata.core.backend_connection.expose_cmds import expose_cmds_with_retrier
 from guardata.core.backend_connection.authenticated import BackendConnStatus
 from guardata.core.core_events import CoreEvent

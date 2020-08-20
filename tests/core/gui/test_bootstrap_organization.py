@@ -69,7 +69,7 @@ async def test_bootstrap_organization(aqtbot, backend, gui_ready_for_bootstrap, 
             (
                 "",
                 "Your organization <b>NewOrg</b> has been created!<br />\n<br />\n"
-                "You will now be automatically logged in.<br />\n<br />\n"
+                "You will now be automatically logged in.<br />\n<br />\n",
             )
         ]
 
@@ -148,7 +148,8 @@ async def test_bootstrap_organization_invite_already_used(
         raise InviteAlreadyUsedError()
 
     monkeypatch.setattr(
-        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
+        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization",
+        _raise_already_used,
     )
 
     await proceed_to_bootstrap(aqtbot, bo_w)
@@ -176,7 +177,8 @@ async def test_bootstrap_organization_invite_not_found(
         raise InviteNotFoundError()
 
     monkeypatch.setattr(
-        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
+        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization",
+        _raise_already_used,
     )
 
     await proceed_to_bootstrap(aqtbot, bo_w)
@@ -204,7 +206,8 @@ async def test_bootstrap_organization_unknown_error(
         raise RuntimeError()
 
     monkeypatch.setattr(
-        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization", _raise_already_used
+        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization",
+        _raise_already_used,
     )
 
     await proceed_to_bootstrap(aqtbot, bo_w)

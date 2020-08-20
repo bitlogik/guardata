@@ -1,11 +1,9 @@
 class TrackingSettings(object):
     """Settings to track how recipients interact with your email."""
 
-    def __init__(self,
-                 click_tracking=None,
-                 open_tracking=None,
-                 subscription_tracking=None,
-                 ganalytics=None):
+    def __init__(
+        self, click_tracking=None, open_tracking=None, subscription_tracking=None, ganalytics=None
+    ):
         """Create a TrackingSettings object
 
         :param click_tracking: Allows you to track whether a recipient clicked
@@ -127,8 +125,7 @@ class TrackingSettings(object):
         if self.open_tracking is not None:
             tracking_settings["open_tracking"] = self.open_tracking.get()
         if self.subscription_tracking is not None:
-            tracking_settings[
-                "subscription_tracking"] = self.subscription_tracking.get()
+            tracking_settings["subscription_tracking"] = self.subscription_tracking.get()
         if self.ganalytics is not None:
             tracking_settings["ganalytics"] = self.ganalytics.get()
         return tracking_settings
