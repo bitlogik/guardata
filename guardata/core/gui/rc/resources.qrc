@@ -9,16 +9,13 @@
         <file>images/logos/guardata_vert_white.png</file>
     </qresource>
     <qresource prefix="/translations">
-        <file>translations/parsec_en.mo</file>
-        <file>translations/parsec_fr.mo</file>
+        <file>translations/guardata_en.mo</file>
+        <file>translations/guardata_fr.mo</file>
     </qresource>
     <qresource prefix="/fonts">
         <file>fonts/ProximaNova.otf</file>
         <file>fonts/Roboto-Regular.ttf</file>
         <file>fonts/OpenSans.ttf</file>
-    </qresource>
-    <qresource prefix="/generated_misc">
-        <file>generated_misc/history.html</file>
     </qresource>
     <qresource prefix="/styles">
         <file>styles/main.css</file>

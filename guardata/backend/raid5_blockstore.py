@@ -51,7 +51,7 @@ def rebuild_block_from_chunks(chunks: List[Optional[bytes]], checksum_chunk: byt
         pass
 
     payload = b"".join(chunks)
-    block_len, = struct.unpack("!I", payload[:4])
+    (block_len,) = struct.unpack("!I", payload[:4])
     return payload[4 : 4 + block_len]
 
 

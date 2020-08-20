@@ -16,7 +16,7 @@ from tests.common import create_shared_workspace
 def test_fuse_grow_by_truncate(tmpdir, mountpoint_service):
     mountpoint = mountpoint_service.wpath
 
-    oracle_fd = os.open(tmpdir / f"oracle-test", os.O_RDWR | os.O_CREAT)
+    oracle_fd = os.open(tmpdir / "oracle-test", os.O_RDWR | os.O_CREAT)
     fd = os.open(mountpoint / "bar.txt", os.O_RDWR | os.O_CREAT)
 
     length = 1
@@ -33,7 +33,7 @@ def test_fuse_grow_by_truncate(tmpdir, mountpoint_service):
 def test_empty_read_then_reopen(tmpdir, mountpoint_service):
     mountpoint = mountpoint_service.wpath
 
-    oracle_fd = os.open(tmpdir / f"oracle-test", os.O_RDWR | os.O_CREAT)
+    oracle_fd = os.open(tmpdir / "oracle-test", os.O_RDWR | os.O_CREAT)
     fd = os.open(mountpoint / "bar.txt", os.O_RDWR | os.O_CREAT)
 
     content = b"\x00"
@@ -53,7 +53,7 @@ def test_empty_read_then_reopen(tmpdir, mountpoint_service):
 
     os.close(oracle_fd)
     os.close(fd)
-    oracle_fd = os.open(tmpdir / f"oracle-test", os.O_RDWR)
+    oracle_fd = os.open(tmpdir / "oracle-test", os.O_RDWR)
     fd = os.open(mountpoint / "bar.txt", os.O_RDWR)
 
     size = 1

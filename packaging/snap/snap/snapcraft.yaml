@@ -14,7 +14,7 @@ grade: stable # must be 'stable' to release into candidate/stable channels
 apps:
   parsec:
     command: parsec
-    desktop: parsec.desktop
+    desktop: guardata.desktop
   cli:
     command: parsec-cli
 

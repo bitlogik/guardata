@@ -18,7 +18,12 @@ from guardata.api.protocol import (
     apiv1_organization_status_serializer,
     apiv1_organization_update_serializer,
 )
-from guardata.api.data import UserCertificateContent, DeviceCertificateContent, DataError, UserProfile
+from guardata.api.data import (
+    UserCertificateContent,
+    DeviceCertificateContent,
+    DataError,
+    UserProfile,
+)
 from guardata.backend.user import User, Device
 from guardata.backend.webhooks import WebhooksComponent
 from guardata.backend.utils import catch_protocol_errors, api
@@ -214,7 +219,7 @@ class BaseOrganizationComponent:
         if not timestamps_in_the_ballpark(u_data.timestamp, now):
             return {
                 "status": "invalid_certification",
-                "reason": f"Invalid timestamp in certification.",
+                "reason": "Invalid timestamp in certification.",
             }
 
         if ru_data:

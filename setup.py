@@ -2,7 +2,6 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-import os
 
 from setuptools import setup, find_packages, distutils, Command
 from setuptools.command.build_py import build_py
@@ -322,7 +321,7 @@ setup(
     author="BitLogiK",
     author_email="contact@bitlogik.fr",
     url="https://guardata.app",
-    python_requires='>=3.6',
+    python_requires=">=3.6",
     packages=find_packages(include=["guardata", "guardata.*"]),
     package_dir={"guardata": "guardata"},
     setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP, DOCUTILS_DEP],  # To generate resources bundle
@@ -349,7 +348,7 @@ setup(
     },
     license="AGPLv3",
     zip_safe=False,
-    keywords = "cloud data storage sharing cryptography",
+    keywords="cloud data storage sharing cryptography",
     classifiers=[
         "Development Status :: 1 - Planning",
         "Programming Language :: Python :: 3",

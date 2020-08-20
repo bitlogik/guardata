@@ -1,3 +1,4 @@
+# Gitlab CI/CD for guardata
 
 .shared_windows_runners:
   tags:
@@ -20,7 +21,7 @@ linux-tests:
     - adduser --disabled-password --gecos "" testuser
     - chmod -R 777 ..
   script:
-    - su testuser LinuxTest.sh
+    - su testuser tests/LinuxTest.sh
 
 windows-tests:
   extends:
@@ -40,8 +41,8 @@ windows-tests:
     - $env:PATH+=";$env:CI_PROJECT_DIR\winfsp-test"
       # build wheel
     - python.exe setup.py bdist_wheel
-    - rm -R -Force parsec
-      # Install the parsec wheel with all dependencies
+    - rm -R -Force guardata
+      # Install the guardata wheel with all dependencies
     - $WHLfiles = Get-ChildItem "dist\guardata-*.whl" | ForEach-Object {$_.Name}
     - python.exe -m pip install "dist\$WHLfiles[all]"
       # Check dependency compatibility
@@ -67,11 +68,11 @@ pip-build:
     - ln -s /usr/bin/python3 /usr/bin/python
     - rm -Rf docs
     - rm -Rf tests
-    - rm -Rf parsec/backend
-    - rm -Rf parsec/test_utils
+    - rm -Rf guardata/backend
+    - rm -Rf guardata/test_utils
     - python -m venv venv_build
     - ./venv_build/bin/python -m pip install -r pre-requirements.txt
-    - echo __version__=\"$CI_COMMIT_TAG\" > parsec/_version.py
+    - echo __version__=\"$CI_COMMIT_TAG\" > guardata/_version.py
     - ./venv_build/bin/python setup.py bdist_wheel
     - pip3 install --user virtualenv
     - python -m venv venv_test
@@ -106,20 +107,20 @@ windows-build:
   before_script:
     - rm -R -Force docs
     - rm -R -Force tests
-    - rm -R -Force parsec/backend
-    - rm -R -Force parsec/test_utils
+    - rm -R -Force guardata/backend
+    - rm -R -Force guardata/test_utils
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
     - choco install -y python --version=3.7.8
     - choco install -y nsis   --version=3.06.1
     - RefreshEnv
     - $pytver = "__version__ = `"${CI_COMMIT_TAG}`"`n"
-    - Out-File -FilePath parsec\_version.py -InputObject $pytver -Encoding ascii
+    - Out-File -FilePath guardata\_version.py -InputObject $pytver -Encoding ascii
     - cd packaging/win32/
     - curl -o winfsp-1.7.20172.msi https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi
     - .\Invoke-Environment.ps1 '"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"'
     - $env:PATH+=";C:\Program Files (x86)\NSIS"
   script:
-    - python.exe freeze_parsec.py ..\\..
+    - python.exe freeze_guardata.py ..\\..
     - makensis.exe installer.nsi
   artifacts:
     paths:

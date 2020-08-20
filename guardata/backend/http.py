@@ -17,7 +17,8 @@ from guardata.backend import static as http_static_module
 from guardata.backend.templates import get_template
 
 
-ACAO_domain = "https://guardata.app" # use "" to disable ACAO
+ACAO_domain = "https://guardata.app"  # use "" to disable ACAO
+
 
 @attr.s(slots=True, auto_attribs=True)
 class HTTPRequest:
@@ -141,9 +142,11 @@ class HTTPComponent:
         org_token = token_hex(32)
         await self._org.create(path, org_token)
         # except OrganizationAlreadyExistsError:
-            # dataj = {"status": "already_exists"}
-            # return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
-        groupURL = f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
+        # dataj = {"status": "already_exists"}
+        # return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
+        groupURL = (
+            f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
+        )
         dataj = {"status": "ok", "CreatedGroup": path, "groupURL": groupURL}
         headers = {"content-Type": "application/json"}
         if ACAO_domain:

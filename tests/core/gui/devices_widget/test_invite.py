@@ -3,7 +3,6 @@
 import pytest
 import trio
 from PyQt5 import QtCore
-from unittest.mock import ANY
 
 from guardata.core.backend_connection import backend_invited_cmds_factory
 from guardata.core.invite import claimer_retrieve_info

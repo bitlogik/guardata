@@ -106,7 +106,7 @@ FOR UPDATE
 
 
 _q_delete_invitation = Q(
-    f"""
+    """
 UPDATE invitation
 SET
     deleted_on = $on,
@@ -233,7 +233,7 @@ FOR UPDATE
 
 
 _q_conduit_update = Q(
-    f"""
+    """
 UPDATE invitation
 SET
     conduit_state = $conduit_state,

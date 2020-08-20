@@ -2,7 +2,12 @@
 
 from guardata.api.protocol import OrganizationID, UserID, DeviceID
 from guardata.backend.backend_events import BackendEvent
-from guardata.backend.user import UserError, UserNotFoundError, UserAlreadyExistsError, UserInvitation
+from guardata.backend.user import (
+    UserError,
+    UserNotFoundError,
+    UserAlreadyExistsError,
+    UserInvitation,
+)
 from guardata.backend.postgresql.handler import send_signal
 from guardata.backend.postgresql.utils import (
     Q,

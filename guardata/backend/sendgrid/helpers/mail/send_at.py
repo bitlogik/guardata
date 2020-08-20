@@ -9,6 +9,7 @@ class SendAt(object):
     at 10:53) can result in lower deferral rates because it won't
     be going through our servers at the same times as everyone else's
     mail."""
+
     def __init__(self, send_at=None, p=None):
         """Create a unix timestamp specifying when your email should
         be delivered.

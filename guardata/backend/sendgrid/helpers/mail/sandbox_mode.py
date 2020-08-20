@@ -3,6 +3,7 @@ class SandBoxMode(object):
     This allows you to send a test email to ensure that your request body is
     valid and formatted correctly.
     """
+
     def __init__(self, enable=None):
         """Create an enabled or disabled SandBoxMode.
 

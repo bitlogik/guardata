@@ -27,7 +27,8 @@ async def test_add_workspace(
     # Add (or try to) a new workspace
     workspace_name = ".." if invalid_name else "Workspace1"
     monkeypatch.setattr(
-        "guardata.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: (workspace_name)
+        "guardata.core.gui.workspaces_widget.get_text_input",
+        lambda *args, **kwargs: (workspace_name),
     )
     await aqtbot.mouse_click(w_w.button_add_workspace, QtCore.Qt.LeftButton)
 
@@ -77,7 +78,8 @@ async def test_rename_workspace(
     # Now do the rename
     workspace_name = ".." if invalid_name else "Workspace1_Renamed"
     monkeypatch.setattr(
-        "guardata.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: (workspace_name)
+        "guardata.core.gui.workspaces_widget.get_text_input",
+        lambda *args, **kwargs: (workspace_name),
     )
     await aqtbot.mouse_click(wk_button.button_rename, QtCore.Qt.LeftButton)
 

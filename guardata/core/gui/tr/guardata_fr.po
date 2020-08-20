@@ -1,22 +1,17 @@
-# French translations for PROJECT.
-# Copyright (C) 2020 ORGANIZATION
-# This file is distributed under the same license as the PROJECT project.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+# French translations for guardata.
+# Copyright (C) 2020 BitLogiK and Scille
+# This file is distributed under the same license as the guardata project.
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: PROJECT VERSION\n"
-"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"Project-Id-Version: guardata 0.0.2\n"
 "POT-Creation-Date: 2020-08-14 06:36+0200\n"
 "PO-Revision-Date: 2020-08-14 07:46+0200\n"
-"Last-Translator: \n"
 "Language: fr\n"
-"Language-Team: fr <LL@li.org>\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.6.0\n"
 
 msgid "TEXT_WORKSPACE_ROLE_READER"
 msgstr "Lecteur"
@@ -25,7 +20,7 @@ msgid "TEXT_WORKSPACE_ROLE_CONTRIBUTOR"
 msgstr "Contributeur"
 
 msgid "TEXT_WORKSPACE_ROLE_MANAGER"
-msgstr "Gérant"
+msgstr "Gestionnaire
 
 msgid "TEXT_WORKSPACE_ROLE_OWNER"
 msgstr "Propriétaire"

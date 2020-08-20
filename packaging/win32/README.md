@@ -18,9 +18,9 @@ Example for Visual Studio 2017 with amd64 target:
 $ "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat"  amd64
 ```
 
-Run the `freeze_parsec.py` Python script with the path to the Parsec sources to use:
+Run the `freeze_guardata.py` Python script with the path to the guardata sources to use:
 ```shell
-$ python freeze_parsec.py ../..
+$ python freeze_guardata.py ../..
 ```
 
 Note the Python version embedded inside the build will be taken from the interpreter
@@ -39,18 +39,6 @@ Run the NSIS script `installer.nsi`:
 $ "C:\Program Files (x86)\NSIS\makensis.exe" installer.nsi
 ```
 
-This will generate a `build\parsec-<version>-<platform>-setup.exe` installer.
+This will generate a `build\guardata-<version>-<platform>-setup.exe` installer.
 
 
-### 3 - Sign the application
-
-Those instructions are depending on the certificate method we are using at the Parsec team, hence they are incomplete.
-
-#### Install signtool
-The `signtool` command is part of the Windows SDK : https://developer.microsoft.com/en-us/windows/downloads/windows-10-sdk/
-
-#### Add signtool to path
-Can be done for example doing ```@set PATH=C:\Program Files (x86)\Windows Kits\10\bin\$VERSION\x64;%PATH%```
-
-#### Sign an executable
-```signtool sign /n Scille /t http://time.certum.pl /fd sha256 /d "Parsec by Scille" /v $EXECUTABLE```

@@ -176,7 +176,8 @@ async def test_mountpoint_path_already_in_use_concurrent_with_mountpoint(
             return mountpoint_path, st_dev
 
         monkeypatch.setattr(
-            "guardata.core.mountpoint.fuse_runner._bootstrap_mountpoint", _mocked_bootstrap_mountpoint
+            "guardata.core.mountpoint.fuse_runner._bootstrap_mountpoint",
+            _mocked_bootstrap_mountpoint,
         )
 
         # Now we can start fuse

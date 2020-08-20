@@ -117,7 +117,7 @@ def test_folder_operations(tmpdir, caplog, hypothesis_settings, mountpoint_servi
             (oracle_root / "w").mkdir()
             oracle_root.chmod(0o500)  # Also protect workspace from deletion
 
-            return PathElement(f"/", self.guardata_root, oracle_root / "w")
+            return PathElement("/", self.guardata_root, oracle_root / "w")
 
         def teardown(self):
             if hasattr(self, "mountpoint_service"):

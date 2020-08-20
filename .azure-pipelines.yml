@@ -1,4 +1,4 @@
-# See https://aka.ms/yaml for documentation
+# Azure CI/CD for guardata
 
 trigger:
   branches:
@@ -15,15 +15,12 @@ variables:
   pytest.base_args: |
     --log-level=DEBUG \
     --durations=10 -v \
-    --cov=parsec --cov-config=setup.cfg --cov-append --cov-report= \
-  debug.stress_flaky_tests: 0  # Repeat all flaky tests X times
+  debug.stress_flaky_tests: 0
 
 jobs:
 
-
 #################################################################################
 # Step 0: Wheel build
-
 
 - job: 's0_build_wheel'
   displayName: 'Build wheel'
@@ -53,7 +50,6 @@ jobs:
 #################################################################################
 # Step 1: Tests
 
-
 - job: 's1_qa'
   displayName: 'Q&A'
   timeoutInMinutes: 5
@@ -73,34 +69,12 @@ jobs:
     displayName: 'Bootstrap'
   - bash: |
       set -eux
-      # Patch .pre-commit-config.yaml to force mixed-line-ending checks to LF
-      sed -i '/id: mixed-line-ending/a\      args:\n\        - "--fix=lf"' .pre-commit-config.yaml
-      cat .pre-commit-config.yaml
       # Run all pre-commit hooks on all files
       pre-commit run --all-files --show-diff-on-failure
     displayName: 'Pre-commit hooks check'
-  - bash: |
-      if ([[ $(Build.SourceBranch) = "refs/heads/master" ]] || [[ $(Build.SourceBranch) = "refs/tags/"* ]])
-      then exit 0; fi
-      for FILENAME in newsfragments/*
-      do
-        # If file never existed in master, consider as a new newsfragment
-        # Cannot git diff against master branch here given newsfragments removed in master will be considered as
-        # new items in our branch
-        if git log origin/master --exit-code -- "$FILENAME" > /dev/null
-        then exit 0; fi
-      done
-      echo "NO NEW NEWSFRAGMENT FOUND" >&2
-    displayName: 'Newsfragment'
-    failOnStderr: true
-  - bash: |
-      git fetch --tags  # Needed by releaser.py to have a consistent `git describe`
-      python ./misc/releaser.py check --verbose
-    displayName: 'Version check'
 
 
 #################################################################################
-
 
 - job: 's1_linux_test'
   displayName: 'Linux tests'
@@ -130,9 +104,9 @@ jobs:
     displayName: 'Bootstrap'
   - bash: |
       set -eux
-      # Remove the parsec folder from the source to force use of the wheel
-      rm -rf parsec
-      # Install the parsec wheel with all dependencies
+      # Remove the guardata folder from the source to force use of the wheel
+      rm -rf guardata
+      # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
       echo $WHEEL
       pip install $WHEEL[all]
@@ -160,13 +134,6 @@ jobs:
   #       tests -m gui --runmountpoint --runslow --rungui -x \
   #       --junitxml=test-results-gui.xml
   #   displayName: 'Tests GUI'
-  - bash: |
-      set -eux
-      pip install -U codecov
-      coverage xml -o coverage.xml
-      grep -E '( filename=|<package )' coverage.xml
-      codecov --file=coverage.xml --commit=$(Build.SourceVersion)
-    displayName: 'Codecov upload'
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: '$(Agent.TempDirectory)/test-results-*.xml'
@@ -175,7 +142,6 @@ jobs:
 
 
 #################################################################################
-
 
 - job: 's1_windows_test'
   displayName: 'Windows tests'
@@ -207,8 +173,8 @@ jobs:
     displayName: 'Bootstrap'
   - bash: |
       set -eux
-      # Remove the parsec folder from the source to force use of the wheel
-      rm -rf parsec
+      # Remove the guardata folder from the source to force use of the wheel
+      rm -rf guardata
       # Install the guardata wheel with all dependencies
       WHEEL_DIRECTORY=`python -c 'print(r"$(Pipeline.Workspace)/wheel".replace("\\\\", "/"))'`
       WHEEL=$(ls $WHEEL_DIRECTORY/guardata-*.whl)
@@ -252,13 +218,6 @@ jobs:
         -n auto --max-worker-restart=0 -x \
         --junitxml=test-results-slow.xml
     displayName: 'Tests slow'
-  - bash: |
-      set -eux
-      pip install -U codecov
-      coverage xml -o coverage.xml
-      grep -E '( filename=|<package )' coverage.xml
-      codecov --file=coverage.xml --commit=$(Build.SourceVersion)
-    displayName: 'Codecov upload'
   - task: PublishTestResults@2
     inputs:
       testResultsFiles: '$(Agent.TempDirectory)/test-results-*.xml'
@@ -268,7 +227,6 @@ jobs:
 
 #################################################################################
 # Step 2: Release packages build
-
 
 - job: 's2_linux_snap_build'
   displayName: 'Linux snap build'
@@ -291,12 +249,12 @@ jobs:
       cp -R $(Build.SourcesDirectory)/packaging/snap snapbuild
       cd snapbuild
       mkdir src
-      cp -R $(Build.SourcesDirectory)/parsec src
+      cp -R $(Build.SourcesDirectory)/guardata src
       cp $(Build.SourcesDirectory)/setup.py src
       cp $(Build.SourcesDirectory)/README.rst src
       cp $(Build.SourcesDirectory)/HISTORY.rst src
       VERBOSE_TAG=`git -C $(Build.SourcesDirectory) describe --tag`
-      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" src/parsec/_version.py
+      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" src/guardata/_version.py
       sed -i "s/__GUARDATA_VERSION__/$VERBOSE_TAG/" snap/snapcraft.yaml
       snapcraft --destructive-mode
       mkdir dist
@@ -308,7 +266,6 @@ jobs:
 
 
 #################################################################################
-
 
 - job: 's2_windows_installer_build'
   displayName: 'Windows installer build'
@@ -342,14 +299,14 @@ jobs:
       SOURCES_DIRECTORY=`python -c 'print(r"$(Build.SourcesDirectory)".replace("\\\\", "/"))'`
       TEMP_DIRECTORY=`python -c 'print(r"$(Agent.TempDirectory)".replace("\\\\", "/"))'`
       VERBOSE_TAG=`git -C $SOURCES_DIRECTORY describe --tag`
-      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" $SOURCES_DIRECTORY/parsec/_version.py
+      sed -i "s#^\\(__version__ = \\).*\$#\\1'$VERBOSE_TAG'#" $SOURCES_DIRECTORY/guardata/_version.py
       cp -R $SOURCES_DIRECTORY/packaging/win32/ winbuild
     displayName: 'Prepare build'
     workingDirectory: $(Agent.TempDirectory)
   # Must use cmd.exe here instead of bash otherwise `C:\Program Files\Git\bin\link.exe`
   # takes priority over visual studio link.exe in PATH
   - script: |
-      python freeze_parsec.py $(Build.SourcesDirectory)
+      python freeze_guardata.py $(Build.SourcesDirectory)
     displayName: 'Freeze Parsec'
     workingDirectory: $(Agent.TempDirectory)/winbuild
   - bash: |
@@ -366,7 +323,6 @@ jobs:
 
 #################################################################################
 # Step 3: Release packages tests
-
 
 - job: 's3_linux_snap_test'
   displayName: 'Never trust a snap'
@@ -400,7 +356,6 @@ jobs:
 #################################################################################
 # Step 4: Release packages upload
 
-
 - job: 's4_linux_snap_upload'
   displayName: 'Upload snap'
   condition: startsWith(variables['build.sourceBranch'], 'refs/tags/')
@@ -425,7 +380,6 @@ jobs:
 
 
 #################################################################################
-
 
 - job: 's4_wheel_pypi_upload'
   displayName: 'Upload wheel on PyPI'

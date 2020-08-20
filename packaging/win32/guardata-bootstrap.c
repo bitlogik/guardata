@@ -23,7 +23,7 @@ int main(int argc, char *argv[])
 
     PyRun_SimpleString(
         "import os, sys\n"
-        "from parsec.cli import cli\n"
+        "from guardata.cli import cli\n"
         "os.makedirs(os.path.expandvars('%APPDATA%\\\\guardata'), exist_ok=True)\n"
         "log_file = os.path.expandvars('%APPDATA%\\\\guardata\\\\guardata-core.log')\n"
         "args = ['core', 'gui', '--log-level', 'INFO', '--log-file', log_file, ' '.join(sys.argv[1:])]\n"

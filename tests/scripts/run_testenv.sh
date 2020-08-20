@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 : '
-Create a temporary environment and initialize a test setup for parsec.
+Create a temporary environment and initialize a test setup for guardata.
 
 Run `tests/scripts/run_testenv.sh --help` for more information.
 '

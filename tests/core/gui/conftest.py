@@ -17,7 +17,11 @@ from guardata.core.local_device import save_device_with_password
 from guardata.core.gui.main_window import MainWindow
 from guardata.core.gui.workspaces_widget import WorkspaceButton
 from guardata.core.gui.trio_thread import QtToTrioJobScheduler
-from guardata.core.gui.login_widget import LoginWidget, LoginPasswordInputWidget, LoginAccountsWidget
+from guardata.core.gui.login_widget import (
+    LoginWidget,
+    LoginPasswordInputWidget,
+    LoginAccountsWidget,
+)
 from guardata.core.gui.central_widget import CentralWidget
 from guardata.core.gui.lang import switch_language
 from guardata.core.gui.guardata_application import guardataApp

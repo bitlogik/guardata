@@ -13,7 +13,10 @@ from guardata.core.backend_connection.authenticated import (
     BackendAuthenticatedConn,
     backend_authenticated_cmds_factory,
 )
-from guardata.core.backend_connection.invited import BackendInvitedCmds, backend_invited_cmds_factory
+from guardata.core.backend_connection.invited import (
+    BackendInvitedCmds,
+    backend_invited_cmds_factory,
+)
 from guardata.core.backend_connection.apiv1_authenticated import (
     APIV1_BackendAuthenticatedCmds,
     APIV1_BackendAuthenticatedConn,

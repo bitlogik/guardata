@@ -508,7 +508,7 @@ class LocalFolderishManifestMixin:
     # Filtering and confinement helpers
 
     def _filter_confined_entries(
-        self: LocalFolderishManifestTypeVar
+        self: LocalFolderishManifestTypeVar,
     ) -> LocalFolderishManifestTypeVar:
         if not self.confined_entries:
             return self
@@ -549,7 +549,7 @@ class LocalFolderishManifestMixin:
         return self.evolve(children=children, filtered_entries=filtered_entries)
 
     def _restore_filtered_entries(
-        self: LocalFolderishManifestTypeVar
+        self: LocalFolderishManifestTypeVar,
     ) -> LocalFolderishManifestTypeVar:
         if not self.filtered_entries:
             return self

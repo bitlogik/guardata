@@ -57,12 +57,12 @@ def main(guardata_source):
 
     # Bootstrap tools virtualenv
     if not TOOLS_VENV_DIR.is_dir():
-        print(f"### Create tool virtualenv ###")
+        print("### Create tool virtualenv ###")
         run(f"python -m venv {TOOLS_VENV_DIR}")
         run(f"{ TOOLS_VENV_DIR / 'Scripts/python' } -m pip install wheel")
 
     if not WHEELS_DIR.is_dir():
-        print(f"### Generate wheels from . and dependencies ###")
+        print("### Generate wheels from . and dependencies ###")
         run(
             f"{ TOOLS_VENV_DIR / 'Scripts/python' } -m pip wheel {guardata_source}[core] --wheel-dir {WHEELS_DIR}"
         )
@@ -74,21 +74,21 @@ def main(guardata_source):
         raise SystemExit(f"{target_dir} already exists, exiting...")
 
     # Extract CPython distrib
-    print(f"### Extracting CPython embedded distribution ###")
+    print("### Extracting CPython embedded distribution ###")
     shutil.unpack_archive(str(CPYTHON_DISTRIB_ARCHIVE), extract_dir=str(target_dir))
 
     # Bootstrap build virtualenv
     build_venv_dir = target_dir / "build_venv"
-    print(f"### Installing wheels in temporary virtualenv ###")
+    print("### Installing wheels in temporary virtualenv ###")
     run(f"python -m venv {build_venv_dir}")
     wheels = " ".join(map(str, WHEELS_DIR.glob("*.whl")))
     run(f"{ build_venv_dir / 'Scripts/python' } -m pip install {wheels}")
 
     # Move build virtualenv's site-packages to the build and patch imports
-    print(f"### Move site-packages to embedded distribution ###")
+    print("### Move site-packages to embedded distribution ###")
     shutil.move(build_venv_dir / "Lib/site-packages", target_dir / "site-packages")
     shutil.rmtree(build_venv_dir)
-    pth_file, = target_dir.glob("*._pth")
+    (pth_file,) = target_dir.glob("*._pth")
     pth_file.write_text(pth_file.read_text() + "site-packages\n")
 
     # Include LICENSE file
@@ -149,12 +149,12 @@ END
     # Clean up deleting not required files
     def filter_info_dirs(dirname):
         return dirname.endswith("-info")
+
     dirlist = next(os.walk(target_dir / "site-packages"))[1]
     dirlistinfo = filter(filter_info_dirs, dirlist)
-    delete_assets_list = [
-            "site-packages/pip",
-            "site-packages/setuptools"
-    ] + ["site-packages/"+dir for dir in dirlistinfo]
+    delete_assets_list = ["site-packages/pip", "site-packages/setuptools"] + [
+        "site-packages/" + dir for dir in dirlistinfo
+    ]
     for remdir in delete_assets_list:
         shutil.rmtree(target_dir / remdir)
 

@@ -60,7 +60,7 @@ class EventBus:
                     "Unhandled exception in event bus callback",
                     callback=cb,
                     event_type=event,
-                    **kwargs
+                    **kwargs,
                 )
 
     @contextmanager

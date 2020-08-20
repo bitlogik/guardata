@@ -18,7 +18,10 @@ from guardata.api.protocol import (
 )
 from guardata.api.data import BaseSchema, EntryID, EntryIDField, UserProfile, UserProfileField
 from guardata.core.types.base import BaseLocalData
-from guardata.core.types.backend_address import BackendOrganizationAddr, BackendOrganizationAddrField
+from guardata.core.types.backend_address import (
+    BackendOrganizationAddr,
+    BackendOrganizationAddrField,
+)
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True, kw_only=True, eq=False)

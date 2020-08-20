@@ -22,4 +22,4 @@ export SNAPCRAFT_PART_INSTALL=$SNAP
 # (i.e. without sandbox).
 unset SNAP
 
-$PYTHON -I -m parsec.cli core gui --log-level=INFO --log-file=$LOG_FILE $@
+$PYTHON -I -m guardata.cli core gui --log-level=INFO --log-file=$LOG_FILE $@

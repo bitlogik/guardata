@@ -24,7 +24,10 @@ from guardata.core.fs.exceptions import FSError, FSLocalMissError, FSInvalidFile
 from guardata.core.fs.storage.local_database import LocalDatabase
 from guardata.core.fs.storage.manifest_storage import ManifestStorage
 from guardata.core.fs.storage.chunk_storage import ChunkStorage, BlockStorage
-from guardata.core.fs.storage.version import WORKSPACE_DATA_STORAGE_NAME, WORKSPACE_CACHE_STORAGE_NAME
+from guardata.core.fs.storage.version import (
+    WORKSPACE_DATA_STORAGE_NAME,
+    WORKSPACE_CACHE_STORAGE_NAME,
+)
 
 
 logger = get_logger()
@@ -295,9 +298,10 @@ class WorkspaceStorage(BaseWorkspaceStorage):
     # Pattern filter interface
 
     async def _load_pattern_filter(self) -> None:
-        self._pattern_filter, self._pattern_filter_fully_applied = (
-            await self.manifest_storage.get_pattern_filter()
-        )
+        (
+            self._pattern_filter,
+            self._pattern_filter_fully_applied,
+        ) = await self.manifest_storage.get_pattern_filter()
 
     async def set_pattern_filter(self, pattern: Pattern) -> None:
         await self.manifest_storage.set_pattern_filter(pattern)

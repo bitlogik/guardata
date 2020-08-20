@@ -21,16 +21,16 @@ class BaseInterface(object):
         :type host: string
         """
         from . import __version__
+
         self.auth = auth
         self.host = host
         self.impersonate_subuser = impersonate_subuser
         self.version = __version__
-        self.useragent = 'sendgrid/{};python'.format(self.version)
+        self.useragent = "sendgrid/{};python".format(self.version)
 
         self.client = python_http_client.Client(
-            host=self.host,
-            request_headers=self._default_headers,
-            version=3)
+            host=self.host, request_headers=self._default_headers, version=3
+        )
 
     @property
     def _default_headers(self):
@@ -38,10 +38,10 @@ class BaseInterface(object):
         headers = {
             "Authorization": self.auth,
             "User-Agent": self.useragent,
-            "Accept": 'application/json'
+            "Accept": "application/json",
         }
         if self.impersonate_subuser:
-            headers['On-Behalf-Of'] = self.impersonate_subuser
+            headers["On-Behalf-Of"] = self.impersonate_subuser
 
         return headers
 

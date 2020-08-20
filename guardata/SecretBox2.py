@@ -8,6 +8,7 @@ import nacl.secret
 from nacl import exceptions as exc
 from nacl.utils import EncryptedMessage, random
 
+
 class SecretBox(nacl.secret.SecretBox):
     """
     The SecretBox2 class encrypts and decrypts messages using the given secret
@@ -32,7 +33,7 @@ class SecretBox(nacl.secret.SecretBox):
     KEY_SIZE = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_KEYBYTES
     NONCE_SIZE = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_NPUBBYTES
     MACBYTES = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_ABYTES
-    MESSAGEBYTES_MAX = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_MESSAGEBYTES_MAX 
+    MESSAGEBYTES_MAX = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_MESSAGEBYTES_MAX
 
     def __bytes__(self):
         return ""
@@ -61,15 +62,15 @@ class SecretBox(nacl.secret.SecretBox):
             raising=exc.TypeError,
         )
 
-        ciphertext = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_encrypt(plaintext if isinstance(plaintext, bytes) else bytes(plaintext), aad, nonce, self._key)
+        ciphertext = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_encrypt(
+            plaintext if isinstance(plaintext, bytes) else bytes(plaintext), aad, nonce, self._key
+        )
 
         encoded_nonce = encoder.encode(nonce)
         encoded_ciphertext = encoder.encode(ciphertext)
 
         return EncryptedMessage._from_parts(
-            encoded_nonce,
-            encoded_ciphertext,
-            encoder.encode(nonce + ciphertext),
+            encoded_nonce, encoded_ciphertext, encoder.encode(nonce + ciphertext)
         )
 
     def decrypt(self, ciphertext, nonce=None, aad=None, encoder=RawEncoder):
@@ -88,10 +89,11 @@ class SecretBox(nacl.secret.SecretBox):
 
         if nonce is None:
             # If we were given the nonce and ciphertext combined, split them.
-            nonce = ciphertext[:self.NONCE_SIZE]
-            ciphertext = ciphertext[self.NONCE_SIZE:]
+            nonce = ciphertext[: self.NONCE_SIZE]
+            ciphertext = ciphertext[self.NONCE_SIZE :]
 
-        plaintext = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_decrypt(ciphertext, aad, nonce, self._key)
+        plaintext = nacl.bindings.crypto_aead_xchacha20poly1305_ietf_decrypt(
+            ciphertext, aad, nonce, self._key
+        )
 
         return plaintext
-

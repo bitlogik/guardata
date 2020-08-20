@@ -34,7 +34,7 @@ class MemoryOrganizationComponent(BaseOrganizationComponent):
         user: BaseUserComponent,
         vlob: MemoryVlobComponent,
         block: MemoryBlockComponent,
-        **other_components
+        **other_components,
     ):
         self._user_component = user
         self._vlob_component = vlob

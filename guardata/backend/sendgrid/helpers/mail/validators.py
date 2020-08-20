@@ -16,6 +16,7 @@ class ValidateApiKey(object):
         """
 
         import re
+
         self.regexes = set()
 
         # Compile the regex strings into patterns, add them to our set
@@ -24,7 +25,7 @@ class ValidateApiKey(object):
                 self.regexes.add(re.compile(regex_string))
 
         if use_default:
-            default_regex_string = r'SG\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+'
+            default_regex_string = r"SG\.[0-9a-zA-Z]+\.[0-9a-zA-Z]+"
             self.regexes.add(re.compile(default_regex_string))
 
     def validate_message_dict(self, request_body):
@@ -49,8 +50,7 @@ class ValidateApiKey(object):
 
             for content in contents:
                 if content is not None:
-                    if (content.get("type") == "text/html" or
-                            isinstance(content.get("value"), str)):
+                    if content.get("type") == "text/html" or isinstance(content.get("value"), str):
                         message_text = content.get("value", "")
                         self.validate_message_text(message_text)
 

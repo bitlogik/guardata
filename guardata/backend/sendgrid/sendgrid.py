@@ -29,11 +29,7 @@ class SendGridAPIClient(BaseInterface):
         https://github.com/sendgrid/sendgrid-python
     """
 
-    def __init__(
-            self,
-            api_key=None,
-            host='https://api.sendgrid.com',
-            impersonate_subuser=None):
+    def __init__(self, api_key=None, host="https://api.sendgrid.com", impersonate_subuser=None):
         """
         Construct the Twilio SendGrid v3 API object.
         Note that the underlying client is being set up during initialization,
@@ -52,7 +48,7 @@ class SendGridAPIClient(BaseInterface):
         :param host: base URL for API calls
         :type host: string
         """
-        self.api_key = api_key or os.environ.get('SENDGRID_API_KEY')
-        auth = 'Bearer {}'.format(self.api_key)
+        self.api_key = api_key or os.environ.get("SENDGRID_API_KEY")
+        auth = "Bearer {}".format(self.api_key)
 
         super(SendGridAPIClient, self).__init__(auth, host, impersonate_subuser)

@@ -17,16 +17,16 @@ class Personalization(object):
 
     def add_email(self, email):
         email_type = type(email)
-        if email_type.__name__ == 'To':
+        if email_type.__name__ == "To":
             self.add_to(email)
             return
-        if email_type.__name__ == 'Cc':
+        if email_type.__name__ == "Cc":
             self.add_cc(email)
             return
-        if email_type.__name__ == 'Bcc':
+        if email_type.__name__ == "Bcc":
             self.add_bcc(email)
             return
-        raise ValueError('Please use a To, Cc or Bcc object.')
+        raise ValueError("Please use a To, Cc or Bcc object.")
 
     @property
     def tos(self):
@@ -217,17 +217,17 @@ class Personalization(object):
         """
         personalization = {}
 
-        for key in ['tos', 'ccs', 'bccs']:
+        for key in ["tos", "ccs", "bccs"]:
             value = getattr(self, key)
             if value:
                 personalization[key[:-1]] = value
 
-        for key in ['subject', 'send_at', 'dynamic_template_data']:
+        for key in ["subject", "send_at", "dynamic_template_data"]:
             value = getattr(self, key)
             if value:
                 personalization[key] = value
 
-        for prop_name in ['headers', 'substitutions', 'custom_args']:
+        for prop_name in ["headers", "substitutions", "custom_args"]:
             prop = getattr(self, prop_name)
             if prop:
                 obj = {}

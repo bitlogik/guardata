@@ -170,4 +170,4 @@ class APIV1_AdministrationClientContext(BaseClientContext):
         )
 
     def __repr__(self):
-        return f"APIV1_AdministrationClientContext()"
+        return "APIV1_AdministrationClientContext()"

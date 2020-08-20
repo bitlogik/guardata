@@ -369,7 +369,9 @@ class ClaimDeviceProvideInfoWidget(QWidget, Ui_ClaimDeviceProvideInfoWidget):
         )
         self.password_strength_widget.main_pwd = self.line_edit_password
         self.line_edit_password.textChanged.connect(self.check_infos)
-        self.line_edit_password_check.textChanged.connect(self.password_strength_widget.on_otherpwd_change)
+        self.line_edit_password_check.textChanged.connect(
+            self.password_strength_widget.on_otherpwd_change
+        )
         self.line_edit_password_check.textChanged.connect(self.check_infos)
         self.claim_success.connect(self._on_claim_success)
         self.claim_error.connect(self._on_claim_error)

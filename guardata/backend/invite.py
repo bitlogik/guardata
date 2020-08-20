@@ -176,13 +176,19 @@ def generate_invite_email(
 async def send_email(email_config: EmailConfig, to_addr: str, message: dict) -> None:
     def _do():
         try:
-            sgc = SendGridAPIClient(api_key=os.environ.get('SG_APIKEY'))
+            sgc = SendGridAPIClient(api_key=os.environ.get("SG_APIKEY"))
             from_email = Email(email_config.sender)
             to_email = To(to_addr)
             subject = message["subject"]
             content_html = Content("text/html", message["html"])
             content_text = Content("text/plain", message["text"])
-            mail = Mail(from_email=from_email, to_emails=to_email, subject=subject, plain_text_content=content_text, html_content=content_html)
+            mail = Mail(
+                from_email=from_email,
+                to_emails=to_email,
+                subject=subject,
+                plain_text_content=content_text,
+                html_content=content_html,
+            )
             response = sgc.client.mail.send.post(request_body=mail.get())
             assert 202 == response.status_code
 
@@ -239,7 +245,7 @@ class BaseInviteComponent:
             ).to_http_redirection_url()
 
         if msg["send_email"]:
-            if not os.environ.get('SG_APIKEY'):
+            if not os.environ.get("SG_APIKEY"):
                 return invite_new_serializer.rep_dump({"status": "not_available"})
 
         if msg["type"] == InvitationType.USER:

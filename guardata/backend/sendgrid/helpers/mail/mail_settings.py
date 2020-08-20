@@ -1,12 +1,14 @@
 class MailSettings(object):
     """A collection of mail settings that specify how to handle this email."""
 
-    def __init__(self,
-                 bcc_settings=None,
-                 bypass_list_management=None,
-                 footer_settings=None,
-                 sandbox_mode=None,
-                 spam_check=None):
+    def __init__(
+        self,
+        bcc_settings=None,
+        bypass_list_management=None,
+        footer_settings=None,
+        sandbox_mode=None,
+        spam_check=None,
+    ):
         """Create a MailSettings object
 
         :param bcc_settings: The BCC Settings of this MailSettings
@@ -142,8 +144,7 @@ class MailSettings(object):
             mail_settings["bcc"] = self.bcc_settings.get()
 
         if self.bypass_list_management is not None:
-            mail_settings[
-                "bypass_list_management"] = self.bypass_list_management.get()
+            mail_settings["bypass_list_management"] = self.bypass_list_management.get()
 
         if self.footer_settings is not None:
             mail_settings["footer"] = self.footer_settings.get()

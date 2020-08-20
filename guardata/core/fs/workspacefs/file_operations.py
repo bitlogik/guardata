@@ -219,7 +219,7 @@ def prepare_resize(
 
 
 def prepare_reshape(
-    manifest: LocalFileManifest
+    manifest: LocalFileManifest,
 ) -> Iterator[Tuple[Chunks, Chunk, Callable, Set[Union[BlockID, ChunkID]]]]:
 
     # Update manifest

@@ -1,10 +1,11 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
-from unittest.mock import ANY
+
+# from unittest.mock import ANY
 from PyQt5 import QtCore
 
-from guardata.core.gui.users_widget import UserInvitationButton
+# from guardata.core.gui.users_widget import UserInvitationButton
 from guardata.core.gui.lang import translate as _
 
 from tests.common import customize_fixtures
@@ -150,7 +151,7 @@ async def test_cancel_user_invitation(
     await aqtbot.mouse_click(u_w.button_add_user, QtCore.Qt.LeftButton)
 
     # def _new_invitation_displayed():
-        # assert u_w.layout_users.count() == 4
+    # assert u_w.layout_users.count() == 4
 
     # await aqtbot.wait_until(_new_invitation_displayed)
     # user_invitation_w = u_w.layout_users.itemAt(3).widget()
@@ -160,7 +161,7 @@ async def test_cancel_user_invitation(
     # await aqtbot.mouse_click(user_invitation_w.button_cancel, QtCore.Qt.LeftButton)
 
     # def _new_invitation_removed():
-        # assert u_w.layout_users.count() == 3
+    # assert u_w.layout_users.count() == 3
 
     # await aqtbot.wait_until(_new_invitation_removed)
     # assert not autoclose_dialog.dialogs

@@ -18,7 +18,7 @@ def open_url(url):
 
 
 # def open_doc_link():
-    # open_url("SOON")
+# open_url("SOON")
 
 
 def open_feedback_link():
@@ -26,7 +26,7 @@ def open_feedback_link():
 
 
 # def open_user_guide():
-    # open_url("https://USERGUIDE")
+# open_url("https://USERGUIDE")
 
 
 def get_default_device():
@@ -53,7 +53,10 @@ def guardata_instances_count():
     inst_count = 0
     for proc in psutil.process_iter():
         try:
-            if proc.name().lower() in ["guardata", "guardata.exe"] and "backend" not in proc.cmdline():
+            if (
+                proc.name().lower() in ["guardata", "guardata.exe"]
+                and "backend" not in proc.cmdline()
+            ):
                 inst_count += 1
         except (psutil.NoSuchProcess, psutil.AccessDenied, psutil.ZombieProcess):
             pass

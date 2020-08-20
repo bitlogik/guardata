@@ -356,7 +356,8 @@ async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
     )
     assert len(w_f.table_files.selected_files()) == 2
     monkeypatch.setattr(
-        "guardata.core.gui.files_widget.ask_question", lambda *args: _("ACTION_FILE_DELETE_MULTIPLE")
+        "guardata.core.gui.files_widget.ask_question",
+        lambda *args: _("ACTION_FILE_DELETE_MULTIPLE"),
     )
     async with aqtbot.wait_signals([w_f.delete_success, w_f.folder_stat_success]):
         w_f.table_files.delete_clicked.emit()

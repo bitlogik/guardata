@@ -33,7 +33,7 @@ try:
 except ImportError as exc:
     raise ModuleNotFoundError(
         """PyQt forms haven't been generated.
-You must install the parsec package or run `python setup.py generate_pyqt_forms`
+You must install the guardata package or run `python setup.py generate_pyqt_forms`
 """
     ) from exc
 
