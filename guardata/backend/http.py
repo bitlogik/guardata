@@ -114,8 +114,8 @@ class HTTPComponent:
         location_url = urlunsplit(
             (backend_addr_split.scheme, backend_addr_split.netloc, path, location_url_query, None)
         )
-
-        return HTTPResponse.build(302, headers={"location": location_url})
+        data = get_template("redirect.html").render(parsecurl=location_url)
+        return HTTPResponse.build_html(200, data=data)
 
     async def _http_static(self, req: HTTPRequest, path: str) -> HTTPResponse:
         if path == "__init__.py":
