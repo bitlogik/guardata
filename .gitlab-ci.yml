@@ -33,6 +33,7 @@ windows-tests:
       # Check winfsp-tests availability
     - python.exe -c "import winfspy.tests.winfsp_tests"
   script:
+    - $env:QT_QPA_PLATFORM="offscreen"
     # py.test --log-level=DEBUG --durations=10 -v tests -n auto --max-worker-restart=0 -x
     # py.test --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow -m mountpoint -x
     - py.test --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow --rungui -m gui -x
