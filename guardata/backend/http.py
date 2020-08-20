@@ -93,11 +93,11 @@ class HTTPComponent:
         self._org = org
 
     async def _http_404(self, req: HTTPRequest) -> HTTPResponse:
-        data = get_template("404.html").render()
+        data = get_template("404.html").render(title="not found")
         return HTTPResponse.build_html(404, data=data)
 
     async def _http_root(self, req: HTTPRequest) -> HTTPResponse:
-        data = get_template("index.html").render()
+        data = get_template("index.html").render(title="cloud server")
         return HTTPResponse.build_html(200, data=data)
 
     async def _http_redirect(self, req: HTTPRequest, path: str) -> HTTPResponse:
@@ -114,7 +114,7 @@ class HTTPComponent:
         location_url = urlunsplit(
             (backend_addr_split.scheme, backend_addr_split.netloc, path, location_url_query, None)
         )
-        data = get_template("redirect.html").render(parsecurl=location_url)
+        data = get_template("redirect.html").render(parsecurl=location_url, title="invitation")
         return HTTPResponse.build_html(200, data=data)
 
     async def _http_static(self, req: HTTPRequest, path: str) -> HTTPResponse:
