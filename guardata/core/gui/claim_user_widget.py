@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import trio
@@ -184,6 +185,7 @@ class ClaimUserFinalizeWidget(QWidget, Ui_ClaimUserFinalizeWidget):
         )
         self.line_edit_password_check.textChanged.connect(self.check_infos)
         self.button_finalize.clicked.connect(self._on_finalize_clicked)
+        self.button_finalize.setDisabled(True)
 
     def check_infos(self, _=""):
         if (
