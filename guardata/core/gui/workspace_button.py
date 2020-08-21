@@ -1,3 +1,4 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from PyQt5.QtCore import pyqtSignal, Qt
@@ -61,6 +62,7 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
 
         self.switch_button = SwitchButton()
         self.widget_actions.layout().insertWidget(0, self.switch_button)
+        self.switch_button.setToolTip(_("TEXT_WORKSPACE_SWITCH_TOOLTIP"))
         self.switch_button.clicked.connect(self._on_switch_clicked)
 
         if not len(files):

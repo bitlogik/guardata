@@ -2366,6 +2366,9 @@ msgstr "Filtrer les utilisateurs"
 msgid "ACTION_USER_INVITE_USER"
 msgstr "Inviter un utilisateur"
 
+msgid "TEXT_WORKSPACE_SWITCH_TOOLTIP"
+msgstr "Dés/Activer le lecteur de cet espace"
+
 msgid "TEXT_WORKSPACE_IS_SHARED_TOOLTIP"
 msgstr "Cet espace de travail est partagé"
 

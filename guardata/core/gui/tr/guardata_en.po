@@ -2306,6 +2306,9 @@ msgstr "Filter users"
 msgid "ACTION_USER_INVITE_USER"
 msgstr "Invite a new user"
 
+msgid "TEXT_WORKSPACE_SWITCH_TOOLTIP"
+msgstr "Disable/Enable the workspace drive"
+
 msgid "TEXT_WORKSPACE_IS_SHARED_TOOLTIP"
 msgstr "This workspace is shared"
 
