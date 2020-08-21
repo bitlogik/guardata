@@ -63,6 +63,7 @@ guardata/client/gui/_resources_rc.py
 
 # PyQtforms, automatically generated
 guardata/client/gui/ui/*.py
+!guardata/client/gui/ui/__init__.py
 
 # QtCreator temporary files
 *.ui.autosave
