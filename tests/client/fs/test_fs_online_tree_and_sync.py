@@ -62,7 +62,7 @@ def test_fs_online_tree_and_sync(user_fs_online_state_machine, oracle_fs_with_sy
         # TODO: really complex to implement...
         #         @rule(path=st.one_of(Folders, Files))
         #         def sync(self, path):
-        #             rep = await self.core_cmd({"cmd": "synchronize", "path": path})
+        #             rep = await self.client_cmd({"cmd": "synchronize", "path": path})
         #             note(rep)
         #             expected_status = self.oracle_fs.sync(path)
         #             assert rep["status"] == expected_status

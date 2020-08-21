@@ -10,9 +10,9 @@ from guardata.cli_utils import generate_not_available_cmd
 
 
 try:
-    from guardata.client.cli import core_cmd
+    from guardata.client.cli import client_cmd
 except ImportError as exc:
-    core_cmd = generate_not_available_cmd(exc)
+    client_cmd = generate_not_available_cmd(exc)
 
 
 try:
@@ -27,7 +27,7 @@ def cli():
     pass
 
 
-cli.add_command(core_cmd, "client")
+cli.add_command(client_cmd, "client")
 cli.add_command(backend_cmd, "backend")
 
 # Add support for GUARDATA_CMD_ARGS env var
