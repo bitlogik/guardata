@@ -32,7 +32,7 @@ def backend_http_send(running_backend, backend_addr):
         await stream.send_all(req)
         headers = await stream.receive_some()
         content = await stream.receive_some()
-        if content and content[:9] == b'<!doctype':
+        if content and content[:9] == b"<!doctype":
             data = headers + content
         else:
             data = headers
