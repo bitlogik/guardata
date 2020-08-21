@@ -372,7 +372,7 @@
                             <p>
 
 {% if greeter %}
-    You have received an invitation from <b></b>{{ greeter }}</b> to join the <b>{{ organization_id }}</b> group on guardata.
+    You have received an invitation from <b></b>{{ greeter }}</b> to join the existing group <b>{{ organization_id }}</b> on guardata.
 {% else %}
     You have received an invitation to add a new device in the <b>{{ organization_id }}</b> group on guardata.
 {% endif %}
@@ -417,7 +417,7 @@ the guardata client via the following link:
 {% if greeter %}
     You should then get in touch with <b>{{ greeter }}</b> and follow the next steps in the guardata client.
 {% else %}
-    You should then start the invitation process from a device already part of the organization group,
+    You should then start the invitation process from a device already part of your guardata account,
     then follow the steps in the guardata client.
 {% endif %}
 <br>
