@@ -180,7 +180,7 @@ async def send_email(email_config: EmailConfig, to_addr: str, message: dict) -> 
             #     message["subject"]
             #     message["html"]
             #     message["text"]
-
+            
         except Exception as e:
             logger.warning("Send email error", exc_info=e, to_addr=to_addr)
 
