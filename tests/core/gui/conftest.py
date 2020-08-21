@@ -486,7 +486,9 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             central_widget = self.test_get_central_widget()
             u_w = self.test_get_users_widget()
             signal = u_w.list_error if error else u_w.list_success
-            async with aqtbot.wait_exposed(u_w, timeout=2500), aqtbot.wait_signal(signal, timeout=2500):
+            async with aqtbot.wait_exposed(u_w, timeout=2500), aqtbot.wait_signal(
+                signal, timeout=2500
+            ):
                 await aqtbot.mouse_click(central_widget.menu.button_users, QtCore.Qt.LeftButton)
             return u_w
 
@@ -494,7 +496,9 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             central_widget = self.test_get_central_widget()
             w_w = self.test_get_workspaces_widget()
             signal = w_w.list_error if error else w_w.list_success
-            async with aqtbot.wait_exposed(w_w, timeout=2500), aqtbot.wait_signal(signal, timeout=2500):
+            async with aqtbot.wait_exposed(w_w, timeout=2500), aqtbot.wait_signal(
+                signal, timeout=2500
+            ):
                 await aqtbot.mouse_click(central_widget.menu.button_files, QtCore.Qt.LeftButton)
             return w_w
 
@@ -509,7 +513,9 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
                 raise AssertionError(f"Workspace `{workspace_name}` not found")
 
             f_w = self.test_get_files_widget()
-            async with aqtbot.wait_exposed(f_w, timeout=2500), aqtbot.wait_signal(f_w.folder_changed, timeout=2500):
+            async with aqtbot.wait_exposed(f_w, timeout=2500), aqtbot.wait_signal(
+                f_w.folder_changed, timeout=2500
+            ):
                 await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
 
             # Sanity check just to be sure...
