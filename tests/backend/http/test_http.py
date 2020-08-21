@@ -146,7 +146,10 @@ async def test_get_redirect_not_available(backend_http_send):
 async def test_get_redirect(backend_http_send, backend_addr):
     rep = await backend_http_send("/redirect/foo/bar?a=1&b=2")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
-    assert rep.find("<div class=\"parsecLink\">parsec://example.com:9999/foo/bar?a=1&b=2&no_ssl=true") > 0
+    assert (
+        rep.find('<div class="parsecLink">parsec://example.com:9999/foo/bar?a=1&b=2&no_ssl=true')
+        > 0
+    )
 
 
 @pytest.mark.trio
@@ -154,7 +157,7 @@ async def test_get_redirect(backend_http_send, backend_addr):
 async def test_get_redirect_over_ssl(backend_http_send, backend_addr):
     rep = await backend_http_send("/redirect/foo/bar?a=1&b=2")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
-    assert rep.find("<div class=\"parsecLink\">parsec://example.com:9999/foo/bar?a=1&b=2") > 0
+    assert rep.find('<div class="parsecLink">parsec://example.com:9999/foo/bar?a=1&b=2') > 0
 
 
 @pytest.mark.trio
@@ -162,7 +165,9 @@ async def test_get_redirect_over_ssl(backend_http_send, backend_addr):
 async def test_get_redirect_no_ssl_param_overwritten(backend_http_send, backend_addr):
     rep = await backend_http_send("/redirect/spam?no_ssl=false&a=1&b=2")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
-    assert rep.find("<div class=\"parsecLink\">parsec://example.com:9999/spam?a=1&b=2&no_ssl=true") > 0
+    assert (
+        rep.find('<div class="parsecLink">parsec://example.com:9999/spam?a=1&b=2&no_ssl=true') > 0
+    )
 
 
 @pytest.mark.trio
@@ -172,7 +177,7 @@ async def test_get_redirect_no_ssl_param_overwritten_with_ssl_enabled(
 ):
     rep = await backend_http_send("/redirect/spam?a=1&b=2&no_ssl=true")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
-    assert rep.find("<div class=\"parsecLink\">parsec://example.com:9999/spam?a=1&b=2") > 0
+    assert rep.find('<div class="parsecLink">parsec://example.com:9999/spam?a=1&b=2') > 0
 
 
 @pytest.mark.trio
