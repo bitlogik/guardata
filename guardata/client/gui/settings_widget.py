@@ -1,7 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import platform
 
 from PyQt5.QtWidgets import QWidget
@@ -14,9 +14,9 @@ from guardata.client.gui.ui.settings_widget import Ui_SettingsWidget
 
 
 class SettingsWidget(QWidget, Ui_SettingsWidget):
-    def __init__(self, core_config, jobs_ctx, event_bus, *args, **kwargs):
+    def __init__(self, client_config, jobs_ctx, event_bus, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.client_config = core_config
+        self.client_config = client_config
         self.event_bus = event_bus
         self.jobs_ctx = jobs_ctx
         self.setupUi(self)
@@ -44,7 +44,7 @@ class SettingsWidget(QWidget, Ui_SettingsWidget):
 
     def save(self):
         self.event_bus.send(
-            CoreEvent.GUI_CONFIG_CHANGED,
+            ClientEvent.GUI_CONFIG_CHANGED,
             gui_tray_enabled=self.check_box_tray.isChecked(),
             gui_language=self.combo_languages.currentData(),
             gui_check_version_at_startup=self.check_box_check_at_startup.isChecked(),

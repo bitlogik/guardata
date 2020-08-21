@@ -7,7 +7,7 @@ from typing import Optional, List, Dict, AsyncIterator, cast, Tuple, Any, Union,
 from pendulum import now as pendulum_now
 
 from guardata.api.protocol import DeviceID
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 from guardata.api.data import BaseManifest as BaseRemoteManifest
 from guardata.client.types import (
     Chunk,
@@ -267,7 +267,7 @@ class SyncTransactions(EntryTransactions):
 
                 # Send synced event
                 self._send_event(
-                    CoreEvent.FS_ENTRY_CONFINED, entry_id=entry_id, cause_id=parent_manifest.id
+                    ClientEvent.FS_ENTRY_CONFINED, entry_id=entry_id, cause_id=parent_manifest.id
                 )
                 return None
 
@@ -306,11 +306,11 @@ class SyncTransactions(EntryTransactions):
 
             # Send downsynced event
             if base_version != new_base_version and remote_author != self.local_author:
-                self._send_event(CoreEvent.FS_ENTRY_DOWNSYNCED, id=entry_id)
+                self._send_event(ClientEvent.FS_ENTRY_DOWNSYNCED, id=entry_id)
 
             # Send synced event
             if local_manifest.need_sync and not new_local_manifest.need_sync:
-                self._send_event(CoreEvent.FS_ENTRY_SYNCED, id=entry_id)
+                self._send_event(ClientEvent.FS_ENTRY_SYNCED, id=entry_id)
 
             # Nothing new to upload
             if final or not new_local_manifest.need_sync:
@@ -392,10 +392,10 @@ class SyncTransactions(EntryTransactions):
                 await self.local_storage.set_manifest(parent_id, new_parent_manifest)
                 await self.local_storage.set_manifest(entry_id, other_manifest)
 
-                self._send_event(CoreEvent.FS_ENTRY_UPDATED, id=new_manifest.id)
-                self._send_event(CoreEvent.FS_ENTRY_UPDATED, id=parent_id)
+                self._send_event(ClientEvent.FS_ENTRY_UPDATED, id=new_manifest.id)
+                self._send_event(ClientEvent.FS_ENTRY_UPDATED, id=parent_id)
                 self._send_event(
-                    CoreEvent.FS_ENTRY_FILE_CONFLICT_RESOLVED,
+                    ClientEvent.FS_ENTRY_FILE_CONFLICT_RESOLVED,
                     id=entry_id,
                     backup_id=new_manifest.id,
                 )

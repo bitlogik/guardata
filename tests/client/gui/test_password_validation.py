@@ -17,8 +17,8 @@ def test_password_validation():
 
 
 @pytest.mark.gui
-def test_password_text(core_config):
-    switch_language(core_config, "en")
+def test_password_text(client_config):
+    switch_language(client_config, "en")
     assert get_password_strength_text(0) == "TOO SHORT"
     assert get_password_strength_text(1) == "VERY WEAK"
     assert get_password_strength_text(2) == "WEAK"

@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import trio
 
 from structlog import get_logger
@@ -30,23 +30,23 @@ from guardata.client.gui.central_widget import CentralWidget
 logger = get_logger()
 
 
-async def _do_run_core(config, device, qt_on_ready):
+async def _do_run_client(config, device, qt_on_ready):
     # Quick fix to avoid MultiError<Cancelled, ...> exception bubbling up
     # TODO: replace this by a proper generic MultiError handling
     with trio.MultiError.catch(lambda exc: None if isinstance(exc, trio.Cancelled) else exc):
         async with logged_client_factory(config=config, device=device, event_bus=None) as client:
             # Create our own job scheduler allows us to cancel all pending
             # jobs depending on us when we logout
-            core_jobs_ctx = QtToTrioJobScheduler()
+            client_jobs_ctx = QtToTrioJobScheduler()
             async with trio.open_service_nursery() as nursery:
-                await nursery.start(core_jobs_ctx._start)
-                qt_on_ready.emit(client, core_jobs_ctx)
+                await nursery.start(client_jobs_ctx._start)
+                qt_on_ready.emit(client, client_jobs_ctx)
 
 
 class InstanceWidget(QWidget):
-    run_core_success = pyqtSignal()
-    run_core_error = pyqtSignal()
-    run_core_ready = pyqtSignal(object, object)
+    run_client_success = pyqtSignal()
+    run_client_error = pyqtSignal()
+    run_client_ready = pyqtSignal(object, object)
     logged_in = pyqtSignal()
     logged_out = pyqtSignal()
     state_changed = pyqtSignal(QWidget, str)
@@ -63,11 +63,11 @@ class InstanceWidget(QWidget):
 
         self.client = None
         self.client_jobs_ctx = None
-        self.running_core_job = None
+        self.running_client_job = None
 
-        self.run_core_success.connect(self.on_core_run_done)
-        self.run_core_error.connect(self.on_core_run_error)
-        self.run_core_ready.connect(self.on_run_core_ready)
+        self.run_client_success.connect(self.on_client_run_done)
+        self.run_client_error.connect(self.on_client_run_error)
+        self.run_client_ready.connect(self.on_run_client_ready)
         self.logged_in.connect(self.on_logged_in)
         self.logged_out.connect(self.on_logged_out)
 
@@ -76,8 +76,8 @@ class InstanceWidget(QWidget):
         self.setLayout(layout)
 
     @pyqtSlot(object, object)
-    def _core_ready(self, client, core_jobs_ctx):
-        self.run_core_ready.emit(client, core_jobs_ctx)
+    def _client_ready(self, client, client_jobs_ctx):
+        self.run_client_ready.emit(client, client_jobs_ctx)
 
     @property
     def current_device(self):
@@ -87,33 +87,33 @@ class InstanceWidget(QWidget):
 
     @property
     def is_logged_in(self):
-        return self.running_core_job is not None
+        return self.running_client_job is not None
 
-    def on_core_config_updated(self, event, **kwargs):
-        self.event_bus.send(CoreEvent.GUI_CONFIG_CHANGED, **kwargs)
+    def on_client_config_updated(self, event, **kwargs):
+        self.event_bus.send(ClientEvent.GUI_CONFIG_CHANGED, **kwargs)
 
-    def start_core(self, device):
-        assert not self.running_core_job
+    def start_client(self, device):
+        assert not self.running_client_job
         assert not self.client
         assert not self.client_jobs_ctx
 
         self.config = guardataApp.get_main_window().config
 
-        self.running_core_job = self.jobs_ctx.submit_job(
-            ThreadSafeQtSignal(self, "run_core_success"),
-            ThreadSafeQtSignal(self, "run_core_error"),
-            _do_run_core,
+        self.running_client_job = self.jobs_ctx.submit_job(
+            ThreadSafeQtSignal(self, "run_client_success"),
+            ThreadSafeQtSignal(self, "run_client_error"),
+            _do_run_client,
             self.config,
             device,
-            ThreadSafeQtSignal(self, "run_core_ready", object, object),
+            ThreadSafeQtSignal(self, "run_client_ready", object, object),
         )
 
-    def on_run_core_ready(self, client, core_jobs_ctx):
+    def on_run_client_ready(self, client, client_jobs_ctx):
         self.client = client
-        self.client_jobs_ctx = core_jobs_ctx
-        self.client.event_bus.connect(CoreEvent.GUI_CONFIG_CHANGED, self.on_core_config_updated)
+        self.client_jobs_ctx = client_jobs_ctx
+        self.client.event_bus.connect(ClientEvent.GUI_CONFIG_CHANGED, self.on_client_config_updated)
         self.event_bus.send(
-            CoreEvent.GUI_CONFIG_CHANGED,
+            ClientEvent.GUI_CONFIG_CHANGED,
             gui_last_device="{}:{}".format(
                 self.client.device.organization_addr.organization_id, self.client.device.device_id
             ),
@@ -123,54 +123,54 @@ class InstanceWidget(QWidget):
         )
         self.logged_in.emit()
 
-    def on_core_run_error(self):
-        assert self.running_core_job.is_finished()
+    def on_client_run_error(self):
+        assert self.running_client_job.is_finished()
         if self.client:
             self.client.event_bus.disconnect(
-                CoreEvent.GUI_CONFIG_CHANGED, self.on_core_config_updated
+                ClientEvent.GUI_CONFIG_CHANGED, self.on_client_config_updated
             )
-        if self.running_core_job.status is not None:
-            if isinstance(self.running_core_job.exc, HandshakeRevokedDevice):
+        if self.running_client_job.status is not None:
+            if isinstance(self.running_client_job.exc, HandshakeRevokedDevice):
                 show_error(
-                    self, _("TEXT_LOGIN_ERROR_DEVICE_REVOKED"), exception=self.running_core_job.exc
+                    self, _("TEXT_LOGIN_ERROR_DEVICE_REVOKED"), exception=self.running_client_job.exc
                 )
-            elif isinstance(self.running_core_job.exc, MountpointWinfspNotAvailable):
+            elif isinstance(self.running_client_job.exc, MountpointWinfspNotAvailable):
                 show_error(
                     self,
                     _("TEXT_LOGIN_ERROR_WINFSP_NOT_AVAILABLE"),
-                    exception=self.running_core_job.exc,
+                    exception=self.running_client_job.exc,
                 )
-            elif isinstance(self.running_core_job.exc, MountpointFuseNotAvailable):
+            elif isinstance(self.running_client_job.exc, MountpointFuseNotAvailable):
                 show_error(
                     self,
                     _("TEXT_LOGIN_ERROR_FUSE_NOT_AVAILABLE"),
-                    exception=self.running_core_job.exc,
+                    exception=self.running_client_job.exc,
                 )
             else:
-                logger.exception("Unhandled error", exc_info=self.running_core_job.exc)
-                show_error(self, _("TEXT_LOGIN_UNKNOWN_ERROR"), exception=self.running_core_job.exc)
-        self.running_core_job = None
+                logger.exception("Unhandled error", exc_info=self.running_client_job.exc)
+                show_error(self, _("TEXT_LOGIN_UNKNOWN_ERROR"), exception=self.running_client_job.exc)
+        self.running_client_job = None
         self.client_jobs_ctx = None
         self.client = None
         self.logged_out.emit()
 
-    def on_core_run_done(self):
-        assert self.running_core_job.is_finished()
+    def on_client_run_done(self):
+        assert self.running_client_job.is_finished()
         if self.client:
             guardataApp.remove_connected_device(
                 self.client.device.organization_addr.organization_id, self.client.device.device_id
             )
             self.client.event_bus.disconnect(
-                CoreEvent.GUI_CONFIG_CHANGED, self.on_core_config_updated
+                ClientEvent.GUI_CONFIG_CHANGED, self.on_client_config_updated
             )
-        self.running_core_job = None
+        self.running_client_job = None
         self.client_jobs_ctx = None
         self.client = None
         self.logged_out.emit()
 
-    def stop_core(self):
-        if self.running_core_job:
-            self.running_core_job.cancel_and_join()
+    def stop_client(self):
+        if self.running_client_job:
+            self.running_client_job.cancel_and_join()
 
     def on_logged_out(self):
         self.state_changed.emit(self, "login")
@@ -181,7 +181,7 @@ class InstanceWidget(QWidget):
         self.show_central_widget()
 
     def logout(self):
-        self.stop_core()
+        self.stop_client()
 
     def login_with_password(self, key_file, password):
         message = None
@@ -193,7 +193,7 @@ class InstanceWidget(QWidget):
             ):
                 message = _("TEXT_LOGIN_ERROR_ALREADY_CONNECTED")
             else:
-                self.start_core(device)
+                self.start_client(device)
         except LocalDeviceError as exc:
             message = _("TEXT_LOGIN_ERROR_AUTHENTICATION_FAILED")
             exception = exc

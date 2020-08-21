@@ -29,7 +29,7 @@ async def logged_gui_with_workspace(
     logged_gui,
     gui_factory,
     autoclose_dialog,
-    core_config,
+    client_config,
     alice,
     running_backend,
     monkeypatch,

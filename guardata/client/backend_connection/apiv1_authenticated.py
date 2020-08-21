@@ -20,7 +20,7 @@ from guardata.client.backend_connection.exceptions import (
 )
 from guardata.client.backend_connection.expose_cmds import expose_cmds_with_retrier
 from guardata.client.backend_connection.authenticated import BackendConnStatus
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 
 
 logger = get_logger()
@@ -41,20 +41,20 @@ def _handle_event(event_bus: EventBus, rep: dict) -> None:
         return
 
     if rep["event"] == APIEvent.MESSAGE_RECEIVED:
-        event_bus.send(CoreEvent.BACKEND_MESSAGE_RECEIVED, index=rep["index"])
+        event_bus.send(ClientEvent.BACKEND_MESSAGE_RECEIVED, index=rep["index"])
 
     elif rep["event"] == APIEvent.PINGED:
-        event_bus.send(CoreEvent.BACKEND_PINGED, ping=rep["ping"])
+        event_bus.send(ClientEvent.BACKEND_PINGED, ping=rep["ping"])
 
     elif rep["event"] == APIEvent.REALM_ROLES_UPDATED:
         realm_id = EntryID(rep["realm_id"])
-        event_bus.send(CoreEvent.BACKEND_REALM_ROLES_UPDATED, realm_id=realm_id, role=rep["role"])
+        event_bus.send(ClientEvent.BACKEND_REALM_ROLES_UPDATED, realm_id=realm_id, role=rep["role"])
 
     elif rep["event"] == APIEvent.REALM_VLOBS_UPDATED:
         src_id = EntryID(rep["src_id"])
         realm_id = EntryID(rep["realm_id"])
         event_bus.send(
-            CoreEvent.BACKEND_REALM_VLOBS_UPDATED,
+            ClientEvent.BACKEND_REALM_VLOBS_UPDATED,
             realm_id=realm_id,
             checkpoint=rep["checkpoint"],
             src_id=src_id,
@@ -63,14 +63,14 @@ def _handle_event(event_bus: EventBus, rep: dict) -> None:
 
     elif rep["event"] == APIEvent.REALM_MAINTENANCE_STARTED:
         event_bus.send(
-            CoreEvent.BACKEND_REALM_MAINTENANCE_STARTED,
+            ClientEvent.BACKEND_REALM_MAINTENANCE_STARTED,
             realm_id=rep["realm_id"],
             encryption_revision=rep["encryption_revision"],
         )
 
     elif rep["event"] == APIEvent.REALM_MAINTENANCE_FINISHED:
         event_bus.send(
-            CoreEvent.BACKEND_REALM_MAINTENANCE_FINISHED,
+            ClientEvent.BACKEND_REALM_MAINTENANCE_FINISHED,
             realm_id=rep["realm_id"],
             encryption_revision=rep["encryption_revision"],
         )
@@ -168,7 +168,7 @@ class APIV1_BackendAuthenticatedConn:
             assert self._status not in (BackendConnStatus.READY, BackendConnStatus.INITIALIZING)
             if self._backend_connection_failures == 0:
                 self.event_bus.send(
-                    CoreEvent.BACKEND_CONNECTION_CHANGED,
+                    ClientEvent.BACKEND_CONNECTION_CHANGED,
                     status=self._status,
                     status_exc=self._status_exc,
                 )
@@ -197,7 +197,7 @@ class APIV1_BackendAuthenticatedConn:
             self._status_exc = None
             self._backend_connection_failures = 0
             self.event_bus.send(
-                CoreEvent.BACKEND_CONNECTION_CHANGED,
+                ClientEvent.BACKEND_CONNECTION_CHANGED,
                 status=self._status,
                 status_exc=self._status_exc,
             )
@@ -234,7 +234,7 @@ class APIV1_BackendAuthenticatedConn:
 
                     self._status = BackendConnStatus.READY
                     self.event_bus.send(
-                        CoreEvent.BACKEND_CONNECTION_CHANGED, status=self._status, status_exc=None
+                        ClientEvent.BACKEND_CONNECTION_CHANGED, status=self._status, status_exc=None
                     )
 
                     while True:

@@ -8,7 +8,7 @@ import platform
 from guardata.utils import trio_run
 from guardata.cli_utils import spinner, operation, cli_exception_handler
 from guardata.client.types import BackendOrganizationClaimUserAddr
-from guardata.client.cli.utils import core_config_options
+from guardata.client.cli.utils import client_config_options
 from guardata.client.local_device import save_device_with_password
 from guardata.client.invite_claim import claim_user as actual_claim_user
 
@@ -30,7 +30,7 @@ async def _claim_user(config, organization_addr, new_device_id, token, password)
 
 @click.command()
 @click.argument("device-name", default=platform.node())
-@core_config_options
+@client_config_options
 @click.option("--addr", required=True, type=BackendOrganizationClaimUserAddr.from_url)
 @click.option("--token")
 @click.password_option()

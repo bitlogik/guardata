@@ -237,15 +237,15 @@ async def _fuzzer_cmd(id, client, workspace, fs_state):
 
 @pytest.mark.trio
 @pytest.mark.slow
-async def test_fuzz_client(request, running_backend, alice_core):
+async def test_fuzz_client(request, running_backend, alice_client):
     await trio.sleep(0.1)  # Somehow fixes the test
-    wid = await alice_core.user_fs.workspace_create("w")
-    workspace = alice_core.user_fs.get_workspace(wid)
+    wid = await alice_client.user_fs.workspace_create("w")
+    workspace = alice_client.user_fs.get_workspace(wid)
     try:
         async with trio.open_service_nursery() as nursery:
             fs_state = FSState()
             for i in range(FUZZ_PARALLELISM):
-                nursery.start_soon(fuzzer, i, alice_core, workspace, fs_state)
+                nursery.start_soon(fuzzer, i, alice_client, workspace, fs_state)
             await trio.sleep(FUZZ_TIME)
             nursery.cancel_scope.cancel()
 

@@ -76,7 +76,7 @@ async def test_bootstrap_organization(aqtbot, backend, gui_ready_for_bootstrap, 
     await aqtbot.wait_until(_bootstrap_done)
 
     # Also make sure the backend has received a device/user with human_handle and device_label
-    device = gui.test_get_core().device
+    device = gui.test_get_client().device
     remote_user, remote_device = await backend.user.get_user_with_device(
         organization_id=device.organization_id, device_id=device.device_id
     )

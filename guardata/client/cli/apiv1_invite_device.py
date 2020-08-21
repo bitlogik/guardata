@@ -8,7 +8,7 @@ from guardata.cli_utils import spinner, cli_exception_handler
 from guardata.api.protocol import DeviceName
 from guardata.client.types import BackendOrganizationClaimDeviceAddr
 from guardata.client.invite_claim import generate_invitation_token, invite_and_create_device
-from guardata.client.cli.utils import core_config_and_device_options
+from guardata.client.cli.utils import client_config_and_device_options
 
 
 async def _invite_device(config, device, new_device_name):
@@ -36,7 +36,7 @@ async def _invite_device(config, device, new_device_name):
 
 
 @click.command()
-@core_config_and_device_options
+@client_config_and_device_options
 @click.argument("new_device_name", type=DeviceName, required=True)
 def invite_device(config, device, new_device_name, **kwargs):
     with cli_exception_handler(config.debug):

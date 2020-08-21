@@ -11,7 +11,7 @@ from structlog import get_logger
 from winfspy import FileSystem, enable_debug_log
 from winfspy.plumbing import filetime_now
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 from guardata.client.win_registry import guardata_drive_icon_context
 from guardata.client.mountpoint.thread_fs_access import ThreadFSAccess
 from guardata.client.mountpoint.winfsp_operations import WinFSPOperations, winify_entry_name
@@ -174,7 +174,7 @@ async def winfsp_mountpoint_runner(
         "timestamp": getattr(workspace_fs, "timestamp", None),
     }
     try:
-        event_bus.send(CoreEvent.MOUNTPOINT_STARTING, **event_kwargs)
+        event_bus.send(ClientEvent.MOUNTPOINT_STARTING, **event_kwargs)
 
         # Manage drive icon
         drive_letter, *_ = mountpoint_path.drive
@@ -190,11 +190,11 @@ async def winfsp_mountpoint_runner(
             await _wait_for_winfsp_ready(mountpoint_path)
 
             # Notify the manager that the mountpoint is ready
-            event_bus.send(CoreEvent.MOUNTPOINT_STARTED, **event_kwargs)
+            event_bus.send(ClientEvent.MOUNTPOINT_STARTED, **event_kwargs)
             task_status.started(mountpoint_path)
 
             # Start recording `sharing.updated` events
-            with event_bus.waiter_on(CoreEvent.SHARING_UPDATED) as waiter:
+            with event_bus.waiter_on(ClientEvent.SHARING_UPDATED) as waiter:
 
                 # Loop over `sharing.updated` event
                 while True:
@@ -221,4 +221,4 @@ async def winfsp_mountpoint_runner(
         # to finish so blocking the trio loop can produce a dead lock...
         with trio.CancelScope(shield=True):
             await trio.to_thread.run_sync(fs.stop)
-            event_bus.send(CoreEvent.MOUNTPOINT_STOPPED, **event_kwargs)
+            event_bus.send(ClientEvent.MOUNTPOINT_STOPPED, **event_kwargs)

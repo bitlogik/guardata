@@ -13,10 +13,10 @@ from guardata.client.gui.login_widget import (
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_login(aqtbot, gui_factory, autoclose_dialog, core_config, alice):
+async def test_login(aqtbot, gui_factory, autoclose_dialog, client_config, alice):
     # Create an existing device before starting the gui
     password = "P2ssxdor!s3"
-    save_device_with_password(core_config.config_dir, alice, password)
+    save_device_with_password(client_config.config_dir, alice, password)
 
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
@@ -52,11 +52,11 @@ async def test_login(aqtbot, gui_factory, autoclose_dialog, core_config, alice):
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_login_back_to_account_list(
-    aqtbot, gui_factory, autoclose_dialog, core_config, alice
+    aqtbot, gui_factory, autoclose_dialog, client_config, alice
 ):
     # Create an existing device before starting the gui
     password = "P2ssxdor!s3"
-    save_device_with_password(core_config.config_dir, alice, password)
+    save_device_with_password(client_config.config_dir, alice, password)
 
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
@@ -85,7 +85,7 @@ async def test_login_back_to_account_list(
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_login_no_devices(aqtbot, gui_factory, autoclose_dialog, core_config):
+async def test_login_no_devices(aqtbot, gui_factory, autoclose_dialog, client_config):
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
 
@@ -95,9 +95,9 @@ async def test_login_no_devices(aqtbot, gui_factory, autoclose_dialog, core_conf
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_login_device_list(aqtbot, gui_factory, autoclose_dialog, core_config, alice):
+async def test_login_device_list(aqtbot, gui_factory, autoclose_dialog, client_config, alice):
     password = "P2ssxdor!s3"
-    save_device_with_password(core_config.config_dir, alice, password)
+    save_device_with_password(client_config.config_dir, alice, password)
 
     gui = await gui_factory()
     lw = gui.test_get_login_widget()

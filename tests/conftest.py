@@ -1,7 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS - 2020 BitLogiK
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import pytest
 import os
 import re
@@ -682,7 +682,7 @@ async def running_backend(server_factory, backend_addr, backend, running_backend
 
 
 @pytest.fixture
-def core_config(tmpdir):
+def client_config(tmpdir):
     tmpdir = Path(tmpdir)
     return ClientConfig(
         config_dir=tmpdir / "config",
@@ -693,57 +693,57 @@ def core_config(tmpdir):
 
 
 @pytest.fixture
-def core_factory(
-    request, running_backend_ready, event_bus_factory, core_config, initialize_userfs_storage_v1
+def client_factory(
+    request, running_backend_ready, event_bus_factory, client_config, initialize_userfs_storage_v1
 ):
     @asynccontextmanager
-    async def _core_factory(device, event_bus=None, user_manifest_in_v0=False):
+    async def _client_factory(device, event_bus=None, user_manifest_in_v0=False):
         await running_backend_ready.wait()
         event_bus = event_bus or event_bus_factory()
 
         if not user_manifest_in_v0:
             # Create a storage just for this operation (the underlying database
             # will be reused by the client's storage thanks to `persistent_mockup`)
-            path = core_config.data_base_dir / device.slug
+            path = client_config.data_base_dir / device.slug
             async with UserStorage.run(device=device, path=path) as storage:
                 await initialize_userfs_storage_v1(storage)
 
         with event_bus.listen() as spy:
-            async with logged_client_factory(core_config, device, event_bus) as client:
+            async with logged_client_factory(client_config, device, event_bus) as client:
                 # On startup client is always considered offline.
                 # Hence we risk concurrency issues if the connection to backend
                 # switches online concurrently with the test.
                 if "running_backend" in request.fixturenames:
                     await spy.wait_with_timeout(
-                        CoreEvent.BACKEND_CONNECTION_CHANGED,
+                        ClientEvent.BACKEND_CONNECTION_CHANGED,
                         {"status": BackendConnStatus.READY, "status_exc": spy.ANY},
                     )
                 assert client.are_monitors_idle()
 
                 yield client
 
-    return _core_factory
+    return _client_factory
 
 
 @pytest.fixture
-async def alice_core(core_factory, alice):
-    async with core_factory(alice) as client:
+async def alice_client(client_factory, alice):
+    async with client_factory(alice) as client:
         yield client
 
 
 @pytest.fixture
-async def alice2_core(core_factory, alice2):
-    async with core_factory(alice2) as client:
+async def alice2_client(client_factory, alice2):
+    async with client_factory(alice2) as client:
         yield client
 
 
 @pytest.fixture
-async def adam_core(core_factory, adam):
-    async with core_factory(adam) as client:
+async def adam_client(client_factory, adam):
+    async with client_factory(adam) as client:
         yield client
 
 
 @pytest.fixture
-async def bob_core(core_factory, bob):
-    async with core_factory(bob) as client:
+async def bob_client(client_factory, bob):
+    async with client_factory(bob) as client:
         yield client

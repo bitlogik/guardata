@@ -4,7 +4,7 @@
 from enum import Enum
 
 
-class CoreEvent(Enum):
+class ClientEvent(Enum):
     MESSAGE_PINGED = "message.pinged"
     # Backend
     BACKEND_CONNECTION_CHANGED = "backend.connection.changed"

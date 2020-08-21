@@ -46,14 +46,14 @@ def get_qlocale():
     return q
 
 
-def switch_language(core_config, lang_key=None):
+def switch_language(client_config, lang_key=None):
     global _current_translator
     global _current_locale_language
 
     QCoreApplication.translate = qt_translate
 
     if not lang_key:
-        lang_key = core_config.gui_language
+        lang_key = client_config.gui_language
     if not lang_key:
         lang_key = get_locale_language()
         logger.info(f"No language in settings, trying local language '{lang_key}'")

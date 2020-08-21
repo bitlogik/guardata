@@ -11,7 +11,7 @@ from guardata.client.types import BackendOrganizationBootstrapAddr
 from guardata.client.backend_connection import apiv1_backend_anonymous_cmds_factory
 from guardata.client.local_device import save_device_with_password
 from guardata.client.invite import bootstrap_organization as do_bootstrap_organization
-from guardata.client.cli.utils import core_config_options
+from guardata.client.cli.utils import client_config_options
 
 
 async def _bootstrap_organization(config, addr, password, force):
@@ -34,7 +34,7 @@ async def _bootstrap_organization(config, addr, password, force):
 
 
 @click.command(short_help="configure new organization")
-@core_config_options
+@client_config_options
 @click.argument("addr", type=BackendOrganizationBootstrapAddr.from_url)
 @click.password_option(prompt="Choose a password for the device")
 @click.option("--force", is_flag=True)

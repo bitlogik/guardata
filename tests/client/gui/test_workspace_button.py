@@ -41,8 +41,8 @@ def bob_user_info(bob):
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_workspace_button(qtbot, workspace_fs, core_config, alice_user_info):
-    switch_language(core_config, "en")
+async def test_workspace_button(qtbot, workspace_fs, client_config, alice_user_info):
+    switch_language(client_config, "en")
 
     roles = {alice_user_info.user_id: (WorkspaceRole.OWNER, alice_user_info)}
     w = WorkspaceButton(
@@ -67,9 +67,9 @@ async def test_workspace_button(qtbot, workspace_fs, core_config, alice_user_inf
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_workspace_button_owned_by(
-    qtbot, workspace_fs, core_config, bob, alice_user_info, bob_user_info
+    qtbot, workspace_fs, client_config, bob, alice_user_info, bob_user_info
 ):
-    switch_language(core_config, "en")
+    switch_language(client_config, "en")
 
     roles = {
         bob.user_id: (WorkspaceRole.OWNER, bob_user_info),
@@ -97,9 +97,9 @@ async def test_workspace_button_owned_by(
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_workspace_button_shared_with(
-    qtbot, workspace_fs, core_config, bob, alice_user_info, bob_user_info
+    qtbot, workspace_fs, client_config, bob, alice_user_info, bob_user_info
 ):
-    switch_language(core_config, "en")
+    switch_language(client_config, "en")
 
     roles = {
         bob.user_id: (WorkspaceRole.READER, bob_user_info),
@@ -126,8 +126,8 @@ async def test_workspace_button_shared_with(
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_workspace_button_files(qtbot, workspace_fs, core_config, alice_user_info):
-    switch_language(core_config, "en")
+async def test_workspace_button_files(qtbot, workspace_fs, client_config, alice_user_info):
+    switch_language(client_config, "en")
 
     roles = {alice_user_info.user_id: (WorkspaceRole.OWNER, alice_user_info)}
     w = WorkspaceButton(
@@ -153,8 +153,8 @@ async def test_workspace_button_files(qtbot, workspace_fs, core_config, alice_us
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_workspace_button_clicked(qtbot, workspace_fs, core_config, alice_user_info):
-    switch_language(core_config, "en")
+async def test_workspace_button_clicked(qtbot, workspace_fs, client_config, alice_user_info):
+    switch_language(client_config, "en")
 
     roles = {alice_user_info.user_id: (WorkspaceRole.OWNER, alice_user_info)}
     w = WorkspaceButton(
@@ -173,8 +173,8 @@ async def test_workspace_button_clicked(qtbot, workspace_fs, core_config, alice_
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_workspace_button_share_clicked(qtbot, workspace_fs, core_config, alice_user_info):
-    switch_language(core_config, "en")
+async def test_workspace_button_share_clicked(qtbot, workspace_fs, client_config, alice_user_info):
+    switch_language(client_config, "en")
 
     roles = {alice_user_info.user_id: (WorkspaceRole.OWNER, alice_user_info)}
     w = WorkspaceButton(
@@ -192,8 +192,8 @@ async def test_workspace_button_share_clicked(qtbot, workspace_fs, core_config, 
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_workspace_button_rename_clicked(qtbot, workspace_fs, core_config, alice_user_info):
-    switch_language(core_config, "en")
+async def test_workspace_button_rename_clicked(qtbot, workspace_fs, client_config, alice_user_info):
+    switch_language(client_config, "en")
 
     roles = {alice_user_info.user_id: (WorkspaceRole.OWNER, alice_user_info)}
     w = WorkspaceButton(
@@ -211,8 +211,8 @@ async def test_workspace_button_rename_clicked(qtbot, workspace_fs, core_config,
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_workspace_button_delete_clicked(qtbot, workspace_fs, core_config, alice_user_info):
-    switch_language(core_config, "en")
+async def test_workspace_button_delete_clicked(qtbot, workspace_fs, client_config, alice_user_info):
+    switch_language(client_config, "en")
 
     roles = {alice_user_info.user_id: (WorkspaceRole.OWNER, alice_user_info)}
     w = WorkspaceButton(

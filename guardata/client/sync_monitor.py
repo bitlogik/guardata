@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import trio
 from trio.hazmat import current_clock
 import math
@@ -396,10 +396,10 @@ async def monitor_sync(user_fs, event_bus, task_status):
                 return math.inf
 
     with event_bus.connect_in_context(
-        (CoreEvent.FS_ENTRY_UPDATED, _on_entry_updated),
-        (CoreEvent.BACKEND_REALM_VLOBS_UPDATED, _on_realm_vlobs_updated),
-        (CoreEvent.SHARING_UPDATED, _on_sharing_updated),
-        (CoreEvent.FS_ENTRY_CONFINED, _on_entry_confined),
+        (ClientEvent.FS_ENTRY_UPDATED, _on_entry_updated),
+        (ClientEvent.BACKEND_REALM_VLOBS_UPDATED, _on_realm_vlobs_updated),
+        (ClientEvent.SHARING_UPDATED, _on_sharing_updated),
+        (ClientEvent.FS_ENTRY_CONFINED, _on_entry_confined),
     ):
         due_times = []
         # Init userfs sync context

@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import os
 import errno
 from typing import Optional
@@ -45,13 +45,13 @@ def translate_error(event_bus, operation, path):
         raise FuseOSError(exc.errno) from exc
 
     except FSRemoteOperationError as exc:
-        event_bus.send(CoreEvent.MOUNTPOINT_REMOTE_ERROR, exc=exc, operation=operation, path=path)
+        event_bus.send(ClientEvent.MOUNTPOINT_REMOTE_ERROR, exc=exc, operation=operation, path=path)
         raise FuseOSError(exc.errno) from exc
 
     except Exception as exc:
         logger.exception("Unhandled exception in fuse mountpoint")
         event_bus.send(
-            CoreEvent.MOUNTPOINT_UNHANDLED_ERROR, exc=exc, operation=operation, path=path
+            ClientEvent.MOUNTPOINT_UNHANDLED_ERROR, exc=exc, operation=operation, path=path
         )
         # Use EINVAL as fallback error code, since this is what fusepy does.
         raise FuseOSError(errno.EINVAL) from exc

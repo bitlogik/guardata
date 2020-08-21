@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 from uuid import UUID
 
 from PyQt5.QtCore import pyqtSignal, QTimer, Qt
@@ -120,8 +120,8 @@ async def _do_workspace_unmount(client, workspace_id, timestamp: pendulum.Pendul
 class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
     RESET_TIMER_THRESHOLD = 1000  # ms
 
-    fs_updated_qt = pyqtSignal(CoreEvent, UUID)
-    fs_synced_qt = pyqtSignal(CoreEvent, UUID)
+    fs_updated_qt = pyqtSignal(ClientEvent, UUID)
+    fs_synced_qt = pyqtSignal(ClientEvent, UUID)
     entry_downsynced_qt = pyqtSignal(UUID, UUID)
 
     sharing_updated_qt = pyqtSignal(WorkspaceEntry, object)
@@ -206,29 +206,29 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
         pass
 
     def showEvent(self, event):
-        self.event_bus.connect(CoreEvent.FS_WORKSPACE_CREATED, self._on_workspace_created_trio)
-        self.event_bus.connect(CoreEvent.FS_ENTRY_UPDATED, self._on_fs_entry_updated_trio)
-        self.event_bus.connect(CoreEvent.FS_ENTRY_SYNCED, self._on_fs_entry_synced_trio)
-        self.event_bus.connect(CoreEvent.SHARING_UPDATED, self._on_sharing_updated_trio)
-        self.event_bus.connect(CoreEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio)
-        self.event_bus.connect(CoreEvent.MOUNTPOINT_STARTED, self._on_mountpoint_started_trio)
-        self.event_bus.connect(CoreEvent.MOUNTPOINT_STOPPED, self._on_mountpoint_stopped_trio)
+        self.event_bus.connect(ClientEvent.FS_WORKSPACE_CREATED, self._on_workspace_created_trio)
+        self.event_bus.connect(ClientEvent.FS_ENTRY_UPDATED, self._on_fs_entry_updated_trio)
+        self.event_bus.connect(ClientEvent.FS_ENTRY_SYNCED, self._on_fs_entry_synced_trio)
+        self.event_bus.connect(ClientEvent.SHARING_UPDATED, self._on_sharing_updated_trio)
+        self.event_bus.connect(ClientEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio)
+        self.event_bus.connect(ClientEvent.MOUNTPOINT_STARTED, self._on_mountpoint_started_trio)
+        self.event_bus.connect(ClientEvent.MOUNTPOINT_STOPPED, self._on_mountpoint_stopped_trio)
         self.reset()
 
     def hideEvent(self, event):
         try:
             self.event_bus.disconnect(
-                CoreEvent.FS_WORKSPACE_CREATED, self._on_workspace_created_trio
+                ClientEvent.FS_WORKSPACE_CREATED, self._on_workspace_created_trio
             )
-            self.event_bus.disconnect(CoreEvent.FS_ENTRY_UPDATED, self._on_fs_entry_updated_trio)
-            self.event_bus.disconnect(CoreEvent.FS_ENTRY_SYNCED, self._on_fs_entry_synced_trio)
-            self.event_bus.disconnect(CoreEvent.SHARING_UPDATED, self._on_sharing_updated_trio)
-            self.event_bus.disconnect(CoreEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio)
+            self.event_bus.disconnect(ClientEvent.FS_ENTRY_UPDATED, self._on_fs_entry_updated_trio)
+            self.event_bus.disconnect(ClientEvent.FS_ENTRY_SYNCED, self._on_fs_entry_synced_trio)
+            self.event_bus.disconnect(ClientEvent.SHARING_UPDATED, self._on_sharing_updated_trio)
+            self.event_bus.disconnect(ClientEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio)
             self.event_bus.disconnect(
-                CoreEvent.MOUNTPOINT_STARTED, self._on_mountpoint_started_trio
+                ClientEvent.MOUNTPOINT_STARTED, self._on_mountpoint_started_trio
             )
             self.event_bus.disconnect(
-                CoreEvent.MOUNTPOINT_STOPPED, self._on_mountpoint_stopped_trio
+                ClientEvent.MOUNTPOINT_STOPPED, self._on_mountpoint_stopped_trio
             )
         except ValueError:
             pass
@@ -470,7 +470,7 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
         else:
             self.disabled_workspaces |= {workspace_id}
         self.event_bus.send(
-            CoreEvent.GUI_CONFIG_CHANGED, disabled_workspaces=self.disabled_workspaces
+            ClientEvent.GUI_CONFIG_CHANGED, disabled_workspaces=self.disabled_workspaces
         )
 
     def is_workspace_mounted(self, workspace_id, timestamp=None):

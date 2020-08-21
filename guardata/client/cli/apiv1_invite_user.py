@@ -8,7 +8,7 @@ from guardata.cli_utils import spinner, cli_exception_handler
 from guardata.api.protocol import UserID
 from guardata.client.types import BackendOrganizationClaimUserAddr
 from guardata.client.invite_claim import generate_invitation_token, invite_and_create_user
-from guardata.client.cli.utils import core_config_and_device_options
+from guardata.client.cli.utils import client_config_and_device_options
 
 
 async def _invite_user(config, device, invited_user_id, admin):
@@ -36,7 +36,7 @@ async def _invite_user(config, device, invited_user_id, admin):
 
 
 @click.command()
-@core_config_and_device_options
+@client_config_and_device_options
 @click.option("--admin", is_flag=True)
 @click.argument("invited_user_id", type=UserID, required=True)
 def invite_user(config, device, admin, invited_user_id, **kwargs):

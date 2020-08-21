@@ -273,14 +273,14 @@ def widget_catcher_factory(aqtbot, monkeypatch):
 
 @pytest.fixture
 def gui_factory(
-    aqtbot, qtbot, qt_thread_gateway, testing_main_window_cls, core_config, monkeypatch
+    aqtbot, qtbot, qt_thread_gateway, testing_main_window_cls, client_config, monkeypatch
 ):
     windows = []
 
-    async def _gui_factory(event_bus=None, core_config=core_config, start_arg=None):
+    async def _gui_factory(event_bus=None, client_config=client_config, start_arg=None):
         # First start popup blocks the test
         # Check version and mountpoint are useless for most tests
-        core_config = core_config.evolve(
+        client_config = client_config.evolve(
             gui_check_version_at_startup=False,
             gui_first_launch=False,
             gui_last_version=guardata_version,
@@ -290,19 +290,19 @@ def gui_factory(
         )
         event_bus = event_bus or EventBus()
         # Language config rely on global var, must reset it for each test !
-        switch_language(core_config)
+        switch_language(client_config)
 
         def _create_main_window():
             # Pass minimize_on_close to avoid having test blocked by the
             # closing confirmation prompt
 
-            switch_language(core_config, "en")
+            switch_language(client_config, "en")
             monkeypatch.setattr(
                 "guardata.client.gui.main_window.list_available_devices",
                 lambda *args, **kwargs: (["a"]),
             )
             main_w = testing_main_window_cls(
-                qt_thread_gateway._job_scheduler, event_bus, core_config, minimize_on_close=True
+                qt_thread_gateway._job_scheduler, event_bus, client_config, minimize_on_close=True
             )
             qtbot.add_widget(main_w)
             main_w.showMaximized()
@@ -326,19 +326,19 @@ def gui_factory(
 
 
 @pytest.fixture
-async def gui(gui_factory, event_bus, core_config):
-    return await gui_factory(event_bus, core_config)
+async def gui(gui_factory, event_bus, client_config):
+    return await gui_factory(event_bus, client_config)
 
 
 @pytest.fixture
-async def logged_gui(aqtbot, gui_factory, core_config, alice, bob, fixtures_customization):
+async def logged_gui(aqtbot, gui_factory, client_config, alice, bob, fixtures_customization):
     # Logged as bob (i.e. standard profile) by default
     if fixtures_customization.get("logged_gui_as_admin", False):
         device = alice
     else:
         device = bob
 
-    save_device_with_password(core_config.config_dir, device, "P2ssxdor!s3")
+    save_device_with_password(client_config.config_dir, device, "P2ssxdor!s3")
 
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
@@ -419,7 +419,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             mount_widget = self.test_get_mount_widget()
             return mount_widget.files_widget
 
-        def test_get_core(self):
+        def test_get_client(self):
             return self.test_get_central_widget().client
 
         async def test_logout_and_switch_to_login_widget(self):

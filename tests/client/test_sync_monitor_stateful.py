@@ -53,7 +53,7 @@ def test_sync_monitor_stateful(
     backend_addr,
     backend_factory,
     server_factory,
-    core_factory,
+    client_factory,
     user_fs_factory,
     alice,
     bob,
@@ -61,7 +61,7 @@ def test_sync_monitor_stateful(
 ):
 
     # Force a sleep in the monitors mockpoints will freeze them until we reach
-    # the `let_core_monitors_process_changes` rule
+    # the `let_client_monitors_process_changes` rule
     async def mockpoint_sleep():
         await trio.sleep(0.01)
 
@@ -98,15 +98,15 @@ def test_sync_monitor_stateful(
         def get_workspace(self, device_id, wid):
             return self.user_fs_per_device[device_id].get_workspace(wid)
 
-        async def start_alice_core(self):
-            async def _core_controlled_cb(started_cb):
-                async with core_factory(alice) as client:
+        async def start_alice_client(self):
+            async def _client_controlled_cb(started_cb):
+                async with client_factory(alice) as client:
                     await started_cb(client=client)
 
-            self.alice_core_controller = await self.get_root_nursery().start(
-                call_with_control, _core_controlled_cb
+            self.alice_client_controller = await self.get_root_nursery().start(
+                call_with_control, _client_controlled_cb
             )
-            return self.alice_core_controller.client
+            return self.alice_client_controller.client
 
         async def start_bob_user_fs(self):
             async def _user_fs_controlled_cb(started_cb):
@@ -134,9 +134,9 @@ def test_sync_monitor_stateful(
 
             await self.start_backend()
             self.bob_user_fs = await self.start_bob_user_fs()
-            self.alice_client = await self.start_alice_core()
+            self.alice_client = await self.start_alice_client()
             self.user_fs_per_device = {
-                alice.device_id: self.alice_core.user_fs,
+                alice.device_id: self.alice_client.user_fs,
                 bob.device_id: self.bob_user_fs,
             }
             self.synced_files = set()
@@ -208,7 +208,7 @@ def test_sync_monitor_stateful(
                     return
 
         @rule(target=SyncedFiles)
-        async def let_core_monitors_process_changes(self):
+        async def let_client_monitors_process_changes(self):
             # Wait for alice client to settle down
             await trio.sleep(300)
             # Bob get back alice's changes
@@ -221,8 +221,8 @@ def test_sync_monitor_stateful(
 
             # Now alice and bob should have agreed on the data
             new_synced_files = []
-            for alice_workspace_entry in self.alice_core.user_fs.get_user_manifest().workspaces:
-                alice_w = self.alice_core.user_fs.get_workspace(alice_workspace_entry.id)
+            for alice_workspace_entry in self.alice_client.user_fs.get_user_manifest().workspaces:
+                alice_w = self.alice_client.user_fs.get_workspace(alice_workspace_entry.id)
                 bob_w = self.bob_user_fs.get_workspace(alice_workspace_entry.id)
 
                 if alice_workspace_entry.role is None:

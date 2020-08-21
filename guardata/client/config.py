@@ -113,7 +113,7 @@ def config_factory(
     **_,
 ) -> ClientConfig:
     data_base_dir = data_base_dir or get_default_data_base_dir(environ)
-    core_config = ClientConfig(
+    client_config = ClientConfig(
         config_dir=config_dir or get_default_config_dir(environ),
         data_base_dir=data_base_dir,
         cache_base_dir=cache_base_dir or get_default_cache_base_dir(environ),
@@ -140,15 +140,15 @@ def config_factory(
     )
 
     # Make sure the directories exist on the system
-    core_config.config_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
-    core_config.data_base_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
-    core_config.cache_base_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+    client_config.config_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+    client_config.data_base_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+    client_config.cache_base_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
 
     # Mountpoint base directory is not used on windows
     if os.name != "nt":
-        core_config.mountpoint_base_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
+        client_config.mountpoint_base_dir.mkdir(mode=0o700, parents=True, exist_ok=True)
 
-    return core_config
+    return client_config
 
 
 def load_config(config_dir: Path, **extra_config) -> ClientConfig:

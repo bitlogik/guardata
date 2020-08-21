@@ -75,15 +75,15 @@ async def test_share_workspace(
     running_backend,
     gui_workspace_sharing,
     autoclose_dialog,
-    core_config,
+    client_config,
     alice,
     adam,
     catch_share_workspace_widget,
     qt_thread_gateway,
 ):
     password = "P2ssxdor!s3"
-    save_device_with_password(core_config.config_dir, alice, password)
-    save_device_with_password(core_config.config_dir, adam, password)
+    save_device_with_password(client_config.config_dir, alice, password)
+    save_device_with_password(client_config.config_dir, adam, password)
 
     logged_gui, share_w_w = gui_workspace_sharing
 

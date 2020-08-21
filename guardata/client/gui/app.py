@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 
 import sys
 import signal
@@ -190,7 +190,7 @@ def run_gui(config: ClientConfig, start_arg: str = None, diagnose: bool = False)
             diagnose_timer.timeout.connect(kill_window)
 
         if lang_key:
-            event_bus.send(CoreEvent.GUI_CONFIG_CHANGED, gui_language=lang_key)
+            event_bus.send(ClientEvent.GUI_CONFIG_CHANGED, gui_language=lang_key)
 
         if diagnose:
             with fail_on_first_exception(kill_window):

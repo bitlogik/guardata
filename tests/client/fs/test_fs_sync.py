@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import pytest
 from pendulum import Pendulum
 from unittest.mock import ANY
@@ -43,7 +43,7 @@ async def test_new_workspace(running_backend, alice, alice_user_fs, alice2_user_
         with freeze_time("2000-01-03"):
             await workspace.sync()
     spy.assert_events_occured(
-        [(CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3))]
+        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3))]
     )
 
     workspace2 = alice_user_fs.get_workspace(wid)
@@ -98,12 +98,12 @@ async def test_new_empty_entry(type, running_backend, alice_user_fs, alice2_user
 
     if type == "file":  # TODO: file and folder should generate the same events after the migration
         expected_events = [
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3))
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3))
         ]
     else:
         expected_events = [
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": fid}, Pendulum(2000, 1, 3)),
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": fid}, Pendulum(2000, 1, 3)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3)),
         ]
     spy.assert_events_occured(expected_events)
 
@@ -162,7 +162,7 @@ async def test_simple_sync(running_backend, alice_user_fs, alice2_user_fs):
         with freeze_time("2000-01-04"):
             await workspace.sync()
     spy.assert_events_occured(
-        [(CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 4))]
+        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 4))]
     )
 
     # 2) Fetch back file from another fs
@@ -172,7 +172,7 @@ async def test_simple_sync(running_backend, alice_user_fs, alice2_user_fs):
             # TODO: `sync` on not loaded entry should load it
             await workspace2.sync()
     spy.assert_events_occured(
-        [(CoreEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5))]
+        [(ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5))]
     )
 
     # 3) Finally make sure both fs have the same data
@@ -206,9 +206,9 @@ async def test_fs_recursive_sync(running_backend, alice_user_fs):
     sync_date = Pendulum(2000, 1, 3)
     spy.assert_events_occured(
         [
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, sync_date),
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, sync_date),
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, sync_date),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, sync_date),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, sync_date),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, sync_date),
         ]
     )
 
@@ -252,7 +252,7 @@ async def test_cross_sync(running_backend, alice_user_fs, alice2_user_fs):
             await workspace.sync()
 
     spy.assert_events_occured(
-        [(CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 4))]
+        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 4))]
     )
 
     with alice2_user_fs.event_bus.listen() as spy:
@@ -261,10 +261,10 @@ async def test_cross_sync(running_backend, alice_user_fs, alice2_user_fs):
 
     spy.assert_events_occured(
         [
-            (CoreEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5)),
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5)),
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, Pendulum(2000, 1, 5)),
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, Pendulum(2000, 1, 5)),
+            (ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, Pendulum(2000, 1, 5)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, Pendulum(2000, 1, 5)),
         ]
     )
 
@@ -273,7 +273,7 @@ async def test_cross_sync(running_backend, alice_user_fs, alice2_user_fs):
             await workspace.sync()
 
     spy.assert_events_occured(
-        [(CoreEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 6))]
+        [(ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 6))]
     )
 
     # 3) Finally make sure both fs have the same data
@@ -356,7 +356,7 @@ async def test_concurrent_update(running_backend, alice_user_fs, alice2_user_fs)
     date_sync = Pendulum(2000, 1, 5)
     spy.assert_events_occured(
         [
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": barid}, date_sync),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": barid}, date_sync),
             # TODO: add more events
         ]
     )
@@ -369,7 +369,7 @@ async def test_concurrent_update(running_backend, alice_user_fs, alice2_user_fs)
     date_sync = Pendulum(2000, 1, 6)
     spy.assert_events_occured(
         [
-            (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": barid}, date_sync),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": barid}, date_sync),
             # TODO: add more events
         ]
     )
@@ -395,7 +395,7 @@ async def test_concurrent_update(running_backend, alice_user_fs, alice2_user_fs)
     date_sync = Pendulum(2000, 1, 8)
     spy.assert_events_occured(
         [
-            (CoreEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": barid}, date_sync),
+            (ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": barid}, date_sync),
             # TODO: add more events
         ]
     )

@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 from unittest.mock import Mock
 from inspect import iscoroutinefunction
 from contextlib import ExitStack, contextmanager
@@ -10,7 +10,7 @@ import attr
 import pendulum
 
 from guardata.client.types import WorkspaceRole
-from guardata.client.logged_client import LoggedCore
+from guardata.client.logged_client import LoggedClient
 from guardata.client.fs import UserFS
 from guardata.api.transport import Transport, TransportError
 
@@ -138,26 +138,26 @@ async def create_shared_workspace(name, creator, *shared_with):
     This is more tricky than it seems given all Cores/FSs must agree on the
     workspace version and (only for the Cores) be ready to listen to the
     workspace's vlob group events.
-    This is *even* more tricky considering we want the cores involved in the
+    This is *even* more tricky considering we want the clients involved in the
     sharing to endup in a stable state (no event wildly fired or coroutine in
     the middle of a processing when leaving this function) to avoid polluting
     the actual test.
     """
     with ExitStack() as stack:
-        if isinstance(creator, LoggedCore):
+        if isinstance(creator, LoggedClient):
             creator_spy = stack.enter_context(creator.event_bus.listen())
             creator_user_fs = creator.user_fs
         elif isinstance(creator, UserFS):
             creator_user_fs = creator
             creator_spy = None
         else:
-            raise ValueError(f"{creator!r} is not a {UserFS!r} or a {LoggedCore!r}")
+            raise ValueError(f"{creator!r} is not a {UserFS!r} or a {LoggedClient!r}")
 
         all_user_fss = []
         shared_with_spies = []
-        shared_with_cores_and_user_fss = []
+        shared_with_clients_and_user_fss = []
         for x in shared_with:
-            if isinstance(x, LoggedCore):
+            if isinstance(x, LoggedClient):
                 user_fs = x.user_fs
                 client = x
                 shared_with_spies.append(stack.enter_context(x.event_bus.listen()))
@@ -165,35 +165,35 @@ async def create_shared_workspace(name, creator, *shared_with):
                 user_fs = x
                 client = None
             else:
-                raise ValueError(f"{x!r} is not a {UserFS!r} or a {LoggedCore!r}")
+                raise ValueError(f"{x!r} is not a {UserFS!r} or a {LoggedClient!r}")
             all_user_fss.append(user_fs)
             if user_fs.device.user_id != creator_user_fs.device.user_id:
-                shared_with_cores_and_user_fss.append((client, user_fs))
+                shared_with_clients_and_user_fss.append((client, user_fs))
 
         wid = await creator_user_fs.workspace_create(name)
         await creator_user_fs.sync()
         workspace = creator_user_fs.get_workspace(wid)
         await workspace.sync()
 
-        for recipient_core, recipient_user_fs in shared_with_cores_and_user_fss:
+        for recipient_client, recipient_user_fs in shared_with_clients_and_user_fss:
             await creator_user_fs.workspace_share(
                 wid, recipient_user_fs.device.user_id, WorkspaceRole.MANAGER
             )
             # Don't try to double-cross client's message monitor !
-            if not recipient_core:
+            if not recipient_client:
                 await recipient_user_fs.process_last_messages()
 
         with trio.fail_after(1):
             if creator_spy:
                 await creator_spy.wait_multiple(
-                    [CoreEvent.FS_WORKSPACE_CREATED, CoreEvent.BACKEND_REALM_ROLES_UPDATED]
+                    [ClientEvent.FS_WORKSPACE_CREATED, ClientEvent.BACKEND_REALM_ROLES_UPDATED]
                 )
             for spy in shared_with_spies:
                 await spy.wait_multiple(
                     [
-                        CoreEvent.BACKEND_REALM_ROLES_UPDATED,
-                        CoreEvent.BACKEND_MESSAGE_RECEIVED,
-                        CoreEvent.SHARING_UPDATED,
+                        ClientEvent.BACKEND_REALM_ROLES_UPDATED,
+                        ClientEvent.BACKEND_MESSAGE_RECEIVED,
+                        ClientEvent.SHARING_UPDATED,
                     ]
                 )
 

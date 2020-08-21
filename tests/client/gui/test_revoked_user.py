@@ -6,9 +6,9 @@ from PyQt5.QtWidgets import QLabel
 
 @pytest.mark.gui
 @pytest.mark.trio
-@pytest.mark.parametrize("wait_idle_core", [False, True])
+@pytest.mark.parametrize("wait_idle_client", [False, True])
 async def test_revoked_notification(
-    aqtbot, running_backend, backend, autoclose_dialog, logged_gui, alice, bob, wait_idle_core
+    aqtbot, running_backend, backend, autoclose_dialog, logged_gui, alice, bob, wait_idle_client
 ):
 
     central_widget = logged_gui.test_get_central_widget()
@@ -18,7 +18,7 @@ async def test_revoked_notification(
     # We're testing this because the internal detection of the revokation might differ,
     # but we still want to make sure the dialog pops up properly
     # TODO: this parametrization could go directly to the logged_gui fixture
-    if wait_idle_core:
+    if wait_idle_client:
         await central_widget.client.wait_idle_monitors()
 
     await backend.user.revoke_user(

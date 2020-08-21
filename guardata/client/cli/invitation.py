@@ -30,7 +30,7 @@ from guardata.client.invite import (
     claimer_retrieve_info,
 )
 from guardata.client.local_device import save_device_with_password
-from guardata.client.cli.utils import core_config_and_device_options, core_config_options
+from guardata.client.cli.utils import client_config_and_device_options, client_config_options
 
 
 async def _invite_device(config, device):
@@ -56,7 +56,7 @@ async def _invite_device(config, device):
 
 
 @click.command(short_help="create device invitation")
-@core_config_and_device_options
+@client_config_and_device_options
 def invite_device(config, device, **kwargs):
     """
     Create new device invitation
@@ -90,7 +90,7 @@ async def _invite_user(config, device, email, send_email):
 
 
 @click.command(short_help="create user invitation")
-@core_config_and_device_options
+@client_config_and_device_options
 @click.argument("email")
 @click.option("--send-email", is_flag=True)
 def invite_user(config, device, email, send_email, **kwargs):
@@ -223,7 +223,7 @@ async def _greet_invitation(config, device, token):
 
 
 @click.command(short_help="greet invitation")
-@core_config_and_device_options
+@client_config_and_device_options
 @click.argument("token", type=UUID)
 def greet_invitation(config, device, token, **kwargs):
     """
@@ -331,7 +331,7 @@ async def _claim_invitation(config, addr, password):
 
 
 @click.command(short_help="claim invitation")
-@core_config_options
+@client_config_options
 @click.argument("addr", type=BackendInvitationAddr.from_url)
 @click.password_option(prompt="Choose a password for the claimed device")
 def claim_invitation(config, addr, password, **kwargs):
@@ -371,7 +371,7 @@ async def _list_invitations(config, device):
 
 
 @click.command(short_help="list invitations")
-@core_config_and_device_options
+@client_config_and_device_options
 def list_invitations(config, device, **kwargs):
     """
     List invitations
@@ -394,7 +394,7 @@ async def _cancel_invitation(config, device, token):
 
 
 @click.command(short_help="cancel invitations")
-@core_config_and_device_options
+@client_config_and_device_options
 @click.argument("token", type=UUID)
 def cancel_invitation(config, device, token, **kwargs):
     """

@@ -7,96 +7,96 @@ from unittest.mock import ANY
 
 from guardata.client.backend_connection import BackendConnStatus
 from guardata.backend.backend_events import BackendEvent
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 
 
 @pytest.mark.trio
-async def test_monitors_idle(autojump_clock, running_backend, alice_core, alice):
-    assert alice_core.are_monitors_idle()
+async def test_monitors_idle(autojump_clock, running_backend, alice_client, alice):
+    assert alice_client.are_monitors_idle()
 
     # Force wakeup of the sync monitor
-    alice_core.event_bus.send(CoreEvent.FS_ENTRY_UPDATED, id=alice.user_manifest_id)
-    assert not alice_core.are_monitors_idle()
+    alice_client.event_bus.send(ClientEvent.FS_ENTRY_UPDATED, id=alice.user_manifest_id)
+    assert not alice_client.are_monitors_idle()
     with trio.fail_after(60):  # autojump, so not *really* 60s
-        await alice_core.wait_idle_monitors()
-    assert alice_core.are_monitors_idle()
+        await alice_client.wait_idle_monitors()
+    assert alice_client.are_monitors_idle()
 
 
 @pytest.mark.trio
-async def test_monitor_switch_offline(autojump_clock, running_backend, alice_core, alice):
-    assert alice_core.are_monitors_idle()
-    assert alice_core.backend_status == BackendConnStatus.READY
+async def test_monitor_switch_offline(autojump_clock, running_backend, alice_client, alice):
+    assert alice_client.are_monitors_idle()
+    assert alice_client.backend_status == BackendConnStatus.READY
 
-    with alice_core.event_bus.listen() as spy:
+    with alice_client.event_bus.listen() as spy:
         with running_backend.offline():
             await spy.wait_with_timeout(
-                CoreEvent.BACKEND_CONNECTION_CHANGED,
+                ClientEvent.BACKEND_CONNECTION_CHANGED,
                 {"status": BackendConnStatus.LOST, "status_exc": spy.ANY},
                 timeout=60,  # autojump, so not *really* 60s
             )
-            await alice_core.wait_idle_monitors()
-            assert alice_core.backend_status == BackendConnStatus.LOST
+            await alice_client.wait_idle_monitors()
+            assert alice_client.backend_status == BackendConnStatus.LOST
 
         # Switch backend online
 
         await spy.wait_with_timeout(
-            CoreEvent.BACKEND_CONNECTION_CHANGED,
+            ClientEvent.BACKEND_CONNECTION_CHANGED,
             {"status": BackendConnStatus.READY, "status_exc": None},
             timeout=60,  # autojump, so not *really* 60s
         )
-        await alice_core.wait_idle_monitors()
-        assert alice_core.backend_status == BackendConnStatus.READY
+        await alice_client.wait_idle_monitors()
+        assert alice_client.backend_status == BackendConnStatus.READY
 
 
 @pytest.mark.trio
 async def test_process_while_offline(
-    autojump_clock, running_backend, alice_core, bob_user_fs, alice, bob
+    autojump_clock, running_backend, alice_client, bob_user_fs, alice, bob
 ):
-    assert alice_core.backend_status == BackendConnStatus.READY
+    assert alice_client.backend_status == BackendConnStatus.READY
 
     with running_backend.offline():
-        with alice_core.event_bus.listen() as spy:
+        with alice_client.event_bus.listen() as spy:
             # Force wakeup of the sync monitor
-            alice_core.event_bus.send(CoreEvent.FS_ENTRY_UPDATED, id=alice.user_manifest_id)
-            assert not alice_core.are_monitors_idle()
+            alice_client.event_bus.send(ClientEvent.FS_ENTRY_UPDATED, id=alice.user_manifest_id)
+            assert not alice_client.are_monitors_idle()
 
             with trio.fail_after(60):  # autojump, so not *really* 60s
                 await spy.wait(
-                    CoreEvent.BACKEND_CONNECTION_CHANGED,
+                    ClientEvent.BACKEND_CONNECTION_CHANGED,
                     {"status": BackendConnStatus.LOST, "status_exc": spy.ANY},
                 )
-                await alice_core.wait_idle_monitors()
-            assert alice_core.backend_status == BackendConnStatus.LOST
+                await alice_client.wait_idle_monitors()
+            assert alice_client.backend_status == BackendConnStatus.LOST
 
 
 @pytest.mark.trio
 async def test_autosync_on_modification(
-    autojump_clock, running_backend, alice, alice_core, alice2_user_fs
+    autojump_clock, running_backend, alice, alice_client, alice2_user_fs
 ):
-    with alice_core.event_bus.listen() as spy:
-        wid = await alice_core.user_fs.workspace_create("w")
-        workspace = alice_core.user_fs.get_workspace(wid)
+    with alice_client.event_bus.listen() as spy:
+        wid = await alice_client.user_fs.workspace_create("w")
+        workspace = alice_client.user_fs.get_workspace(wid)
         # Wait for the sync monitor to sync the new workspace
         with trio.fail_after(60):  # autojump, so not *really* 60s
-            await alice_core.wait_idle_monitors()
+            await alice_client.wait_idle_monitors()
         spy.assert_events_occured(
             [
-                (CoreEvent.FS_ENTRY_SYNCED, {"id": alice.user_manifest_id}),
-                (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}),
+                (ClientEvent.FS_ENTRY_SYNCED, {"id": alice.user_manifest_id}),
+                (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}),
             ],
             in_order=False,
         )
 
-    with alice_core.event_bus.listen() as spy:
+    with alice_client.event_bus.listen() as spy:
         await workspace.mkdir("/foo")
         foo_id = await workspace.path_id("/foo")
         # Wait for the sync monitor to sync the new folder
         with trio.fail_after(60):  # autojump, so not *really* 60s
-            await alice_core.wait_idle_monitors()
+            await alice_client.wait_idle_monitors()
         spy.assert_events_occured(
             [
-                (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": foo_id}),
-                (CoreEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}),
+                (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": foo_id}),
+                (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}),
             ],
             in_order=False,
         )
@@ -111,17 +111,17 @@ async def test_autosync_on_modification(
 
 @pytest.mark.trio
 async def test_autosync_on_remote_modifications(
-    autojump_clock, running_backend, alice, alice_core, alice2_user_fs
+    autojump_clock, running_backend, alice, alice_client, alice2_user_fs
 ):
-    with alice_core.event_bus.listen() as spy:
+    with alice_client.event_bus.listen() as spy:
         wid = await alice2_user_fs.workspace_create("w")
         await alice2_user_fs.sync()
 
-        # Wait for event to come back to alice_core
+        # Wait for event to come back to alice_client
         await spy.wait_multiple_with_timeout(
             [
                 (
-                    CoreEvent.BACKEND_REALM_VLOBS_UPDATED,
+                    ClientEvent.BACKEND_REALM_VLOBS_UPDATED,
                     {
                         "realm_id": alice.user_manifest_id,
                         "checkpoint": 2,
@@ -129,37 +129,37 @@ async def test_autosync_on_remote_modifications(
                         "src_version": 2,
                     },
                 ),
-                (CoreEvent.FS_ENTRY_REMOTE_CHANGED, {"id": alice.user_manifest_id, "path": "/"}),
+                (ClientEvent.FS_ENTRY_REMOTE_CHANGED, {"id": alice.user_manifest_id, "path": "/"}),
             ],
             timeout=60,  # autojump, so not *really* 60s
         )
-        # Now wait for alice_core's sync
+        # Now wait for alice_client's sync
         with trio.fail_after(60):  # autojump, so not *really* 60s
-            await alice_core.wait_idle_monitors()
+            await alice_client.wait_idle_monitors()
         # Check workspace has been correctly synced
-        alice_w = alice_core.user_fs.get_workspace(wid)
+        alice_w = alice_client.user_fs.get_workspace(wid)
 
         alice2_w = alice2_user_fs.get_workspace(wid)
         await alice2_w.mkdir("/foo")
         foo_id = await alice2_w.path_id("/foo")
         await alice2_w.sync()
 
-        # Wait for event to come back to alice_core
+        # Wait for event to come back to alice_client
         await spy.wait_multiple_with_timeout(
             [
                 (
-                    CoreEvent.BACKEND_REALM_VLOBS_UPDATED,
+                    ClientEvent.BACKEND_REALM_VLOBS_UPDATED,
                     {"realm_id": wid, "checkpoint": 2, "src_id": foo_id, "src_version": 1},
                 ),
                 (
-                    CoreEvent.BACKEND_REALM_VLOBS_UPDATED,
+                    ClientEvent.BACKEND_REALM_VLOBS_UPDATED,
                     {"realm_id": wid, "checkpoint": 3, "src_id": wid, "src_version": 2},
                 ),
             ],
             timeout=60,  # autojump, so not *really* 60s
         )
         with trio.fail_after(60):  # autojump, so not *really* 60s
-            await alice_core.wait_idle_monitors()
+            await alice_client.wait_idle_monitors()
         # Check folder has been correctly synced
         path_info = await alice_w.path_info("/foo")
         path_info2 = await alice2_w.path_info("/foo")
@@ -168,16 +168,16 @@ async def test_autosync_on_remote_modifications(
 
 @pytest.mark.trio
 async def test_reconnect_with_remote_changes(
-    autojump_clock, alice2, running_backend, alice_core, alice2_user_fs
+    autojump_clock, alice2, running_backend, alice_client, alice2_user_fs
 ):
-    wid = await alice_core.user_fs.workspace_create("w")
-    alice_w = alice_core.user_fs.get_workspace(wid)
+    wid = await alice_client.user_fs.workspace_create("w")
+    alice_w = alice_client.user_fs.get_workspace(wid)
     await alice_w.mkdir("/foo")
     await alice_w.touch("/bar.txt")
     # Wait for sync monitor to do it job
-    await alice_core.wait_idle_monitors()
+    await alice_client.wait_idle_monitors()
 
-    with running_backend.offline_for(alice_core.device.device_id):
+    with running_backend.offline_for(alice_client.device.device_id):
         # Get back modifications from alice
         await alice2_user_fs.sync()
         alice2_w = alice2_user_fs.get_workspace(wid)
@@ -231,17 +231,17 @@ async def test_reconnect_with_remote_changes(
                 in_order=False,
             )
 
-    with alice_core.event_bus.listen() as spy:
+    with alice_client.event_bus.listen() as spy:
         # Now alice should sync back the changes
         await spy.wait_with_timeout(
-            CoreEvent.BACKEND_CONNECTION_CHANGED,
+            ClientEvent.BACKEND_CONNECTION_CHANGED,
             {"status": BackendConnStatus.READY, "status_exc": spy.ANY},
             timeout=60,  # autojump, so not *really* 60s
         )
         await spy.wait_multiple_with_timeout(
             [
-                (CoreEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": foo_id}),
-                (CoreEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": bar_id}),
+                (ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": foo_id}),
+                (ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": bar_id}),
             ],
             in_order=False,
             timeout=60,  # autojump, so not *really* 60s
@@ -250,11 +250,11 @@ async def test_reconnect_with_remote_changes(
 
 @pytest.mark.trio
 async def test_sync_confined_children_after_rename(
-    autojump_clock, alice, running_backend, alice_core
+    autojump_clock, alice, running_backend, alice_client
 ):
     # Create a workspace
-    wid = await alice_core.user_fs.workspace_create("w")
-    alice_w = alice_core.user_fs.get_workspace(wid)
+    wid = await alice_client.user_fs.workspace_create("w")
+    alice_w = alice_client.user_fs.get_workspace(wid)
 
     # Set a filter
     pattern = re.compile(r".*\.tmp$")
@@ -264,7 +264,7 @@ async def test_sync_confined_children_after_rename(
     await alice_w.mkdir("/test.tmp/a/b/c", parents=True)
 
     # Wait for sync monitor to be idle
-    await alice_core.wait_idle_monitors()
+    await alice_client.wait_idle_monitors()
 
     # Make sure the root is synced
     info = await alice_w.path_info("/")
@@ -281,7 +281,7 @@ async def test_sync_confined_children_after_rename(
     await alice_w.rename("/test.tmp", "/test2.tmp")
 
     # Wait for sync monitor to be idle
-    await alice_core.wait_idle_monitors()
+    await alice_client.wait_idle_monitors()
 
     # Make sure the root is synced
     info = await alice_w.path_info("/")
@@ -298,7 +298,7 @@ async def test_sync_confined_children_after_rename(
     await alice_w.rename("/test2.tmp", "/test2")
 
     # Wait for sync monitor to be idle
-    await alice_core.wait_idle_monitors()
+    await alice_client.wait_idle_monitors()
 
     # Make sure the root is synced
     info = await alice_w.path_info("/")
@@ -315,7 +315,7 @@ async def test_sync_confined_children_after_rename(
     await alice_w.rename("/test2", "/test3.tmp")
 
     # Wait for sync monitor to be idle
-    await alice_core.wait_idle_monitors()
+    await alice_client.wait_idle_monitors()
 
     # Make sure the root is synced
     info = await alice_w.path_info("/")

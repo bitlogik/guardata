@@ -17,7 +17,7 @@ from guardata.client.local_device import (
 )
 
 
-def core_config_options(fn):
+def client_config_options(fn):
     @click.option("--config-dir", type=click.Path(exists=True, file_okay=False))
     @click.option(
         "--log-level",
@@ -61,8 +61,8 @@ def format_available_devices(devices: List[AvailableDevice]) -> str:
     return "\n".join(out)
 
 
-def core_config_and_device_options(fn):
-    @core_config_options
+def client_config_and_device_options(fn):
+    @client_config_options
     @click.option(
         "--device",
         "-D",

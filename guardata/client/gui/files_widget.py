@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import pathlib
 from uuid import UUID
 import trio
@@ -149,8 +149,8 @@ class Clipboard:
 
 
 class FilesWidget(QWidget, Ui_FilesWidget):
-    fs_updated_qt = pyqtSignal(CoreEvent, UUID)
-    fs_synced_qt = pyqtSignal(CoreEvent, UUID)
+    fs_updated_qt = pyqtSignal(ClientEvent, UUID)
+    fs_synced_qt = pyqtSignal(ClientEvent, UUID)
     entry_downsynced_qt = pyqtSignal(UUID, UUID)
 
     sharing_updated_qt = pyqtSignal(WorkspaceEntry, object)
@@ -247,10 +247,10 @@ class FilesWidget(QWidget, Ui_FilesWidget):
         self.loading_dialog = None
         self.import_progress.connect(self._on_import_progress)
 
-        self.event_bus.connect(CoreEvent.FS_ENTRY_UPDATED, self._on_fs_entry_updated_trio)
-        self.event_bus.connect(CoreEvent.FS_ENTRY_SYNCED, self._on_fs_entry_synced_trio)
-        self.event_bus.connect(CoreEvent.SHARING_UPDATED, self._on_sharing_updated_trio)
-        self.event_bus.connect(CoreEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio)
+        self.event_bus.connect(ClientEvent.FS_ENTRY_UPDATED, self._on_fs_entry_updated_trio)
+        self.event_bus.connect(ClientEvent.FS_ENTRY_SYNCED, self._on_fs_entry_synced_trio)
+        self.event_bus.connect(ClientEvent.SHARING_UPDATED, self._on_sharing_updated_trio)
+        self.event_bus.connect(ClientEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio)
 
     def disconnect_all(self):
         pass

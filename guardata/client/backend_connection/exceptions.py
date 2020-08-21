@@ -18,6 +18,6 @@ class BackendConnectionRefused(BackendConnectionError):
     pass
 
 
-# TODO: hack needed by `LoggedCore.get_user_info`
+# TODO: hack needed by `LoggedClient.get_user_info`
 class BackendNotFoundError(BackendConnectionError):
     pass

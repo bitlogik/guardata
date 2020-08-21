@@ -12,12 +12,12 @@ from guardata.client.backend_connection import (
     BackendNotAvailable,
     BackendNotFoundError,
 )
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 
 
 @pytest.mark.trio
 async def test_init_online_backend_late_reply(
-    server_factory, core_config, alice, event_bus, backend
+    server_factory, client_config, alice, event_bus, backend
 ):
     can_serve_client = trio.Event()
 
@@ -28,20 +28,20 @@ async def test_init_online_backend_late_reply(
     async with server_factory(_handle_client, alice.organization_addr):
         with trio.fail_after(1):
             async with logged_client_factory(
-                config=core_config, device=alice, event_bus=event_bus
+                config=client_config, device=alice, event_bus=event_bus
             ) as client:
                 # We don't want for backend to reply finish client init
                 with client.event_bus.listen() as spy:
                     can_serve_client.set()
                     # Now backend reply, monitor should send events accordingly
                     await spy.wait(
-                        CoreEvent.BACKEND_CONNECTION_CHANGED,
+                        ClientEvent.BACKEND_CONNECTION_CHANGED,
                         kwargs={"status": BackendConnStatus.READY, "status_exc": None},
                     )
 
 
 @pytest.mark.trio
-async def test_init_offline_backend_late_reply(server_factory, core_config, alice, event_bus):
+async def test_init_offline_backend_late_reply(server_factory, client_config, alice, event_bus):
     can_serve_client = trio.Event()
 
     async def _handle_client(stream):
@@ -51,19 +51,19 @@ async def test_init_offline_backend_late_reply(server_factory, core_config, alic
     async with server_factory(_handle_client, alice.organization_addr):
         with trio.fail_after(1):
             async with logged_client_factory(
-                config=core_config, device=alice, event_bus=event_bus
+                config=client_config, device=alice, event_bus=event_bus
             ) as client:
                 with client.event_bus.listen() as spy:
                     can_serve_client.set()
                     await spy.wait(
-                        CoreEvent.BACKEND_CONNECTION_CHANGED,
+                        ClientEvent.BACKEND_CONNECTION_CHANGED,
                         kwargs={"status": BackendConnStatus.LOST, "status_exc": ANY},
                     )
 
 
 @pytest.mark.trio
-async def test_find_and_get_info(running_backend, alice_core, bob, alice, alice2):
-    infos, total = await alice_core.find_humans(query="bob")
+async def test_find_and_get_info(running_backend, alice_client, bob, alice, alice2):
+    infos, total = await alice_client.find_humans(query="bob")
     assert total == 1
     assert infos == [
         UserInfo(
@@ -75,7 +75,7 @@ async def test_find_and_get_info(running_backend, alice_core, bob, alice, alice2
         )
     ]
 
-    info = await alice_core.get_user_info(bob.user_id)
+    info = await alice_client.get_user_info(bob.user_id)
     assert info == UserInfo(
         user_id=bob.user_id,
         human_handle=bob.human_handle,
@@ -84,14 +84,14 @@ async def test_find_and_get_info(running_backend, alice_core, bob, alice, alice2
         revoked_on=None,
     )
 
-    infos = await alice_core.get_user_devices_info(bob.user_id)
+    infos = await alice_client.get_user_devices_info(bob.user_id)
     assert infos == [
         DeviceInfo(
             device_id=bob.device_id, device_label=bob.device_label, created_on=Pendulum(2000, 1, 1)
         )
     ]
 
-    infos = await alice_core.get_user_devices_info()
+    infos = await alice_client.get_user_devices_info()
     assert infos == [
         DeviceInfo(
             device_id=alice.device_id,
@@ -107,38 +107,38 @@ async def test_find_and_get_info(running_backend, alice_core, bob, alice, alice2
 
 
 @pytest.mark.trio
-async def test_get_info_not_found(running_backend, alice_core, mallory):
+async def test_get_info_not_found(running_backend, alice_client, mallory):
     with pytest.raises(BackendNotFoundError):
-        await alice_core.get_user_info(mallory.user_id)
+        await alice_client.get_user_info(mallory.user_id)
 
     with pytest.raises(BackendNotFoundError):
-        await alice_core.get_user_devices_info(mallory.user_id)
+        await alice_client.get_user_devices_info(mallory.user_id)
 
 
 @pytest.mark.trio
-async def test_find_get_info_and_revoke_offline(alice_core, bob):
+async def test_find_get_info_and_revoke_offline(alice_client, bob):
     with pytest.raises(BackendNotAvailable):
-        await alice_core.find_humans()
+        await alice_client.find_humans()
 
     with pytest.raises(BackendNotAvailable):
-        await alice_core.get_user_info(bob.user_id)
+        await alice_client.get_user_info(bob.user_id)
 
     with pytest.raises(BackendNotAvailable):
-        await alice_core.get_user_devices_info(bob.user_id)
+        await alice_client.get_user_devices_info(bob.user_id)
 
     with pytest.raises(BackendNotAvailable):
-        await alice_core.revoke_user(bob.user_id)
+        await alice_client.revoke_user(bob.user_id)
 
 
 @pytest.mark.trio
 @pytest.mark.parametrize("user_cached", [False, True])
-async def test_revoke_user(running_backend, alice_core, bob, user_cached):
+async def test_revoke_user(running_backend, alice_client, bob, user_cached):
     if user_cached:
-        before_info = await alice_core.get_user_info(bob.user_id)
+        before_info = await alice_client.get_user_info(bob.user_id)
 
-    await alice_core.revoke_user(bob.user_id)
+    await alice_client.revoke_user(bob.user_id)
 
-    after_info = await alice_core.get_user_info(bob.user_id)
+    after_info = await alice_client.get_user_info(bob.user_id)
 
     assert after_info.revoked_on
     if user_cached:

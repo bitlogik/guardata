@@ -6,7 +6,7 @@ import click
 from guardata.utils import trio_run
 from guardata.cli_utils import cli_exception_handler
 from guardata.client import logged_client_factory
-from guardata.client.cli.utils import core_config_and_device_options
+from guardata.client.cli.utils import client_config_and_device_options
 
 
 async def _create_workspace(config, device, name):
@@ -15,7 +15,7 @@ async def _create_workspace(config, device, name):
 
 
 @click.command(short_help="create workspace")
-@core_config_and_device_options
+@client_config_and_device_options
 @click.argument("name")
 def create_workspace(config, device, name, **kwargs):
     """

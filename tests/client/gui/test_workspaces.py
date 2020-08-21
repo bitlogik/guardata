@@ -7,7 +7,7 @@ import pendulum
 from unittest.mock import ANY
 
 from guardata.api.data import WorkspaceEntry
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 from guardata.client.fs import FSWorkspaceNoReadAccess
 from guardata.client.gui.workspace_button import WorkspaceButton
 
@@ -63,7 +63,7 @@ async def test_rename_workspace(
     w_w = await logged_gui.test_switch_to_workspaces_widget()
 
     # Create a workspace and make sure the workspace is displayed
-    client = logged_gui.test_get_core()
+    client = logged_gui.test_get_client()
     await client.user_fs.workspace_create("Workspace1")
 
     def _workspace_displayed():
@@ -111,7 +111,7 @@ async def test_mountpoint_remote_error_event(aqtbot, running_backend, logged_gui
 
     async with aqtbot.wait_signal(c_w.new_notification):
         c_w.event_bus.send(
-            CoreEvent.MOUNTPOINT_REMOTE_ERROR,
+            ClientEvent.MOUNTPOINT_REMOTE_ERROR,
             exc=FSWorkspaceNoReadAccess("Cannot get workspace roles: no read access"),
             path="/foo",
             operation="open",
@@ -124,7 +124,7 @@ async def test_mountpoint_remote_error_event(aqtbot, running_backend, logged_gui
 
     async with aqtbot.wait_signal(c_w.new_notification):
         c_w.event_bus.send(
-            CoreEvent.MOUNTPOINT_UNHANDLED_ERROR,
+            ClientEvent.MOUNTPOINT_UNHANDLED_ERROR,
             exc=RuntimeError("D'Oh !"),
             path="/bar",
             operation="unlink",
@@ -153,23 +153,23 @@ async def test_event_bus_internal_connection(aqtbot, running_backend, logged_gui
     )
 
     async with aqtbot.wait_signal(w_w.fs_synced_qt):
-        w_w.event_bus.send(CoreEvent.FS_ENTRY_SYNCED, workspace_id=None, id=uuid)
+        w_w.event_bus.send(ClientEvent.FS_ENTRY_SYNCED, workspace_id=None, id=uuid)
 
     async with aqtbot.wait_signal(w_w.fs_updated_qt):
-        w_w.event_bus.send(CoreEvent.FS_ENTRY_UPDATED, workspace_id=uuid, id=None)
+        w_w.event_bus.send(ClientEvent.FS_ENTRY_UPDATED, workspace_id=uuid, id=None)
 
     async with aqtbot.wait_signal(w_w._workspace_created_qt):
-        w_w.event_bus.send(CoreEvent.FS_WORKSPACE_CREATED, new_entry=w_entry)
+        w_w.event_bus.send(ClientEvent.FS_WORKSPACE_CREATED, new_entry=w_entry)
 
     async with aqtbot.wait_signal(w_w.sharing_updated_qt):
-        w_w.event_bus.send(CoreEvent.SHARING_UPDATED, new_entry=w_entry, previous_entry=None)
+        w_w.event_bus.send(ClientEvent.SHARING_UPDATED, new_entry=w_entry, previous_entry=None)
 
     async with aqtbot.wait_signal(w_w.entry_downsynced_qt):
-        w_w.event_bus.send(CoreEvent.FS_ENTRY_DOWNSYNCED, workspace_id=uuid, id=uuid)
+        w_w.event_bus.send(ClientEvent.FS_ENTRY_DOWNSYNCED, workspace_id=uuid, id=uuid)
 
     async with aqtbot.wait_signal(w_w.mountpoint_started):
         w_w.event_bus.send(
-            CoreEvent.MOUNTPOINT_STARTED,
+            ClientEvent.MOUNTPOINT_STARTED,
             mountpoint=None,
             workspace_id=uuid,
             timestamp=pendulum.now(),
@@ -178,7 +178,7 @@ async def test_event_bus_internal_connection(aqtbot, running_backend, logged_gui
     assert not autoclose_dialog.dialogs
     async with aqtbot.wait_signal(w_w.mountpoint_stopped):
         w_w.event_bus.send(
-            CoreEvent.MOUNTPOINT_STOPPED,
+            ClientEvent.MOUNTPOINT_STOPPED,
             mountpoint=None,
             workspace_id=uuid,
             timestamp=pendulum.now(),

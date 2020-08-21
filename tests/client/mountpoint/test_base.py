@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import os
 import errno
 from uuid import uuid4
@@ -145,8 +145,8 @@ async def test_mount_and_explore_workspace(
 
             spy.assert_events_occured(
                 [
-                    (CoreEvent.MOUNTPOINT_STARTING, expected),
-                    (CoreEvent.MOUNTPOINT_STARTED, expected),
+                    (ClientEvent.MOUNTPOINT_STARTING, expected),
+                    (ClientEvent.MOUNTPOINT_STARTED, expected),
                 ]
             )
 
@@ -170,11 +170,11 @@ async def test_mount_and_explore_workspace(
             if manual_unmount:
                 await mountpoint_manager.unmount_workspace(wid)
                 # Mountpoint should be stopped by now
-                spy.assert_events_occured([(CoreEvent.MOUNTPOINT_STOPPED, expected)])
+                spy.assert_events_occured([(ClientEvent.MOUNTPOINT_STOPPED, expected)])
 
         if not manual_unmount:
             # Mountpoint should be stopped by now
-            spy.assert_events_occured([(CoreEvent.MOUNTPOINT_STOPPED, expected)])
+            spy.assert_events_occured([(ClientEvent.MOUNTPOINT_STOPPED, expected)])
 
 
 @pytest.mark.trio
@@ -215,13 +215,13 @@ async def test_idempotent_mount(base_mountpoint, alice_user_fs, event_bus, manua
 
 @pytest.mark.trio
 @pytest.mark.mountpoint
-async def test_work_within_logged_core(base_mountpoint, core_config, alice, tmpdir):
-    core_config = core_config.evolve(mountpoint_base_dir=base_mountpoint)
+async def test_work_within_logged_client(base_mountpoint, client_config, alice, tmpdir):
+    client_config = client_config.evolve(mountpoint_base_dir=base_mountpoint)
 
-    async with logged_client_factory(core_config, alice) as alice_core:
-        manager = alice_core.mountpoint_manager
-        wid = await alice_core.user_fs.workspace_create("w")
-        workspace = alice_core.user_fs.get_workspace(wid)
+    async with logged_client_factory(client_config, alice) as alice_client:
+        manager = alice_client.mountpoint_manager
+        wid = await alice_client.user_fs.workspace_create("w")
+        workspace = alice_client.user_fs.get_workspace(wid)
         await workspace.touch("/bar.txt")
 
         with pytest.raises(MountpointNotMounted):

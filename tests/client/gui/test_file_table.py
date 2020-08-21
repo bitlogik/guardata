@@ -11,8 +11,8 @@ from guardata.client.gui.lang import switch_language
 
 
 @pytest.mark.gui
-def test_file_table_parent_folder(qtbot, core_config):
-    switch_language(core_config, "en")
+def test_file_table_parent_folder(qtbot, client_config):
+    switch_language(client_config, "en")
 
     w = FileTable(parent=None)
     qtbot.addWidget(w)
@@ -26,8 +26,8 @@ def test_file_table_parent_folder(qtbot, core_config):
 
 
 @pytest.mark.gui
-def test_file_table_parent_workspace(qtbot, core_config):
-    switch_language(core_config, "en")
+def test_file_table_parent_workspace(qtbot, client_config):
+    switch_language(client_config, "en")
 
     w = FileTable(parent=None)
     qtbot.addWidget(w)
@@ -53,8 +53,8 @@ def test_file_table_clear(qtbot):
 
 
 @pytest.mark.gui
-def test_file_table_sort(qtbot, core_config):
-    switch_language(core_config, "en")
+def test_file_table_sort(qtbot, client_config):
+    switch_language(client_config, "en")
 
     w = FileTable(parent=None)
     qtbot.addWidget(w)

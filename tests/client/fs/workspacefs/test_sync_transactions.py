@@ -4,7 +4,7 @@ import re
 import pytest
 
 from guardata.api.protocol import DeviceID
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 from guardata.client.types import FsPath, EntryID, Chunk, LocalFolderManifest, LocalFileManifest
 
 from guardata.client.fs.workspacefs.sync_transactions import merge_manifests
@@ -321,18 +321,18 @@ async def test_file_conflict(alice_sync_transactions):
     spy.assert_events_exactly_occured(
         [
             (
-                CoreEvent.FS_ENTRY_UPDATED,
+                ClientEvent.FS_ENTRY_UPDATED,
                 {"workspace_id": sync_transactions.workspace_id, "id": a2_id},
             ),
             (
-                CoreEvent.FS_ENTRY_UPDATED,
+                ClientEvent.FS_ENTRY_UPDATED,
                 {
                     "workspace_id": sync_transactions.workspace_id,
                     "id": sync_transactions.workspace_id,
                 },
             ),
             (
-                CoreEvent.FS_ENTRY_FILE_CONFLICT_RESOLVED,
+                ClientEvent.FS_ENTRY_FILE_CONFLICT_RESOLVED,
                 {"workspace_id": sync_transactions.workspace_id, "id": a_id, "backup_id": a2_id},
             ),
         ]

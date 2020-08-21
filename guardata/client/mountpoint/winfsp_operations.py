@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 import functools
 from contextlib import contextmanager
 from trio import Cancelled, RunFinishedError
@@ -48,7 +48,7 @@ def translate_error(event_bus, operation, path):
         raise NTStatusError(exc.ntstatus) from exc
 
     except FSRemoteOperationError as exc:
-        event_bus.send(CoreEvent.MOUNTPOINT_REMOTE_ERROR, exc=exc, operation=operation, path=path)
+        event_bus.send(ClientEvent.MOUNTPOINT_REMOTE_ERROR, exc=exc, operation=operation, path=path)
         raise NTStatusError(exc.ntstatus) from exc
 
     except (Cancelled, RunFinishedError) as exc:
@@ -59,7 +59,7 @@ def translate_error(event_bus, operation, path):
     except Exception as exc:
         logger.exception("Unhandled exception in winfsp mountpoint", operation=operation, path=path)
         event_bus.send(
-            CoreEvent.MOUNTPOINT_UNHANDLED_ERROR, exc=exc, operation=operation, path=path
+            ClientEvent.MOUNTPOINT_UNHANDLED_ERROR, exc=exc, operation=operation, path=path
         )
         raise NTStatusError(NTSTATUS.STATUS_INTERNAL_ERROR) from exc
 

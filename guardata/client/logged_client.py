@@ -47,7 +47,7 @@ DEFAULT_PATTERN_FILTER = re.compile(r"\~\$|\.\~|.*\.tmp$")
 
 
 @attr.s(frozen=True, slots=True)
-class LoggedCore:
+class LoggedClient:
     config = attr.ib()
     device = attr.ib()
     event_bus = attr.ib()
@@ -293,7 +293,7 @@ async def logged_client_factory(
                 exclude_from_mount_all=config.disabled_workspaces,
             ) as mountpoint_manager:
 
-                yield LoggedCore(
+                yield LoggedClient(
                     config=config,
                     device=device,
                     event_bus=event_bus,

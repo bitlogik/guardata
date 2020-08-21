@@ -1,7 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.client.client_events import CoreEvent
+from guardata.client.client_events import ClientEvent
 from typing import Optional
 from structlog import get_logger
 
@@ -64,7 +64,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.minimize_on_close_notif_already_send = False
         self.force_close = False
         self.need_close = False
-        self.event_bus.connect(CoreEvent.GUI_CONFIG_CHANGED, self.on_config_updated)
+        self.event_bus.connect(ClientEvent.GUI_CONFIG_CHANGED, self.on_config_updated)
         self.setWindowTitle(
             _("TEXT_GUARDATA_WINDOW_TITLE_version").format(version=GUARDATA_VERSION)
         )
@@ -409,7 +409,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         # At the very first launch
         if self.config.gui_first_launch:
             self.event_bus.send(
-                CoreEvent.GUI_CONFIG_CHANGED,
+                ClientEvent.GUI_CONFIG_CHANGED,
                 gui_first_launch=False,
                 gui_last_version=GUARDATA_VERSION,
             )
@@ -418,7 +418,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         if self.config.gui_last_version and self.config.gui_last_version != GUARDATA_VERSION:
 
             # Acknowledge the changes
-            self.event_bus.send(CoreEvent.GUI_CONFIG_CHANGED, gui_last_version=GUARDATA_VERSION)
+            self.event_bus.send(ClientEvent.GUI_CONFIG_CHANGED, gui_last_version=GUARDATA_VERSION)
 
         devices = list_available_devices(self.config.config_dir)
         if not len(devices) and not invitation_link:
@@ -466,7 +466,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         idx = self.tab_center.indexOf(widget)
         if idx == -1 or idx == self.tab_center.currentIndex():
             return
-        if event == CoreEvent.SHARING_UPDATED:
+        if event == ClientEvent.SHARING_UPDATED:
             self.tab_center.tabBar().setTabTextColor(idx, MainWindow.TAB_NOTIFICATION_COLOR)
 
     def _get_login_tab_index(self):
