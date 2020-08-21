@@ -24,19 +24,13 @@ def backend_http_send(running_backend, backend_addr):
 
         if isinstance(target, str):
             target = target.encode("utf8")
-        # Use HTTP 1.0 given 1.1 requires Host header
-        req = b"GET %s HTTP/1.0\r\n\r\n" % target
+        req = b"GET %s HTTP/1.1\r\nHost: %s\r\n" % (target, backend_addr.hostname)
         await stream.send_all(req)
-        rep = await stream.receive_some()
+        rep = await stream.receive_some(4096)
         await stream.aclose()
         return rep.decode("utf8")
 
     return _http_send
-
-
-def _get_header(rep, header_name):
-    header_line = next(line for line in rep.split("\r\n") if line.startswith(f"{header_name}:"))
-    return header_line.split(": ", 1)[1]
 
 
 @pytest.mark.trio
