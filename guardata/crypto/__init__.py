@@ -14,7 +14,7 @@ from nacl.pwhash import argon2id
 from nacl.utils import random
 from nacl.encoding import RawEncoder
 
-from guardata.SecretBox2 import SecretBox
+from guardata.crypto.secretbox2 import SecretBox
 
 
 # Note to simplify things, we adopt `nacl.CryptoError` as our root error cls
