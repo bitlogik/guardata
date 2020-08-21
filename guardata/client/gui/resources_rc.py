@@ -1,4 +1,5 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
 try:
     from guardata.client.gui._resources_rc import *  # noqa
