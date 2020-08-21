@@ -122,8 +122,8 @@ class FileLabel(QLabel):
 
     def setText(self, text):
         self.full_text = text
-        if len(text) > 30:
-            text = text[:30] + "..."
+        if len(text) > 31:
+            text = text[:31] + ".."
         super().setText(text)
 
 

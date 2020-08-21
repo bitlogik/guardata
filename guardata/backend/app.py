@@ -232,7 +232,6 @@ class BackendApp:
                 await self.handle_client_http(stream, event, conn)
 
         except h11.RemoteProtocolError:
-            # Peer is drunk...
             pass
 
         finally:
@@ -254,7 +253,6 @@ class BackendApp:
             server_header = "guardata"
         rep.headers.append(("server", server_header))
 
-        # TODO: Specify reason ? (currently we have `HTTP/1.1 200 \r\n` instead of `HTTP/1.1 200 OK\r\n`)
         try:
             await stream.send_all(
                 conn.send(
