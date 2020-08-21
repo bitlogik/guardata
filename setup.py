@@ -273,19 +273,12 @@ test_requirements = [
     # - see pip issues #7096/#6239/#4391/#988
     # Looking forward to the new pip dependency resolver!
     'pywin32==227;platform_system=="Windows"',
-    # Fix botocore and sphinx conflicting requirements on docutils
-    "docutils>=0.12,<0.16",
-    # Documentation generation requirements
-    "sphinx==2.4.3",
-    "sphinx-intl==2.0.0",
-    "sphinx-rtd-theme==0.4.3",
 ]
 
 
 PYQT_DEPS = ["PyQt5==5.14.2", "pyqt5-sip==12.8.0"]
 BABEL_DEP = "Babel==2.6.0"
 WHEEL_DEP = "wheel==0.34.2"
-DOCUTILS_DEP = "docutils==0.15"
 extra_requirements = {
     "client": [
         *PYQT_DEPS,
@@ -324,7 +317,7 @@ setup(
     python_requires=">=3.6",
     packages=find_packages(include=["guardata", "guardata.*"]),
     package_dir={"guardata": "guardata"},
-    setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP, DOCUTILS_DEP],  # To generate resources bundle
+    setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP],  # Generate resources bundle
     install_requires=requirements,
     extras_require=extra_requirements,
     cmdclass={
