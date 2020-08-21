@@ -45,7 +45,7 @@ def test_share_workspace(tmpdir, alice, bob):
     share_mock = MagicMock()
 
     @asynccontextmanager
-    async def logged_core_factory(*args, **kwargs):
+    async def logged_client_factory(*args, **kwargs):
         yield factory_mock(*args, **kwargs)
 
     async def share(*args, **kwargs):
@@ -56,7 +56,7 @@ def test_share_workspace(tmpdir, alice, bob):
     password = "S3cr3t"
     save_device_with_password(Path(config_dir), bob, password)
 
-    with patch("guardata.client.cli.share_workspace.logged_core_factory", logged_core_factory):
+    with patch("guardata.client.cli.share_workspace.logged_client_factory", logged_client_factory):
         runner = CliRunner()
         args = (
             f"client share_workspace --password {password} "

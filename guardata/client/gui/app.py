@@ -14,7 +14,7 @@ from structlog import get_logger
 from PyQt5.QtCore import QTimer, Qt
 from PyQt5.QtWidgets import QApplication
 
-from guardata.client.config import CoreConfig
+from guardata.client.config import ClientConfig
 from guardata.event_bus import EventBus
 from guardata.client.ipcinterface import (
     run_ipc_server,
@@ -106,7 +106,7 @@ def fail_on_first_exception(kill_window):
             raise exceptions[0]
 
 
-def run_gui(config: CoreConfig, start_arg: str = None, diagnose: bool = False):
+def run_gui(config: ClientConfig, start_arg: str = None, diagnose: bool = False):
     logger.info("Starting UI")
 
     # Needed for High DPI usage of QIcons, otherwise only QImages are well scaled

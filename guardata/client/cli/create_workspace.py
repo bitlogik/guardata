@@ -5,12 +5,12 @@ import click
 
 from guardata.utils import trio_run
 from guardata.cli_utils import cli_exception_handler
-from guardata.client import logged_core_factory
+from guardata.client import logged_client_factory
 from guardata.client.cli.utils import core_config_and_device_options
 
 
 async def _create_workspace(config, device, name):
-    async with logged_core_factory(config, device) as client:
+    async with logged_client_factory(config, device) as client:
         await client.user_fs.workspace_create(f"{name}")
 
 

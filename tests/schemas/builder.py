@@ -104,7 +104,7 @@ def generate_api_data_specs():
     return {data_cls.__name__: data_class_to_spec(data_cls) for data_cls in data_classes}
 
 
-def generate_core_data_specs():
+def generate_client_data_specs():
     import guardata.client.types
 
     package = guardata.client.types
@@ -121,10 +121,10 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("what", choices=["api_data", "core_data"])
+    parser.add_argument("what", choices=["api_data", "client_data"])
     args = parser.parse_args()
     if args.what == "api_data":
         specs = generate_api_data_specs()
     else:
-        specs = generate_core_data_specs()
+        specs = generate_client_data_specs()
     print(json.dumps(specs, indent=4, sort_keys=True))

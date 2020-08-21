@@ -10,7 +10,7 @@ from typing import Optional
 import random
 
 from guardata.logging import configure_logging
-from guardata.client import logged_core_factory
+from guardata.client import logged_client_factory
 from guardata.api.data import UserProfile
 from guardata.api.protocol import OrganizationID, HumanHandle, InvitationType
 from guardata.client.types import (
@@ -76,7 +76,7 @@ async def initialize_test_organization(
     # Create a workspace for Alice
 
     config = load_config(config_dir, debug="DEBUG" in os.environ)
-    async with logged_core_factory(config, alice_device) as client:
+    async with logged_client_factory(config, alice_device) as client:
         alice_ws_id = await client.user_fs.workspace_create("alice_workspace")
         await client.user_fs.sync()
 
@@ -126,7 +126,7 @@ async def initialize_test_organization(
 
     # Create bob workspace and share with Alice
 
-    async with logged_core_factory(config, bob_device) as client:
+    async with logged_client_factory(config, bob_device) as client:
         bob_ws_id = await client.user_fs.workspace_create("bob_workspace")
         await client.user_fs.workspace_share(bob_ws_id, alice_device.user_id, WorkspaceRole.MANAGER)
 
@@ -142,7 +142,7 @@ async def initialize_test_organization(
 
     # Synchronize every device
     for device in (alice_device, other_alice_device, bob_device):
-        async with logged_core_factory(config, device) as client:
+        async with logged_client_factory(config, device) as client:
             await client.user_fs.process_last_messages()
             await client.user_fs.sync()
 
@@ -152,7 +152,7 @@ async def initialize_test_organization(
 async def _share_workspace_with_user(
     config, host_device, workspace_id, invited_device, role: Optional[WorkspaceRole]
 ):
-    async with logged_core_factory(config, host_device) as client:
+    async with logged_client_factory(config, host_device) as client:
         await client.user_fs.workspace_share(workspace_id, invited_device.user_id, role)
 
 

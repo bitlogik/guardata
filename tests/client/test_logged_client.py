@@ -5,7 +5,7 @@ import trio
 from unittest.mock import ANY
 from pendulum import Pendulum
 
-from guardata.client import logged_core_factory
+from guardata.client import logged_client_factory
 from guardata.client.types import UserInfo, DeviceInfo
 from guardata.client.backend_connection import (
     BackendConnStatus,
@@ -27,7 +27,7 @@ async def test_init_online_backend_late_reply(
 
     async with server_factory(_handle_client, alice.organization_addr):
         with trio.fail_after(1):
-            async with logged_core_factory(
+            async with logged_client_factory(
                 config=core_config, device=alice, event_bus=event_bus
             ) as client:
                 # We don't want for backend to reply finish client init
@@ -50,7 +50,7 @@ async def test_init_offline_backend_late_reply(server_factory, core_config, alic
 
     async with server_factory(_handle_client, alice.organization_addr):
         with trio.fail_after(1):
-            async with logged_core_factory(
+            async with logged_client_factory(
                 config=core_config, device=alice, event_bus=event_bus
             ) as client:
                 with client.event_bus.listen() as spy:

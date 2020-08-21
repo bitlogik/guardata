@@ -14,7 +14,7 @@ from guardata.event_bus import EventBus
 from guardata.api.protocol import UserID, InvitationType, InvitationDeletedReason
 from guardata.api.data import RevokedUserCertificateContent
 from guardata.client.types import LocalDevice, UserInfo, DeviceInfo, BackendInvitationAddr
-from guardata.client.config import CoreConfig
+from guardata.client.config import ClientConfig
 from guardata.client.backend_connection import (
     BackendAuthenticatedConn,
     BackendConnectionError,
@@ -248,8 +248,8 @@ class LoggedCore:
 
 
 @asynccontextmanager
-async def logged_core_factory(
-    config: CoreConfig, device: LocalDevice, event_bus: Optional[EventBus] = None
+async def logged_client_factory(
+    config: ClientConfig, device: LocalDevice, event_bus: Optional[EventBus] = None
 ):
     event_bus = event_bus or EventBus()
 

@@ -17,7 +17,7 @@ from guardata.client.mountpoint import (
     MountpointFuseNotAvailable,
     MountpointWinfspNotAvailable,
 )
-from guardata.client import logged_core_factory
+from guardata.client import logged_client_factory
 from guardata.client.types import FsPath, WorkspaceRole
 
 from tests.common import create_shared_workspace
@@ -218,7 +218,7 @@ async def test_idempotent_mount(base_mountpoint, alice_user_fs, event_bus, manua
 async def test_work_within_logged_core(base_mountpoint, core_config, alice, tmpdir):
     core_config = core_config.evolve(mountpoint_base_dir=base_mountpoint)
 
-    async with logged_core_factory(core_config, alice) as alice_core:
+    async with logged_client_factory(core_config, alice) as alice_core:
         manager = alice_core.mountpoint_manager
         wid = await alice_core.user_fs.workspace_create("w")
         workspace = alice_core.user_fs.get_workspace(wid)

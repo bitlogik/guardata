@@ -49,7 +49,7 @@ def get_default_mountpoint_base_dir(environ: dict) -> Path:
 
 
 @attr.s(slots=True, frozen=True, auto_attribs=True)
-class CoreConfig:
+class ClientConfig:
     config_dir: Path
     data_base_dir: Path
     cache_base_dir: Path
@@ -111,9 +111,9 @@ def config_factory(
     gui_show_confined: bool = False,
     environ: dict = {},
     **_,
-) -> CoreConfig:
+) -> ClientConfig:
     data_base_dir = data_base_dir or get_default_data_base_dir(environ)
-    core_config = CoreConfig(
+    core_config = ClientConfig(
         config_dir=config_dir or get_default_config_dir(environ),
         data_base_dir=data_base_dir,
         cache_base_dir=cache_base_dir or get_default_cache_base_dir(environ),
@@ -151,7 +151,7 @@ def config_factory(
     return core_config
 
 
-def load_config(config_dir: Path, **extra_config) -> CoreConfig:
+def load_config(config_dir: Path, **extra_config) -> ClientConfig:
 
     config_file = config_dir / "config.json"
     try:
@@ -188,11 +188,11 @@ def load_config(config_dir: Path, **extra_config) -> CoreConfig:
     return config_factory(config_dir=config_dir, **data_conf, **extra_config, environ=os.environ)
 
 
-def reload_config(config: CoreConfig) -> CoreConfig:
+def reload_config(config: ClientConfig) -> ClientConfig:
     return load_config(config.config_dir, debug=config.debug)
 
 
-def save_config(config: CoreConfig):
+def save_config(config: ClientConfig):
     config_path = config.config_dir
     config_path.mkdir(mode=0o700, parents=True, exist_ok=True)
     config_path /= "config.json"

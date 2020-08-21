@@ -8,7 +8,7 @@ from pendulum import Pendulum, parse as pendulum_parse
 
 from guardata.utils import trio_run
 from guardata.cli_utils import cli_exception_handler, generate_not_available_cmd
-from guardata.client import logged_core_factory
+from guardata.client import logged_client_factory
 from guardata.client.cli.utils import core_config_and_device_options, core_config_options
 
 try:
@@ -34,7 +34,7 @@ else:
 
 async def _run_mountpoint(config, device, timestamp: Pendulum = None):
     config = config.evolve(mountpoint_enabled=True)
-    async with logged_core_factory(config, device):
+    async with logged_client_factory(config, device):
         display_device = click.style(device.device_id, fg="yellow")
         mountpoint_display = click.style(str(config.mountpoint_base_dir.absolute()), fg="yellow")
         click.echo(f"{display_device}'s drive mounted at {mountpoint_display}")

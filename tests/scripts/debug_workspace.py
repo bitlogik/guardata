@@ -10,7 +10,7 @@ from tqdm import tqdm
 from humanize import naturalsize
 
 from guardata.logging import configure_logging
-from guardata.client.logged_client import logged_core_factory
+from guardata.client.logged_client import logged_client_factory
 from guardata.client.types import FsPath
 from guardata.client.config import get_default_config_dir, load_config
 from guardata.client.local_device import list_available_devices, load_device_with_password
@@ -84,7 +84,7 @@ async def main():
     device = load_device_with_password(key_file, PASSWORD)
 
     # Log in
-    async with logged_core_factory(config, device) as client:
+    async with logged_client_factory(config, device) as client:
 
         # Get workspace
         user_manifest = client.user_fs.get_user_manifest()

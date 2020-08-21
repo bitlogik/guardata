@@ -25,9 +25,9 @@ from pathlib import Path
 import sqlite3
 
 from guardata.monitoring import TaskMonitoringInstrument
-from guardata.client import CoreConfig
+from guardata.client import ClientConfig
 from guardata.client.types import BackendAddr
-from guardata.client.logged_client import logged_core_factory
+from guardata.client.logged_client import logged_client_factory
 from guardata.client.backend_connection import BackendConnStatus
 from guardata.client.mountpoint.manager import get_mountpoint_runner
 from guardata.client.fs.storage import LocalDatabase, local_database, UserStorage
@@ -684,7 +684,7 @@ async def running_backend(server_factory, backend_addr, backend, running_backend
 @pytest.fixture
 def core_config(tmpdir):
     tmpdir = Path(tmpdir)
-    return CoreConfig(
+    return ClientConfig(
         config_dir=tmpdir / "config",
         cache_base_dir=tmpdir / "cache",
         data_base_dir=tmpdir / "data",
@@ -709,7 +709,7 @@ def core_factory(
                 await initialize_userfs_storage_v1(storage)
 
         with event_bus.listen() as spy:
-            async with logged_core_factory(core_config, device, event_bus) as client:
+            async with logged_client_factory(core_config, device, event_bus) as client:
                 # On startup client is always considered offline.
                 # Hence we risk concurrency issues if the connection to backend
                 # switches online concurrently with the test.
