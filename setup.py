@@ -244,8 +244,6 @@ requirements = [
     "click==7.0",
     "msgpack==0.6.0",
     "wsproto==0.15.0",
-    # Can use marshmallow or the toasted flavour as you like ;-)
-    # "marshmallow==2.14.0",
     "toastedmarshmallow==0.2.6",
     "pendulum==1.3.1",
     "PyNaCl==1.4.0",
@@ -259,10 +257,17 @@ requirements = [
     "async_exit_stack==1.0.1",
     "outcome==1.0.0",
     "packaging==20.4",
+    *PYQT_DEPS,
+    BABEL_DEP,
+    'fusepy==3.0.1;platform_system=="Linux"',
+    'winfspy==0.8.0;platform_system=="Windows"',
+    "zxcvbn==4.4.27",
+    "psutil==5.6.3",
 ]
 
 
 test_requirements = [
+    "jinja2==2.11.2",
     "pytest==5.4.3",
     "pytest-cov==2.10.0",
     "pytest-xdist==1.32.0",
@@ -272,11 +277,12 @@ test_requirements = [
     "hypothesis==5.3.0",
     "hypothesis-trio==0.5.0",
     "trustme==0.6.0",
-    # Winfsptest requirements
-    # We can't use `winfspy[test]` because of some pip limitations
-    # - see pip issues #7096/#6239/#4391/#988
-    # Looking forward to the new pip dependency resolver!
     'pywin32==227;platform_system=="Windows"',
+    "pbr==4.0.2",
+    "python_http_client>=3.2.1",
+    "starkbank-ecdsa>=1.0.0",
+    "triopg==0.3.0",
+    "trio-asyncio==0.11.0",
 ]
 
 
@@ -284,28 +290,6 @@ PYQT_DEPS = ["PyQt5==5.14.2", "pyqt5-sip==12.8.0"]
 BABEL_DEP = "Babel==2.6.0"
 WHEEL_DEP = "wheel==0.34.2"
 extra_requirements = {
-    "client": [
-        *PYQT_DEPS,
-        BABEL_DEP,
-        'fusepy==3.0.1;platform_system=="Linux"',
-        'winfspy==0.8.0;platform_system=="Windows"',
-        "zxcvbn==4.4.27",
-        "psutil==5.6.3",
-    ],
-    "backend": [
-        "jinja2==2.11.2",
-        # PostgreSQL
-        "triopg==0.3.0",
-        "trio-asyncio==0.11.0",
-        # S3
-        "boto3==1.12.34",
-        "botocore==1.15.34",
-        # Swift
-        "python-swiftclient==3.5.0",
-        "pbr==4.0.2",
-        "python_http_client>=3.2.1",
-        "starkbank-ecdsa>=1.0.0",
-    ],
     "dev": test_requirements,
 }
 extra_requirements["all"] = sum(extra_requirements.values(), [])
