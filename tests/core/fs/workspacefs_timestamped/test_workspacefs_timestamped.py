@@ -3,8 +3,8 @@
 import pytest
 from unittest.mock import ANY
 
-from guardata.core.types import FsPath
-from guardata.core.fs.exceptions import FSWorkspaceTimestampedTooEarly
+from guardata.client.types import FsPath
+from guardata.client.fs.exceptions import FSWorkspaceTimestampedTooEarly
 
 
 @pytest.mark.trio

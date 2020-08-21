@@ -4,8 +4,8 @@ import pytest
 from pendulum import Pendulum
 from unittest.mock import ANY
 
-from guardata.core.types import EntryID
-from guardata.core.fs import (
+from guardata.client.types import EntryID
+from guardata.client.fs import (
     FSError,
     FSWorkspaceNotFoundError,
     FSWorkspaceNotInMaintenance,

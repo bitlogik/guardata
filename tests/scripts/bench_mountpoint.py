@@ -54,7 +54,7 @@ def keep_running_cmd(cmd):
 def main():
     workdir = Path(mkdtemp(prefix="parsec-bench-"))
     print(f"Workdir: {workdir}")
-    confdir = workdir / "core"
+    confdir = workdir / "client"
     mountdir = workdir / "mountpoint"
     confdir.mkdir(exist_ok=True)
     mountdir.mkdir(exist_ok=True)
@@ -64,23 +64,23 @@ def main():
         backend_addr = f"parsec://127.0.0.1:{PORT}?no_ssl=true"
 
         out = run_cmd(
-            f"{GUARDATA_CLI} core create_organization {ORGNAME}"
+            f"{GUARDATA_CLI} client create_organization {ORGNAME}"
             f" --addr={backend_addr} --administration-token={TOKEN}"
         )
 
         boostrap_addr = out.stdout.decode().split("Bootstrap organization url: ")[-1].strip()
         out = run_cmd(
-            f"{GUARDATA_CLI} core bootstrap_organization {DEVICE}"
+            f"{GUARDATA_CLI} client bootstrap_organization {DEVICE}"
             f" --addr={boostrap_addr} --config-dir={confdir} --password={PASSWORD}"
         )
 
         out = run_cmd(
-            f"{GUARDATA_CLI} core create_workspace w1"
+            f"{GUARDATA_CLI} client create_workspace w1"
             f" --config-dir={confdir} --device={DEVICE} --password={PASSWORD}"
         )
 
         with keep_running_cmd(
-            f"{GUARDATA_PROFILE_CLI} core run -l INFO"
+            f"{GUARDATA_PROFILE_CLI} client run -l INFO"
             f" --device={DEVICE} --password={PASSWORD} --mountpoint={mountdir} --config-dir={confdir}"
         ):
 

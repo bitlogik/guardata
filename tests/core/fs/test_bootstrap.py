@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 import pytest
 from pendulum import Pendulum
 from unittest.mock import ANY

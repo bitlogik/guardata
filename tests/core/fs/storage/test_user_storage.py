@@ -4,8 +4,8 @@ from pathlib import Path
 
 import pytest
 
-from guardata.core.fs.storage import UserStorage
-from guardata.core.types import LocalUserManifest, EntryID
+from guardata.client.fs.storage import UserStorage
+from guardata.client.types import LocalUserManifest, EntryID
 
 
 @pytest.fixture

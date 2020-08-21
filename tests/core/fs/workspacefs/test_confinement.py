@@ -3,7 +3,7 @@
 import re
 import pytest
 
-from guardata.core.types import FsPath
+from guardata.client.types import FsPath
 from tests.common import create_shared_workspace
 
 

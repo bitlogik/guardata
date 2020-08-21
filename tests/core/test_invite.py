@@ -5,9 +5,9 @@ import trio
 
 from guardata.api.data import UserProfile
 from guardata.api.protocol import HumanHandle, InvitationType
-from guardata.core.backend_connection import backend_invited_cmds_factory
-from guardata.core.types import BackendInvitationAddr, LocalDevice, WorkspaceRole
-from guardata.core.invite import (
+from guardata.client.backend_connection import backend_invited_cmds_factory
+from guardata.client.types import BackendInvitationAddr, LocalDevice, WorkspaceRole
+from guardata.client.invite import (
     InvitePeerResetError,
     claimer_retrieve_info,
     DeviceClaimInitialCtx,

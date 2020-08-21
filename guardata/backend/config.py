@@ -3,7 +3,7 @@
 import attr
 from typing import List, Optional
 
-from guardata.core.types import BackendAddr
+from guardata.client.types import BackendAddr
 
 
 class BaseBlockStoreConfig:

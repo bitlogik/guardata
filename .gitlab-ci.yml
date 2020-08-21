@@ -79,7 +79,7 @@ pip-build:
   script:
     - source venv_test/bin/activate
     - pip3 install -r pre-requirements.txt
-    - pip3 install $(ls dist/guardata-*.whl)[core]
+    - pip3 install $(ls dist/guardata-*.whl)[client]
     - mkdir empty
     - cd empty
     - guardata --version

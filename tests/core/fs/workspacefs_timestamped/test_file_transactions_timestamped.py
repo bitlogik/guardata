@@ -2,8 +2,8 @@
 
 import pytest
 
-from guardata.core.types import FsPath
-from guardata.core.fs import FSError, FSInvalidFileDescriptor
+from guardata.client.types import FsPath
+from guardata.client.fs import FSError, FSInvalidFileDescriptor
 
 
 @pytest.mark.trio

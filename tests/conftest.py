@@ -1,7 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS - 2020 BitLogiK
 
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 import pytest
 import os
 import re
@@ -25,12 +25,12 @@ from pathlib import Path
 import sqlite3
 
 from guardata.monitoring import TaskMonitoringInstrument
-from guardata.core import CoreConfig
-from guardata.core.types import BackendAddr
-from guardata.core.logged_core import logged_core_factory
-from guardata.core.backend_connection import BackendConnStatus
-from guardata.core.mountpoint.manager import get_mountpoint_runner
-from guardata.core.fs.storage import LocalDatabase, local_database, UserStorage
+from guardata.client import CoreConfig
+from guardata.client.types import BackendAddr
+from guardata.client.logged_core import logged_core_factory
+from guardata.client.backend_connection import BackendConnStatus
+from guardata.client.mountpoint.manager import get_mountpoint_runner
+from guardata.client.fs.storage import LocalDatabase, local_database, UserStorage
 
 from guardata.backend import backend_app_factory
 from guardata.backend.config import (
@@ -703,14 +703,14 @@ def core_factory(
 
         if not user_manifest_in_v0:
             # Create a storage just for this operation (the underlying database
-            # will be reused by the core's storage thanks to `persistent_mockup`)
+            # will be reused by the client's storage thanks to `persistent_mockup`)
             path = core_config.data_base_dir / device.slug
             async with UserStorage.run(device=device, path=path) as storage:
                 await initialize_userfs_storage_v1(storage)
 
         with event_bus.listen() as spy:
-            async with logged_core_factory(core_config, device, event_bus) as core:
-                # On startup core is always considered offline.
+            async with logged_core_factory(core_config, device, event_bus) as client:
+                # On startup client is always considered offline.
                 # Hence we risk concurrency issues if the connection to backend
                 # switches online concurrently with the test.
                 if "running_backend" in request.fixturenames:
@@ -718,32 +718,32 @@ def core_factory(
                         CoreEvent.BACKEND_CONNECTION_CHANGED,
                         {"status": BackendConnStatus.READY, "status_exc": spy.ANY},
                     )
-                assert core.are_monitors_idle()
+                assert client.are_monitors_idle()
 
-                yield core
+                yield client
 
     return _core_factory
 
 
 @pytest.fixture
 async def alice_core(core_factory, alice):
-    async with core_factory(alice) as core:
-        yield core
+    async with core_factory(alice) as client:
+        yield client
 
 
 @pytest.fixture
 async def alice2_core(core_factory, alice2):
-    async with core_factory(alice2) as core:
-        yield core
+    async with core_factory(alice2) as client:
+        yield client
 
 
 @pytest.fixture
 async def adam_core(core_factory, adam):
-    async with core_factory(adam) as core:
-        yield core
+    async with core_factory(adam) as client:
+        yield client
 
 
 @pytest.fixture
 async def bob_core(core_factory, bob):
-    async with core_factory(bob) as core:
-        yield core
+    async with core_factory(bob) as client:
+        yield client

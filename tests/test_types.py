@@ -4,7 +4,7 @@ import pytest
 
 from guardata.api.protocol import DeviceID, UserID, DeviceName, OrganizationID
 from guardata.crypto import SigningKey, PrivateKey, SecretKey, export_root_verify_key
-from guardata.core.types import (
+from guardata.client.types import (
     BackendAddr,
     BackendOrganizationAddr,
     BackendOrganizationBootstrapAddr,

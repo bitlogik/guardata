@@ -8,17 +8,17 @@ from async_generator import asynccontextmanager
 from pendulum import now as pendulum_now
 
 from guardata.utils import start_task
-from guardata.core.gui.lang import translate
+from guardata.client.gui.lang import translate
 from guardata.api.protocol import InvitationType, HumanHandle, InvitationDeletedReason
-from guardata.core.types import BackendInvitationAddr
-from guardata.core.backend_connection import backend_invited_cmds_factory
-from guardata.core.invite import claimer_retrieve_info
-from guardata.core.gui.greet_device_widget import (
+from guardata.client.types import BackendInvitationAddr
+from guardata.client.backend_connection import backend_invited_cmds_factory
+from guardata.client.invite import claimer_retrieve_info
+from guardata.client.gui.greet_device_widget import (
     GreetDeviceCodeExchangeWidget,
     GreetDeviceInstructionsWidget,
     GreetDeviceWidget,
 )
-from guardata.core.gui.devices_widget import DeviceButton
+from guardata.client.gui.devices_widget import DeviceButton
 
 from tests.common import customize_fixtures
 
@@ -26,9 +26,9 @@ from tests.common import customize_fixtures
 @pytest.fixture
 def catch_greet_device_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "guardata.core.gui.greet_device_widget.GreetDeviceCodeExchangeWidget",
-        "guardata.core.gui.greet_device_widget.GreetDeviceInstructionsWidget",
-        "guardata.core.gui.greet_device_widget.GreetDeviceWidget",
+        "guardata.client.gui.greet_device_widget.GreetDeviceCodeExchangeWidget",
+        "guardata.client.gui.greet_device_widget.GreetDeviceInstructionsWidget",
+        "guardata.client.gui.greet_device_widget.GreetDeviceWidget",
     )
 
 
@@ -73,7 +73,7 @@ def GreetDeviceTestBed(
                         await self.claimer_claim_task.cancel_and_join()
 
         async def bootstrap(self):
-            author = logged_gui.test_get_central_widget().core.device
+            author = logged_gui.test_get_central_widget().client.device
             # Create new invitation
 
             invitation = await backend.invite.new_for_device(

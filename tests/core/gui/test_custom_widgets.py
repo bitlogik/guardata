@@ -2,7 +2,7 @@
 
 import pytest
 
-from guardata.core.gui import custom_widgets
+from guardata.client.gui import custom_widgets
 
 
 @pytest.mark.gui

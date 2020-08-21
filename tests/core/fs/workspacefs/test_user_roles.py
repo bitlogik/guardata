@@ -2,8 +2,8 @@
 
 import pytest
 
-from guardata.core.types import WorkspaceRole
-from guardata.core.fs import FSBackendOfflineError
+from guardata.client.types import WorkspaceRole
+from guardata.client.fs import FSBackendOfflineError
 
 
 @pytest.mark.trio

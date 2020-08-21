@@ -59,16 +59,16 @@ target/
 random_seed
 
 # PyQt resource bundle, automatically generated
-guardata/core/gui/_resources_rc.py
+guardata/client/gui/_resources_rc.py
 
 # PyQtforms, automatically generated
-guardata/core/gui/ui/*.py
+guardata/client/gui/ui/*.py
 
 # QtCreator temporary files
 *.ui.autosave
 
 # History html file, automatically generated
-guardata/core/gui/rc/generated_misc/
+guardata/client/gui/rc/generated_misc/
 
 # Temporary files
 *~

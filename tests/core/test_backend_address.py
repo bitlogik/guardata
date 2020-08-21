@@ -3,7 +3,7 @@
 import pytest
 
 from guardata.api.protocol import InvitationType
-from guardata.core.types import (
+from guardata.client.types import (
     BackendAddr,
     BackendOrganizationAddr,
     BackendOrganizationBootstrapAddr,

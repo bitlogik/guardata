@@ -12,10 +12,10 @@ from hypothesis_trio.stateful import (
 )
 from hypothesis import strategies as st
 
-from guardata.core.types import EntryID, LocalFileManifest, Chunk
-from guardata.core.fs.storage import WorkspaceStorage
-from guardata.core.fs.workspacefs.file_transactions import FSInvalidFileDescriptor
-from guardata.core.fs.exceptions import FSRemoteBlockNotFound
+from guardata.client.types import EntryID, LocalFileManifest, Chunk
+from guardata.client.fs.storage import WorkspaceStorage
+from guardata.client.fs.workspacefs.file_transactions import FSInvalidFileDescriptor
+from guardata.client.fs.exceptions import FSRemoteBlockNotFound
 
 from tests.common import freeze_time, call_with_control
 

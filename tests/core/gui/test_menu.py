@@ -3,7 +3,7 @@
 import pytest
 from PyQt5 import QtCore
 
-from guardata.core.gui.menu_widget import MenuWidget
+from guardata.client.gui.menu_widget import MenuWidget
 
 
 @pytest.mark.gui

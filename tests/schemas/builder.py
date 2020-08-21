@@ -11,8 +11,8 @@ from guardata.api.data.base import BaseData, BaseAPIData, BaseSignedData, BaseAP
 from guardata.api.data.manifest import BaseManifest
 from guardata.api.data.message import BaseMessageContent
 
-from guardata.core.types.base import BaseLocalData
-from guardata.core.types.manifest import BaseLocalManifest
+from guardata.client.types.base import BaseLocalData
+from guardata.client.types.manifest import BaseLocalManifest
 
 
 _SERIALIZER_TO_STR = {
@@ -90,7 +90,7 @@ def collect_data_classes_from_module(mod):
             continue
         # Ignore imported classes (avoid to populate current module collection
         # with extenal imported schema.
-        # Example: Avoid to add imported api schemas while generating guardata.core.types)
+        # Example: Avoid to add imported api schemas while generating guardata.client.types)
         if not item.__module__.startswith(mod.__name__):
             continue
         data_classes.append(item)
@@ -105,9 +105,9 @@ def generate_api_data_specs():
 
 
 def generate_core_data_specs():
-    import guardata.core.types
+    import guardata.client.types
 
-    package = guardata.core.types
+    package = guardata.client.types
 
     data_classes = set()
     for submod_info in pkgutil.walk_packages(package.__path__, prefix=f"{package.__name__}."):

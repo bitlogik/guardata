@@ -20,7 +20,7 @@ from guardata.api.data import (
     RevokedUserCertificateContent,
     DeviceCertificateContent,
 )
-from guardata.core.trustchain import TrustchainContext
+from guardata.client.trustchain import TrustchainContext
 
 
 @pytest.mark.slow

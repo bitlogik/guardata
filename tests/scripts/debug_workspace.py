@@ -10,10 +10,10 @@ from tqdm import tqdm
 from humanize import naturalsize
 
 from guardata.logging import configure_logging
-from guardata.core.logged_core import logged_core_factory
-from guardata.core.types import FsPath
-from guardata.core.config import get_default_config_dir, load_config
-from guardata.core.local_device import list_available_devices, load_device_with_password
+from guardata.client.logged_core import logged_core_factory
+from guardata.client.types import FsPath
+from guardata.client.config import get_default_config_dir, load_config
+from guardata.client.local_device import list_available_devices, load_device_with_password
 from guardata.test_utils import (
     make_workspace_dir_inconsistent as make_workspace_dir_inconsistent_helper,
     make_workspace_dir_complex_versions as make_workspace_dir_complex_versions_helper,
@@ -84,12 +84,12 @@ async def main():
     device = load_device_with_password(key_file, PASSWORD)
 
     # Log in
-    async with logged_core_factory(config, device) as core:
+    async with logged_core_factory(config, device) as client:
 
         # Get workspace
-        user_manifest = core.user_fs.get_user_manifest()
+        user_manifest = client.user_fs.get_user_manifest()
         workspace_entry = user_manifest.workspaces[0]
-        workspace = core.user_fs.get_workspace(workspace_entry.id)
+        workspace = client.user_fs.get_workspace(workspace_entry.id)
 
         # await make_workspace_dir_inconsistent(device, workspace, "/bar")
         await make_workspace_dir_simple_versions(device, workspace, "/foo")

@@ -4,17 +4,17 @@ import pytest
 
 from PyQt5 import QtCore
 
-from guardata.core.local_device import save_device_with_password
+from guardata.client.local_device import save_device_with_password
 
-from guardata.core.gui.workspace_button import WorkspaceButton
-from guardata.core.gui.lang import translate
-from guardata.core.gui.login_widget import LoginPasswordInputWidget
+from guardata.client.gui.workspace_button import WorkspaceButton
+from guardata.client.gui.lang import translate
+from guardata.client.gui.login_widget import LoginPasswordInputWidget
 
 
 @pytest.fixture
 def catch_share_workspace_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "guardata.core.gui.workspace_sharing_widget.WorkspaceSharingWidget"
+        "guardata.client.gui.workspace_sharing_widget.WorkspaceSharingWidget"
     )
 
 
@@ -25,7 +25,7 @@ async def gui_workspace_sharing(
     w_w = await logged_gui.test_switch_to_workspaces_widget()
 
     monkeypatch.setattr(
-        "guardata.core.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: ("Workspace")
+        "guardata.client.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: ("Workspace")
     )
     await aqtbot.mouse_click(w_w.button_add_workspace, QtCore.Qt.LeftButton)
 

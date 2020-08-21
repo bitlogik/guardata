@@ -6,7 +6,7 @@ from hypothesis import strategies as st
 from hypothesis_trio.stateful import initialize, rule, Bundle
 from string import ascii_lowercase
 
-from guardata.core.fs import FSWorkspaceNotFoundError
+from guardata.client.fs import FSWorkspaceNotFoundError
 
 
 # The point is not to find breaking filenames here, so keep it simple

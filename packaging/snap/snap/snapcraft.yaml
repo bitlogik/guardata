@@ -27,14 +27,14 @@ parts:
       chmod 755 guardata
       chmod 755 guardata-cli
 
-  guardata-core:
+  guardata-client:
     plugin: python
     python-version: python3
     source: "./src"
     source-type: local
     override-pull: |
       snapcraftctl pull
-      sed -i "s#install_requires=requirements#install_requires=requirements + extra_requirements['core']#g" setup.py
+      sed -i "s#install_requires=requirements#install_requires=requirements + extra_requirements['client']#g" setup.py
     stage-packages:
       # fuse package contains fusermount which is sometime needed by libfuse2
       # (see: https://github.com/Scille/parsec-cloud/issues/1253)

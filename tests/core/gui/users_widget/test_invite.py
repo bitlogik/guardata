@@ -5,8 +5,8 @@ import pytest
 # from unittest.mock import ANY
 from PyQt5 import QtCore
 
-# from guardata.core.gui.users_widget import UserInvitationButton
-from guardata.core.gui.lang import translate as _
+# from guardata.client.gui.users_widget import UserInvitationButton
+from guardata.client.gui.lang import translate as _
 
 from tests.common import customize_fixtures
 
@@ -23,7 +23,7 @@ async def test_invite_user(
     assert u_w.layout_users.count() == 3
 
     monkeypatch.setattr(
-        "guardata.core.gui.users_widget.get_text_input",
+        "guardata.client.gui.users_widget.get_text_input",
         lambda *args, **kwargs: "hubert.farnsworth@pe.com",
     )
 
@@ -64,7 +64,7 @@ async def test_revoke_user(
     assert bob_w.user_info.is_revoked is False
 
     monkeypatch.setattr(
-        "guardata.core.gui.users_widget.ask_question",
+        "guardata.client.gui.users_widget.ask_question",
         lambda *args: _("ACTION_USER_REVOCATION_CONFIRM"),
     )
 
@@ -110,7 +110,7 @@ async def test_revoke_user_not_allowed(
     # TODO: we should instead check that the menu giving access to revocation button is hidden...
 
     monkeypatch.setattr(
-        "guardata.core.gui.users_widget.ask_question",
+        "guardata.client.gui.users_widget.ask_question",
         lambda *args: _("ACTION_USER_REVOCATION_CONFIRM"),
     )
 
@@ -140,9 +140,9 @@ async def test_cancel_user_invitation(
     email = "i@like.coffee"
 
     # Patch dialogs
-    monkeypatch.setattr("guardata.core.gui.users_widget.get_text_input", lambda *x, **y: email)
+    monkeypatch.setattr("guardata.client.gui.users_widget.get_text_input", lambda *x, **y: email)
     monkeypatch.setattr(
-        "guardata.core.gui.users_widget.ask_question",
+        "guardata.client.gui.users_widget.ask_question",
         lambda *x, **y: _("TEXT_USER_INVITE_CANCEL_INVITE_ACCEPT"),
     )
     u_w = await logged_gui.test_switch_to_users_widget()

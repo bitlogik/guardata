@@ -14,18 +14,18 @@ from PyQt5 import QtCore
 
 from guardata.event_bus import EventBus
 from guardata import __version__ as guardata_version
-from guardata.core.local_device import save_device_with_password
-from guardata.core.gui.main_window import MainWindow
-from guardata.core.gui.workspaces_widget import WorkspaceButton
-from guardata.core.gui.trio_thread import QtToTrioJobScheduler
-from guardata.core.gui.login_widget import (
+from guardata.client.local_device import save_device_with_password
+from guardata.client.gui.main_window import MainWindow
+from guardata.client.gui.workspaces_widget import WorkspaceButton
+from guardata.client.gui.trio_thread import QtToTrioJobScheduler
+from guardata.client.gui.login_widget import (
     LoginWidget,
     LoginPasswordInputWidget,
     LoginAccountsWidget,
 )
-from guardata.core.gui.central_widget import CentralWidget
-from guardata.core.gui.lang import switch_language
-from guardata.core.gui.guardata_application import guardataApp
+from guardata.client.gui.central_widget import CentralWidget
+from guardata.client.gui.lang import switch_language
+from guardata.client.gui.guardata_application import guardataApp
 
 
 class ThreadedTrioTestRunner:
@@ -235,7 +235,7 @@ def autoclose_dialog(monkeypatch):
             spy.dialogs.append((dialog.label_title.text(), dialog.center_widget))
 
     monkeypatch.setattr(
-        "guardata.core.gui.custom_dialogs.GreyedDialog.exec_", _dialog_exec, raising=False
+        "guardata.client.gui.custom_dialogs.GreyedDialog.exec_", _dialog_exec, raising=False
     )
     return spy
 
@@ -298,7 +298,7 @@ def gui_factory(
 
             switch_language(core_config, "en")
             monkeypatch.setattr(
-                "guardata.core.gui.main_window.list_available_devices",
+                "guardata.client.gui.main_window.list_available_devices",
                 lambda *args, **kwargs: (["a"]),
             )
             main_w = testing_main_window_cls(
@@ -420,7 +420,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             return mount_widget.files_widget
 
         def test_get_core(self):
-            return self.test_get_central_widget().core
+            return self.test_get_central_widget().client
 
         async def test_logout_and_switch_to_login_widget(self):
             central_widget = self.test_get_central_widget()

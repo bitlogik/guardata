@@ -5,15 +5,15 @@ import pytest
 from PyQt5 import QtCore
 
 from guardata.api.protocol import OrganizationID
-from guardata.core.types import BackendOrganizationBootstrapAddr
-from guardata.core.invite.exceptions import InviteNotFoundError, InviteAlreadyUsedError
-from guardata.core.gui.bootstrap_organization_widget import BootstrapOrganizationWidget
+from guardata.client.types import BackendOrganizationBootstrapAddr
+from guardata.client.invite.exceptions import InviteNotFoundError, InviteAlreadyUsedError
+from guardata.client.gui.bootstrap_organization_widget import BootstrapOrganizationWidget
 
 
 @pytest.fixture
 def catch_bootstrap_organization_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "guardata.core.gui.bootstrap_organization_widget.BootstrapOrganizationWidget"
+        "guardata.client.gui.bootstrap_organization_widget.BootstrapOrganizationWidget"
     )
 
 
@@ -148,7 +148,7 @@ async def test_bootstrap_organization_invite_already_used(
         raise InviteAlreadyUsedError()
 
     monkeypatch.setattr(
-        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization",
+        "guardata.client.gui.bootstrap_organization_widget.bootstrap_organization",
         _raise_already_used,
     )
 
@@ -177,7 +177,7 @@ async def test_bootstrap_organization_invite_not_found(
         raise InviteNotFoundError()
 
     monkeypatch.setattr(
-        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization",
+        "guardata.client.gui.bootstrap_organization_widget.bootstrap_organization",
         _raise_already_used,
     )
 
@@ -206,7 +206,7 @@ async def test_bootstrap_organization_unknown_error(
         raise RuntimeError()
 
     monkeypatch.setattr(
-        "guardata.core.gui.bootstrap_organization_widget.bootstrap_organization",
+        "guardata.client.gui.bootstrap_organization_widget.bootstrap_organization",
         _raise_already_used,
     )
 

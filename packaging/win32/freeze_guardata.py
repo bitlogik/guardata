@@ -64,7 +64,7 @@ def main(guardata_source):
     if not WHEELS_DIR.is_dir():
         print("### Generate wheels from . and dependencies ###")
         run(
-            f"{ TOOLS_VENV_DIR / 'Scripts/python' } -m pip wheel {guardata_source}[core] --wheel-dir {WHEELS_DIR}"
+            f"{ TOOLS_VENV_DIR / 'Scripts/python' } -m pip wheel {guardata_source}[client] --wheel-dir {WHEELS_DIR}"
         )
 
     # Now we actually generate the build target

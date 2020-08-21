@@ -2,7 +2,7 @@
 
 import pytest
 
-from guardata.core.gui.loading_widget import LoadingWidget
+from guardata.client.gui.loading_widget import LoadingWidget
 
 
 @pytest.mark.gui

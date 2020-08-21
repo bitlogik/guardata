@@ -4,14 +4,14 @@ import pytest
 import trio
 
 from guardata.api.protocol import APIV1_ANONYMOUS_CMDS
-from guardata.core.types import BackendOrganizationAddr
-from guardata.core.backend_connection import (
+from guardata.client.types import BackendOrganizationAddr
+from guardata.client.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     apiv1_backend_anonymous_cmds_factory,
 )
 
-from tests.core.backend_connection.common import ALL_CMDS
+from tests.client.backend_connection.common import ALL_CMDS
 
 
 @pytest.mark.trio

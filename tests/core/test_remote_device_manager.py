@@ -3,7 +3,7 @@
 import pytest
 from pendulum import Pendulum
 
-from guardata.core.remote_devices_manager import RemoteDevicesManagerBackendOfflineError
+from guardata.client.remote_devices_manager import RemoteDevicesManagerBackendOfflineError
 
 from tests.common import freeze_time
 

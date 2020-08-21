@@ -7,9 +7,9 @@ from unittest.mock import ANY
 
 from guardata.api.protocol import DeviceID, RealmRole
 from guardata.api.data import BaseManifest as BaseRemoteManifest
-from guardata.core.types import FsPath, EntryID
-from guardata.core.fs.exceptions import FSError, FSBackendOfflineError
-from guardata.core.fs.workspacefs.workspacefs import ReencryptionNeed
+from guardata.client.types import FsPath, EntryID
+from guardata.client.fs.exceptions import FSError, FSBackendOfflineError
+from guardata.client.fs.workspacefs.workspacefs import ReencryptionNeed
 
 
 @pytest.mark.trio

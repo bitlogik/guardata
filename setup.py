@@ -49,7 +49,7 @@ def fix_pyqt_import():
 
 
 class GeneratePyQtResourcesBundle(Command):
-    description = "Generates `guardata.core.gui._resource_rc` bundle module"
+    description = "Generates `guardata.client.gui._resource_rc` bundle module"
 
     user_options = []
 
@@ -64,16 +64,16 @@ class GeneratePyQtResourcesBundle(Command):
         try:
             from PyQt5.pyrcc_main import processResourceFile
 
-            self.announce("Generating `guardata.core.gui._resources_rc`", level=distutils.log.INFO)
+            self.announce("Generating `guardata.client.gui._resources_rc`", level=distutils.log.INFO)
             processResourceFile(
-                ["guardata/core/gui/rc/resources.qrc"], "guardata/core/gui/_resources_rc.py", False
+                ["guardata/client/gui/rc/resources.qrc"], "guardata/client/gui/_resources_rc.py", False
             )
         except ImportError:
-            print("PyQt5 not installed, skipping `guardata.core.gui._resources_rc` generation.")
+            print("PyQt5 not installed, skipping `guardata.client.gui._resources_rc` generation.")
 
 
 class GeneratePyQtForms(Command):
-    description = "Generates `guardata.core.ui.*` forms module"
+    description = "Generates `guardata.client.ui.*` forms module"
 
     user_options = []
 
@@ -92,21 +92,21 @@ class GeneratePyQtForms(Command):
         try:
             from PyQt5.uic.driver import Driver
         except ImportError:
-            print("PyQt5 not installed, skipping `guardata.core.gui.ui` generation.")
+            print("PyQt5 not installed, skipping `guardata.client.gui.ui` generation.")
             return
 
-        self.announce("Generating `guardata.core.gui.ui`", level=distutils.log.INFO)
+        self.announce("Generating `guardata.client.gui.ui`", level=distutils.log.INFO)
         Options = namedtuple(
             "Options",
             ["output", "import_from", "debug", "preview", "execute", "indent", "resource_suffix"],
         )
-        ui_dir = pathlib.Path("guardata/core/gui/forms")
-        ui_path = "guardata/core/gui/ui"
+        ui_dir = pathlib.Path("guardata/client/gui/forms")
+        ui_path = "guardata/client/gui/ui"
         os.makedirs(ui_path, exist_ok=True)
         for f in ui_dir.iterdir():
             o = Options(
                 output=os.path.join(ui_path, "{}.py".format(f.stem)),
-                import_from="guardata.core.gui",
+                import_from="guardata.client.gui",
                 debug=False,
                 preview=False,
                 execute=False,
@@ -138,11 +138,11 @@ class ExtractTranslations(Command):
         try:
             from PyQt5.pylupdate_main import main as pylupdate_main
         except ImportError:
-            print("PyQt5 not installed, skipping `guardata.core.gui.ui` generation.")
+            print("PyQt5 not installed, skipping `guardata.client.gui.ui` generation.")
             return
 
         self.announce("Generating ui translation files", level=distutils.log.INFO)
-        ui_dir = pathlib.Path("guardata/core/gui")
+        ui_dir = pathlib.Path("guardata/client/gui")
         tr_dir = ui_dir / "tr"
         os.makedirs(tr_dir, exist_ok=True)
 
@@ -200,7 +200,7 @@ class CompileTranslations(Command):
         from babel.messages.frontend import CommandLineInterface
 
         self.announce("Compiling ui translation files", level=distutils.log.INFO)
-        ui_dir = pathlib.Path("guardata/core/gui")
+        ui_dir = pathlib.Path("guardata/client/gui")
         tr_dir = ui_dir / "tr"
         rc_dir = ui_dir / "rc" / "translations"
         os.makedirs(rc_dir, exist_ok=True)
@@ -287,7 +287,7 @@ BABEL_DEP = "Babel==2.6.0"
 WHEEL_DEP = "wheel==0.34.2"
 DOCUTILS_DEP = "docutils==0.15"
 extra_requirements = {
-    "core": [
+    "client": [
         *PYQT_DEPS,
         BABEL_DEP,
         'fusepy==3.0.1;platform_system=="Linux"',
@@ -335,12 +335,12 @@ setup(
         "generate_pyqt": build_py_with_pyqt,
         "build_py": build_py_with_pyqt,
     },
-    # Omitting GUI resources given they end up packaged in `guardata/core/gui/_resources_rc.py`
+    # Omitting GUI resources given they end up packaged in `guardata/client/gui/_resources_rc.py`
     package_data={
         "guardata.backend.postgresql.migrations": ["*.sql"],
         "guardata.backend.templates": ["*"],
         "guardata.backend.static": ["*"],
-        "guardata.core.resources": ["*.ico"],
+        "guardata.client.resources": ["*.ico"],
     },
     entry_points={
         "console_scripts": ["guardata = guardata.cli:cli"],

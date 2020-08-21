@@ -8,8 +8,8 @@ import pathlib
 import tempfile
 import subprocess
 
-from guardata.core.config import config_factory
-from guardata.core.local_device import list_available_devices
+from guardata.client.config import config_factory
+from guardata.client.local_device import list_available_devices
 
 
 def kill_local_backend(backend_port=6888):
@@ -57,7 +57,7 @@ def run_testenv():
         assert cache_path.exists()
         assert config_path.exists()
 
-        # Return a core configuration
+        # Return a client configuration
         yield config_factory(
             config_dir=config_path, data_base_dir=data_path, cache_base_dir=cache_path
         )

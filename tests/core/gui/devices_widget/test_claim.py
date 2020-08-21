@@ -8,10 +8,10 @@ from async_generator import asynccontextmanager
 from functools import partial
 
 from guardata.api.protocol import InvitationType, InvitationDeletedReason
-from guardata.core.types import BackendInvitationAddr
-from guardata.core.invite import DeviceGreetInitialCtx
-from guardata.core.gui.lang import translate
-from guardata.core.gui.claim_device_widget import (
+from guardata.client.types import BackendInvitationAddr
+from guardata.client.invite import DeviceGreetInitialCtx
+from guardata.client.gui.lang import translate
+from guardata.client.gui.claim_device_widget import (
     ClaimDeviceCodeExchangeWidget,
     ClaimDeviceProvideInfoWidget,
     ClaimDeviceInstructionsWidget,
@@ -22,10 +22,10 @@ from guardata.core.gui.claim_device_widget import (
 @pytest.fixture
 def catch_claim_device_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "guardata.core.gui.claim_device_widget.ClaimDeviceCodeExchangeWidget",
-        "guardata.core.gui.claim_device_widget.ClaimDeviceProvideInfoWidget",
-        "guardata.core.gui.claim_device_widget.ClaimDeviceInstructionsWidget",
-        "guardata.core.gui.claim_device_widget.ClaimDeviceWidget",
+        "guardata.client.gui.claim_device_widget.ClaimDeviceCodeExchangeWidget",
+        "guardata.client.gui.claim_device_widget.ClaimDeviceProvideInfoWidget",
+        "guardata.client.gui.claim_device_widget.ClaimDeviceInstructionsWidget",
+        "guardata.client.gui.claim_device_widget.ClaimDeviceWidget",
     )
 
 

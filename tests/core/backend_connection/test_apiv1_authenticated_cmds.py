@@ -12,14 +12,14 @@ from guardata.api.protocol import (
     APIV1_AUTHENTICATED_CMDS,
     APIEvent,
 )
-from guardata.core.types import BackendOrganizationAddr
-from guardata.core.backend_connection import (
+from guardata.client.types import BackendOrganizationAddr
+from guardata.client.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     apiv1_backend_authenticated_cmds_factory,
 )
 
-from tests.core.backend_connection.common import ALL_CMDS
+from tests.client.backend_connection.common import ALL_CMDS
 
 
 @pytest.mark.trio

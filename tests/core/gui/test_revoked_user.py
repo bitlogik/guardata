@@ -14,12 +14,12 @@ async def test_revoked_notification(
     central_widget = logged_gui.test_get_central_widget()
     assert central_widget is not None
 
-    # Revokation might come when the core is busy, or idle
+    # Revokation might come when the client is busy, or idle
     # We're testing this because the internal detection of the revokation might differ,
     # but we still want to make sure the dialog pops up properly
     # TODO: this parametrization could go directly to the logged_gui fixture
     if wait_idle_core:
-        await central_widget.core.wait_idle_monitors()
+        await central_widget.client.wait_idle_monitors()
 
     await backend.user.revoke_user(
         organization_id=alice.organization_id,

@@ -4,8 +4,8 @@
 import pytest
 from pendulum import Pendulum
 
-from guardata.core.fs import FSError
-from guardata.core.types import WorkspaceRole
+from guardata.client.fs import FSError
+from guardata.client.types import WorkspaceRole
 
 from tests.common import freeze_time
 

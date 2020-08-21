@@ -4,9 +4,9 @@ import pytest
 
 from PyQt5 import QtCore
 
-from guardata.core.types import WorkspaceRole, UserInfo
-from guardata.core.gui.workspace_button import WorkspaceButton
-from guardata.core.gui.lang import switch_language
+from guardata.client.types import WorkspaceRole, UserInfo
+from guardata.client.gui.workspace_button import WorkspaceButton
+from guardata.client.gui.lang import switch_language
 
 
 @pytest.fixture

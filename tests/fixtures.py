@@ -20,8 +20,8 @@ from guardata.api.data import (
 )
 from guardata.api.protocol import OrganizationID, UserID, DeviceID, HumanHandle, RealmRole
 from guardata.backend.backend_events import BackendEvent
-from guardata.core.types import LocalDevice, LocalUserManifest, BackendOrganizationBootstrapAddr
-from guardata.core.local_device import generate_new_device
+from guardata.client.types import LocalDevice, LocalUserManifest, BackendOrganizationBootstrapAddr
+from guardata.client.local_device import generate_new_device
 from guardata.backend.user import User as BackendUser, Device as BackendDevice
 from guardata.backend.realm import RealmGrantedRole
 

@@ -6,9 +6,9 @@ import os
 import subprocess
 from uuid import uuid4
 from pathlib import Path
-from guardata.core.ipcinterface import IPCCommand
+from guardata.client.ipcinterface import IPCCommand
 
-from guardata.core.ipcinterface import (
+from guardata.client.ipcinterface import (
     _install_win32_mutex,
     _install_posix_file_lock,
     run_ipc_server,
@@ -43,7 +43,7 @@ async def test_win32_mutex():
 # async def test_win32_mutex_interprocess():
 #     mutex_name = uuid4().hex
 #     python_cmd = f"""
-# from guardata.core.ipcinterface import _install_win32_mutex, IPCServerAlreadyRunning
+# from guardata.client.ipcinterface import _install_win32_mutex, IPCServerAlreadyRunning
 # try:
 #     with _install_win32_mutex("{mutex_name}"):
 #         pass
@@ -88,7 +88,7 @@ async def test_posix_file_lock_interprocess(tmpdir):
     file1 = Path(tmpdir / "1.lock")
     python_cmd = f"""
 from pathlib import Path
-from guardata.core.ipcinterface import _install_posix_file_lock, IPCServerAlreadyRunning
+from guardata.client.ipcinterface import _install_posix_file_lock, IPCServerAlreadyRunning
 try:
     with _install_posix_file_lock(Path("{file1}")):
         pass
@@ -135,7 +135,7 @@ async def test_ipc_server(tmpdir, monkeypatch):
             assert str(exc.value).startswith("Invalid message format:")
 
             # Force bad command to reach the server
-            monkeypatch.setattr("guardata.core.ipcinterface.cmd_req_serializer.dump", lambda x: x)
+            monkeypatch.setattr("guardata.client.ipcinterface.cmd_req_serializer.dump", lambda x: x)
             with pytest.raises(IPCServerBadResponse) as exc:
                 await send_to_ipc_server(file1, "dummy")
             assert exc.value.rep == {

@@ -5,14 +5,14 @@ import trio
 from uuid import uuid4
 
 from guardata.api.protocol import INVITED_CMDS, InvitationType
-from guardata.core.types import BackendInvitationAddr
-from guardata.core.backend_connection import (
+from guardata.client.types import BackendInvitationAddr
+from guardata.client.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     backend_invited_cmds_factory,
 )
 
-from tests.core.backend_connection.common import ALL_CMDS
+from tests.client.backend_connection.common import ALL_CMDS
 
 
 @pytest.fixture

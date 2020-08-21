@@ -3,7 +3,7 @@
 import pytest
 from pendulum import Pendulum
 
-from guardata.core.fs import FSError
+from guardata.client.fs import FSError
 
 
 @pytest.fixture

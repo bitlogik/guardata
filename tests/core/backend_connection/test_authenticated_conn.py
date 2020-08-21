@@ -5,13 +5,13 @@ import trio
 
 from guardata.backend.backend_events import BackendEvent
 from guardata.api.protocol import RealmRole
-from guardata.core.backend_connection import (
+from guardata.client.backend_connection import (
     BackendAuthenticatedConn,
     BackendConnStatus,
     BackendNotAvailable,
     BackendConnectionRefused,
 )
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 
 
 @pytest.fixture

@@ -2,7 +2,7 @@ include LICENSE
 include README.rst
 
 recursive-exclude guardata/backend *
-recursive-include guardata/core/resources *.ico
-recursive-include guardata/core/gui/forms *.ui
-recursive-include guardata/core/gui/tr *.po *.ts
-recursive-include guardata/core/gui/rc *.css *.html *.mo *.otf *.png *.qrc *.svg *.ttf
+recursive-include guardata/client/resources *.ico
+recursive-include guardata/client/gui/forms *.ui
+recursive-include guardata/client/gui/tr *.po *.ts
+recursive-include guardata/client/gui/rc *.css *.html *.mo *.otf *.png *.qrc *.svg *.ttf

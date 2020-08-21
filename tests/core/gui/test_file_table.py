@@ -6,8 +6,8 @@ import uuid
 
 from PyQt5 import QtCore
 
-from guardata.core.gui.file_table import FileTable
-from guardata.core.gui.lang import switch_language
+from guardata.client.gui.file_table import FileTable
+from guardata.client.gui.lang import switch_language
 
 
 @pytest.mark.gui

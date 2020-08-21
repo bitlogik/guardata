@@ -7,7 +7,7 @@ from PyQt5 import QtWidgets
 
 @pytest.fixture
 def catch_file_history_widget(widget_catcher_factory):
-    return widget_catcher_factory("guardata.core.gui.file_history_widget.FileHistoryWidget")
+    return widget_catcher_factory("guardata.client.gui.file_history_widget.FileHistoryWidget")
 
 
 @pytest.mark.gui
@@ -15,9 +15,9 @@ def catch_file_history_widget(widget_catcher_factory):
 async def test_file_history(
     aqtbot, running_backend, logged_gui, monkeypatch, autoclose_dialog, catch_file_history_widget
 ):
-    core = logged_gui.test_get_core()
-    wid = await core.user_fs.workspace_create("wksp1")
-    wfs = core.user_fs.get_workspace(wid)
+    client = logged_gui.test_get_core()
+    wid = await client.user_fs.workspace_create("wksp1")
+    wfs = client.user_fs.get_workspace(wid)
 
     w_w = logged_gui.test_get_workspaces_widget()
 

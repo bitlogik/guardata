@@ -6,13 +6,13 @@ from pendulum import Pendulum
 from unittest.mock import ANY
 
 from guardata.api.data import UserManifest
-from guardata.core.types import (
+from guardata.client.types import (
     WorkspaceEntry,
     WorkspaceRole,
     LocalUserManifest,
     LocalWorkspaceManifest,
 )
-from guardata.core.fs import FSWorkspaceNotFoundError, FSBackendOfflineError
+from guardata.client.fs import FSWorkspaceNotFoundError, FSBackendOfflineError
 
 from tests.common import freeze_time
 

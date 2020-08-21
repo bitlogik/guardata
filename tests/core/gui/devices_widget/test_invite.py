@@ -4,9 +4,9 @@ import pytest
 import trio
 from PyQt5 import QtCore
 
-from guardata.core.backend_connection import backend_invited_cmds_factory
-from guardata.core.invite import claimer_retrieve_info
-from guardata.core.gui.greet_device_widget import (
+from guardata.client.backend_connection import backend_invited_cmds_factory
+from guardata.client.invite import claimer_retrieve_info
+from guardata.client.gui.greet_device_widget import (
     GreetDeviceInstructionsWidget,
     GreetDeviceCodeExchangeWidget,
     GreetDeviceWidget,
@@ -18,9 +18,9 @@ from tests.common import customize_fixtures
 @pytest.fixture
 def catch_greet_device_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "guardata.core.gui.greet_device_widget.GreetDeviceInstructionsWidget",
-        "guardata.core.gui.greet_device_widget.GreetDeviceCodeExchangeWidget",
-        "guardata.core.gui.greet_device_widget.GreetDeviceWidget",
+        "guardata.client.gui.greet_device_widget.GreetDeviceInstructionsWidget",
+        "guardata.client.gui.greet_device_widget.GreetDeviceCodeExchangeWidget",
+        "guardata.client.gui.greet_device_widget.GreetDeviceWidget",
     )
 
 

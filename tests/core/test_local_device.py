@@ -10,8 +10,8 @@ from os import fspath
 from guardata.crypto import SigningKey
 from guardata.serde import packb, unpackb
 from guardata.api.protocol import OrganizationID, DeviceID, HumanHandle
-from guardata.core.types import LocalDevice
-from guardata.core.local_device import (
+from guardata.client.types import LocalDevice
+from guardata.client.local_device import (
     AvailableDevice,
     get_key_file,
     get_default_key_file,

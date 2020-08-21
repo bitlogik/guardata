@@ -8,7 +8,7 @@ from inspect import iscoroutinefunction
 from queue import Queue
 
 from guardata.utils import start_task
-from guardata.core.mountpoint import mountpoint_manager_factory
+from guardata.client.mountpoint import mountpoint_manager_factory
 
 
 @pytest.fixture

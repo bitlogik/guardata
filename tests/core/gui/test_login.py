@@ -3,8 +3,8 @@
 import pytest
 from PyQt5 import QtCore
 
-from guardata.core.local_device import save_device_with_password
-from guardata.core.gui.login_widget import (
+from guardata.client.local_device import save_device_with_password
+from guardata.client.gui.login_widget import (
     LoginPasswordInputWidget,
     LoginAccountsWidget,
     LoginNoDevicesWidget,

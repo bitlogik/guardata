@@ -10,7 +10,7 @@ Run `tests/scripts/run_testenv.sh --help` for more information.
 
 import pkg_resources
 
-# Make sure guardata is fully installed (core, backend, dev)
+# Make sure guardata is fully installed (client, backend, dev)
 pkg_resources.require("guardata[all]")
 
 import os
@@ -26,8 +26,8 @@ import psutil
 
 from guardata import __version__ as GUARDATA_VERSION
 from guardata.utils import trio_run
-from guardata.core.types import BackendAddr
-from guardata.core.config import get_default_config_dir
+from guardata.client.types import BackendAddr
+from guardata.client.config import get_default_config_dir
 from guardata.test_utils import initialize_test_organization
 
 
@@ -113,7 +113,7 @@ async def configure_mime_types():
         """\
 [Desktop Entry]
 Name=Parsec
-Exec=guardata core gui %u
+Exec=guardata client gui %u
 Type=Application
 Terminal=false
 StartupNotify=false
@@ -205,7 +205,7 @@ def main(**kwargs):
 
         \b
         $ source tests/scripts/run_testenv.sh
-        $ guardata core gui
+        $ guardata client gui
         # Connect as bob@laptop and register a new device called pc
         # Copy the URL
 
@@ -271,9 +271,9 @@ Using existing backend: {backend_address}
         f"""\
 Mount alice and bob drives using:
 
-    $ guardata core run -P {password} -D {alice_device.slughash[:3]}  # Alice
-    $ guardata core run -P {password} -D {other_alice_device.slughash[:3]}  # Alice 2nd device
-    $ guardata core run -P {password} -D {bob_device.slughash[:3]}  # Bob
+    $ guardata client run -P {password} -D {alice_device.slughash[:3]}  # Alice
+    $ guardata client run -P {password} -D {other_alice_device.slughash[:3]}  # Alice 2nd device
+    $ guardata client run -P {password} -D {bob_device.slughash[:3]}  # Bob
 """
     )
 

@@ -8,8 +8,8 @@ from collections import defaultdict
 from random import randrange, choice
 from string import ascii_lowercase
 
-from guardata.core.fs import FSError
-from guardata.core.types import WorkspaceRole
+from guardata.client.fs import FSError
+from guardata.client.types import WorkspaceRole
 
 
 FUZZ_PARALLELISM = 10
@@ -118,15 +118,15 @@ class SkipCommand(Exception):
     pass
 
 
-async def fuzzer(id, core, workspace, fs_state):
+async def fuzzer(id, client, workspace, fs_state):
     while True:
         try:
-            await _fuzzer_cmd(id, core, workspace, fs_state)
+            await _fuzzer_cmd(id, client, workspace, fs_state)
         except SkipCommand:
             fs_state.add_stat(id, "skipped command", "...")
 
 
-async def _fuzzer_cmd(id, core, workspace, fs_state):
+async def _fuzzer_cmd(id, client, workspace, fs_state):
     x = randrange(0, 100)
     await trio.sleep(x * 0.01)
 
@@ -229,7 +229,7 @@ async def _fuzzer_cmd(id, core, workspace, fs_state):
     else:
         path = fs_state.get_path()
         try:
-            await core.user_fs.workspace_share(path[1:], "bob", WorkspaceRole.OWNER)
+            await client.user_fs.workspace_share(path[1:], "bob", WorkspaceRole.OWNER)
             fs_state.add_stat(id, "share_ok", f"path={path}")
         except FSError as exc:
             fs_state.add_stat(id, "share_bad", f"path={path}, raised {exc!r}")

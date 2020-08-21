@@ -2,7 +2,7 @@
 
 import pytest
 
-from guardata.core.gui.color import StringToColor
+from guardata.client.gui.color import StringToColor
 
 
 @pytest.mark.gui

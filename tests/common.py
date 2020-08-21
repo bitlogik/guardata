@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 from unittest.mock import Mock
 from inspect import iscoroutinefunction
 from contextlib import ExitStack, contextmanager
@@ -9,9 +9,9 @@ import trio
 import attr
 import pendulum
 
-from guardata.core.types import WorkspaceRole
-from guardata.core.logged_core import LoggedCore
-from guardata.core.fs import UserFS
+from guardata.client.types import WorkspaceRole
+from guardata.client.logged_core import LoggedCore
+from guardata.client.fs import UserFS
 from guardata.api.transport import Transport, TransportError
 
 
@@ -159,16 +159,16 @@ async def create_shared_workspace(name, creator, *shared_with):
         for x in shared_with:
             if isinstance(x, LoggedCore):
                 user_fs = x.user_fs
-                core = x
+                client = x
                 shared_with_spies.append(stack.enter_context(x.event_bus.listen()))
             elif isinstance(x, UserFS):
                 user_fs = x
-                core = None
+                client = None
             else:
                 raise ValueError(f"{x!r} is not a {UserFS!r} or a {LoggedCore!r}")
             all_user_fss.append(user_fs)
             if user_fs.device.user_id != creator_user_fs.device.user_id:
-                shared_with_cores_and_user_fss.append((core, user_fs))
+                shared_with_cores_and_user_fss.append((client, user_fs))
 
         wid = await creator_user_fs.workspace_create(name)
         await creator_user_fs.sync()
@@ -179,7 +179,7 @@ async def create_shared_workspace(name, creator, *shared_with):
             await creator_user_fs.workspace_share(
                 wid, recipient_user_fs.device.user_id, WorkspaceRole.MANAGER
             )
-            # Don't try to double-cross core's message monitor !
+            # Don't try to double-cross client's message monitor !
             if not recipient_core:
                 await recipient_user_fs.process_last_messages()
 

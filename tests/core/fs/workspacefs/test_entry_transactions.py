@@ -18,10 +18,10 @@ from hypothesis_trio.stateful import (
 )
 from hypothesis import strategies as st
 
-from guardata.core.types import FsPath, EntryID
-from guardata.core.fs.utils import is_folder_manifest
-from guardata.core.fs.storage import WorkspaceStorage
-from guardata.core.fs.exceptions import FSRemoteManifestNotFound
+from guardata.client.types import FsPath, EntryID
+from guardata.client.fs.utils import is_folder_manifest
+from guardata.client.fs.storage import WorkspaceStorage
+from guardata.client.fs.exceptions import FSRemoteManifestNotFound
 
 from tests.common import freeze_time, call_with_control
 

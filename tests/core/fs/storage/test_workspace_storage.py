@@ -6,10 +6,10 @@ import pytest
 from pendulum import now
 
 from guardata.api.data.manifest import LOCAL_AUTHOR_LEGACY_PLACEHOLDER
-from guardata.core.fs.storage import WorkspaceStorage
-from guardata.core.fs import FSError, FSInvalidFileDescriptor
-from guardata.core.fs.exceptions import FSLocalMissError
-from guardata.core.types import (
+from guardata.client.fs.storage import WorkspaceStorage
+from guardata.client.fs import FSError, FSInvalidFileDescriptor
+from guardata.client.fs.exceptions import FSLocalMissError
+from guardata.client.types import (
     DEFAULT_BLOCK_SIZE,
     LocalUserManifest,
     LocalWorkspaceManifest,

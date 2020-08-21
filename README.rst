@@ -1,5 +1,5 @@
 
-.. image:: guardata/core/gui/rc/images/logos/guardata_vert.png
+.. image:: guardata/client/gui/rc/images/logos/guardata_vert.png
     :align: center
 
 # guardata

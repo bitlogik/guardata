@@ -3,8 +3,8 @@
 import pytest
 from pendulum import Pendulum
 
-from guardata.core.types import FsPath
-from guardata.core.fs.exceptions import FSLocalMissError
+from guardata.client.types import FsPath
+from guardata.client.fs.exceptions import FSLocalMissError
 
 
 @pytest.mark.trio

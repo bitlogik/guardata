@@ -4,12 +4,12 @@ import re
 import pytest
 
 from guardata.api.protocol import DeviceID
-from guardata.core.core_events import CoreEvent
-from guardata.core.types import FsPath, EntryID, Chunk, LocalFolderManifest, LocalFileManifest
+from guardata.client.core_events import CoreEvent
+from guardata.client.types import FsPath, EntryID, Chunk, LocalFolderManifest, LocalFileManifest
 
-from guardata.core.fs.workspacefs.sync_transactions import merge_manifests
-from guardata.core.fs.workspacefs.sync_transactions import merge_folder_children
-from guardata.core.fs.exceptions import FSFileConflictError
+from guardata.client.fs.workspacefs.sync_transactions import merge_manifests
+from guardata.client.fs.workspacefs.sync_transactions import merge_folder_children
+from guardata.client.fs.exceptions import FSFileConflictError
 
 
 empty_filter = re.compile(r"^\b$")

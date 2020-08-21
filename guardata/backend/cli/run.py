@@ -23,7 +23,7 @@ from guardata.backend.config import (
     RAID1BlockStoreConfig,
     RAID5BlockStoreConfig,
 )
-from guardata.core.types import BackendAddr
+from guardata.client.types import BackendAddr
 
 
 logger = get_logger()
@@ -275,7 +275,7 @@ integer and `<config>` the MOCKED/POSTGRESQL/S3/SWIFT config.
     help="""Allow organization bootstrap without prior creation.
 
 Without this flag, an organization must be created by administration (see
- `guardata core create_organization` command) before bootstrap can occur.
+ `guardata client create_organization` command) before bootstrap can occur.
 
 With this flag, the server allows anybody to bootstrap an organanization
 by providing an empty bootstrap token given 1) the organization is not boostrapped yet

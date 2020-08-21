@@ -2,7 +2,7 @@
 
 import pytest
 
-from guardata.core.fs import FSWorkspaceNoAccess
+from guardata.client.fs import FSWorkspaceNoAccess
 
 from tests.common import create_shared_workspace
 

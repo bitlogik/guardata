@@ -13,8 +13,8 @@ from hypothesis_trio.stateful import (
     multiple,
 )
 
-from guardata.core.types import WorkspaceRole
-from guardata.core.fs import FSWorkspaceNotFoundError, FSWorkspaceNoAccess
+from guardata.client.types import WorkspaceRole
+from guardata.client.fs import FSWorkspaceNotFoundError, FSWorkspaceNoAccess
 
 from tests.common import call_with_control
 
@@ -65,9 +65,9 @@ def test_sync_monitor_stateful(
     async def mockpoint_sleep():
         await trio.sleep(0.01)
 
-    monkeypatch.setattr("guardata.core.sync_monitor.freeze_sync_monitor_mockpoint", mockpoint_sleep)
+    monkeypatch.setattr("guardata.client.sync_monitor.freeze_sync_monitor_mockpoint", mockpoint_sleep)
     monkeypatch.setattr(
-        "guardata.core.messages_monitor.freeze_messages_monitor_mockpoint", mockpoint_sleep
+        "guardata.client.messages_monitor.freeze_messages_monitor_mockpoint", mockpoint_sleep
     )
 
     class SyncMonitorStateful(TrioAsyncioRuleBasedStateMachine):
@@ -100,13 +100,13 @@ def test_sync_monitor_stateful(
 
         async def start_alice_core(self):
             async def _core_controlled_cb(started_cb):
-                async with core_factory(alice) as core:
-                    await started_cb(core=core)
+                async with core_factory(alice) as client:
+                    await started_cb(client=client)
 
             self.alice_core_controller = await self.get_root_nursery().start(
                 call_with_control, _core_controlled_cb
             )
-            return self.alice_core_controller.core
+            return self.alice_core_controller.client
 
         async def start_bob_user_fs(self):
             async def _user_fs_controlled_cb(started_cb):
@@ -209,7 +209,7 @@ def test_sync_monitor_stateful(
 
         @rule(target=SyncedFiles)
         async def let_core_monitors_process_changes(self):
-            # Wait for alice core to settle down
+            # Wait for alice client to settle down
             await trio.sleep(300)
             # Bob get back alice's changes
             await self.bob_user_fs.sync()

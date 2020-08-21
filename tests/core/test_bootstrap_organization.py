@@ -4,9 +4,9 @@ import pytest
 
 from guardata.api.data import UserProfile
 from guardata.api.protocol import OrganizationID, HumanHandle
-from guardata.core.backend_connection import apiv1_backend_anonymous_cmds_factory
-from guardata.core.types import BackendOrganizationBootstrapAddr
-from guardata.core.invite import bootstrap_organization, InviteNotFoundError, InviteAlreadyUsedError
+from guardata.client.backend_connection import apiv1_backend_anonymous_cmds_factory
+from guardata.client.types import BackendOrganizationBootstrapAddr
+from guardata.client.invite import bootstrap_organization, InviteNotFoundError, InviteAlreadyUsedError
 
 
 @pytest.mark.trio

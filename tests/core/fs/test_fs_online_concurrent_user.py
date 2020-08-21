@@ -11,7 +11,7 @@ from hypothesis_trio.stateful import (
     TrioAsyncioRuleBasedStateMachine,
 )
 
-from guardata.core.fs.exceptions import FSWorkspaceNotFoundError
+from guardata.client.fs.exceptions import FSWorkspaceNotFoundError
 from tests.common import call_with_control, compare_fs_dumps
 
 # The point is not to find breaking filenames here, so keep it simple

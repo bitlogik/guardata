@@ -4,7 +4,7 @@ import pytest
 
 from PyQt5.QtWidgets import QLabel
 from tests.common import customize_fixtures
-from guardata.core.gui.lang import translate
+from guardata.client.gui.lang import translate
 
 
 @pytest.mark.gui

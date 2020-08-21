@@ -9,10 +9,10 @@ from functools import partial
 
 from guardata.api.data import UserProfile
 from guardata.api.protocol import InvitationType, HumanHandle, InvitationDeletedReason
-from guardata.core.types import BackendInvitationAddr
-from guardata.core.invite import UserGreetInitialCtx
-from guardata.core.gui.lang import translate
-from guardata.core.gui.claim_user_widget import (
+from guardata.client.types import BackendInvitationAddr
+from guardata.client.invite import UserGreetInitialCtx
+from guardata.client.gui.lang import translate
+from guardata.client.gui.claim_user_widget import (
     ClaimUserFinalizeWidget,
     ClaimUserCodeExchangeWidget,
     ClaimUserProvideInfoWidget,
@@ -24,11 +24,11 @@ from guardata.core.gui.claim_user_widget import (
 @pytest.fixture
 def catch_claim_user_widget(widget_catcher_factory):
     return widget_catcher_factory(
-        "guardata.core.gui.claim_user_widget.ClaimUserFinalizeWidget",
-        "guardata.core.gui.claim_user_widget.ClaimUserCodeExchangeWidget",
-        "guardata.core.gui.claim_user_widget.ClaimUserProvideInfoWidget",
-        "guardata.core.gui.claim_user_widget.ClaimUserInstructionsWidget",
-        "guardata.core.gui.claim_user_widget.ClaimUserWidget",
+        "guardata.client.gui.claim_user_widget.ClaimUserFinalizeWidget",
+        "guardata.client.gui.claim_user_widget.ClaimUserCodeExchangeWidget",
+        "guardata.client.gui.claim_user_widget.ClaimUserProvideInfoWidget",
+        "guardata.client.gui.claim_user_widget.ClaimUserInstructionsWidget",
+        "guardata.client.gui.claim_user_widget.ClaimUserWidget",
     )
 
 

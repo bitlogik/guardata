@@ -2,8 +2,8 @@
 
 import pytest
 
-from guardata.core.gui.password_validation import get_password_strength, get_password_strength_text
-from guardata.core.gui.lang import switch_language
+from guardata.client.gui.password_validation import get_password_strength, get_password_strength_text
+from guardata.client.gui.lang import switch_language
 
 
 @pytest.mark.gui

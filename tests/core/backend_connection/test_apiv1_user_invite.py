@@ -12,7 +12,7 @@ from guardata.api.data import (
     APIV1_UserClaimContent,
     UserProfile,
 )
-from guardata.core.backend_connection import (
+from guardata.client.backend_connection import (
     backend_authenticated_cmds_factory,
     apiv1_backend_anonymous_cmds_factory,
 )

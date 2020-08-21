@@ -5,9 +5,9 @@ import trio
 import pytest
 from unittest.mock import ANY
 
-from guardata.core.backend_connection import BackendConnStatus
+from guardata.client.backend_connection import BackendConnStatus
 from guardata.backend.backend_events import BackendEvent
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 
 
 @pytest.mark.trio

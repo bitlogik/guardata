@@ -9,7 +9,7 @@ from guardata.api.data import (
     RevokedUserCertificateContent,
     UserProfile,
 )
-from guardata.core.trustchain import TrustchainContext, TrustchainError
+from guardata.client.trustchain import TrustchainContext, TrustchainError
 
 
 class TrustchainData:

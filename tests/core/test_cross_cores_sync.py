@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 import pytest
 import trio
 from async_generator import asynccontextmanager
@@ -10,7 +10,7 @@ from tests.open_tcp_stream_mock_wrapper import offline
 
 
 @asynccontextmanager
-async def wait_for_entries_synced(core, entries_pathes):
+async def wait_for_entries_synced(client, entries_pathes):
     event = trio.Event()
     to_sync = set(entries_pathes)
     synced = set()
@@ -30,13 +30,13 @@ async def wait_for_entries_synced(core, entries_pathes):
         if synced == to_sync:
             event.set()
 
-    core.signal_ns.connect(CoreEvent.FS_ENTRY_SYNCED, _on_entry_synced)
+    client.signal_ns.connect(CoreEvent.FS_ENTRY_SYNCED, _on_entry_synced)
     try:
         yield event
         await event.wait()
 
     finally:
-        core.signal_ns.disconnect(CoreEvent.FS_ENTRY_SYNCED, _on_entry_synced)
+        client.signal_ns.disconnect(CoreEvent.FS_ENTRY_SYNCED, _on_entry_synced)
 
 
 # @pytest.mark.trio
@@ -197,7 +197,7 @@ async def test_fast_forward_on_offline_during_sync(
             # TODO: shouldn't need this...
             await trio.testing.wait_all_tasks_blocked(cushion=0.1)
 
-            # core goes offline, other core2 is still connected to backend
+            # client goes offline, other core2 is still connected to backend
             async with wait_for_entries_synced(alice_core, ("/", "/foo.txt")):
                 stat2 = await alice2_core2.user_fs.stat("/foo.txt")
                 with offline(server1.addr):

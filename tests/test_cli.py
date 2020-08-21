@@ -24,7 +24,7 @@ from async_generator import asynccontextmanager
 from guardata import __version__ as guardata_version
 from guardata.api.protocol import OrganizationID, DeviceID
 from guardata.backend.postgresql import MigrationItem
-from guardata.core.local_device import save_device_with_password, list_available_devices
+from guardata.client.local_device import save_device_with_password, list_available_devices
 from guardata.cli import cli
 
 CWD = Path(__file__).parent.parent
@@ -56,10 +56,10 @@ def test_share_workspace(tmpdir, alice, bob):
     password = "S3cr3t"
     save_device_with_password(Path(config_dir), bob, password)
 
-    with patch("guardata.core.cli.share_workspace.logged_core_factory", logged_core_factory):
+    with patch("guardata.client.cli.share_workspace.logged_core_factory", logged_core_factory):
         runner = CliRunner()
         args = (
-            f"core share_workspace --password {password} "
+            f"client share_workspace --password {password} "
             f"--device={bob.slughash} --config-dir={config_dir} "
             f"ws1 {alice.user_id}"
         )
@@ -283,7 +283,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
             admin_url += "?no_ssl=true"
 
         p = _run(
-            "core create_organization "
+            "client create_organization "
             f"{org} --addr={admin_url} "
             f"--administration-token={administration_token}",
             env=ssl_conf.client_env,
@@ -294,7 +294,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Bootstrap organization #######")
         _run(
-            "core apiv1 bootstrap_organization "
+            "client apiv1 bootstrap_organization "
             f"{alice1} --addr={url} --config-dir={config_dir} --password={password}",
             env=ssl_conf.client_env,
         )
@@ -303,7 +303,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Create another user #######")
         with _running(
-            "core apiv1 invite_user "
+            "client apiv1 invite_user "
             f"--config-dir={config_dir} --device={alice1_slughash} "
             f"--password={password} {bob1.user_id}",
             wait_for="token:",
@@ -314,7 +314,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
             token = re.search(r"^token: (.*)$", stdout, re.MULTILINE).group(1)
 
             _run(
-                "core apiv1 claim_user "
+                "client apiv1 claim_user "
                 f"--config-dir={config_dir} --addr={url} --token={token} "
                 f"--password={password} {bob1.device_name}",
                 env=ssl_conf.client_env,
@@ -324,7 +324,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Create another device #######")
         with _running(
-            "core apiv1 invite_device "
+            "client apiv1 invite_device "
             f"--config-dir={config_dir} --device={alice1_slughash} --password={password}"
             f" {alice2.device_name}",
             wait_for="token:",
@@ -335,7 +335,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
             token = re.search(r"^token: (.*)$", stdout, re.MULTILINE).group(1)
 
             _run(
-                "core apiv1 claim_device "
+                "client apiv1 claim_device "
                 f"--config-dir={config_dir} --addr={url} --token={token} "
                 f"--password={password}",
                 env=ssl_conf.client_env,
@@ -347,7 +347,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
         bob1_slughash = _retrieve_device_slughash(bob1)
 
         print("####### List users #######")
-        p = _run(f"core list_devices --config-dir={config_dir}", env=ssl_conf.client_env)
+        p = _run(f"client list_devices --config-dir={config_dir}", env=ssl_conf.client_env)
         stdout = p.stdout.decode()
         assert alice1_slughash[:3] in stdout
         assert f"{org}: {alice1.user_id} @ {alice1.device_name}" in stdout
@@ -358,19 +358,19 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### New users can communicate with backend #######")
         _run(
-            "core create_workspace wksp1 "
+            "client create_workspace wksp1 "
             f"--config-dir={config_dir} --device={bob1_slughash} --password={password}",
             env=ssl_conf.client_env,
         )
         _run(
-            "core create_workspace wksp2 "
+            "client create_workspace wksp2 "
             f"--config-dir={config_dir} --device={alice2_slughash} --password={password}",
             env=ssl_conf.client_env,
         )
 
         print("####### Stats organization #######")
         _run(
-            "core stats_organization "
+            "client stats_organization "
             f"{org} --addr={admin_url} "
             f"--administration-token={administration_token}",
             env=ssl_conf.client_env,
@@ -378,7 +378,7 @@ def test_apiv1_full_run(unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Status organization #######")
         _run(
-            "core status_organization "
+            "client status_organization "
             f"{org} --addr={admin_url} "
             f"--administration-token={administration_token}",
             env=ssl_conf.client_env,
@@ -421,7 +421,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
             admin_url += "?no_ssl=true"
 
         p = _run(
-            "core create_organization "
+            "client create_organization "
             f"{org} --addr={admin_url} "
             f"--administration-token={administration_token}",
             env=ssl_conf.client_env,
@@ -432,7 +432,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Bootstrap organization #######")
         with _running(
-            "core bootstrap_organization " f"{url} --config-dir={config_dir} --password={password}",
+            "client bootstrap_organization " f"{url} --config-dir={config_dir} --password={password}",
             env=ssl_conf.client_env,
             wait_for="User fullname:",
         ) as p:
@@ -454,7 +454,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Stats organization #######")
         _run(
-            "core stats_organization "
+            "client stats_organization "
             f"{org} --addr={admin_url} "
             f"--administration-token={administration_token}",
             env=ssl_conf.client_env,
@@ -462,7 +462,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Status organization #######")
         _run(
-            "core status_organization "
+            "client status_organization "
             f"{org} --addr={admin_url} "
             f"--administration-token={administration_token}",
             env=ssl_conf.client_env,
@@ -470,7 +470,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Create user&device invitations #######")
         p = _run(
-            "core invite_user "
+            "client invite_user "
             f"--config-dir={config_dir} --device={alice1_slughash} "
             f"--password={password} bob@example.com",
             env=ssl_conf.client_env,
@@ -479,7 +479,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
         user_invitation_token = re.search(r"token=([^&]+)", user_invitation_url).group(1)
 
         p = _run(
-            "core invite_device "
+            "client invite_device "
             f"--config-dir={config_dir} --device={alice1_slughash} "
             f"--password={password}",
             env=ssl_conf.client_env,
@@ -490,7 +490,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
         print("####### List invitations #######")
 
         p = _run(
-            "core list_invitations "
+            "client list_invitations "
             f"--config-dir={config_dir} --device={alice1_slughash} "
             f"--password={password}",
             env=ssl_conf.client_env,
@@ -501,12 +501,12 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Claim user invitation #######")
         with _running(
-            "core claim_invitation "
+            "client claim_invitation "
             f"--config-dir={config_dir} --password={password} {user_invitation_url} ",
             env=ssl_conf.client_env,
         ) as p_claimer:
             with _running(
-                "core greet_invitation "
+                "client greet_invitation "
                 f"--config-dir={config_dir} --device={alice1_slughash} "
                 f"--password={password} {user_invitation_token}",
                 env=ssl_conf.client_env,
@@ -580,12 +580,12 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Claim device invitation #######")
         with _running(
-            f"core claim_invitation "
+            f"client claim_invitation "
             f"--config-dir={config_dir} --password={password} {device_invitation_url} ",
             env=ssl_conf.client_env,
         ) as p_claimer:
             with _running(
-                f"core greet_invitation "
+                f"client greet_invitation "
                 f"--config-dir={config_dir} --device={alice1_slughash} "
                 f"--password={password} {device_invitation_token}",
                 env=ssl_conf.client_env,
@@ -641,7 +641,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
                 p_claimer.wait()
 
         print("####### List users #######")
-        p = _run(f"core list_devices --config-dir={config_dir}", env=ssl_conf.client_env)
+        p = _run(f"client list_devices --config-dir={config_dir}", env=ssl_conf.client_env)
         stdout = p.stdout.decode()
         assert alice1_slughash[:3] in stdout
         assert (
@@ -661,12 +661,12 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### New users can communicate with backend #######")
         _run(
-            f"core create_workspace wksp1 "
+            f"client create_workspace wksp1 "
             f"--config-dir={config_dir} --device={bob1_slughash} --password={password}",
             env=ssl_conf.client_env,
         )
         _run(
-            f"core create_workspace wksp2 "
+            f"client create_workspace wksp2 "
             f"--config-dir={config_dir} --device={alice2_slughash} --password={password}",
             env=ssl_conf.client_env,
         )
@@ -691,4 +691,4 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
     ],
 )
 def test_gui_with_diagnose_option(env):
-    _run("core gui --diagnose", env=env, capture=False)
+    _run("client gui --diagnose", env=env, capture=False)

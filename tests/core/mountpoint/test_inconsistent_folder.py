@@ -5,7 +5,7 @@ import errno
 import pytest
 import trio
 
-from guardata.core.mountpoint import mountpoint_manager_factory
+from guardata.client.mountpoint import mountpoint_manager_factory
 from guardata.test_utils import create_inconsistent_workspace
 
 

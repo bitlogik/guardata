@@ -19,7 +19,7 @@ from guardata.api.protocol import (
 from guardata.api.transport import Transport
 from guardata.backend.realm import RealmGrantedRole
 from guardata.backend.backend_events import BackendEvent
-from guardata.core.types import LocalDevice
+from guardata.client.types import LocalDevice
 
 from tests.common import FreezeTestOnTransportError
 

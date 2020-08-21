@@ -1,8 +1,8 @@
 #! /bin/sh
 
 mkdir -p ~/.config/guardata
-LOG_FILE=~/.config/guardata/guardata-core.log
-echo Starting guardata core >> $LOG_FILE
+LOG_FILE=~/.config/guardata/guardata-client.log
+echo Starting guardata client >> $LOG_FILE
 export XDG_CURRENT_DESKTOP=unknown
 PYTHON=${SNAP}/usr/bin/python3
 
@@ -21,4 +21,4 @@ export SNAPCRAFT_PART_INSTALL=$SNAP
 # in classic mode (without sandbox).
 unset SNAP
 
-$PYTHON -I -m guardata.cli core gui --log-level=INFO --log-file=$LOG_FILE $@
+$PYTHON -I -m guardata.cli client gui --log-level=INFO --log-file=$LOG_FILE $@

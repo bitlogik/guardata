@@ -5,14 +5,14 @@ import trio
 from unittest.mock import ANY
 from pendulum import Pendulum
 
-from guardata.core import logged_core_factory
-from guardata.core.types import UserInfo, DeviceInfo
-from guardata.core.backend_connection import (
+from guardata.client import logged_core_factory
+from guardata.client.types import UserInfo, DeviceInfo
+from guardata.client.backend_connection import (
     BackendConnStatus,
     BackendNotAvailable,
     BackendNotFoundError,
 )
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 
 
 @pytest.mark.trio
@@ -29,9 +29,9 @@ async def test_init_online_backend_late_reply(
         with trio.fail_after(1):
             async with logged_core_factory(
                 config=core_config, device=alice, event_bus=event_bus
-            ) as core:
-                # We don't want for backend to reply finish core init
-                with core.event_bus.listen() as spy:
+            ) as client:
+                # We don't want for backend to reply finish client init
+                with client.event_bus.listen() as spy:
                     can_serve_client.set()
                     # Now backend reply, monitor should send events accordingly
                     await spy.wait(
@@ -52,8 +52,8 @@ async def test_init_offline_backend_late_reply(server_factory, core_config, alic
         with trio.fail_after(1):
             async with logged_core_factory(
                 config=core_config, device=alice, event_bus=event_bus
-            ) as core:
-                with core.event_bus.listen() as spy:
+            ) as client:
+                with client.event_bus.listen() as spy:
                     can_serve_client.set()
                     await spy.wait(
                         CoreEvent.BACKEND_CONNECTION_CHANGED,

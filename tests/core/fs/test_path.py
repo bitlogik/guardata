@@ -2,7 +2,7 @@
 
 import pytest
 
-from guardata.core.types import FsPath
+from guardata.client.types import FsPath
 
 
 @pytest.mark.parametrize(

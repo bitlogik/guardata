@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 import os
 import trio
 import pytest
 from pathlib import Path
 
-from guardata.core.types import FsPath
-from guardata.core.mountpoint.manager import mountpoint_manager_factory
+from guardata.client.types import FsPath
+from guardata.client.mountpoint.manager import mountpoint_manager_factory
 
 from tests.common import create_shared_workspace
 
@@ -111,7 +111,7 @@ async def test_remote_error_event(
                 raise RuntimeError("D'Oh !")
 
             monkeypatch.setattr(
-                "guardata.core.fs.workspacefs.entry_transactions.EntryTransactions.folder_create",
+                "guardata.client.fs.workspacefs.entry_transactions.EntryTransactions.folder_create",
                 _crash,
             )
             with alice_user_fs.event_bus.listen() as spy:

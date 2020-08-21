@@ -7,14 +7,14 @@ import pendulum
 from guardata.api.transport import Transport, Ping, Pong
 from guardata.api.data import RevokedUserCertificateContent
 from guardata.api.protocol import ServerHandshake, HandshakeType, AUTHENTICATED_CMDS, APIEvent
-from guardata.core.types import BackendOrganizationAddr
-from guardata.core.backend_connection import (
+from guardata.client.types import BackendOrganizationAddr
+from guardata.client.backend_connection import (
     BackendNotAvailable,
     BackendConnectionRefused,
     backend_authenticated_cmds_factory,
 )
 
-from tests.core.backend_connection.common import ALL_CMDS
+from tests.client.backend_connection.common import ALL_CMDS
 
 
 @pytest.mark.trio

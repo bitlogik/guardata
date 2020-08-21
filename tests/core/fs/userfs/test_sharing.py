@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.core.core_events import CoreEvent
+from guardata.client.core_events import CoreEvent
 import pytest
 from unittest.mock import ANY
 from pendulum import Pendulum
 
 from guardata.api.data import UserManifest, WorkspaceEntry
-from guardata.core.types import WorkspaceRole, LocalUserManifest, EntryID
-from guardata.core.fs import (
+from guardata.client.types import WorkspaceRole, LocalUserManifest, EntryID
+from guardata.client.fs import (
     FSError,
     FSWorkspaceNotFoundError,
     FSBackendOfflineError,

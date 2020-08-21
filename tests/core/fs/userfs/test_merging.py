@@ -4,8 +4,8 @@ import pytest
 from pendulum import Pendulum
 
 from guardata.api.data import UserManifest, WorkspaceEntry
-from guardata.core.types import LocalUserManifest
-from guardata.core.fs.userfs.merging import merge_local_user_manifests
+from guardata.client.types import LocalUserManifest
+from guardata.client.fs.userfs.merging import merge_local_user_manifests
 
 
 @pytest.fixture

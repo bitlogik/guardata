@@ -10,7 +10,7 @@ import h11
 
 from guardata import __version__ as guardata_version
 from guardata.api.protocol import OrganizationID, InvitationType
-from guardata.core.types.backend_address import BackendInvitationAddr
+from guardata.client.types.backend_address import BackendInvitationAddr
 
 
 @pytest.fixture
