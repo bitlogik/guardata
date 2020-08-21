@@ -222,7 +222,13 @@ def main(**kwargs):
 
 
 async def amain(
-    backend_address, backend_port, password, administration_token, force, empty, source_file
+    backend_address,
+    backend_port,
+    password,
+    administration_token,
+    force,
+    empty,
+    source_file,
     add_random_users,
 ):
     # Set up the temporary environment
