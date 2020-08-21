@@ -1,9 +1,20 @@
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import math
 
 from PyQt5.QtCore import Qt, pyqtSignal, QSize
-from PyQt5.QtGui import QIcon, QPainter, QColor, QPen, QCursor, QPixmap, QFont, QFontMetrics
+from PyQt5.QtGui import (
+    QIcon,
+    QPainter,
+    QColor,
+    QPen,
+    QCursor,
+    QPixmap,
+    QFont,
+    QFontMetrics,
+    QGuiApplication,
+)
 from PyQt5.QtWidgets import (
     QPushButton,
     QLabel,
@@ -27,11 +38,13 @@ class SpinnerWidget(QWidget, Ui_SpinnerWidget):
 
 
 def ensure_string_size(s, size, font):
-    metrics = QFontMetrics(font)
-    if metrics.horizontalAdvance(s) > size:
-        while metrics.horizontalAdvance(s + "...") > size:
-            s = s[: len(s) - 1]
-        s += "..."
+    if QGuiApplication.platformName() != "offscreen":
+        metrics = QFontMetrics(font)
+        if metrics.horizontalAdvance(s) > size:
+            while metrics.horizontalAdvance(s + "..") > size:
+                s = s[: len(s) - 1]
+            s += ".."
+
     return s
 
 

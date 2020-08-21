@@ -52,6 +52,7 @@ windows-tests:
   script:
     - py.test --log-level=DEBUG --durations=10 -v tests -n auto --max-worker-restart=0 -x
     - py.test --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow -m mountpoint -x
+    - $env:QT_QPA_PLATFORM="offscreen"
     - py.test --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow --rungui -m gui -x
     - py.test --log-level=DEBUG --durations=10 -v tests --runslow -m slow -n auto --max-worker-restart=0 -x
 
