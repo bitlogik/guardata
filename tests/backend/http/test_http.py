@@ -24,7 +24,7 @@ def backend_http_send(running_backend, backend_addr):
 
         if isinstance(target, str):
             target = target.encode("utf8")
-        req = b"GET %s HTTP/1.1\r\nHost: %s\r\n" % (target, backend_addr.hostname)
+        req = b"GET %s HTTP/1.1\r\nHost: %s\r\n" % (target, backend_addr.hostname.encode("idna"))
         await stream.send_all(req)
         rep = await stream.receive_some(4096)
         await stream.aclose()
