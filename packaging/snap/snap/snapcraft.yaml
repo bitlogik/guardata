@@ -1,22 +1,22 @@
-name: parsec
+name: guardata
 version: __GUARDATA_VERSION__
-summary: Secure cloud framework # 79 char long summary
+summary: trustless data cloud storage
 description: |
-  Parsec is an open-source cloud-based application that allow simple yet
-  cryptographically secure file hosting.
+  guardata is a secure and trustless cloud storage service,
+   to share and sync your files with on-premise modern encryption.
 base: core18
 type: app
 
 confinement: classic # classic is needed to have fuse working
 icon: "./bin/guardata.png"
-grade: stable # must be 'stable' to release into candidate/stable channels
+grade: stable
 
 apps:
-  parsec:
-    command: parsec
+  guardata:
+    command: guardata
     desktop: guardata.desktop
   cli:
-    command: parsec-cli
+    command: guardata-cli
 
 parts:
   bootstrap:
@@ -24,18 +24,16 @@ parts:
     source: "./bin"
     override-pull: |
       snapcraftctl pull
-      # Make sure executables *are* executable
-      chmod 755 parsec
-      chmod 755 parsec-cli
+      chmod 755 guardata
+      chmod 755 guardata-cli
 
-  parsec-core:
+  guardata-core:
     plugin: python
     python-version: python3
     source: "./src"
     source-type: local
     override-pull: |
       snapcraftctl pull
-      # Ugly hack given snapcraft doesn't support extra requirements...
       sed -i "s#install_requires=requirements#install_requires=requirements + extra_requirements['core']#g" setup.py
     stage-packages:
       # fuse package contains fusermount which is sometime needed by libfuse2

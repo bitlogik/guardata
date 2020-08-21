@@ -52,26 +52,23 @@ coverage.xml
 # Django stuff:
 *.log
 
-# Sphinx documentation
-docs/_build/
-
 # PyBuilder
 target/
 
 # gnupg stuff
 random_seed
 
-# PyQt's big ass resource bundle, automatically generated
-parsec/core/gui/_resources_rc.py
+# PyQt resource bundle, automatically generated
+guardata/core/gui/_resources_rc.py
 
-# PyQt's forms, automatically generated
-parsec/core/gui/ui/*.py
+# PyQtforms, automatically generated
+guardata/core/gui/ui/*.py
 
-# QtCreator's temporary files
+# QtCreator temporary files
 *.ui.autosave
 
 # History html file, automatically generated
-parsec/core/gui/rc/generated_misc/
+guardata/core/gui/rc/generated_misc/
 
 # Temporary files
 *~
