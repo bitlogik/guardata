@@ -134,9 +134,9 @@ async def call_with_control(controlled_fn, *, task_status=trio.TASK_STATUS_IGNOR
 
 async def create_shared_workspace(name, creator, *shared_with):
     """
-    Create a workspace and share it with the given Cores/FSs.
-    This is more tricky than it seems given all Cores/FSs must agree on the
-    workspace version and (only for the Cores) be ready to listen to the
+    Create a workspace and share it with the given Clients/FSs.
+    This is more tricky than it seems given all Clients/FSs must agree on the
+    workspace version and (only for the Clients) be ready to listen to the
     workspace's vlob group events.
     This is *even* more tricky considering we want the clients involved in the
     sharing to endup in a stable state (no event wildly fired or coroutine in
