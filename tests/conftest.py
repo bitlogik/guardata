@@ -27,7 +27,7 @@ import sqlite3
 from guardata.monitoring import TaskMonitoringInstrument
 from guardata.client import CoreConfig
 from guardata.client.types import BackendAddr
-from guardata.client.logged_core import logged_core_factory
+from guardata.client.logged_client import logged_core_factory
 from guardata.client.backend_connection import BackendConnStatus
 from guardata.client.mountpoint.manager import get_mountpoint_runner
 from guardata.client.fs.storage import LocalDatabase, local_database, UserStorage

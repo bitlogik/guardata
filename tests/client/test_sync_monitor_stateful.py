@@ -134,7 +134,7 @@ def test_sync_monitor_stateful(
 
             await self.start_backend()
             self.bob_user_fs = await self.start_bob_user_fs()
-            self.alice_core = await self.start_alice_core()
+            self.alice_client = await self.start_alice_core()
             self.user_fs_per_device = {
                 alice.device_id: self.alice_core.user_fs,
                 bob.device_id: self.bob_user_fs,

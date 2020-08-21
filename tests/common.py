@@ -10,7 +10,7 @@ import attr
 import pendulum
 
 from guardata.client.types import WorkspaceRole
-from guardata.client.logged_core import LoggedCore
+from guardata.client.logged_client import LoggedCore
 from guardata.client.fs import UserFS
 from guardata.api.transport import Transport, TransportError
 

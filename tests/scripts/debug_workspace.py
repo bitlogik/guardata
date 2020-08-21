@@ -10,7 +10,7 @@ from tqdm import tqdm
 from humanize import naturalsize
 
 from guardata.logging import configure_logging
-from guardata.client.logged_core import logged_core_factory
+from guardata.client.logged_client import logged_core_factory
 from guardata.client.types import FsPath
 from guardata.client.config import get_default_config_dir, load_config
 from guardata.client.local_device import list_available_devices, load_device_with_password
