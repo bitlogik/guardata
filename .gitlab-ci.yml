@@ -67,7 +67,6 @@ pip-build:
     - DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get -y install python3-pip python3-venv fuse postgresql postgresql-contrib desktop-file-utils libgl1-mesa-glx xdg-utils libffi-dev
     - /sbin/ldconfig
     - ln -s /usr/bin/python3 /usr/bin/python
-    - rm -Rf docs
     - rm -Rf tests
     - rm -Rf guardata/backend
     - rm -Rf guardata/test_utils
@@ -84,17 +83,6 @@ pip-build:
     - mkdir empty
     - cd empty
     - guardata --version
-    # Run guardata GUI in background and log it return code
-    # xvfb-run guardata core gui --diagnose
-    #echo "
-    #  [pypi]
-    #  username = __token__
-    #  password = $PYPI_CREDENTIALS
-    #  " > ~/.pypirc
-    #  pip3 install twine
-    #  twine upload dist/guardata-*.whl
-    #env:
-    #  PYPI_CREDENTIALS: $(PYPI_CREDENTIALS)
   artifacts:
     paths:
       - dist/guardata-*.whl
@@ -106,7 +94,6 @@ windows-build:
     - tags
   stage: build
   before_script:
-    - rm -R -Force docs
     - rm -R -Force tests
     - rm -R -Force guardata/backend
     - rm -R -Force guardata/test_utils
