@@ -12,7 +12,7 @@ from guardata.client.backend_connection import (
     BackendNotAvailable,
     BackendNotFoundError,
 )
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 
 
 @pytest.mark.trio

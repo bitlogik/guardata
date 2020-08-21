@@ -7,7 +7,7 @@ from typing import Optional, List, Dict, AsyncIterator, cast, Tuple, Any, Union,
 from pendulum import now as pendulum_now
 
 from guardata.api.protocol import DeviceID
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 from guardata.api.data import BaseManifest as BaseRemoteManifest
 from guardata.client.types import (
     Chunk,

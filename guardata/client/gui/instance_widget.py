@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 import trio
 
 from structlog import get_logger
@@ -62,7 +62,7 @@ class InstanceWidget(QWidget):
         self.systray_notification = systray_notification
 
         self.client = None
-        self.core_jobs_ctx = None
+        self.client_jobs_ctx = None
         self.running_core_job = None
 
         self.run_core_success.connect(self.on_core_run_done)
@@ -95,7 +95,7 @@ class InstanceWidget(QWidget):
     def start_core(self, device):
         assert not self.running_core_job
         assert not self.client
-        assert not self.core_jobs_ctx
+        assert not self.client_jobs_ctx
 
         self.config = guardataApp.get_main_window().config
 
@@ -110,7 +110,7 @@ class InstanceWidget(QWidget):
 
     def on_run_core_ready(self, client, core_jobs_ctx):
         self.client = client
-        self.core_jobs_ctx = core_jobs_ctx
+        self.client_jobs_ctx = core_jobs_ctx
         self.client.event_bus.connect(CoreEvent.GUI_CONFIG_CHANGED, self.on_core_config_updated)
         self.event_bus.send(
             CoreEvent.GUI_CONFIG_CHANGED,
@@ -150,7 +150,7 @@ class InstanceWidget(QWidget):
                 logger.exception("Unhandled error", exc_info=self.running_core_job.exc)
                 show_error(self, _("TEXT_LOGIN_UNKNOWN_ERROR"), exception=self.running_core_job.exc)
         self.running_core_job = None
-        self.core_jobs_ctx = None
+        self.client_jobs_ctx = None
         self.client = None
         self.logged_out.emit()
 
@@ -164,7 +164,7 @@ class InstanceWidget(QWidget):
                 CoreEvent.GUI_CONFIG_CHANGED, self.on_core_config_updated
             )
         self.running_core_job = None
-        self.core_jobs_ctx = None
+        self.client_jobs_ctx = None
         self.client = None
         self.logged_out.emit()
 
@@ -215,7 +215,7 @@ class InstanceWidget(QWidget):
         self.clear_widgets()
         central_widget = CentralWidget(
             self.client,
-            self.core_jobs_ctx,
+            self.client_jobs_ctx,
             self.client.event_bus,
             systray_notification=self.systray_notification,
             parent=self,

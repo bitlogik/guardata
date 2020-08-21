@@ -9,7 +9,7 @@ from structlog import get_logger
 
 from async_generator import asynccontextmanager
 
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 from guardata.event_bus import EventBus
 from guardata.crypto import SecretKey
 from guardata.api.data import (

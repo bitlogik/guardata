@@ -4,7 +4,7 @@ import re
 import pytest
 
 from guardata.api.protocol import DeviceID
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 from guardata.client.types import FsPath, EntryID, Chunk, LocalFolderManifest, LocalFileManifest
 
 from guardata.client.fs.workspacefs.sync_transactions import merge_manifests

@@ -11,7 +11,7 @@ from structlog import get_logger
 from winfspy import FileSystem, enable_debug_log
 from winfspy.plumbing import filetime_now
 
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 from guardata.client.win_registry import guardata_drive_icon_context
 from guardata.client.mountpoint.thread_fs_access import ThreadFSAccess
 from guardata.client.mountpoint.winfsp_operations import WinFSPOperations, winify_entry_name

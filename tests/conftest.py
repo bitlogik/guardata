@@ -1,7 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS - 2020 BitLogiK
 
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 import pytest
 import os
 import re

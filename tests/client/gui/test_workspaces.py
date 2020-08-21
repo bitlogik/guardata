@@ -7,7 +7,7 @@ import pendulum
 from unittest.mock import ANY
 
 from guardata.api.data import WorkspaceEntry
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 from guardata.client.fs import FSWorkspaceNoReadAccess
 from guardata.client.gui.workspace_button import WorkspaceButton
 

@@ -16,7 +16,7 @@ from guardata.client.types import (
 )
 
 
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 from guardata.client.fs.workspacefs.file_transactions import FileTransactions
 from guardata.client.fs.utils import is_file_manifest, is_folder_manifest, is_folderish_manifest
 from guardata.client.fs.exceptions import (

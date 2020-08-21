@@ -20,7 +20,7 @@ from guardata.client.backend_connection.exceptions import (
     BackendConnectionRefused,
 )
 from guardata.client.backend_connection.expose_cmds import expose_cmds_with_retrier
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 
 
 logger = get_logger()

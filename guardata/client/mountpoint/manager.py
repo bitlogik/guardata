@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from guardata.client.core_events import CoreEvent
+from guardata.client.client_events import CoreEvent
 import os
 import trio
 import logging
