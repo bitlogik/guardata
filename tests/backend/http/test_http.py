@@ -24,11 +24,20 @@ def backend_http_send(running_backend, backend_addr):
 
         if isinstance(target, str):
             target = target.encode("utf8")
-        req = b"GET %s HTTP/1.1\r\nHost: %s\r\n" % (target, backend_addr.hostname.encode("idna"))
+
+        req = b"GET %s HTTP/1.1\r\nHost: %s \r\n\r\n" % (
+            target,
+            backend_addr.hostname.encode("idna"),
+        )
         await stream.send_all(req)
-        rep = await stream.receive_some(4096)
+        headers = await stream.receive_some()
+        content = await stream.receive_some()
+        if content and content[:9] == b'<!doctype':
+            data = headers + content
+        else:
+            data = headers
         await stream.aclose()
-        return rep.decode("utf8")
+        return data.decode("utf8")
 
     return _http_send
 
