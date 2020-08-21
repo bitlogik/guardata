@@ -239,6 +239,10 @@ with open("README.rst") as readme_file:
     readme = readme_file.read()
 
 
+PYQT_DEPS = ["PyQt5==5.14.2", "pyqt5-sip==12.8.0"]
+BABEL_DEP = "Babel==2.6.0"
+
+
 requirements = [
     "attrs==19.2.0",
     "click==7.0",
@@ -286,8 +290,6 @@ test_requirements = [
 ]
 
 
-PYQT_DEPS = ["PyQt5==5.14.2", "pyqt5-sip==12.8.0"]
-BABEL_DEP = "Babel==2.6.0"
 WHEEL_DEP = "wheel==0.34.2"
 extra_requirements = {
     "dev": test_requirements,

@@ -2,7 +2,6 @@
 .. image:: guardata/client/gui/rc/images/logos/guardata_vert.png
     :align: center
 
-# guardata
 
 This is the public repository for the guardata client.
 
@@ -20,8 +19,8 @@ Key features :
 - Access control and logging
 - open source
 
-guardata is a service offered by [BitLogiK](https://bitlogik.fr).
+guardata is a service offered by `BitLogiK <https://bitlogik.fr>`_.
 
-guardata is based on the [parsec technology](https://github.com/Scille/parsec-cloud) developed by Scille.
+guardata is based on the `parsec technology <https://github.com/Scille/parsec-cloud>`_ developed by Scille.
 
 More info to come
