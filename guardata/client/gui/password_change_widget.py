@@ -5,7 +5,11 @@ from PyQt5.QtWidgets import QWidget, QApplication
 
 from structlog import get_logger
 
-from guardata.client.local_device import get_key_file, change_device_password, LocalDeviceCryptoError
+from guardata.client.local_device import (
+    get_key_file,
+    change_device_password,
+    LocalDeviceCryptoError,
+)
 
 from guardata.client.gui.password_validation import PasswordStrengthWidget, get_password_strength
 from guardata.client.gui.custom_dialogs import show_error, show_info, GreyedDialog

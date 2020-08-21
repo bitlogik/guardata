@@ -10,7 +10,11 @@ from PyQt5.QtWidgets import QWidget
 
 from guardata.client.types import LocalDevice
 from guardata.client.local_device import save_device_with_password
-from guardata.client.invite import claimer_retrieve_info, InvitePeerResetError, InviteAlreadyUsedError
+from guardata.client.invite import (
+    claimer_retrieve_info,
+    InvitePeerResetError,
+    InviteAlreadyUsedError,
+)
 from guardata.client.backend_connection import (
     backend_invited_cmds_factory,
     BackendConnectionRefused,
@@ -23,7 +27,9 @@ from guardata.client.gui.custom_dialogs import show_error, GreyedDialog, show_in
 from guardata.client.gui.lang import translate as _
 from guardata.client.gui.password_validation import get_password_strength
 from guardata.client.gui.ui.claim_device_widget import Ui_ClaimDeviceWidget
-from guardata.client.gui.ui.claim_device_code_exchange_widget import Ui_ClaimDeviceCodeExchangeWidget
+from guardata.client.gui.ui.claim_device_code_exchange_widget import (
+    Ui_ClaimDeviceCodeExchangeWidget,
+)
 from guardata.client.gui.ui.claim_device_provide_info_widget import Ui_ClaimDeviceProvideInfoWidget
 from guardata.client.gui.ui.claim_device_instructions_widget import Ui_ClaimDeviceInstructionsWidget
 

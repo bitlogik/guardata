@@ -65,7 +65,9 @@ def test_sync_monitor_stateful(
     async def mockpoint_sleep():
         await trio.sleep(0.01)
 
-    monkeypatch.setattr("guardata.client.sync_monitor.freeze_sync_monitor_mockpoint", mockpoint_sleep)
+    monkeypatch.setattr(
+        "guardata.client.sync_monitor.freeze_sync_monitor_mockpoint", mockpoint_sleep
+    )
     monkeypatch.setattr(
         "guardata.client.messages_monitor.freeze_messages_monitor_mockpoint", mockpoint_sleep
     )

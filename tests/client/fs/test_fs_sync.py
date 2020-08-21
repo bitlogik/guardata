@@ -261,10 +261,22 @@ async def test_cross_sync(running_backend, alice_user_fs, alice2_user_fs):
 
     spy.assert_events_occured(
         [
-            (ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5)),
+            (
+                ClientEvent.FS_ENTRY_DOWNSYNCED,
+                {"workspace_id": wid, "id": wid},
+                Pendulum(2000, 1, 5),
+            ),
             (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5)),
-            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, Pendulum(2000, 1, 5)),
-            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, Pendulum(2000, 1, 5)),
+            (
+                ClientEvent.FS_ENTRY_SYNCED,
+                {"workspace_id": wid, "id": spy.ANY},
+                Pendulum(2000, 1, 5),
+            ),
+            (
+                ClientEvent.FS_ENTRY_SYNCED,
+                {"workspace_id": wid, "id": spy.ANY},
+                Pendulum(2000, 1, 5),
+            ),
         ]
     )
 

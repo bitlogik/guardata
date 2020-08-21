@@ -32,7 +32,12 @@ from guardata.client.gui.claim_device_widget import ClaimDeviceWidget
 from guardata.client.gui.license_widget import LicenseWidget
 from guardata.client.gui.about_widget import AboutWidget
 from guardata.client.gui.settings_widget import SettingsWidget
-from guardata.client.gui.custom_dialogs import ask_question, show_error, GreyedDialog, get_text_input
+from guardata.client.gui.custom_dialogs import (
+    ask_question,
+    show_error,
+    GreyedDialog,
+    get_text_input,
+)
 from guardata.client.gui.custom_widgets import Button
 from guardata.client.gui.create_org_widget import CreateOrgWidget
 from guardata.client.gui import validators

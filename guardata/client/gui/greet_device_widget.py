@@ -14,7 +14,9 @@ from guardata.client.gui.custom_dialogs import show_error, GreyedDialog, show_in
 from guardata.client.gui.lang import translate as _
 from guardata.client.gui import desktop
 from guardata.client.gui.ui.greet_device_widget import Ui_GreetDeviceWidget
-from guardata.client.gui.ui.greet_device_code_exchange_widget import Ui_GreetDeviceCodeExchangeWidget
+from guardata.client.gui.ui.greet_device_code_exchange_widget import (
+    Ui_GreetDeviceCodeExchangeWidget,
+)
 from guardata.client.gui.ui.greet_device_instructions_widget import Ui_GreetDeviceInstructionsWidget
 
 

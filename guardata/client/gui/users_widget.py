@@ -288,7 +288,11 @@ class UsersWidget(QWidget, Ui_UsersWidget):
 
     def greet_user(self, token):
         GreetUserWidget.show_modal(
-            client=self.client, jobs_ctx=self.jobs_ctx, token=token, parent=self, on_finished=self.reset
+            client=self.client,
+            jobs_ctx=self.jobs_ctx,
+            token=token,
+            parent=self,
+            on_finished=self.reset,
         )
 
     def cancel_invitation(self, token):

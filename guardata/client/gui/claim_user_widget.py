@@ -11,7 +11,11 @@ from PyQt5.QtWidgets import QWidget
 from guardata.api.protocol import HumanHandle
 from guardata.client.types import LocalDevice
 from guardata.client.local_device import LocalDeviceAlreadyExistsError, save_device_with_password
-from guardata.client.invite import claimer_retrieve_info, InvitePeerResetError, InviteAlreadyUsedError
+from guardata.client.invite import (
+    claimer_retrieve_info,
+    InvitePeerResetError,
+    InviteAlreadyUsedError,
+)
 
 from guardata.client.backend_connection import (
     backend_invited_cmds_factory,

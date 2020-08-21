@@ -64,9 +64,13 @@ class GeneratePyQtResourcesBundle(Command):
         try:
             from PyQt5.pyrcc_main import processResourceFile
 
-            self.announce("Generating `guardata.client.gui._resources_rc`", level=distutils.log.INFO)
+            self.announce(
+                "Generating `guardata.client.gui._resources_rc`", level=distutils.log.INFO
+            )
             processResourceFile(
-                ["guardata/client/gui/rc/resources.qrc"], "guardata/client/gui/_resources_rc.py", False
+                ["guardata/client/gui/rc/resources.qrc"],
+                "guardata/client/gui/_resources_rc.py",
+                False,
             )
         except ImportError:
             print("PyQt5 not installed, skipping `guardata.client.gui._resources_rc` generation.")

@@ -223,7 +223,9 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
             self.event_bus.disconnect(ClientEvent.FS_ENTRY_UPDATED, self._on_fs_entry_updated_trio)
             self.event_bus.disconnect(ClientEvent.FS_ENTRY_SYNCED, self._on_fs_entry_synced_trio)
             self.event_bus.disconnect(ClientEvent.SHARING_UPDATED, self._on_sharing_updated_trio)
-            self.event_bus.disconnect(ClientEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio)
+            self.event_bus.disconnect(
+                ClientEvent.FS_ENTRY_DOWNSYNCED, self._on_entry_downsynced_trio
+            )
             self.event_bus.disconnect(
                 ClientEvent.MOUNTPOINT_STARTED, self._on_mountpoint_started_trio
             )

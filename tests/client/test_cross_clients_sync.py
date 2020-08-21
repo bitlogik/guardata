@@ -95,7 +95,9 @@ async def test_online_sync2(autojump_clock, running_backend, client_factory, ali
 
 @pytest.mark.trio
 @pytest.mark.skip(reason="Recursive sync strategy need to be reworked")
-async def test_sync_then_clean_start(autojump_clock, running_backend, client_factory, alice, alice2):
+async def test_sync_then_clean_start(
+    autojump_clock, running_backend, client_factory, alice, alice2
+):
     # Given the clients are initialized while the backend is online, we are
     # guaranteed they are connected
     async with client_factory() as alice_client:
@@ -111,7 +113,9 @@ async def test_sync_then_clean_start(autojump_clock, running_backend, client_fac
 
             await alice_client.user_fs.sync("/foo.txt")
 
-        async with client_factory() as alice2_client2, wait_for_entries_synced(alice2_client2, ["/"]):
+        async with client_factory() as alice2_client2, wait_for_entries_synced(
+            alice2_client2, ["/"]
+        ):
             await alice2_client2.login(alice2)
 
             for path in ("/", "/foo.txt"):
@@ -172,9 +176,9 @@ async def test_fast_forward_on_offline_during_sync(
 
         # Given the clients are initialized while the backend is online, we are
         # guaranteed they are connected
-        async with client_factory(config={"backend_addr": server1.addr}) as alice_client, client_factory(
-            config={"backend_addr": server2.addr}
-        ) as alice2_client2:
+        async with client_factory(
+            config={"backend_addr": server1.addr}
+        ) as alice_client, client_factory(config={"backend_addr": server2.addr}) as alice2_client2:
             await alice_client.login(alice)
             await alice2_client2.login(alice2)
 

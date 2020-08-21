@@ -45,7 +45,8 @@ async def logged_gui_with_workspace(
     assert add_button is not None
 
     monkeypatch.setattr(
-        "guardata.client.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: ("Workspace")
+        "guardata.client.gui.workspaces_widget.get_text_input",
+        lambda *args, **kwargs: ("Workspace"),
     )
 
     async with aqtbot.wait_signals(

@@ -432,7 +432,8 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
 
         print("####### Bootstrap organization #######")
         with _running(
-            "client bootstrap_organization " f"{url} --config-dir={config_dir} --password={password}",
+            "client bootstrap_organization "
+            f"{url} --config-dir={config_dir} --password={password}",
             env=ssl_conf.client_env,
             wait_for="User fullname:",
         ) as p:

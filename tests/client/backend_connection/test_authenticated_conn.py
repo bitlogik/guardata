@@ -245,7 +245,10 @@ async def test_realm_notif_on_new_workspace_sync(
         await spy.wait_multiple_with_timeout(
             [
                 # Access to newly created realm
-                (ClientEvent.BACKEND_REALM_ROLES_UPDATED, {"realm_id": wid, "role": RealmRole.OWNER}),
+                (
+                    ClientEvent.BACKEND_REALM_ROLES_UPDATED,
+                    {"realm_id": wid, "role": RealmRole.OWNER},
+                ),
                 # New realm workspace manifest created
                 (
                     ClientEvent.BACKEND_REALM_VLOBS_UPDATED,

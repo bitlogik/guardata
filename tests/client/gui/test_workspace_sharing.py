@@ -25,7 +25,8 @@ async def gui_workspace_sharing(
     w_w = await logged_gui.test_switch_to_workspaces_widget()
 
     monkeypatch.setattr(
-        "guardata.client.gui.workspaces_widget.get_text_input", lambda *args, **kwargs: ("Workspace")
+        "guardata.client.gui.workspaces_widget.get_text_input",
+        lambda *args, **kwargs: ("Workspace"),
     )
     await aqtbot.mouse_click(w_w.button_add_workspace, QtCore.Qt.LeftButton)
 

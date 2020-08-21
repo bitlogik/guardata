@@ -2,7 +2,10 @@
 
 import pytest
 
-from guardata.client.gui.password_validation import get_password_strength, get_password_strength_text
+from guardata.client.gui.password_validation import (
+    get_password_strength,
+    get_password_strength_text,
+)
 from guardata.client.gui.lang import switch_language
 
 

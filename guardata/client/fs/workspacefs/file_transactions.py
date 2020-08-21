@@ -12,7 +12,11 @@ from guardata.client.types import FileDescriptor, EntryID, LocalDevice
 
 from guardata.client.fs.remote_loader import RemoteLoader
 from guardata.client.fs.storage import WorkspaceStorage
-from guardata.client.fs.exceptions import FSLocalMissError, FSInvalidFileDescriptor, FSEndOfFileError
+from guardata.client.fs.exceptions import (
+    FSLocalMissError,
+    FSInvalidFileDescriptor,
+    FSEndOfFileError,
+)
 from guardata.client.types import Chunk, LocalFileManifest
 from guardata.client.fs.workspacefs.file_operations import (
     prepare_read,

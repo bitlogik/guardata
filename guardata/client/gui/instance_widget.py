@@ -132,7 +132,9 @@ class InstanceWidget(QWidget):
         if self.running_client_job.status is not None:
             if isinstance(self.running_client_job.exc, HandshakeRevokedDevice):
                 show_error(
-                    self, _("TEXT_LOGIN_ERROR_DEVICE_REVOKED"), exception=self.running_client_job.exc
+                    self,
+                    _("TEXT_LOGIN_ERROR_DEVICE_REVOKED"),
+                    exception=self.running_client_job.exc,
                 )
             elif isinstance(self.running_client_job.exc, MountpointWinfspNotAvailable):
                 show_error(
@@ -148,7 +150,9 @@ class InstanceWidget(QWidget):
                 )
             else:
                 logger.exception("Unhandled error", exc_info=self.running_client_job.exc)
-                show_error(self, _("TEXT_LOGIN_UNKNOWN_ERROR"), exception=self.running_client_job.exc)
+                show_error(
+                    self, _("TEXT_LOGIN_UNKNOWN_ERROR"), exception=self.running_client_job.exc
+                )
         self.running_client_job = None
         self.client_jobs_ctx = None
         self.client = None
