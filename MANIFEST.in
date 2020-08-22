@@ -1,7 +1,6 @@
 include LICENSE
 include README.rst
 
-recursive-exclude guardata/backend *
 recursive-include guardata/client/resources *.ico
 recursive-include guardata/client/gui/forms *.ui
 recursive-include guardata/client/gui/tr *.po *.ts
