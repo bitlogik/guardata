@@ -305,7 +305,7 @@ setup(
     author_email="contact@bitlogik.fr",
     url="https://guardata.app",
     python_requires=">=3.6",
-    packages=find_packages(include=["guardata", "guardata.*"], exclude=["guardata.backend.*"]),
+    packages=find_packages(include=["guardata", "guardata.*"], exclude=["guardata.backend", "guardata.backend.*"]),
     package_dir={"guardata": "guardata"},
     setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP],
     install_requires=requirements,
