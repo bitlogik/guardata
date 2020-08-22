@@ -9,7 +9,7 @@ class PackageLoader(BaseLoader):
         self.path = path
 
     def get_source(self, environment, template):
-        from guardata.backend import templates  # Self import \o/
+        from backendService import templates  # Self import \o/
 
         try:
             source = importlib_resources.read_text(templates, template)

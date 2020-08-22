@@ -13,7 +13,7 @@ import importlib_resources
 import h11
 
 from backendService.config import BackendConfig
-from guardata.backend import static as http_static_module
+from backendService import static as http_static_module
 from backendService.templates import get_template
 
 

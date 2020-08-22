@@ -11,7 +11,7 @@ from collections import defaultdict
 from guardata.utils import trio_run
 from guardata.cli_utils import cli_exception_handler
 from guardata.logging import configure_logging
-from guardata.backend import backend_app_factory
+from backendService import backend_app_factory
 from backendService.config import (
     BackendConfig,
     EmailConfig,
