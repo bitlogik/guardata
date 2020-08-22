@@ -257,7 +257,7 @@ requirements = [
     'contextvars==2.1;python_version<"3.7"',
     "structlog==19.2.0",
     "importlib_resources==1.0.2",
-    "colorama==0.4.0",  # structlog colored output
+    "colorama==0.4.0",
     "async_exit_stack==1.0.1",
     "outcome==1.0.0",
     "packaging==20.4",
