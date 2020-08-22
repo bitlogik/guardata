@@ -293,7 +293,7 @@ def GreetUserTestBed(
 
             await aqtbot.wait_until(_greet_done)
 
-            return None  # Test is done \o/
+            return None  # Test is done
 
     return _GreetUserTestBed
 

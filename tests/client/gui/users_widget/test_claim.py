@@ -303,7 +303,7 @@ def ClaimUserTestBed(
                 )
             ]
 
-            return None  # Test is done \o/
+            return None  # Test is done
 
     return _ClaimUserTestBed
 

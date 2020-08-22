@@ -260,7 +260,7 @@ def ClaimDeviceTestBed(
 
             await aqtbot.wait_until(_claim_done)
 
-            return None  # Test is done \o/
+            return None  # Test is done
 
     return _ClaimDeviceTestBed
 

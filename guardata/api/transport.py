@@ -198,7 +198,7 @@ class Transport:
                 await self._net_send(event.response())
 
             elif isinstance(event, Pong):
-                # Nothing to do \o/
+                # Nothing to do
                 self.logger.debug("Received pong")
 
             else:
