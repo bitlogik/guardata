@@ -329,7 +329,7 @@ setup(
     classifiers=[
         "Development Status :: 1 - Planning",
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: GNU General Public License v3 (GPLv3)",
+        "License :: OSI Approved :: GNU Affero General Public License v3",
         "Operating System :: Microsoft :: Windows :: Windows 8",
         "Operating System :: Microsoft :: Windows :: Windows 8.1",
         "Operating System :: Microsoft :: Windows :: Windows 10",
