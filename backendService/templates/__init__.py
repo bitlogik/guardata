@@ -10,6 +10,7 @@ class PackageLoader(BaseLoader):
 
     def get_source(self, environment, template):
         from backendService import templates
+
         try:
             source = importlib_resources.read_text(templates, template)
         except FileNotFoundError as exc:
