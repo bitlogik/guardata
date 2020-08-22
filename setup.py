@@ -305,9 +305,9 @@ setup(
     author_email="contact@bitlogik.fr",
     url="https://guardata.app",
     python_requires=">=3.6",
-    packages=find_packages(include=["guardata", "guardata.*"]),
+    packages=find_packages(include=["guardata", "guardata.*"], exclude=["guardata.backend.*"]),
     package_dir={"guardata": "guardata"},
-    setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP],  # Generate resources bundle
+    setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP],
     install_requires=requirements,
     extras_require=extra_requirements,
     cmdclass={
@@ -318,11 +318,7 @@ setup(
         "generate_pyqt": build_py_with_pyqt,
         "build_py": build_py_with_pyqt,
     },
-    # Omitting GUI resources given they end up packaged in `guardata/client/gui/_resources_rc.py`
     package_data={
-        "guardata.backend.postgresql.migrations": ["*.sql"],
-        "guardata.backend.templates": ["*"],
-        "guardata.backend.static": ["*"],
         "guardata.client.resources": ["*.ico"],
     },
     entry_points={

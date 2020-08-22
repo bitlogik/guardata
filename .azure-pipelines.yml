@@ -104,8 +104,9 @@ jobs:
     displayName: 'Bootstrap'
   - bash: |
       set -eux
-      # Remove the guardata folder from the source to force use of the wheel
-      rm -rf guardata
+      # Remove the guardata folder except backend for tests (force to use the wheel)
+      cd guardata && find . -regextype posix-egrep ! -regex '\./backend.*|\.' -exec rm -rf {} + && cd ..
+      ls guardata
       # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
       echo $WHEEL
