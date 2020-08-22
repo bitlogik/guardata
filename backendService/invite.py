@@ -234,7 +234,7 @@ class BaseInviteComponent:
             ).to_http_redirection_url()
 
         if msg["send_email"]:
-            if not os.environ.get("SG_APIKEY"):
+            if not os.environ.get("EMAIL_CONFIG"):
                 return invite_new_serializer.rep_dump({"status": "not_available"})
 
         if msg["type"] == InvitationType.USER:
