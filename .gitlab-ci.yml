@@ -31,8 +31,8 @@ windows-tests:
     - tags
   before_script:
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-    - choco install -y python --version=3.7.8
-    - choco install -y winfsp --version=1.7.20172
+    - choco install -y --limit-output python --version=3.7.8
+    - choco install -y --limit-output winfsp --version=1.7.20172
     - mkdir winfsp-test
     - curl -o winfsp-tests-1.7.20172.zip https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-tests-1.7.20172.zip
     - Expand-Archive winfsp-tests-1.7.20172.zip -DestinationPath winfsp-test
@@ -94,12 +94,10 @@ windows-build:
     - tags
   stage: build
   before_script:
-    - rm -R -Force tests
-    - rm -R -Force guardata/backend
     - rm -R -Force guardata/test_utils
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-    - choco install -y python --version=3.7.8
-    - choco install -y nsis   --version=3.06.1
+    - choco install -y --limit-output python --version=3.7.8
+    - choco install -y --limit-output nsis   --version=3.06.1
     - RefreshEnv
     - $pytver = "__version__ = `"${CI_COMMIT_TAG}`"`n"
     - Out-File -FilePath guardata\_version.py -InputObject $pytver -Encoding ascii
