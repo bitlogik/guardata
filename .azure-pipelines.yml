@@ -164,7 +164,7 @@ jobs:
       set -eux
       python.exe --version
       pip install -r pre-requirements.txt
-      choco install -y --limit-output winfsp --pre --version=$(winfsp.version)
+      choco install -y --no-progress winfsp --pre --version=$(winfsp.version)
       # Install winfsp-test and put it in PATH
       mkdir winfsp-test
       curl -L https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-tests-1.7.20172.zip -o winfsp-test/winfsp-tests.zip
