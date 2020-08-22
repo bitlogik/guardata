@@ -68,7 +68,7 @@ pip-build:
     - /sbin/ldconfig
     - ln -s /usr/bin/python3 /usr/bin/python
     - rm -Rf tests
-    - rm -Rf guardata/backend
+    - rm -Rf backendService
     - rm -Rf guardata/test_utils
     - python -m venv venv_build
     - ./venv_build/bin/python -m pip install -r pre-requirements.txt
