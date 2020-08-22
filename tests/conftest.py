@@ -32,8 +32,8 @@ from guardata.client.backend_connection import BackendConnStatus
 from guardata.client.mountpoint.manager import get_mountpoint_runner
 from guardata.client.fs.storage import LocalDatabase, local_database, UserStorage
 
-from .guardata.backend import backend_app_factory
-from .guardata.backend.config import (
+from guardatalocal.backend import backend_app_factory
+from guardatalocal.backend.config import (
     BackendConfig,
     EmailConfig,
     MockedBlockStoreConfig,
