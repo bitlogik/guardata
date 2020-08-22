@@ -21,6 +21,6 @@ Key features :
 
 guardata is a service offered by `BitLogiK <https://bitlogik.fr>`_.
 
-guardata is based on the `parsec technology <https://github.com/Scille/parsec-cloud>`_ developed by Scille.
+guardata is based on the `parsec technology <https://www.youtube.com/watch?v=hBg9EDCgjq8>`_ developed by Scille.
 
 More info to come
