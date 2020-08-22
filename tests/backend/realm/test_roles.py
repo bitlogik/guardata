@@ -7,7 +7,7 @@ from unittest.mock import ANY
 
 from guardata.api.protocol import RealmRole
 from guardata.api.data import RealmRoleCertificateContent, UserProfile
-from guardata.backend.realm import RealmGrantedRole
+from backendService.realm import RealmGrantedRole
 
 from tests.common import freeze_time, customize_fixtures
 from tests.backend.common import realm_update_roles, realm_get_role_certificates

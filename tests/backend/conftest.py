@@ -17,8 +17,8 @@ from guardata.api.protocol import (
     APIV1_AdministrationClientHandshake,
 )
 from guardata.api.transport import Transport
-from guardata.backend.realm import RealmGrantedRole
-from guardata.backend.backend_events import BackendEvent
+from backendService.realm import RealmGrantedRole
+from backendService.backend_events import BackendEvent
 from guardata.client.types import LocalDevice
 
 from tests.common import FreezeTestOnTransportError

@@ -104,9 +104,8 @@ jobs:
     displayName: 'Bootstrap'
   - bash: |
       set -eux
-      # Remove the guardata folder except backend for tests (force to use the wheel)
-      cd guardata && find . -regextype posix-egrep ! -regex '\./backend.*|\.' -exec rm -rf {} + && cd ..
-      ls guardata
+      # Remove the guardata folder (force to use the wheel)
+      rm -rf guardata
       # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
       echo $WHEEL
@@ -165,7 +164,7 @@ jobs:
       set -eux
       python.exe --version
       pip install -r pre-requirements.txt
-      choco install -y --limit-output winfsp --pre --version=$(winfsp.version)
+      choco install -y --no-progress winfsp --pre --version=$(winfsp.version)
       # Install winfsp-test and put it in PATH
       mkdir winfsp-test
       curl -L https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-tests-1.7.20172.zip -o winfsp-test/winfsp-tests.zip

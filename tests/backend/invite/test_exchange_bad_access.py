@@ -9,7 +9,7 @@ from functools import partial
 from guardata.crypto import PrivateKey
 from guardata.api.transport import TransportError
 from guardata.api.protocol import InvitationDeletedReason, InvitationType
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 
 from tests.backend.common import (
     ping,

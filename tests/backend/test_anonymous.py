@@ -5,7 +5,7 @@
 
 # from guardata.api.protocol.base import packb, unpackb
 
-# from guardata.backend.utils import anonymous_api, check_anonymous_api_allowed
+# from backendService.utils import anonymous_api, check_anonymous_api_allowed
 
 
 # def test_anonymous_api_decorator():
@@ -26,7 +26,7 @@
 #     def not_decorated():
 #         pass
 
-#     with patch("guardata.backend.user.BaseUserComponent.api_user_claim", new=not_decorated):
+#     with patch("backendService.user.BaseUserComponent.api_user_claim", new=not_decorated):
 #         with pytest.raises(RuntimeError):
 #             async with backend_factory():
 #                 pass

@@ -13,7 +13,7 @@ from guardata.client.fs import (
     FSBackendOfflineError,
     FSSharingNotAllowedError,
 )
-from guardata.backend.realm import RealmGrantedRole, RealmRole
+from backendService.realm import RealmGrantedRole, RealmRole
 
 from tests.common import freeze_time, create_shared_workspace
 

@@ -1,10 +1,10 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 import pytest
 import pendulum
 
-from guardata.backend.user import INVITATION_VALIDITY, User, Device
+from backendService.user import INVITATION_VALIDITY, User, Device
 from guardata.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
 from guardata.api.protocol import apiv1_user_create_serializer
 

@@ -7,7 +7,7 @@ from uuid import UUID
 from guardata.utils import TIMESTAMP_MAX_DT
 from guardata.api.data import RealmRoleCertificateContent, UserProfile
 from guardata.api.protocol import RealmRole
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 
 from tests.common import freeze_time, customize_fixtures
 from tests.backend.test_events import events_subscribe

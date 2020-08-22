@@ -4,7 +4,7 @@ import pytest
 from pendulum import Pendulum
 import trio
 
-from guardata.backend.user import UserInvitation
+from backendService.user import UserInvitation
 from guardata.api.data import UserProfile
 from guardata.api.protocol import (
     apiv1_user_cancel_invitation_serializer,

@@ -5,8 +5,8 @@ from uuid import UUID
 from pendulum import Pendulum
 
 from guardata.api.protocol import RealmRole, APIEvent
-from guardata.backend.realm import RealmGrantedRole
-from guardata.backend.backend_events import BackendEvent
+from backendService.realm import RealmGrantedRole
+from backendService.backend_events import BackendEvent
 
 from tests.backend.common import events_subscribe, events_listen_nowait
 

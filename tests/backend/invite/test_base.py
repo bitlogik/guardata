@@ -6,7 +6,7 @@ from unittest.mock import ANY
 from pendulum import Pendulum  # , now as pendulum_now
 
 # from guardata.api.data import RevokedUserCertificateContent
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 
 # from guardata.api.transport import TransportError
 from guardata.api.data import UserProfile

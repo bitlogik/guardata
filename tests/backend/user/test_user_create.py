@@ -3,7 +3,7 @@
 import pytest
 import pendulum
 
-from guardata.backend.user import INVITATION_VALIDITY, User, Device
+from backendService.user import INVITATION_VALIDITY, User, Device
 from guardata.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
 from guardata.api.protocol import DeviceID
 

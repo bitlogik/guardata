@@ -14,7 +14,7 @@ from pendulum import now as pendulum_now
 
 from guardata.api.protocol import RealmRole
 from guardata.api.data import RealmRoleCertificateContent
-from guardata.backend.realm import RealmGrantedRole
+from backendService.realm import RealmGrantedRole
 
 from tests.common import call_with_control
 

@@ -1,13 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 from guardata.event_bus import MetaEvent
 import pytest
 import trio
 from async_generator import asynccontextmanager
 
 from guardata.api.protocol import apiv1_user_invite_serializer, UserID
-from guardata.backend.user import PEER_EVENT_MAX_WAIT, UserInvitation
+from backendService.user import PEER_EVENT_MAX_WAIT, UserInvitation
 
 
 @asynccontextmanager

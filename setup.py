@@ -305,7 +305,7 @@ setup(
     author_email="contact@bitlogik.fr",
     url="https://guardata.app",
     python_requires=">=3.6",
-    packages=find_packages(include=["guardata", "guardata.*"], exclude=["guardata.backend", "guardata.backend.*"]),
+    packages=find_packages(include=["guardata", "guardata.*"]),
     package_dir={"guardata": "guardata"},
     setup_requires=[WHEEL_DEP, *PYQT_DEPS, BABEL_DEP],
     install_requires=requirements,
@@ -318,9 +318,7 @@ setup(
         "generate_pyqt": build_py_with_pyqt,
         "build_py": build_py_with_pyqt,
     },
-    package_data={
-        "guardata.client.resources": ["*.ico"],
-    },
+    package_data={"guardata.client.resources": ["*.ico"], },
     entry_points={
         "console_scripts": ["guardata = guardata.cli:cli"],
         "babel.extractors": ["extract_qt = misc.babel_qt_extractor.extract_qt"],
