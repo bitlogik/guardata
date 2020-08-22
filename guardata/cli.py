@@ -16,7 +16,7 @@ except ImportError as exc:
 
 
 try:
-    from guardata.backend.cli import backend_cmd
+    from backendService.cli import backend_cmd
 except ImportError as exc:
     backend_cmd = generate_not_available_cmd(exc)
 

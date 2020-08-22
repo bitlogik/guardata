@@ -3,7 +3,7 @@
 import pytest
 import trio
 
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 from guardata.api.protocol import RealmRole
 from guardata.client.backend_connection import (
     BackendAuthenticatedConn,

@@ -1,11 +1,11 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 import pytest
 import pendulum
 
 from guardata.api.data import DeviceCertificateContent, UserProfile
-from guardata.backend.user import INVITATION_VALIDITY, Device
+from backendService.user import INVITATION_VALIDITY, Device
 
 from tests.common import freeze_time, customize_fixtures
 from tests.backend.common import device_create, ping

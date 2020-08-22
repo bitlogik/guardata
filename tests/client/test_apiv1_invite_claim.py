@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 from guardata.event_bus import MetaEvent
 import pytest
 import trio

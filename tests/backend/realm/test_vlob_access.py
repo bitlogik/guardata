@@ -12,7 +12,7 @@ from guardata.api.protocol import (
     vlob_update_serializer,
     vlob_list_versions_serializer,
 )
-from guardata.backend.realm import RealmGrantedRole
+from backendService.realm import RealmGrantedRole
 
 from tests.common import freeze_time
 from tests.backend.common import vlob_create, vlob_update, vlob_read, vlob_list_versions

@@ -19,11 +19,11 @@ from guardata.api.data import (
     RealmRoleCertificateContent,
 )
 from guardata.api.protocol import OrganizationID, UserID, DeviceID, HumanHandle, RealmRole
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 from guardata.client.types import LocalDevice, LocalUserManifest, BackendOrganizationBootstrapAddr
 from guardata.client.local_device import generate_new_device
-from guardata.backend.user import User as BackendUser, Device as BackendDevice
-from guardata.backend.realm import RealmGrantedRole
+from backendService.user import User as BackendUser, Device as BackendDevice
+from backendService.realm import RealmGrantedRole
 
 from tests.common import freeze_time, addr_with_device_subdomain
 

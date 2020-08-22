@@ -6,7 +6,7 @@ import asyncio
 import asyncpg
 from asyncpg.cluster import TempCluster
 
-from guardata.backend.postgresql.handler import _apply_migrations, retrieve_migrations
+from backendService.postgresql.handler import _apply_migrations, retrieve_migrations
 
 
 def _patch_url_if_xdist(url):

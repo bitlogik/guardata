@@ -6,7 +6,7 @@ from uuid import UUID
 
 from guardata.api.data import RealmRoleCertificateContent
 from guardata.api.protocol import RealmRole, APIEvent
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 
 from tests.backend.test_events import events_subscribe, events_listen_nowait
 from tests.backend.common import realm_create, realm_update_roles

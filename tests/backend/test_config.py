@@ -2,7 +2,7 @@
 
 import pytest
 
-from guardata.backend.cli.run import _split_with_escaping
+from backendService.cli.run import _split_with_escaping
 
 
 @pytest.mark.parametrize(

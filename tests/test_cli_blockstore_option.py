@@ -3,8 +3,8 @@
 import pytest
 from click import BadParameter
 
-from guardata.backend.cli.run import _parse_blockstore_params
-from guardata.backend.config import (
+from backendService.cli.run import _parse_blockstore_params
+from backendService.config import (
     MockedBlockStoreConfig,
     PostgreSQLBlockStoreConfig,
     S3BlockStoreConfig,

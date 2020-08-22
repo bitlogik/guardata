@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 # import pytest
-# from guardata.backend.http.router import (
+# from backendService.http.router import (
 #     _http_404,
 #     _redirect_to_guardata,
 #     _is_route,

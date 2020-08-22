@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 from guardata.event_bus import MetaEvent
 import pytest
 import trio
@@ -11,7 +11,7 @@ from guardata.api.protocol import (
     apiv1_device_get_invitation_creator_serializer,
     apiv1_device_claim_serializer,
 )
-from guardata.backend.user import Device, DeviceInvitation, PEER_EVENT_MAX_WAIT
+from backendService.user import Device, DeviceInvitation, PEER_EVENT_MAX_WAIT
 
 from tests.common import freeze_time
 

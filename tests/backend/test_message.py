@@ -4,8 +4,8 @@ import pytest
 from pendulum import Pendulum
 
 from guardata.api.protocol import message_get_serializer, APIEvent
-from guardata.backend.backend_events import BackendEvent
-from guardata.backend.config import PostgreSQLBlockStoreConfig
+from backendService.backend_events import BackendEvent
+from backendService.config import PostgreSQLBlockStoreConfig
 
 from tests.backend.test_events import events_subscribe, events_listen, events_listen_nowait
 

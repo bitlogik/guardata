@@ -3,7 +3,7 @@
 import pytest
 
 from guardata.api.protocol import apiv1_user_get_invitation_creator_serializer
-from guardata.backend.user import UserInvitation, INVITATION_VALIDITY
+from backendService.user import UserInvitation, INVITATION_VALIDITY
 
 from tests.common import freeze_time
 

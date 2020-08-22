@@ -4,7 +4,7 @@ import pytest
 from pendulum import Pendulum
 
 from guardata.api.protocol import apiv1_device_get_invitation_creator_serializer
-from guardata.backend.user import DeviceInvitation, INVITATION_VALIDITY
+from backendService.user import DeviceInvitation, INVITATION_VALIDITY
 
 from tests.common import freeze_time
 

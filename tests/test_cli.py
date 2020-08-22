@@ -23,7 +23,7 @@ from async_generator import asynccontextmanager
 
 from guardata import __version__ as guardata_version
 from guardata.api.protocol import OrganizationID, DeviceID
-from guardata.backend.postgresql import MigrationItem
+from backendService.postgresql import MigrationItem
 from guardata.client.local_device import save_device_with_password, list_available_devices
 from guardata.cli import cli
 
@@ -177,7 +177,7 @@ def test_migrate_backend(postgresql_url, unused_tcp_port):
     dry_run_args = f"backend migrate --db {postgresql_url} --dry-run"
     apply_args = f"backend migrate --db {postgresql_url}"
 
-    with patch("guardata.backend.cli.migration.retrieve_migrations") as retrieve_migrations:
+    with patch("backendService.cli.migration.retrieve_migrations") as retrieve_migrations:
         retrieve_migrations.return_value = [
             MigrationItem(
                 idx=100001, name="migration1", file_name="100001_migration1.sql", sql=sql

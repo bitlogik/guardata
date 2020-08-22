@@ -12,7 +12,7 @@ from guardata.client.fs import (
     FSWorkspaceInMaintenance,
     FSBadEncryptionRevision,
 )
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 from tests.common import freeze_time
 
 

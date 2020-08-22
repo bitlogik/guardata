@@ -1,11 +1,11 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from guardata.backend.backend_events import BackendEvent
+from backendService.backend_events import BackendEvent
 import pytest
 import trio
 from pendulum import now as pendulum_now, Pendulum
 
-from guardata.backend.user import INVITATION_VALIDITY
+from backendService.user import INVITATION_VALIDITY
 from guardata.api.data import RevokedUserCertificateContent, UserProfile
 from guardata.api.protocol import HandshakeRevokedDevice
 from guardata.api.transport import TransportError

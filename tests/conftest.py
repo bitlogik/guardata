@@ -32,8 +32,8 @@ from guardata.client.backend_connection import BackendConnStatus
 from guardata.client.mountpoint.manager import get_mountpoint_runner
 from guardata.client.fs.storage import LocalDatabase, local_database, UserStorage
 
-from guardatalocal.backend import backend_app_factory
-from guardatalocal.backend.config import (
+from backendService import backend_app_factory
+from backendService.config import (
     BackendConfig,
     EmailConfig,
     MockedBlockStoreConfig,
@@ -629,7 +629,7 @@ def email_letterbox(monkeypatch):
     async def _mocked_send_email(email_config, to_addr, message):
         letterbox._push(to_addr, message)
 
-    monkeypatch.setattr("guardata.backend.invite.send_email", _mocked_send_email)
+    monkeypatch.setattr("backendService.invite.send_email", _mocked_send_email)
     return letterbox
 
 
@@ -650,7 +650,7 @@ def webhook_spy(monkeypatch):
         events.append((req.full_url, cooked_data))
         yield MockedRep()
 
-    monkeypatch.setattr("guardata.backend.webhooks.urlopen", _mock_urlopen)
+    monkeypatch.setattr("backendService.webhooks.urlopen", _mock_urlopen)
     return events
 
 
