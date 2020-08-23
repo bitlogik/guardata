@@ -15,6 +15,7 @@ import attr
 
 
 class SASCode(str):
+    # Short Authentication Strings
     __slots__ = ()
     length = 5
     symbols = "123456789ABCDEFGHJKLMNPRSTUVWXYZ"
