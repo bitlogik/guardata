@@ -161,8 +161,8 @@ def _wait_for(p, wait_txt):
 
 
 def _wait_for_regex(p, regex):
-    for _ in range(10):
-        sleep(0.1)
+    for _ in range(20):
+        sleep(0.25)
         stdout = p.live_stdout.read()
         match = re.search(regex, stdout, re.MULTILINE)
         if match:

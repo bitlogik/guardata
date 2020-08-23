@@ -3,7 +3,7 @@
 
 import attr
 from typing import Tuple, Optional
-from hashlib import sha256
+from nacl.hashlib import blake2b
 from marshmallow import ValidationError
 from pendulum import Pendulum, now as pendulum_now
 
@@ -91,7 +91,7 @@ class LocalDevice(BaseLocalData):
         Hence it's often simpler to rely on it hash instead (e.g. select the
         device to use in the CLI by providing the beginning of the hash)
         """
-        return sha256(self.slug.encode()).hexdigest()
+        return blake2b(self.slug.encode()).hexdigest()
 
     @staticmethod
     def load_slug(slug: str) -> Tuple[str, OrganizationID, DeviceID]:
@@ -107,7 +107,7 @@ class LocalDevice(BaseLocalData):
 
     @property
     def root_verify_key_hash(self):
-        return sha256(self.root_verify_key.encode()).hexdigest()[:10]
+        return blake2b(self.root_verify_key.encode()).hexdigest()[:10]
 
     @property
     def organization_id(self):

@@ -3,16 +3,14 @@
 
 from typing import Tuple
 from base64 import b32decode, b32encode
-from hashlib import sha256
 
-from nacl.exceptions import CryptoError  # noqa: republishing
+from nacl.exceptions import CryptoError, TypeError, ensure  # noqa: republishing
 from nacl.public import SealedBox, PrivateKey as _PrivateKey, PublicKey as _PublicKey
 from nacl.signing import SigningKey as _SigningKey, VerifyKey as _VerifyKey
 from nacl.bindings import crypto_sign_BYTES, crypto_scalarmult
-from nacl.hash import blake2b, BLAKE2B_BYTES
+from nacl.hashlib import blake2b
 from nacl.pwhash import argon2id
 from nacl.utils import random
-from nacl.encoding import RawEncoder
 
 from guardata.crypto.secretbox2 import SecretBox
 
@@ -75,17 +73,18 @@ class SecretKey(bytes):
         box = SecretBox(self)
         return box.decrypt(ciphered)
 
-    def hmac(self, data: bytes, digest_size=BLAKE2B_BYTES) -> bytes:
-        return blake2b(data, digest_size=digest_size, key=self, encoder=RawEncoder)
-
 
 class HashDigest(bytes):
     __slots__ = ()
 
     @classmethod
     def from_data(self, data: bytes) -> "HashDigest":
-        # nacl's sha256 doesn't accept bytearray, so stick to `hashlib.sha256`
-        return HashDigest(sha256(data).digest())
+        ensure(
+            isinstance(data, bytes) or isinstance(data, bytearray),
+            "data type must be bytes or bytearray",
+            raising=TypeError,
+        )
+        return HashDigest(blake2b(data if isinstance(data, bytes) else bytes(data)).digest())
 
 
 # Basically just add comparison support to nacl keys
@@ -183,6 +182,11 @@ def import_root_verify_key(raw: str) -> VerifyKey:
         return VerifyKey(b32decode(raw.replace("s", "=").encode("utf8")))
     except CryptoError as exc:
         raise ValueError("Invalid verify key") from exc
+
+
+def derivate_secret_from_keys(key: bytes, salt: bytes) -> bytes:
+    rawkey = argon2id.kdf(16, key, salt, opslimit=CRYPTO_OPSLIMIT, memlimit=CRYPTO_MEMLIMIT,)
+    return rawkey
 
 
 def derivate_secret_key_from_password(password: str, salt: bytes = None) -> Tuple[SecretKey, bytes]:

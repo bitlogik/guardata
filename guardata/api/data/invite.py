@@ -2,9 +2,10 @@
 
 import re
 from typing import Optional, Tuple, List
-from random import randint, shuffle
+from random import shuffle
+from secrets import randbelow
 
-from guardata.crypto import VerifyKey, PublicKey, PrivateKey, SecretKey
+from guardata.crypto import VerifyKey, PublicKey, PrivateKey, SecretKey, derivate_secret_from_keys
 from guardata.serde import fields, post_load
 from guardata.api.protocol import DeviceID, DeviceIDField, HumanHandle, HumanHandleField
 from guardata.api.data.base import BaseAPIData, BaseSchema
@@ -14,9 +15,10 @@ import attr
 
 
 class SASCode(str):
+    # Short Authentication Strings
     __slots__ = ()
-    length = 4
-    symbols = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789"
+    length = 5
+    symbols = "123456789ABCDEFGHJKLMNPRSTUVWXYZ"
     regex = re.compile(rf"^[{symbols}]{{{length}}}$")
 
     def __init__(self, raw):
@@ -42,16 +44,19 @@ class SASCode(str):
 def generate_sas_codes(
     claimer_nonce: bytes, greeter_nonce: bytes, shared_secret_key: SecretKey
 ) -> Tuple[SASCode, SASCode]:
-    # Computes combined HMAC
+    # Computes combined KDF
     combined_nonce = claimer_nonce + greeter_nonce
-    # Digest size of 5 bytes so we can split it between two 20bits SAS
-    combined_hmac = shared_secret_key.hmac(combined_nonce, digest_size=5)
+    # Digest size of 8 bytes can be split between two 25bits SAS
+    # KDF is argon2id(pwd=combined_nonce+1half_shared_secret_key, salt=2half_shared_secret_key,, "moderate")
+    combined_kdf = derivate_secret_from_keys(
+        combined_nonce + shared_secret_key[:16], shared_secret_key[16:]
+    )
 
-    hmac_as_int = int.from_bytes(combined_hmac, "big")
-    # Big endian number extracted from bits [0, 20[
-    claimer_sas = hmac_as_int % 2 ** 20
-    # Big endian number extracted from bits [20, 40[
-    greeter_sas = (hmac_as_int >> 20) % 2 ** 20
+    mac_as_int = int.from_bytes(combined_kdf[:8], "big")
+    # Big endian number extracted from bits [0, 25[
+    claimer_sas = mac_as_int % 2 ** 25
+    # Big endian number extracted from bits [25, 50[
+    greeter_sas = (mac_as_int >> 25) % 2 ** 25
 
     return SASCode.from_int(claimer_sas), SASCode.from_int(greeter_sas)
 
@@ -59,7 +64,7 @@ def generate_sas_codes(
 def generate_sas_code_candidates(valid_sas: SASCode, size: int = 3) -> List[SASCode]:
     candidates = {valid_sas}
     while len(candidates) < size:
-        candidates.add(SASCode.from_int(randint(0, 2 ** 20 - 1)))
+        candidates.add(SASCode.from_int(randbelow(2 ** 25)))
     ordered_candidates = list(candidates)
     shuffle(ordered_candidates)
     return ordered_candidates
