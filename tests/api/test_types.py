@@ -113,8 +113,8 @@ def test_sas_code():
     # [...]
     #assert SASCode.from_int(0x84001) == SASCode("BASS")
     # [...]
-    assert SASCode.from_int(0xFFFFFFE) == SASCode("YZZZZ")
-    assert SASCode.from_int(0xFFFFFFF) == SASCode("ZZZZZ")
+    assert SASCode.from_int(0x1FFFFFE) == SASCode("YZZZZ")
+    assert SASCode.from_int(0x1FFFFFF) == SASCode("ZZZZZ")
 
     with pytest.raises(ValueError):
         SASCode.from_int(2 ** 25)
