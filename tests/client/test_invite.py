@@ -94,7 +94,7 @@ async def test_good_device_claim(
 
         await in_progress_ctx.do_create_new_device(author=alice, device_label=granted_device_label)
 
-    with trio.fail_after(1):
+    with trio.fail_after(5):
         async with trio.open_nursery() as nursery:
             nursery.start_soon(_run_claimer)
             nursery.start_soon(_run_greeter)
@@ -244,7 +244,7 @@ async def test_good_user_claim(
             profile=granted_profile,
         )
 
-    with trio.fail_after(1):
+    with trio.fail_after(5):
         async with trio.open_nursery() as nursery:
             nursery.start_soon(_run_claimer)
             nursery.start_soon(_run_greeter)
