@@ -184,7 +184,7 @@ def import_root_verify_key(raw: str) -> VerifyKey:
 
 def derivate_secret_from_keys(key: bytes, salt: bytes) -> bytes:
     rawkey = argon2id.kdf(
-        8,
+        16,
         key,
         salt,
         opslimit=CRYPTO_OPSLIMIT,

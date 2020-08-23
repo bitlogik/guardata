@@ -49,11 +49,11 @@ def generate_sas_codes(
     # KDF is argon2id(pwd=combined_nonce+1half_shared_secret_key, salt=2half_shared_secret_key,, "moderate")
     combined_kdf = derivate_secret_from_keys(combined_nonce+shared_secret_key[:16], shared_secret_key[16:])
 
-    hmac_as_int = int.from_bytes(combined_kdf, "big")
+    mac_as_int = int.from_bytes(combined_kdf[:8], "big")
     # Big endian number extracted from bits [0, 25[
-    claimer_sas = hmac_as_int % 2 ** 25
+    claimer_sas = mac_as_int % 2 ** 25
     # Big endian number extracted from bits [25, 50[
-    greeter_sas = (hmac_as_int >> 25) % 2 ** 25
+    greeter_sas = (mac_as_int >> 25) % 2 ** 25
 
     return SASCode.from_int(claimer_sas), SASCode.from_int(greeter_sas)
 
