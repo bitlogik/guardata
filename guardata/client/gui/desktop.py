@@ -22,7 +22,7 @@ def open_url(url):
 
 
 def open_feedback_link():
-    open_url("https://guardata.app/queryform")
+    open_url("https://guardata.app/contact")
 
 
 # def open_user_guide():
