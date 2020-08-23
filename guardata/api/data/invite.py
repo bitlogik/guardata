@@ -48,7 +48,9 @@ def generate_sas_codes(
     combined_nonce = claimer_nonce + greeter_nonce
     # Digest size of 8 bytes can be split between two 25bits SAS
     # KDF is argon2id(pwd=combined_nonce+1half_shared_secret_key, salt=2half_shared_secret_key,, "moderate")
-    combined_kdf = derivate_secret_from_keys(combined_nonce+shared_secret_key[:16], shared_secret_key[16:])
+    combined_kdf = derivate_secret_from_keys(
+        combined_nonce + shared_secret_key[:16], shared_secret_key[16:]
+    )
 
     mac_as_int = int.from_bytes(combined_kdf[:8], "big")
     # Big endian number extracted from bits [0, 25[

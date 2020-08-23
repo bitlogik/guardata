@@ -111,7 +111,7 @@ def test_sas_code():
     assert SASCode.from_int(0x0) == SASCode("11111")
     assert SASCode.from_int(0x1) == SASCode("21111")
     # [...]
-    #assert SASCode.from_int(0x84001) == SASCode("BASS")
+    # assert SASCode.from_int(0x84001) == SASCode("1BASS")
     # [...]
     assert SASCode.from_int(0x1FFFFFE) == SASCode("YZZZZ")
     assert SASCode.from_int(0x1FFFFFF) == SASCode("ZZZZZ")
