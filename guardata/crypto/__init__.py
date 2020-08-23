@@ -182,8 +182,7 @@ def import_root_verify_key(raw: str) -> VerifyKey:
         raise ValueError("Invalid verify key") from exc
 
 
-def derivate_secret_from_keys(key: key, salt: bytes) -> Tuple[SecretKey, bytes]:
-    salt = salt or random(argon2id.SALTBYTES)
+def derivate_secret_from_keys(key: bytes, salt: bytes) -> bytes:
     rawkey = argon2id.kdf(
         8,
         key,
@@ -192,6 +191,7 @@ def derivate_secret_from_keys(key: key, salt: bytes) -> Tuple[SecretKey, bytes]:
         memlimit=CRYPTO_MEMLIMIT,
     )
     return rawkey
+
 
 def derivate_secret_key_from_password(password: str, salt: bytes = None) -> Tuple[SecretKey, bytes]:
     salt = salt or random(argon2id.SALTBYTES)
