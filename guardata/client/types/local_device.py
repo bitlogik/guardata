@@ -107,7 +107,7 @@ class LocalDevice(BaseLocalData):
 
     @property
     def root_verify_key_hash(self):
-        return black2b(self.root_verify_key.encode()).hexdigest()[:10]
+        return blake2b(self.root_verify_key.encode()).hexdigest()[:10]
 
     @property
     def organization_id(self):

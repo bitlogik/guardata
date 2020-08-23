@@ -11,7 +11,6 @@ from nacl.bindings import crypto_sign_BYTES, crypto_scalarmult
 from nacl.hashlib import blake2b
 from nacl.pwhash import argon2id
 from nacl.utils import random
-from nacl.encoding import RawEncoder
 
 from guardata.crypto.secretbox2 import SecretBox
 
