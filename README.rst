@@ -19,7 +19,7 @@ Key features :
 - Access control and logging
 - open source
 
-guardata is based on the `parsec technology <https://www.youtube.com/watch?v=hBg9EDCgjq8>`_ developed by Scille. The cryptographic routines are provided by the `lisodium library <https://doc.libsodium.org/>`_.
+guardata is based on the `parsec technology <https://www.youtube.com/watch?v=Ds89nhbO0yk>`_ developed by Scille. The cryptographic routines are provided by the `lisodium library <https://doc.libsodium.org/>`_.
 
 
 Differences with the Parsec reference implementation :
