@@ -75,9 +75,6 @@ class SecretKey(bytes):
         box = SecretBox(self)
         return box.decrypt(ciphered)
 
-    def hmac(self, data: bytes, digest_size=BLAKE2B_BYTES) -> bytes:
-        return blake2b(data, digest_size=digest_size, key=self, encoder=RawEncoder)
-
 
 class HashDigest(bytes):
     __slots__ = ()
@@ -184,6 +181,17 @@ def import_root_verify_key(raw: str) -> VerifyKey:
     except CryptoError as exc:
         raise ValueError("Invalid verify key") from exc
 
+
+def derivate_secret_from_keys(key: key, salt: bytes) -> Tuple[SecretKey, bytes]:
+    salt = salt or random(argon2id.SALTBYTES)
+    rawkey = argon2id.kdf(
+        8,
+        key,
+        salt,
+        opslimit=CRYPTO_OPSLIMIT,
+        memlimit=CRYPTO_MEMLIMIT,
+    )
+    return rawkey
 
 def derivate_secret_key_from_password(password: str, salt: bytes = None) -> Tuple[SecretKey, bytes]:
     salt = salt or random(argon2id.SALTBYTES)

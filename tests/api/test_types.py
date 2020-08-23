@@ -108,20 +108,20 @@ def test_invalid_human_handle(email, label):
 
 
 def test_sas_code():
-    assert SASCode.from_int(0x0) == SASCode("AAAA")
-    assert SASCode.from_int(0x1) == SASCode("BAAA")
+    assert SASCode.from_int(0x0) == SASCode("11111")
+    assert SASCode.from_int(0x1) == SASCode("21111")
     # [...]
-    assert SASCode.from_int(0x84001) == SASCode("BASS")
+    #assert SASCode.from_int(0x84001) == SASCode("BASS")
     # [...]
-    assert SASCode.from_int(0xFFFFE) == SASCode("8999")
-    assert SASCode.from_int(0xFFFFF) == SASCode("9999")
+    assert SASCode.from_int(0xFFFFFFE) == SASCode("YZZZZ")
+    assert SASCode.from_int(0xFFFFFFF) == SASCode("ZZZZZ")
 
     with pytest.raises(ValueError):
-        SASCode.from_int(2 ** 20)
+        SASCode.from_int(2 ** 25)
 
     with pytest.raises(ValueError):
         SASCode.from_int(-1)
 
-    for invalid in ["", "AAA", "AAAAA", "aaaa", "AAAI", "AAAO", "AAA0", "AAA1"]:
+    for invalid in ["", "AAA", "AAAAAA", "aaaaa", "AAAAI", "AAAAO", "AAAA0", "AAAAQ"]:
         with pytest.raises(ValueError):
             SASCode(invalid)
