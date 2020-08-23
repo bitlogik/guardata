@@ -3,7 +3,7 @@
     :align: center
 
 
-This is the public repository for the guardata client.
+Public source code repository for the guardata client.
 
 guardata is a secure and trustless cloud storage service, to share and sync your files with on-premise modern encryption.
 
@@ -35,8 +35,8 @@ Differences with the parsec reference implementation :
 Install
 -------
 
-Get the guardata client software on
-https://guardata.app/get
+| Get the guardata client software on
+| https://guardata.app/get
 
 
 More info to come
