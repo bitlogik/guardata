@@ -3,13 +3,12 @@
 
 from typing import Tuple
 from base64 import b32decode, b32encode
-from hashlib import sha256
 
-from nacl.exceptions import CryptoError  # noqa: republishing
+from nacl.exceptions import CryptoError, TypeError, ensure  # noqa: republishing
 from nacl.public import SealedBox, PrivateKey as _PrivateKey, PublicKey as _PublicKey
 from nacl.signing import SigningKey as _SigningKey, VerifyKey as _VerifyKey
 from nacl.bindings import crypto_sign_BYTES, crypto_scalarmult
-from nacl.hash import blake2b, BLAKE2B_BYTES
+from nacl.hashlib import blake2b
 from nacl.pwhash import argon2id
 from nacl.utils import random
 from nacl.encoding import RawEncoder
@@ -81,8 +80,12 @@ class HashDigest(bytes):
 
     @classmethod
     def from_data(self, data: bytes) -> "HashDigest":
-        # nacl's sha256 doesn't accept bytearray, so stick to `hashlib.sha256`
-        return HashDigest(sha256(data).digest())
+        ensure(
+            isinstance(data, bytes) or isinstance(data, bytearray),
+            "data type must be bytes or bytearray",
+            raising=TypeError,
+        )
+        return HashDigest(blake2b(data if isinstance(data, bytes) else bytes(data)).digest())
 
 
 # Basically just add comparison support to nacl keys

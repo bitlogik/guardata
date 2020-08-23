@@ -3,7 +3,7 @@
 
 import attr
 from pathlib import Path
-from hashlib import sha256
+from nacl.hashlib import blake2b
 from typing import List, Optional, Iterator
 from os import fspath
 from os import name as osname
@@ -165,7 +165,7 @@ class AvailableDevice:
 
     @property
     def slughash(self) -> str:
-        return sha256(self.slug.encode()).hexdigest()
+        return blake2b(self.slug.encode()).hexdigest()
 
 
 def _iter_available_devices(config_dir: Path) -> Iterator[AvailableDevice]:
