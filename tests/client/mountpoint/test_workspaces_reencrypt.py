@@ -39,6 +39,11 @@ async def reencryption_needed_workspace(
     return shared_workspace
 
 
+@pytest.fixture
+async def aqtbot(qtbot, run_trio_test_in_thread):
+    return AsyncQtBot(qtbot, run_trio_test_in_thread)
+
+
 @pytest.mark.gui
 @pytest.mark.trio
 @customize_fixtures(logged_gui_as_admin=True)
