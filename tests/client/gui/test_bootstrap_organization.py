@@ -188,9 +188,8 @@ async def test_bootstrap_organization_invite_not_found(
         assert not bo_w.isVisible()
         l_w = gui.test_get_login_widget()
         assert l_w.isVisible()
-        assert autoclose_dialog.dialogs == [
-            ("Error", "There is no group matching with this link.")
-        ]
+        assert autoclose_dialog.dialogs == [("Error", "There is no group matching with this link.")]
+
 
     await aqtbot.wait_until(_bootstrap_done)
 
