@@ -411,7 +411,7 @@ def run_cmd(
     dev,
 ):
     if "PYTEST_CURRENT_TEST" not in os.environ:
-        os._exit()
+        os._exit(0)
 
     configure_logging(log_level, log_format, log_file, log_filter)
 
