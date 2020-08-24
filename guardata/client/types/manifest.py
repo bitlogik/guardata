@@ -524,12 +524,14 @@ class LocalFolderishManifestMixin:
         other: LocalFolderishManifestTypeVar,
         pattern_filter: Pattern,
     ) -> LocalFolderishManifestTypeVar:
-        if not other.confined_entries:
+        # Using self.filtered_entries is useful to restore entries that were present locally
+        # before applying a new filter that filtered those entries from the remote manifest
+        if not other.confined_entries and not self.filtered_entries:
             return self
         previously_confined_entries = {
             name: entry_id
             for name, entry_id in other.children.items()
-            if entry_id in other.confined_entries
+            if entry_id in other.confined_entries or entry_id in self.filtered_entries
         }
         return self.evolve_children_and_mark_updated(previously_confined_entries, pattern_filter)
 

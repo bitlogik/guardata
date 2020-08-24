@@ -165,3 +165,86 @@ async def test_sync_with_different_filters(running_backend, alice_user_fs, alice
     assert await workspace2.read_bytes("/foo/xyz.tmp/bar/test.txt") == b"a2"
     assert await workspace2.read_bytes("/foo/xyz~/bar/test.txt") == b"b2"
     assert await workspace2.read_bytes("/foo/xyz/bar/test.txt") == b"c2"
+
+async def test_change_filter(alice_workspace, running_backend):
+
+    # Apply a *.x filter
+    pattern = re.compile(r".*\.x$")
+    await alice_workspace.set_and_apply_pattern_filter(pattern)
+    assert alice_workspace.local_storage.get_pattern_filter() == pattern
+    assert alice_workspace.local_storage.get_pattern_filter_fully_applied()
+
+    # Create x, y and z files
+    await alice_workspace.touch("/test1.x")
+    await alice_workspace.touch("/test1.y")
+    await alice_workspace.touch("/test1.z")
+
+    # Check status
+    await assert_path_info(alice_workspace, "/test1.x", confined=True, need_sync=True)
+    await assert_path_info(alice_workspace, "/test1.y", confined=False, need_sync=True)
+    await assert_path_info(alice_workspace, "/test1.z", confined=False, need_sync=True)
+
+    # Synchronize then create more x, y and z files
+    await alice_workspace.sync()
+    await alice_workspace.touch("/test2.x")
+    await alice_workspace.touch("/test2.y")
+    await alice_workspace.touch("/test2.z")
+
+    # Check status
+    await assert_path_info(alice_workspace, "/test1.x", confined=True, need_sync=True)
+    await assert_path_info(alice_workspace, "/test1.y", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.z", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.x", confined=True, need_sync=True)
+    await assert_path_info(alice_workspace, "/test2.y", confined=False, need_sync=True)
+    await assert_path_info(alice_workspace, "/test2.y", confined=False, need_sync=True)
+
+    # Appy Y filter
+    pattern = re.compile(r".*\.y$")
+    await alice_workspace.set_and_apply_pattern_filter(pattern)
+    assert alice_workspace.local_storage.get_pattern_filter() == pattern
+    assert alice_workspace.local_storage.get_pattern_filter_fully_applied()
+
+    # Check status
+    await assert_path_info(alice_workspace, "/test1.x", confined=False, need_sync=True)
+    await assert_path_info(alice_workspace, "/test1.y", confined=True, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.z", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.x", confined=False, need_sync=True)
+    await assert_path_info(alice_workspace, "/test2.y", confined=True, need_sync=True)
+    await assert_path_info(alice_workspace, "/test2.z", confined=False, need_sync=True)
+
+    # Synchronize the workspace
+    await alice_workspace.sync()
+
+    await assert_path_info(alice_workspace, "/test1.x", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.y", confined=True, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.z", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.x", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.y", confined=True, need_sync=True)
+    await assert_path_info(alice_workspace, "/test2.z", confined=False, need_sync=False)
+
+    # Rollback to X filter
+    pattern = re.compile(r".*\.x$")
+    await alice_workspace.set_and_apply_pattern_filter(pattern)
+    assert alice_workspace.local_storage.get_pattern_filter() == pattern
+    assert alice_workspace.local_storage.get_pattern_filter_fully_applied()
+
+    # Check status
+    await assert_path_info(alice_workspace, "/test1.x", confined=True, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.y", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.z", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.x", confined=True, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.y", confined=False, need_sync=True)
+    await assert_path_info(alice_workspace, "/test2.z", confined=False, need_sync=False)
+
+    # Synchronize the workspace
+    await alice_workspace.sync()
+
+    await assert_path_info(alice_workspace, "/test1.x", confined=True, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.y", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test1.z", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.x", confined=True, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.y", confined=False, need_sync=False)
+    await assert_path_info(alice_workspace, "/test2.z", confined=False, need_sync=False)
+
+
+@pytest.mark.trio
