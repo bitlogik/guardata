@@ -5,9 +5,9 @@ from PyQt5 import QtCore
 
 from functools import partial
 
-from parsec.core.gui.lang import translate
-from parsec.core.gui.workspace_button import WorkspaceButton
-from parsec.core.types import WorkspaceRole
+from guardata.client.gui.lang import translate
+from guardata.client.gui.workspace_button import WorkspaceButton
+from guardata.client.types import WorkspaceRole
 
 from tests.common import customize_fixtures
 
@@ -116,7 +116,7 @@ async def test_workspace_reencryption(
     await aqtbot.wait_until(_reencrypt_button_displayed)
 
     monkeypatch.setattr(
-        "parsec.core.gui.workspaces_widget.ask_question",
+        "guardata.client.gui.workspaces_widget.ask_question",
         lambda *args, **kwargs: translate("ACTION_WORKSPACE_REENCRYPTION_CONFIRM"),
     )
     async with aqtbot.wait_signals(
