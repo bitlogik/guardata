@@ -12,7 +12,6 @@ from guardata.client.backend_connection import (
 from guardata.client.remote_devices_manager import RemoteDevicesManager
 from guardata.client.fs import UserFS
 from parsec.core.logged_core import get_pattern_filter
-from guardata.client.logged_client import DEFAULT_PATTERN_FILTER
 
 
 @pytest.fixture
