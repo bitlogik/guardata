@@ -1522,7 +1522,7 @@ msgid "TEXT_BOOTSTRAP_ORG_INVALID_URL"
 msgstr "This is not a valid parsec link."
 
 msgid "TEXT_BOOTSTRAP_ORG_INVITE_NOT_FOUND"
-msgstr "There are no group matching with this link."
+msgstr "There is no group matching with this link."
 
 msgid "TEXT_BOOTSTRAP_ORG_ALREADY_BOOTSTRAPPED"
 msgstr "This organization has already been activated."
@@ -1555,7 +1555,7 @@ msgstr "Could not activate the organization."
 
 msgid "TEXT_BOOTSTRAP_ORG_SUCCESS_organization"
 msgstr ""
-"Your organization <b>{organization}</b> has been created!<br />\n"
+"Your organization (group) <b>{organization}</b> has been activated!<br />\n"
 "<br />\n"
 "You will now be automatically logged in.<br />\n"
 "<br />\n"

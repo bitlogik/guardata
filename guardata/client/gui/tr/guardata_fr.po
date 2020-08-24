@@ -1598,7 +1598,7 @@ msgstr "Impossible d'activer l'organisation."
 
 msgid "TEXT_BOOTSTRAP_ORG_SUCCESS_organization"
 msgstr ""
-"Votre organisation <b>{organization}</b> a été créée !<br />\n"
+"Votre organisation (groupe) <b>{organization}</b> a été activée !<br />\n"
 "<br />\n"
 "Vous allez maintenant être automatiquement connecté.<br />\n"
 "<br />\n"

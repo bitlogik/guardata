@@ -68,7 +68,7 @@ async def test_bootstrap_organization(aqtbot, backend, gui_ready_for_bootstrap, 
         assert autoclose_dialog.dialogs == [
             (
                 "",
-                "Your organization <b>NewOrg</b> has been created!<br />\n<br />\n"
+                "Your organization (group) <b>NewOrg</b> has been activated!<br />\n<br />\n"
                 "You will now be automatically logged in.<br />\n<br />\n",
             )
         ]
@@ -160,7 +160,7 @@ async def test_bootstrap_organization_invite_already_used(
         l_w = gui.test_get_login_widget()
         assert l_w.isVisible()
         assert autoclose_dialog.dialogs == [
-            ("Error", "This organization has already been bootstrapped.")
+            ("Error", "This organization has already been activated.")
         ]
 
     await aqtbot.wait_until(_bootstrap_done)
@@ -189,7 +189,7 @@ async def test_bootstrap_organization_invite_not_found(
         l_w = gui.test_get_login_widget()
         assert l_w.isVisible()
         assert autoclose_dialog.dialogs == [
-            ("Error", "There are no organization to bootstrap with this link.")
+            ("Error", "There is no group matching with this link.")
         ]
 
     await aqtbot.wait_until(_bootstrap_done)
@@ -217,7 +217,7 @@ async def test_bootstrap_organization_unknown_error(
         assert not bo_w.isVisible()
         l_w = gui.test_get_login_widget()
         assert l_w.isVisible()
-        assert autoclose_dialog.dialogs == [("Error", "Could not bootstrap the organization.")]
+        assert autoclose_dialog.dialogs == [("Error", "Could not activate the organization.")]
 
     await aqtbot.wait_until(_bootstrap_done)
 
