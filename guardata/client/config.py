@@ -55,8 +55,8 @@ class ClientConfig:
     cache_base_dir: Path
     mountpoint_base_dir: Path
 
-    pattern_filter: Optional[str] = None # if not None : overrides the path with this regex
-    pattern_filter_path: Optional[Path] = None # default path or failsafe pattern
+    pattern_filter: Optional[str] = None  # if not None : overrides the path with this regex
+    pattern_filter_path: Optional[Path] = None  # default path or failsafe pattern
 
     debug: bool = False
 

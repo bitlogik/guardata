@@ -3,9 +3,12 @@
 
 import re
 import attr
+import fnmatch
 from uuid import UUID
+from pathlib import Path
+import importlib_resources
 from pendulum import now as pendulum_now
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Pattern
 from structlog import get_logger
 from functools import partial
 from async_generator import asynccontextmanager
@@ -13,6 +16,7 @@ from async_generator import asynccontextmanager
 from guardata.event_bus import EventBus
 from guardata.api.protocol import UserID, InvitationType, InvitationDeletedReason
 from guardata.api.data import RevokedUserCertificateContent
+import guardata.client.resources
 from guardata.client.types import LocalDevice, UserInfo, DeviceInfo, BackendInvitationAddr
 from guardata.client.config import ClientConfig
 from guardata.client.backend_connection import (
