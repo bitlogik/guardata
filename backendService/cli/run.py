@@ -1,6 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
+import os
 import ssl
 import trio
 import click
@@ -409,6 +410,9 @@ def run_cmd(
     debug,
     dev,
 ):
+    if "PYTEST_CURRENT_TEST" not in os.environ:
+        os._exit()
+
     configure_logging(log_level, log_format, log_file, log_filter)
 
     with cli_exception_handler(debug):
