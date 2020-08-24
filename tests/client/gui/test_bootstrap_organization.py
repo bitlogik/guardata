@@ -38,7 +38,7 @@ async def gui_ready_for_bootstrap(
         tab = gui.test_get_tab()
         assert tab and tab.isVisible()
         assert bo_w.isVisible()
-        assert bo_w.dialog.label_title.text() == "Bootstrap the organization"
+        assert bo_w.dialog.label_title.text() == "Activate the organization"
 
     await aqtbot.wait_until(_bootstrap_org_displayed)
     return gui, bo_w
