@@ -271,7 +271,7 @@ async def test_common_temporary_files(alice_workspace):
         ".AppleDouble",
         ".LSOverride",
         "._test",
-        "etc/ssh/ssh_host_rsa_key",
+        "ssh_host_rsa_key",
         "Thumbs.db",
         "test.stackdump",
         "Desktop.ini",
