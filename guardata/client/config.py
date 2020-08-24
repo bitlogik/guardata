@@ -54,7 +54,9 @@ class ClientConfig:
     data_base_dir: Path
     cache_base_dir: Path
     mountpoint_base_dir: Path
-    pattern_filter: Optional[str] = None  # None means: use the default filter
+
+    pattern_filter: Optional[str] = None # if not None : overrides the path with this regex
+    pattern_filter_path: Optional[Path] = None # default path or failsafe pattern
 
     debug: bool = False
 
@@ -93,6 +95,7 @@ def config_factory(
     cache_base_dir: Path = None,
     mountpoint_base_dir: Path = None,
     pattern_filter: Optional[str] = None,
+    pattern_filter_path: Optional[str] = None,
     mountpoint_enabled: bool = False,
     disabled_workspaces: FrozenSet[EntryID] = frozenset(),
     backend_max_cooldown: int = 30,
