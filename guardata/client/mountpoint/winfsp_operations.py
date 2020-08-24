@@ -153,7 +153,7 @@ class WinFSPOperations(BaseFileSystemOperations):
         self.fs_access = fs_access
 
         max_file_nodes = 1024
-        max_file_size = 16 * 1024 * 1024
+        max_file_size = 1024 * 1024 * 1024
         file_nodes = 1
         self._volume_info = {
             "total_size": max_file_nodes * max_file_size,
