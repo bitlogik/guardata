@@ -11,7 +11,7 @@ from guardata.client.backend_connection import (
 )
 from guardata.client.remote_devices_manager import RemoteDevicesManager
 from guardata.client.fs import UserFS
-from guardata.client.logged_client import DEFAULT_PATTERN_FILTER
+from guardata.client.logged_client import get_pattern_filter
 
 
 @pytest.fixture
@@ -117,7 +117,7 @@ def user_fs_factory(local_storage_path, event_bus_factory, initialize_userfs_sto
             path = local_storage_path(device)
             rdm = RemoteDevicesManager(cmds, device.root_verify_key)
             async with UserFS.run(
-                device, path, cmds, rdm, event_bus, DEFAULT_PATTERN_FILTER
+                device, path, cmds, rdm, event_bus, get_pattern_filter()
             ) as user_fs:
                 if not initialize_in_v0:
                     await initialize_userfs_storage_v1(user_fs.storage)

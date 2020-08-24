@@ -3,9 +3,12 @@
 
 import re
 import attr
+import fnmatch
 from uuid import UUID
+from pathlib import Path
+import importlib_resources
 from pendulum import now as pendulum_now
-from typing import Optional, Tuple, List
+from typing import Optional, Tuple, List, Pattern
 from structlog import get_logger
 from functools import partial
 from async_generator import asynccontextmanager
@@ -13,6 +16,7 @@ from async_generator import asynccontextmanager
 from guardata.event_bus import EventBus
 from guardata.api.protocol import UserID, InvitationType, InvitationDeletedReason
 from guardata.api.data import RevokedUserCertificateContent
+import guardata.client.resources
 from guardata.client.types import LocalDevice, UserInfo, DeviceInfo, BackendInvitationAddr
 from guardata.client.config import ClientConfig
 from guardata.client.backend_connection import (
@@ -43,7 +47,53 @@ from guardata.client.fs import UserFS
 
 logger = get_logger()
 
-DEFAULT_PATTERN_FILTER = re.compile(r"\~\$|\.\~|.*\.tmp$")
+FAILSAFE_PATTERN_FILTER = re.compile(r"\~\$|\.\~|.*\.tmp$")
+
+
+def _get_pattern_filter(pattern_filter_path: Path) -> Optional[Pattern]:
+    try:
+        data = pattern_filter_path.read_text()
+    except OSError as exc:
+        logger.warning(
+            f"Path to the file containing the filename patterns "
+            f"to ignore is not properly defined: {exc}"
+        )
+        return None
+    try:
+        regex = "|".join(
+            fnmatch.translate(line.strip())
+            for line in data.splitlines()
+            if line.strip() and not line.strip().startswith("#")
+        )
+    except ValueError as exc:
+        logger.warning(
+            f"Could not parse the file containing the filename patterns " f"to ignore: {exc}"
+        )
+        return None
+    try:
+        logger.info(f"CONFINED curent regex  : {regex}")
+        return re.compile(regex)
+    except re.error as exc:
+        logger.warning(
+            f"Could not compile the file containing the filename patterns "
+            f"to ignore into a regex pattern: {exc}"
+        )
+        return None
+
+
+def get_pattern_filter(pattern_filter_path: Optional[Path] = None) -> Pattern:
+    pattern = None
+    # Get the pattern from the path defined in the core config
+    if pattern_filter_path is not None:
+        pattern = _get_pattern_filter(pattern_filter_path)
+    # Default to the pattern from the ignore file in the core resources
+    if pattern is None:
+        with importlib_resources.path(guardata.client.resources, "default_pattern.ignore") as path:
+            pattern = _get_pattern_filter(path)
+    # As a last resort use the failsafe
+    if pattern is None:
+        return FAILSAFE_PATTERN_FILTER
+    return pattern
 
 
 @attr.s(frozen=True, slots=True)
@@ -255,12 +305,12 @@ async def logged_client_factory(
 
     # Get the pattern filter
     if config.pattern_filter is None:
-        pattern_filter = DEFAULT_PATTERN_FILTER
+        pattern_filter = get_pattern_filter(config.pattern_filter_path)
     else:
         try:
             pattern_filter = re.compile(config.pattern_filter)
         except re.error:
-            pattern_filter = DEFAULT_PATTERN_FILTER
+            pattern_filter = get_pattern_filter(config.pattern_filter_path)
 
     backend_conn = BackendAuthenticatedConn(
         addr=device.organization_addr,
