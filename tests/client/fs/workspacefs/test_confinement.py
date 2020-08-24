@@ -10,7 +10,7 @@ from tests.common import create_shared_workspace
 async def assert_path_info(workspace, path, **kwargs):
     info = await workspace.path_info(path)
     for key, value in kwargs.items():
-        assert info[key] == value
+        assert info[key] == value, key
 
 
 @pytest.mark.trio
@@ -166,6 +166,8 @@ async def test_sync_with_different_filters(running_backend, alice_user_fs, alice
     assert await workspace2.read_bytes("/foo/xyz~/bar/test.txt") == b"b2"
     assert await workspace2.read_bytes("/foo/xyz/bar/test.txt") == b"c2"
 
+
+@pytest.mark.trio
 async def test_change_filter(alice_workspace, running_backend):
 
     # Apply a *.x filter
@@ -248,3 +250,38 @@ async def test_change_filter(alice_workspace, running_backend):
 
 
 @pytest.mark.trio
+async def test_common_temporary_files(alice_workspace):
+    file_list = ["test.txt", "test" "t" ".test"]
+    for path in file_list:
+        path = "/" + path
+        await alice_workspace.touch(path)
+        await assert_path_info(alice_workspace, path, confined=False)
+
+    confined_file_list = [
+        "test.tmp",
+        "test.temp",
+        "test.swp",
+        "test~",
+        ".fuse_hidden000001",
+        ".directory",
+        ".Trash-0001",
+        ".nfsxxx",
+        ".goutputstream-U6EGP0",
+        ".DS_Store",
+        ".AppleDouble",
+        ".LSOverride",
+        "Icon",
+        "._test",
+        "Thumbs.db",
+        "test.stackdump",
+        "Desktop.ini",
+        "desktop.ini",
+        "$RECYCLE.BIN",
+        "test.lnk",
+        ".~test",
+        "~$test",
+    ]
+    for path in confined_file_list:
+        path = "/" + path
+        await alice_workspace.touch(path)
+        await assert_path_info(alice_workspace, path, confined=True)
