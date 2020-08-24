@@ -1555,20 +1555,20 @@ msgstr "Ce fichier n'est pas encore synchronisé."
 
 msgid "TEXT_BOOTSTRAP_ORG_INSTRUCTIONS_url-organization"
 msgstr ""
-"Vous allez démarrer l'organisation <b>{organization}</b>. Vous serez le "
+"Vous allez activer le groupe <b>{organization}</b>. Vous serez le "
 "premier administrateur de l'organisation.<br /><br />\n"
 "\n"
 "Pour continuer, veuillez choisir un nom d'utilisateur, un nom d'appareil,"
 " ainsi qu'un mot de passe."
 
 msgid "TEXT_BOOTSTRAP_ORG_INVALID_URL"
-msgstr "L'URL n'est pas valide pour démarrer l'organisation."
+msgstr "L'URL n'est pas un lien parsec valide."
 
 msgid "TEXT_BOOTSTRAP_ORG_INVITE_NOT_FOUND"
-msgstr "Aucune organisation ne peut être démarrée avec ce lien."
+msgstr "Aucune organisation ne correspond à ce lien."
 
 msgid "TEXT_BOOTSTRAP_ORG_ALREADY_BOOTSTRAPPED"
-msgstr "Cette organisation a déjà été démarrée."
+msgstr "Cette organisation a déjà été activée."
 
 msgid "TEXT_BOOTSTRAP_ORG_USER_EXISTS"
 msgstr "Ce nom d'utilisateur existe déjà au sein de cette organisation."
@@ -1588,13 +1588,13 @@ msgstr ""
 "mettre à jour."
 
 msgid "TEXT_BOOTSTRAP_ORG_BACKEND_REFUSAL"
-msgstr "Impossible de démarrer l'organisation."
+msgstr "Impossible d'activer l'organisation."
 
 msgid "TEXT_BOOTSTRAP_ORG_BACKEND_OFFLINE"
 msgstr "Le serveur est hors-ligne ou vous n'avez pas de connexion internet."
 
 msgid "TEXT_BOOTSTRAP_ORG_UNKNOWN_FAILURE"
-msgstr "Impossible de démarrer l'organisation."
+msgstr "Impossible d'activer l'organisation."
 
 msgid "TEXT_BOOTSTRAP_ORG_SUCCESS_organization"
 msgstr ""
@@ -1610,7 +1610,7 @@ msgid "TEXT_BOOTSTRAP_ORG_INVALID_EMAIL"
 msgstr "L'email n'est pas valide."
 
 msgid "TEXT_BOOTSTRAP_ORG_TITLE"
-msgstr "Démarrer l'organisation"
+msgstr "Activer l'organisation"
 
 msgid "ACTION_OK"
 msgstr "OK"
@@ -1891,10 +1891,10 @@ msgid "TEXT_INVALID_URL"
 msgstr "L'URL n'est pas valide."
 
 msgid "TEXT_BOOTSTRAP_ORG_URL_TITLE"
-msgstr "Démarrer une organisation"
+msgstr "Activer un groupe"
 
 msgid "TEXT_BOOTSTRAP_ORG_URL_INSTRUCTIONS"
-msgstr "Veuillez fournir le lien pour démarrer l'organisation."
+msgstr "Veuillez fournir le lien pour activer le groupe."
 
 msgid "TEXT_BOOTSTRAP_ORG_URL_PLACEHOLDER"
 msgstr "parsec://cloud.guardata.app/my_org?action=bootstrap_organization&token=1234ABCD"
@@ -1969,10 +1969,10 @@ msgid "TEXT_LABEL_PASSWORD_CONFIRMATION"
 msgstr "Confirmation du mot de passe"
 
 msgid "TEXT_BOOTSTRAP_ORG_TOOLTIP"
-msgstr "Démarrer l'organisation"
+msgstr "Activer le groupe"
 
 msgid "ACTION_BOOTSTRAP_ORG"
-msgstr "Démarrer l'organisation"
+msgstr "Démarrer le groupe"
 
 msgid "TEXT_LABEL_USER_EMAIL"
 msgstr "Email (doit être valide)"
@@ -2075,13 +2075,11 @@ msgstr "Veuillez choisir :"
 
 msgid "TEXT_ORG_WIZARD_CREATE_FROM_SCRATCH"
 msgstr ""
-"Je n'ai pas de compte sur le site web et veux créer une nouvelle "
-"organisation"
+"Je n'ai pas de lien parsec et veux créer un nouveau groupe"
 
 msgid "TEXT_ORG_WIZARD_ALREADY_HAS_URL"
 msgstr ""
-"J'ai déjà un compte sur le site web et une URL pour démarrer mon "
-"organisation"
+"J'ai déjà le lien parsec du site web pour activer mon groupe"
 
 msgid "TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS"
 msgstr "Si votre groupe n'existe pas encore, vous devez le<br/>"
@@ -2094,7 +2092,7 @@ msgstr "Si votre groupe n'existe pas encore, vous devez le<br/>"
 "au retour, en donnant le lien parsec."
 
 msgid "TEXT_LABEL_ORG_NAME"
-msgstr "Nom de l'organisation"
+msgstr "Nom de l'organisation ou du groupe"
 
 msgid "ACTION_ACCEPT_CONTRACT"
 msgstr "Fermez ce message, et allez sur Première connexion<br/>"

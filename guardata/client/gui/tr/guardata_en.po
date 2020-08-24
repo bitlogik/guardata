@@ -1512,20 +1512,20 @@ msgstr "The file is not synced yet."
 
 msgid "TEXT_BOOTSTRAP_ORG_INSTRUCTIONS_url-organization"
 msgstr ""
-"You are about to bootstrap the organization <b>{organization}</b>. You "
+"You are about to activate the group <b>{organization}</b>. You "
 "will be the first administrator of the organization.<br /><br />\n"
 "\n"
 "To proceed, please provide your name, your email address, a name for this"
 " device, and a password."
 
 msgid "TEXT_BOOTSTRAP_ORG_INVALID_URL"
-msgstr "This is not a valid bootstrap link."
+msgstr "This is not a valid parsec link."
 
 msgid "TEXT_BOOTSTRAP_ORG_INVITE_NOT_FOUND"
-msgstr "There are no organization to bootstrap with this link."
+msgstr "There are no group matching with this link."
 
 msgid "TEXT_BOOTSTRAP_ORG_ALREADY_BOOTSTRAPPED"
-msgstr "This organization has already been bootstrapped."
+msgstr "This organization has already been activated."
 
 msgid "TEXT_BOOTSTRAP_ORG_USER_EXISTS"
 msgstr "This user already exists within this organization."
@@ -1545,13 +1545,13 @@ msgstr ""
 "the latest version."
 
 msgid "TEXT_BOOTSTRAP_ORG_BACKEND_REFUSAL"
-msgstr "Could not bootstrap the organization."
+msgstr "Could not activate the organization."
 
 msgid "TEXT_BOOTSTRAP_ORG_BACKEND_OFFLINE"
 msgstr "The server is offline or you have no access to the internet."
 
 msgid "TEXT_BOOTSTRAP_ORG_UNKNOWN_FAILURE"
-msgstr "Could not bootstrap the organization."
+msgstr "Could not activate the organization."
 
 msgid "TEXT_BOOTSTRAP_ORG_SUCCESS_organization"
 msgstr ""
@@ -1567,7 +1567,7 @@ msgid "TEXT_BOOTSTRAP_ORG_INVALID_EMAIL"
 msgstr "The email is invalid."
 
 msgid "TEXT_BOOTSTRAP_ORG_TITLE"
-msgstr "Bootstrap the organization"
+msgstr "Activate the organization"
 
 msgid "ACTION_OK"
 msgstr "OK"
@@ -1838,10 +1838,10 @@ msgid "TEXT_INVALID_URL"
 msgstr "The link is invalid."
 
 msgid "TEXT_BOOTSTRAP_ORG_URL_TITLE"
-msgstr "Bootstrap an organization"
+msgstr "Activate a group"
 
 msgid "TEXT_BOOTSTRAP_ORG_URL_INSTRUCTIONS"
-msgstr "Please provide the link to bootstrap the organization."
+msgstr "Please provide the link to start the group."
 
 msgid "TEXT_BOOTSTRAP_ORG_URL_PLACEHOLDER"
 msgstr "parsec://cloud.guardata.app/my_org?action=bootstrap_organization&token=1234ABCD"
@@ -1917,10 +1917,10 @@ msgid "TEXT_LABEL_PASSWORD_CONFIRMATION"
 msgstr "Password confirmation"
 
 msgid "TEXT_BOOTSTRAP_ORG_TOOLTIP"
-msgstr "Start the organization"
+msgstr "Activate the group"
 
 msgid "ACTION_BOOTSTRAP_ORG"
-msgstr "Start the organization"
+msgstr "Start the group"
 
 msgid "TEXT_LABEL_USER_EMAIL"
 msgstr "Email (must be valid)"
@@ -2024,13 +2024,11 @@ msgstr "Please choose:"
 
 msgid "TEXT_ORG_WIZARD_CREATE_FROM_SCRATCH"
 msgstr ""
-"I don't have an account on the website and want to create a new "
-"organization"
+"I don't have link from the website and want to create a new group"
 
 msgid "TEXT_ORG_WIZARD_ALREADY_HAS_URL"
 msgstr ""
-"I already have an account on the website and a link to bootstrap my "
-"organization"
+"I already have a parsec link from the website to activate my group"
 
 msgid "TEXT_ORG_WIZARD_CREATE_ORG_INSTRUCTIONS"
 msgstr "If your group doesn't exist yet, you need to<br/>"
@@ -2043,7 +2041,7 @@ msgstr "If your group doesn't exist yet, you need to<br/>"
 "the parsec link."
 
 msgid "TEXT_LABEL_ORG_NAME"
-msgstr "Organization name"
+msgstr "Organization or group name"
 
 msgid "ACTION_ACCEPT_CONTRACT"
 msgstr "Close this message, go on First login<br/>"
