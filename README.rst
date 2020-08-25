@@ -2,9 +2,6 @@
 .. image:: https://raw.githubusercontent.com/bitlogik/guardata/master/guardata/client/gui/rc/images/logos/guardata_vert.png
     :align: center
 
-
-Public source code repository for the guardata client.
-
 guardata is a secure and trustless cloud storage service, to share and sync your files with on-premise modern encryption.
 
 Homepage: https://guardata.app
