@@ -1,0 +1,11 @@
+[Desktop Entry]
+Name=guardata
+Comment=guardata : trustless data cloud storage
+Exec=guardata %u
+Icon=${SNAP}/guardata.png
+Type=Application
+Terminal=false
+StartupNotify=false
+StartupWMClass=guardata
+Categories=Network
+MimeType=x-scheme-handler/parsec;
