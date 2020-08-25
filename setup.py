@@ -7,7 +7,6 @@ from setuptools import setup, find_packages, distutils, Command
 from setuptools.command.build_py import build_py
 
 
-# Awesome hack to load `__version__`
 __version__ = None
 exec(open("guardata/_version.py", encoding="utf-8").read())
 
@@ -327,7 +326,7 @@ setup(
     zip_safe=False,
     keywords="cloud data storage sharing cryptography",
     classifiers=[
-        "Development Status :: 1 - Planning",
+        "Development Status :: 4 - Beta",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU Affero General Public License v3",
         "Operating System :: Microsoft :: Windows :: Windows 8",
