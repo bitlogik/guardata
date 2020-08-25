@@ -4,11 +4,13 @@ import pytest
 
 from PyQt5 import QtCore
 
+from guardata.client.types import WorkspaceRole
 from guardata.client.local_device import save_device_with_password
-
 from guardata.client.gui.workspace_button import WorkspaceButton
 from guardata.client.gui.lang import translate
 from guardata.client.gui.login_widget import LoginPasswordInputWidget
+
+from tests.common import customize_fixtures
 
 
 @pytest.fixture
@@ -231,3 +233,48 @@ async def test_workspace_sharing_filter_users(
 
     await aqtbot.key_clicks(share_w_w.line_edit_filter, "zoidberg")
     assert _users_visible() == 0
+
+
+@customize_fixtures(logged_gui_as_admin=True)
+@pytest.mark.gui
+@pytest.mark.trio
+async def test_rename_workspace_when_revoked(
+    aqtbot, running_backend, logged_gui, autoclose_dialog, qt_thread_gateway, bob, monkeypatch
+):
+    w_w = await logged_gui.test_switch_to_workspaces_widget()
+
+    client = logged_gui.test_get_tab().client
+    wid = await client.user_fs.workspace_create("Workspace")
+
+    def _workspace_not_shared_listed():
+        assert w_w.layout_workspaces.count() == 1
+        wk_button = w_w.layout_workspaces.itemAt(0).widget()
+        assert isinstance(wk_button, WorkspaceButton)
+        assert wk_button.label_title.text() == "Workspace (private)"
+        assert wk_button.label_title.toolTip() == "Workspace (private)"
+        assert not wk_button.is_shared
+        wk_button.name == "Workspace"
+
+    await aqtbot.wait_until(_workspace_not_shared_listed, timeout=2000)
+
+    wid = w_w.layout_workspaces.itemAt(0).widget().workspace_fs.workspace_id
+
+    await client.user_fs.workspace_share(wid, bob.user_id, WorkspaceRole.MANAGER)
+
+    def _workspace_shared_listed():
+        assert w_w.layout_workspaces.count() == 1
+        wk_button = w_w.layout_workspaces.itemAt(0).widget()
+        assert isinstance(wk_button, WorkspaceButton)
+        assert wk_button.is_shared
+        assert wk_button.name == "Workspace"
+        assert wk_button.label_title.toolTip() == "Workspace (shared with Boby McBobFace)"
+        assert wk_button.label_title.text() == "Workspace (shared wi..."
+
+    await aqtbot.wait_until(_workspace_shared_listed, timeout=2000)
+
+    await client.revoke_user(bob.user_id)
+
+    w_w = await logged_gui.test_switch_to_users_widget()
+    w_w = await logged_gui.test_switch_to_workspaces_widget()
+
+    await aqtbot.wait_until(_workspace_not_shared_listed, timeout=2000)

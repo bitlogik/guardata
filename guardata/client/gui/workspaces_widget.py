@@ -84,10 +84,15 @@ async def _do_workspace_list(client):
             users_roles[user_info.user_id] = (ws_entry.role, user_info)
 
         try:
-            root_info = await workspace_fs.path_info("/")
-            files = root_info["children"]
-        except FSBackendOfflineError:
+            # List files and directories in the root directory, used for preview
             files = []
+            async for child in workspace_fs.iterdir("/"):
+                child_info = await workspace_fs.path_info(child)
+                # Do not include confined files and directories in the preview
+                if not child_info.get("confined") or client.config.gui_show_confined:
+                    files.append(child.name)
+        except FSBackendOfflineError:
+            pass
         workspaces.append((workspace_fs, ws_entry, users_roles, files, timestamped))
 
     user_manifest = client.user_fs.get_user_manifest()
