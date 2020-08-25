@@ -4,7 +4,7 @@ You have received an invitation from {{ greeter }} to join the existing group {{
 You have received an invitation to add an new device in the {{ organization_id}} group on guardata.
 {% endif %}
 
-If you don't already have it, you should Download the guardata client via the following link: https://guardata.app/preview
+If you don't already have it, you should Download the guardata client via the following link: https://guardata.app/get
 
 Once installed, click on the following link to proceed to guardata : {{ invitation_url }}
 
