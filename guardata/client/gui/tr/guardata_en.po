@@ -348,7 +348,7 @@ msgstr ""
 "process."
 
 msgid "TEXT_CLAIM_USER_INVALID_HUMAN_HANDLE"
-msgstr "The email is invalid."
+msgstr "The name provided has an invalid format."
 
 msgid "TEXT_CLAIM_USER_CLAIM_ERROR"
 msgstr "Error while validating invite information. Please restart the process."

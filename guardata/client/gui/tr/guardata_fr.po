@@ -371,7 +371,7 @@ msgstr ""
 " le processus."
 
 msgid "TEXT_CLAIM_USER_INVALID_HUMAN_HANDLE"
-msgstr "L'email est invalide."
+msgstr "Le nom fourni a un format invalide."
 
 msgid "TEXT_CLAIM_USER_CLAIM_ERROR"
 msgstr ""
