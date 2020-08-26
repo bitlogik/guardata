@@ -384,6 +384,7 @@ class ClaimDeviceProvideInfoWidget(QWidget, Ui_ClaimDeviceProvideInfoWidget):
         self.claim_error.connect(self._on_claim_error)
         self.label_wait.hide()
         self.button_ok.clicked.connect(self._on_claim_clicked)
+        self.check_infos()
 
     def check_infos(self, _=""):
         if (
