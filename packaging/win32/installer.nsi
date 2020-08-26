@@ -128,24 +128,6 @@ Function .onInit
 
     Call checkGuardataRunning
 
-    ReadRegStr $R0 HKLM \
-    "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PROGRAM_NAME}" \
-    "UninstallString"
-    StrCmp $R0 "" done
-
-    MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
-    "${PROGRAM_NAME} is already installed. $\n$\nClick `OK` to remove the \
-    previous version or `Cancel` to cancel this upgrade." \
-    /SD IDOK IDOK uninst
-    Abort
-
-    ;Run the uninstaller sequentially and silently
-    ;https://nsis.sourceforge.io/Docs/Chapter3.html#installerusageuninstaller
-    uninst:
-      ClearErrors
-      ExecWait '"$R0" /S _?=$INSTDIR'
-    done:
-
 FunctionEnd
 
 Function un.onUninstSuccess
@@ -154,8 +136,18 @@ Function un.onUninstSuccess
 FunctionEnd
 
 Function un.onInit
-    MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Do you want to completely remove $(^Name)?" /SD IDYES IDYES +2
-    Abort
+    checkUn:
+        System::Call 'kernel32::OpenMutex(i 0x100000, b 0, t "guardata") i .R0'
+        IntCmp $R0 0 notRunningUn
+            System::Call 'kernel32::CloseHandle(i $R0)'
+            MessageBox MB_OKCANCEL|MB_ICONEXCLAMATION \
+                "guardata is running, please close it first.$\n$\n \
+                Click `OK` to retry or `Cancel` to cancel this uninstallation." \
+                /SD IDCANCEL IDOK checkUn
+            Abort
+    notRunningUn:
+        MessageBox MB_ICONQUESTION|MB_YESNO|MB_DEFBUTTON2 "Are you sure you want to remove $(^Name)?" /SD IDYES IDYES +2
+        Abort
 FunctionEnd
 
 Function CreateDesktopShortcut
@@ -243,16 +235,6 @@ Section "Associate parsec:// URI links with guardata" Section3
     WriteRegStr HKCR "parsec\shell\open\command" "" '"$INSTDIR\guardata.exe" "%1"'
 SectionEnd
 
-; Hidden: Remove obsolete entries
-Section "-Remove obsolete entries" Section4
-    ; Remove obsolete guardata registry configuration
-    DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
-    DeleteRegKey HKCU "Software\Classes\Wow6432Node\CLSID\{${APPGUID}}"
-    DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\Desktop\NameSpace\{${APPGUID}}"
-    DeleteRegKey HKCU "Software\Microsoft\Windows\CurrentVersion\Explorer\HideDesktopIcons\NewStartPanel\{${APPGUID}}"
-    ClearErrors
-SectionEnd
-
 ; Create uninstaller.
 Section -Uninstaller
     WriteUninstaller ${PROGRAM_UNINST_FILENAME}
@@ -263,7 +245,7 @@ Section -Uninstaller
     WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "UninstallString" ${PROGRAM_UNINST_FILENAME}
     WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "DisplayVersion" ${PROGRAM_VERSION}
     WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "Publisher" "BitLogiK"
-    WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "DisplayIcon" "$INSTDIR\site-packages\parsec\client\resources\guardata.ico"
+    WriteRegStr ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}" "DisplayIcon" "$INSTDIR\site-packages\guardata\client\resources\guardata.ico"
 SectionEnd
 
 ; --- Uninstallation section ---
@@ -287,8 +269,8 @@ Section Uninstall
 
     ; Delete registry keys.
     DeleteRegKey ${PROGRAM_UNINST_ROOT_KEY} "${PROGRAM_UNINST_KEY}"
-    ; This key is only used by guardata, so we should always delete it
-    DeleteRegKey HKCR "guardata"
+    ; Remove the parsec URI association
+    DeleteRegKey HKCR "parsec"
 
   ; Explorer shortcut keys potentially set by the application's settings
   DeleteRegKey HKCU "Software\Classes\CLSID\{${APPGUID}}"
