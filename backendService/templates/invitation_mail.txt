@@ -1,10 +1,10 @@
 {% if greeter %}
-You have received an invitation from {{ greeter }} to join the existing group {{ organization_id }} on guardata.
+This is an invitation from {{ greeter }} to join the existing group {{ organization_id }} on guardata.
 {% else %}
-You have received an invitation to add an new device in the {{ organization_id}} group on guardata.
+This is an invitation to add a new device in the {{ organization_id}} group on guardata.
 {% endif %}
 
-If you don't already have it, you should Download the guardata client via the following link: https://guardata.app/get
+If you don't already have it, you have to download the guardata client via the following link : https://guardata.app/get
 
 Once installed, click on the following link to proceed to guardata : {{ invitation_url }}
 
