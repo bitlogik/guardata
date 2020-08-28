@@ -956,7 +956,7 @@
         <file>images/material/wrap_text.svg</file>
         <file>images/material/youtube_searched_for.svg</file>
         <file>images/material/zoom_out_map.svg</file>
-        <file>images/icons/spinner.svg</file>
+        <file>images/icons/spinner.gif</file>
     </qresource>
     <qresource prefix="/file_ext">
         <file>images/file_formats/3dm-file-format.svg</file>

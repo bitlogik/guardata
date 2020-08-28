@@ -81,6 +81,10 @@ class FileHistoryWidget(QWidget, Ui_FileHistoryWidget):
     def set_loading_in_progress(self, in_progress: bool):
         self.loading_in_progress = in_progress
         self.area_list.setVisible(not in_progress)
+        if in_progress:
+            self.spinner.spinner_movie.start()
+        else:
+            self.spinner.spinner_movie.stop()
         self.spinner.setVisible(in_progress)
 
     def reset_dialog(self, workspace_fs, version_lister, path):

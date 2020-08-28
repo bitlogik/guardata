@@ -3,11 +3,11 @@
 
 import os
 import trio
-from typing import Tuple
-from pathlib import Path
-from uuid import uuid4
-from typing import Optional
 import random
+from pathlib import Path
+from typing import Tuple, Optional
+from uuid import uuid4
+from sys import stderr
 
 from guardata.logging import configure_logging
 from guardata.client import logged_client_factory
@@ -249,6 +249,7 @@ async def _add_random_users_to_organization(
         return
     if add_random_users > 200:
         add_random_users = 200
+    print(f"Creating {add_random_users} random users", file=stderr)
     while add_random_users > 0:
         name = "test_" + str(uuid4())[:9]
         device = await _invite_user_to_organization(

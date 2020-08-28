@@ -236,11 +236,11 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         self.mount_widget.show()
         self.mount_widget.show_workspaces_widget()
 
-    def show_users_widget(self):
+    def show_users_widget(self, page=1):
         self.clear_widgets()
         self.menu.activate_users()
         self.label_title.setText(_("ACTION_MENU_USERS"))
-        self.users_widget.show()
+        self.users_widget.show(page=page)
 
     def show_devices_widget(self):
         self.clear_widgets()

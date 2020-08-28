@@ -243,6 +243,7 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
                 is_current_user=user_info.user_id == self.client.device.user_id,
                 role=role or "NOT_SHARED",
             )
+        self.spinner.spinner_movie.stop()
         self.spinner.hide()
         self.widget_users.show()
 
@@ -252,10 +253,12 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
 
         if job.status == "offline":
             show_error(self, _("TEXT_WORKSPACE_SHARING_OFFLINE"))
+        self.spinner.spinner_movie.stop()
         self.spinner.hide()
         self.widget_users.show()
 
     def reset(self):
+        self.spinner.spinner_movie.start()
         self.spinner.show()
         self.widget_users.hide()
         self.jobs_ctx.submit_job(
