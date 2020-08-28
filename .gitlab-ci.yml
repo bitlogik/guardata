@@ -118,6 +118,7 @@ snap-build:
     - tags
   stage: build
   before_script:
+    - apt-get -y update
     - cp -R packaging/snap snapbuild
     - cd snapbuild
     - mkdir src
