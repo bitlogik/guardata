@@ -158,10 +158,14 @@ async def _do_revoke_user(client, user_info):
         raise JobResultError("error") from exc
 
 
-async def _do_list_users_and_invitations(client):
+async def _do_list_users_and_invitations(client, page=1):
     try:
-        # TODO: handle pagination ! (currently we only display the first 100 users...)
-        users, total = await client.find_humans()
+        users = []
+        total = 1
+        while total != 0:
+            page_users, total = await core.find_humans(page=page, per_page=100)
+            users = users + page_users
+            page += 1
         invitations = await client.list_invitations()
         return users, [inv for inv in invitations if inv["type"] == InvitationType.USER]
     except BackendNotAvailable as exc:
@@ -227,8 +231,8 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         self.cancel_invitation_success.connect(self._on_cancel_invitation_success)
         self.cancel_invitation_error.connect(self._on_cancel_invitation_error)
 
-    def show(self):
-        self.reset()
+    def show(self, page=1):
+        self.reset(page=page)
         super().show()
 
     def on_filter_timer_timeout(self):
@@ -378,6 +382,7 @@ class UsersWidget(QWidget, Ui_UsersWidget):
     def _on_list_success(self, job):
         assert job.is_finished()
         assert job.status == "ok"
+        self.spinner.hide()
 
         users, invitations = job.ret
         self._flush_users_list()
@@ -398,6 +403,7 @@ class UsersWidget(QWidget, Ui_UsersWidget):
     def _on_list_error(self, job):
         assert job.is_finished()
         assert job.status != "ok"
+        self.spinner.hide()
 
         status = job.status
         if status in ["error", "offline"]:
@@ -442,12 +448,14 @@ class UsersWidget(QWidget, Ui_UsersWidget):
 
         show_error(self, errmsg, exception=job.exc)
 
-    def reset(self):
+    def reset(self, page=1):
         self.layout_users.clear()
+        self.spinner.show()
 
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "list_success", QtToTrioJob),
             ThreadSafeQtSignal(self, "list_error", QtToTrioJob),
             _do_list_users_and_invitations,
             client=self.client,
+            page=page,
         )

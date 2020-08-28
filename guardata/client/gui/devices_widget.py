@@ -165,6 +165,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
     def _on_list_success(self, job):
         assert job.is_finished()
         assert job.status == "ok"
+        self.spinner.hide()
 
         devices = job.ret
         current_device = self.client.device
@@ -175,6 +176,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
     def _on_list_error(self, job):
         assert job.is_finished()
         assert job.status != "ok"
+        self.spinner.hide()
 
         status = job.status
         if status in ["error", "offline"]:
@@ -184,6 +186,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
             self.layout_devices.addWidget(label)
 
     def reset(self):
+        self.spinner.show()
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "list_success", QtToTrioJob),
             ThreadSafeQtSignal(self, "list_error", QtToTrioJob),
