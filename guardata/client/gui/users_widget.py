@@ -163,7 +163,7 @@ async def _do_list_users_and_invitations(client, page=1):
         users = []
         total = 1
         while total != 0:
-            page_users, total = await core.find_humans(page=page, per_page=100)
+            page_users, total = await client.find_humans(page=page, per_page=100)
             users = users + page_users
             page += 1
         invitations = await client.list_invitations()

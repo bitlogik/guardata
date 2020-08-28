@@ -301,7 +301,7 @@ async def test_pagination(access_testbed, organization_factory, local_device_fac
 
     # Test out of pagination
     rep = await human_find(sock, page=3, per_page=3)
-    assert rep == {"status": "ok", "results": [], "per_page": 3, "page": 3, "total": 0
+    assert rep == {"status": "ok", "results": [], "per_page": 3, "page": 3, "total": 0}
 
 
 @pytest.mark.trio
