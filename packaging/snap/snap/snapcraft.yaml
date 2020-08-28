@@ -39,6 +39,7 @@ parts:
       # (see: https://github.com/Scille/parsec-cloud/issues/1253)
       - fuse
       - libfuse2
+      - libdrm2
       - libxext6
       - libx11-6
       - libx11-xcb1
