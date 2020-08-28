@@ -120,7 +120,7 @@ snap-build:
   before_script:
     - apt-get -y update
     - apt-get -y install snapd
-    - systemctl restart snapd.service
+    - service snapd restart
     - snap install snapcraft --classic
     - cp -R packaging/snap snapbuild
     - cd snapbuild
