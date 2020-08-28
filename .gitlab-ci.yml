@@ -130,9 +130,6 @@ snap-build:
     - sed -i "s#^\\(__version__ = \\).*\$#\\1'$CI_COMMIT_TAG'#" src/guardata/_version.py
     - sed -i "s/__GUARDATA_VERSION__/$CI_COMMIT_TAG/" snap/snapcraft.yaml
     - snapcraft --destructive-mode
-    # Testing
-    - snap install --classic --dangerous guardata*.snap
-    - guardata.cli --version
   artifacts:
     paths:
       - snapbuild/guardata*.snap
