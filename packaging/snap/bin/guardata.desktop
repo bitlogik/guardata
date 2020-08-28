@@ -7,5 +7,5 @@ Type=Application
 Terminal=false
 StartupNotify=false
 StartupWMClass=guardata
-Categories=Network
+Categories=Office
 MimeType=x-scheme-handler/parsec;

@@ -34,12 +34,12 @@ parts:
     source-type: local
     override-pull: |
       snapcraftctl pull
-      sed -i "s#install_requires=requirements#install_requires=requirements + extra_requirements['client']#g" setup.py
     stage-packages:
       # fuse package contains fusermount which is sometime needed by libfuse2
       # (see: https://github.com/Scille/parsec-cloud/issues/1253)
       - fuse
       - libfuse2
+      - libdrm2
       - libxext6
       - libx11-6
       - libx11-xcb1
