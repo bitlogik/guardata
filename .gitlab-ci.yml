@@ -1,14 +1,32 @@
 # Gitlab CI/CD for guardata
 
+stages:
+  - quickQC
+  - test
+  - build
+
 .shared_windows_runners:
   tags:
   - shared-windows
   - windows
   - windows-1809
 
+quality-control:
+  image: python:3.8-alpine
+  stage: quickQC
+  timeout: 4m
+  before_script:
+    - apk update
+    - apk add git build-base
+    - pip3 install pre-commit
+  script:
+    - pre-commit run --all-files --show-diff-on-failure
+
 linux-tests:
   image: ubuntu:focal
   stage: test
+  timeout: 40m
+  needs: [quality-control]
   except:
     - tags
   before_script:
@@ -27,6 +45,8 @@ windows-tests:
   extends:
     - .shared_windows_runners
   stage: test
+  timeout: 40m
+  needs: [quality-control]
   except:
     - tags
   before_script:
@@ -61,6 +81,7 @@ pip-build:
   only:
     - tags
   stage: build
+  timeout: 5m
   before_script:
     - apt-get -y update
     # apt-get install -y xvfb xorg
@@ -73,10 +94,10 @@ pip-build:
     - python -m venv venv_build
     - ./venv_build/bin/python -m pip install -r pre-requirements.txt
     - echo __version__=\"$CI_COMMIT_TAG\" > guardata/_version.py
+  script:
     - ./venv_build/bin/python setup.py bdist_wheel
     - pip3 install --user virtualenv
     - python -m venv venv_test
-  script:
     - source venv_test/bin/activate
     - pip3 install -r pre-requirements.txt
     - pip3 install $(ls dist/guardata-*.whl)[client]
@@ -93,6 +114,7 @@ windows-build:
   only:
     - tags
   stage: build
+  timeout: 30m
   before_script:
     - rm -R -Force guardata/test_utils
     - Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
