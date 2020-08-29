@@ -14,6 +14,7 @@ from PyQt5.QtGui import (
     QFont,
     QFontMetrics,
     QGuiApplication,
+    QMovie,
 )
 from PyQt5.QtWidgets import (
     QPushButton,
@@ -23,7 +24,6 @@ from PyQt5.QtWidgets import (
     QListView,
     QComboBox,
 )
-from PyQt5.QtSvg import QSvgWidget
 
 from guardata.client.gui.ui.code_input_widget import Ui_CodeInputWidget
 from guardata.client.gui.ui.spinner_widget import Ui_SpinnerWidget
@@ -33,7 +33,7 @@ class SpinnerWidget(QWidget, Ui_SpinnerWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setupUi(self)
-        self.spinner = QSvgWidget(":/icons/images/icons/spinner.svg")
+        self.spinner = QMovie(":/icons/images/icons/spinner.gif")
         self.widget.layout().insertWidget(1, self.spinner)
 
 
