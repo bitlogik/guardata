@@ -1,10 +1,7 @@
-# Azure CI/CD for guardata
+# Azure Github CI/CD for guardata
 
 trigger:
   branches:
-    include:
-    - '*'
-  tags:
     include:
     - '*'
 
@@ -20,11 +17,40 @@ variables:
 jobs:
 
 #################################################################################
-# Step 0: Wheel build
+# Step 0: Quality Control
 
-- job: 's0_build_wheel'
+- job: 's0_qc'
+  displayName: 'Quality Control'
+  timeoutInMinutes: 4
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - checkout: self
+    submodules: true
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+  - bash: |
+      set -eux
+      sudo apt-get update
+      python --version
+      pip install pre-commit
+    displayName: 'Bootstrap'
+  - bash: |
+      set -eux
+      # Run all pre-commit hooks on all files
+      pre-commit run --all-files --show-diff-on-failure
+    displayName: 'Pre-commit hooks check'
+
+
+#################################################################################
+# Step 1: Binary wheel build
+
+- job: 's1_build_wheel'
   displayName: 'Build wheel'
-  timeoutInMinutes: 10
+  dependsOn:
+    - s0_qc
+  timeoutInMinutes: 8
   pool:
     vmImage: 'ubuntu-latest'
   steps:
@@ -48,38 +74,13 @@ jobs:
 
 
 #################################################################################
-# Step 1: Tests
+# Step 2.a: Tests on Linux
 
-- job: 's1_qa'
-  displayName: 'Q&A'
-  timeoutInMinutes: 5
-  pool:
-    vmImage: 'ubuntu-latest'
-  steps:
-  - checkout: self
-    submodules: true
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-  - bash: |
-      set -eux
-      sudo apt-get update
-      python --version
-      pip install pre-commit
-    displayName: 'Bootstrap'
-  - bash: |
-      set -eux
-      # Run all pre-commit hooks on all files
-      pre-commit run --all-files --show-diff-on-failure
-    displayName: 'Pre-commit hooks check'
-
-
-#################################################################################
-
-- job: 's1_linux_test'
+- job: 's2_linux_test'
   displayName: 'Linux tests'
-  dependsOn: s0_build_wheel
-  timeoutInMinutes: 60
+  dependsOn:
+    - s1_build_wheel
+  timeoutInMinutes: 40
   pool:
     vmImage: 'ubuntu-latest'
   variables:
@@ -142,11 +143,13 @@ jobs:
 
 
 #################################################################################
+# Step 2.b: Tests on Windows
 
-- job: 's1_windows_test'
+- job: 's2_windows_test'
   displayName: 'Windows tests'
-  dependsOn: s0_build_wheel
-  timeoutInMinutes: 60
+  dependsOn:
+    - s1_build_wheel
+  timeoutInMinutes: 40
   pool:
     vmImage: 'windows-latest'
   variables:
