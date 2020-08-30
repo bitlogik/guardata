@@ -35,7 +35,7 @@ class SpinnerWidget(QWidget, Ui_SpinnerWidget):
         self.setupUi(self)
         self.movie_label = QLabel()
         self.spinner_movie = QMovie(":/icons/images/icons/spinner.gif")
-        self.movie_label.SetMovie(self.spinner_movie)
+        self.movie_label.setMovie(self.spinner_movie)
         self.widget.layout().insertWidget(1, self.movie_label)
 
 
