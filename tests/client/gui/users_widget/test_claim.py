@@ -294,7 +294,7 @@ def ClaimUserTestBed(
                 central_widget = gui.test_get_central_widget()
                 assert central_widget and central_widget.isVisible()
 
-            await aqtbot.wait_until(_claim_done)
+            await aqtbot.wait_until(_claim_done, timeout=2000)
 
             assert autoclose_dialog.dialogs == [
                 (

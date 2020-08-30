@@ -71,7 +71,6 @@ def _get_pattern_filter(pattern_filter_path: Path) -> Optional[Pattern]:
         )
         return None
     try:
-        logger.info(f"CONFINED curent regex  : {regex}")
         return re.compile(regex)
     except re.error as exc:
         logger.warning(

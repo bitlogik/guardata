@@ -447,7 +447,9 @@ async def test_greet_user_reset_by_peer(aqtbot, GreetUserTestBed, autoclose_dial
             expected_message = translate("TEXT_GREET_USER_PEER_RESET")
             guci_w = self.greet_user_check_informations_widget
 
-            await self.claimer_claim_task.cancel_and_join()
+            with trio.fail_after(1):
+                await self.claimer_claim_task.cancel_and_join()
+
             async with self._reset_claimer():
 
                 await aqtbot.mouse_click(guci_w.button_create_user, QtCore.Qt.LeftButton)
@@ -543,7 +545,9 @@ async def test_greet_user_invitation_cancelled(
         async def cancelled_step_6_validate_claim_info(self):
             expected_message = translate("TEXT_GREET_USER_CREATE_USER_ERROR")
             guci_w = self.greet_user_check_informations_widget
-            await self.claimer_claim_task.cancel_and_join()
+            with trio.fail_after(1):
+                await self.claimer_claim_task.cancel_and_join()
+
             await self._cancel_invitation()
 
             await aqtbot.mouse_click(guci_w.button_create_user, QtCore.Qt.LeftButton)

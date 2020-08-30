@@ -43,10 +43,12 @@ async def test_login(aqtbot, gui_factory, autoclose_dialog, client_config, alice
         await aqtbot.mouse_click(password_w.button_login, QtCore.Qt.LeftButton)
 
     central_widget = gui.test_get_central_widget()
-    assert central_widget is not None
-    assert (
-        central_widget.button_user.text() == f"{alice.organization_id}\n{alice.short_user_display}"
-    )
+    assert central_widget
+    with aqtbot.qtbot.waitExposed(central_widget):
+        assert (
+            central_widget.button_user.text()
+            == f"{alice.organization_id}\n{alice.short_user_display}"
+        )
 
 
 @pytest.mark.gui

@@ -64,14 +64,15 @@ async def test_bootstrap_organization(aqtbot, backend, gui_ready_for_bootstrap, 
         assert not bo_w.isVisible()
         # Should be logged in with the new device
         central_widget = gui.test_get_central_widget()
-        assert central_widget and central_widget.isVisible()
-        assert autoclose_dialog.dialogs == [
-            (
-                "",
-                "Your organization (group) <b>NewOrg</b> has been activated!<br />\n<br />\n"
-                "You will now be automatically logged in.<br />\n<br />\n",
-            )
-        ]
+        assert central_widget
+        with aqtbot.qtbot.waitExposed(central_widget):
+            assert autoclose_dialog.dialogs == [
+                (
+                    "",
+                    "Your organization (group) <b>NewOrg</b> has been activated!<br />\n<br />\n"
+                    "You will now be automatically logged in.<br />\n<br />\n",
+                )
+            ]
 
     await aqtbot.wait_until(_bootstrap_done)
 

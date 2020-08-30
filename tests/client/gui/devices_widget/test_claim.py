@@ -255,10 +255,13 @@ def ClaimDeviceTestBed(
                 assert not cdpi_w.isVisible()
                 # Should be logged in with the new device
                 central_widget = gui.test_get_central_widget()
-                assert central_widget and central_widget.isVisible()
-                assert autoclose_dialog.dialogs == [("", "The device was successfully created!")]
+                assert central_widget
+                with aqtbot.qtbot.waitExposed(central_widget):
+                    assert autoclose_dialog.dialogs == [
+                        ("", "The device was successfully created!")
+                    ]
 
-            await aqtbot.wait_until(_claim_done)
+            await aqtbot.wait_until(_claim_done, timeout=2000)
 
             return None  # Test is done
 
@@ -318,13 +321,17 @@ async def test_claim_device_offline(
             with running_backend.offline():
                 assert not autoclose_dialog.dialogs
                 await aqtbot.run(cdce_w.code_input_widget.good_code_clicked.emit)
-                await aqtbot.wait_until(partial(self._claim_aborted, expected_message))
+                await aqtbot.wait_until(
+                    partial(self._claim_aborted, expected_message), timeout=2000
+                )
             return None
 
         async def offline_step_4_exchange_claimer_sas(self):
             expected_message = translate("TEXT_CLAIM_DEVICE_WAIT_PEER_TRUST_ERROR")
             with running_backend.offline():
-                await aqtbot.wait_until(partial(self._claim_aborted, expected_message))
+                await aqtbot.wait_until(
+                    partial(self._claim_aborted, expected_message), timeout=2000
+                )
 
             return None
 
@@ -393,7 +400,9 @@ async def test_claim_device_reset_by_peer(
 
             async with self._reset_greeter():
                 await aqtbot.run(cdce_w.code_input_widget.good_code_clicked.emit)
-                await aqtbot.wait_until(partial(self._claim_restart, expected_message))
+                await aqtbot.wait_until(
+                    partial(self._claim_restart, expected_message), timeout=2000
+                )
 
             await self.bootstrap_after_restart()
             return None
@@ -401,7 +410,9 @@ async def test_claim_device_reset_by_peer(
         async def reset_step_4_exchange_claimer_sas(self):
             expected_message = translate("TEXT_CLAIM_DEVICE_WAIT_PEER_TRUST_ERROR")
             async with self._reset_greeter():
-                await aqtbot.wait_until(partial(self._claim_restart, expected_message))
+                await aqtbot.wait_until(
+                    partial(self._claim_restart, expected_message), timeout=2000
+                )
 
             await self.bootstrap_after_restart()
             return None
@@ -493,7 +504,7 @@ async def test_claim_device_invitation_cancelled(
             await self._cancel_invitation()
 
             await aqtbot.run(cdce_w.code_input_widget.good_code_clicked.emit)
-            await aqtbot.wait_until(partial(self._claim_restart, expected_message))
+            await aqtbot.wait_until(partial(self._claim_restart, expected_message), timeout=2000)
 
             return None
 
@@ -501,7 +512,7 @@ async def test_claim_device_invitation_cancelled(
             expected_message = translate("TEXT_CLAIM_DEVICE_WAIT_PEER_TRUST_ERROR")
             await self._cancel_invitation()
 
-            await aqtbot.wait_until(partial(self._claim_restart, expected_message))
+            await aqtbot.wait_until(partial(self._claim_restart, expected_message), timeout=2000)
 
             return None
 

@@ -40,7 +40,7 @@ async def logged_gui_with_files(
         assert f_w.workspace_fs.get_workspace_name() == "w1"
         assert f_w.table_files.rowCount() == 1
 
-    await aqtbot.wait_until(_entry_available)
+    await aqtbot.wait_until(_entry_available, timeout=2000)
 
     def folder_ready():
         assert f_w.isVisible()
@@ -52,14 +52,14 @@ async def logged_gui_with_files(
     async with aqtbot.wait_signal(f_w.folder_stat_success, timeout=3000):
         await aqtbot.mouse_click(f_w.button_create_folder, QtCore.Qt.LeftButton)
 
-    await aqtbot.wait_until(folder_ready)
+    await aqtbot.wait_until(folder_ready, timeout=2000)
 
     d_w = await logged_gui.test_switch_to_devices_widget()
 
     def device_widget_ready():
         assert d_w.isVisible()
 
-    await aqtbot.wait_until(device_widget_ready)
+    await aqtbot.wait_until(device_widget_ready, timeout=2000)
 
     return logged_gui, w_w, f_w
 
@@ -92,7 +92,7 @@ async def test_file_link(
         assert folder
         assert folder.text() == "dir1"
 
-    await aqtbot.wait_until(folder_ready)
+    await aqtbot.wait_until(folder_ready, timeout=2000)
 
     assert logged_gui.tab_center.count() == 1
 
@@ -122,7 +122,7 @@ async def test_file_link_invalid_path(
         assert len(autoclose_dialog.dialogs) == 1
         assert autoclose_dialog.dialogs == [("Error", translate("TEXT_FILE_GOTO_LINK_NOT_FOUND"))]
 
-    await aqtbot.wait_until(assert_dialogs)
+    await aqtbot.wait_until(assert_dialogs, timeout=2000)
 
     assert logged_gui.tab_center.count() == 1
 
@@ -152,7 +152,7 @@ async def test_file_link_invalid_workspace(
         assert len(autoclose_dialog.dialogs) == 1
         assert autoclose_dialog.dialogs == [("Error", translate("TEXT_INVALID_URL"))]
 
-    await aqtbot.wait_until(assert_dialogs)
+    await aqtbot.wait_until(assert_dialogs, timeout=2000)
 
 
 @pytest.mark.gui
@@ -189,6 +189,6 @@ async def test_file_link_disconnected(
             )
         ]
 
-    await aqtbot.wait_until(assert_dialogs)
+    await aqtbot.wait_until(assert_dialogs, timeout=2000)
 
     assert logged_gui.tab_center.count() == 1
