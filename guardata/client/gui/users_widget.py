@@ -382,6 +382,7 @@ class UsersWidget(QWidget, Ui_UsersWidget):
     def _on_list_success(self, job):
         assert job.is_finished()
         assert job.status == "ok"
+        self.spinner.spinner_movie.stop()
         self.spinner.hide()
 
         users, invitations = job.ret
@@ -403,6 +404,7 @@ class UsersWidget(QWidget, Ui_UsersWidget):
     def _on_list_error(self, job):
         assert job.is_finished()
         assert job.status != "ok"
+        self.spinner.spinner_movie.stop()
         self.spinner.hide()
 
         status = job.status
@@ -450,6 +452,7 @@ class UsersWidget(QWidget, Ui_UsersWidget):
 
     def reset(self, page=1):
         self.layout_users.clear()
+        self.spinner.spinner_movie.start()
         self.spinner.show()
 
         self.jobs_ctx.submit_job(

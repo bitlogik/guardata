@@ -33,8 +33,10 @@ class SpinnerWidget(QWidget, Ui_SpinnerWidget):
     def __init__(self, parent=None):
         super().__init__(parent=parent)
         self.setupUi(self)
-        self.spinner = QMovie(":/icons/images/icons/spinner.gif")
-        self.widget.layout().insertWidget(1, self.spinner)
+        self.movie_label = QLabel()
+        self.spinner_movie = QMovie(":/icons/images/icons/spinner.gif")
+        self.movie_label.SetMovie(self.spinner_movie)
+        self.widget.layout().insertWidget(1, self.movie_label)
 
 
 def ensure_string_size(s, size, font):

@@ -165,6 +165,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
     def _on_list_success(self, job):
         assert job.is_finished()
         assert job.status == "ok"
+        self.spinner.spinner_movie.stop()
         self.spinner.hide()
 
         devices = job.ret
@@ -176,6 +177,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
     def _on_list_error(self, job):
         assert job.is_finished()
         assert job.status != "ok"
+        self.spinner.spinner_movie.stop()
         self.spinner.hide()
 
         status = job.status
@@ -186,6 +188,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
             self.layout_devices.addWidget(label)
 
     def reset(self):
+        self.spinner.spinner_movie.start()
         self.spinner.show()
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "list_success", QtToTrioJob),
