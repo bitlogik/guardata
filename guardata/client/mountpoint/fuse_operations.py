@@ -111,6 +111,14 @@ class FuseOperations(LoggingMixIn, Operations):
         fuse_stat["st_gid"] = gid
         return fuse_stat
 
+    def chmod(self, path: FsPath, mode: int):
+        # TODO : for now silently ignored
+        return
+
+    def chown(self, path: FsPath, uid: int, gid: int):
+        # TODO : for now silently ignored
+        return
+
     def readdir(self, path: FsPath, fh: int):
         stat = self.fs_access.entry_info(path)
 
