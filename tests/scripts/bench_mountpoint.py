@@ -1,4 +1,5 @@
 #! /usr/bin/env python3
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 
@@ -52,7 +53,7 @@ def keep_running_cmd(cmd):
 
 
 def main():
-    workdir = Path(mkdtemp(prefix="parsec-bench-"))
+    workdir = Path(mkdtemp(prefix="guardata-bench-"))
     print(f"Workdir: {workdir}")
     confdir = workdir / "client"
     mountdir = workdir / "mountpoint"

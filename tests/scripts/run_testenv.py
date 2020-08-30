@@ -1,8 +1,9 @@
-#! /usr/bin/env python
+#! /usr/bin/env python3
+# Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 """
-Create a temporary environment and initialize a test setup for guardata.
+Creates a temporary environment and initializes a test setup for guardata.
 
 Run `tests/scripts/run_testenv.sh --help` for more information.
 """
@@ -10,7 +11,7 @@ Run `tests/scripts/run_testenv.sh --help` for more information.
 
 import pkg_resources
 
-# Make sure guardata is fully installed (client, backend, dev)
+# Make sure guardata is fully installed (client, test, dev)
 pkg_resources.require("guardata[all]")
 
 import os
@@ -52,6 +53,7 @@ async def new_environment(source_file=None):
             "XDG_DATA_HOME": f"{tempdir}/share",
             "XDG_CONFIG_HOME": f"{tempdir}/config",
         }
+    env["PYTEST_CURRENT_TEST"] = "TestsScripts"
     for key, value in env.items():
         await trio.Path(value).mkdir(exist_ok=True)
         os.environ[key] = value
@@ -129,7 +131,8 @@ async def restart_local_backend(administration_token, backend_port):
     pattern = f"guardata.* backend.* run.* -P {backend_port}"
     command = (
         f"{sys.executable} -Wignore -m guardata.cli backend run -b MOCKED --db MOCKED "
-        f"-P {backend_port} --administration-token {administration_token} --backend-addr parsec://localhost:{backend_port}?no_ssl=true"
+        f"-P {backend_port} --administration-token {administration_token} "
+        f"--backend-addr parsec://localhost:{backend_port}?no_ssl=true"
         f" --email-sender aaa@mydomain.com"
     )
 
@@ -269,11 +272,17 @@ Using existing backend: {backend_address}
     # Report
     click.echo(
         f"""\
+
 Mount alice and bob drives using:
 
     $ guardata client run -P {password} -D {alice_device.slughash[:3]}  # Alice
     $ guardata client run -P {password} -D {other_alice_device.slughash[:3]}  # Alice 2nd device
     $ guardata client run -P {password} -D {bob_device.slughash[:3]}  # Bob
+
+or
+Run the guardata GUI (use "test" as the password) :
+    $ guardata client gui
+
 """
     )
 
