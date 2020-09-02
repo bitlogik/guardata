@@ -294,7 +294,9 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
             self.widget.setStyleSheet("background-color: #FFFFFF;")
             self.widget_title.setStyleSheet("background-color: #FFFFFF;")
             self.widget_actions.setStyleSheet("background-color: #FFFFFF;")
+            self.button_open.setDisabled(False)
         else:
             self.widget.setStyleSheet("background-color: #DDDDDD;")
             self.widget_title.setStyleSheet("background-color: #DDDDDD;")
             self.widget_actions.setStyleSheet("background-color: #DDDDDD;")
+            self.button_open.setDisabled(True)
