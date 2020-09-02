@@ -11,6 +11,7 @@ import pendulum
 
 from guardata.client.types import (
     WorkspaceEntry,
+    UserInfo,
     FsPath,
     EntryID,
     EntryName,
@@ -80,7 +81,19 @@ async def _do_workspace_list(client):
                 user_info = await client.get_user_info(user)
                 users_roles[user_info.user_id] = (role, user_info)
         except FSBackendOfflineError:
-            user_info = await client.get_user_info(workspace_fs.device.user_id)
+            # Fallback to craft a custom list with only our device since it's
+            # the only one we know about
+            user_info = UserInfo(
+                user_id=client.device.user_id,
+                human_handle=client.device.human_handle,
+                profile=client.device.profile,
+                revoked_on=None,
+                # Unfortunatly, this field is not available from LocalDevice,
+                # so it is set with a dummy value
+                # More a hack than an issue given this field is
+                # not used here.
+                created_on=pendulum.from_timestamp(0),
+            )
             users_roles[user_info.user_id] = (ws_entry.role, user_info)
 
         try:
