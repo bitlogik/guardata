@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: guardata 0.0.2\n"
+"Project-Id-Version: guardata 0.0.5\n"
 "POT-Creation-Date: 2020-08-14 06:36+0200\n"
-"PO-Revision-Date: 2020-08-26 07:46+0200\n"
+"PO-Revision-Date: 2020-09-03 07:46+0200\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
@@ -316,8 +316,8 @@ msgstr "Effacer"
 msgid "TEXT_WORKSPACE_ONLY_OWNER_CAN_REENCRYPT"
 msgstr "Seul le propriétaire d'un espace de travail peut le rechiffrer."
 
-msgid "TEXT_WORKSPACE_CURRENTLY_REENCRYPTING_TOOLTIP"
-msgstr "En cours de rechiffrement"
+msgid "TEXT_WORKSPACE_REENCRYPTION"
+msgstr "Rechiffrement ... %p%"
 
 msgid "TEXT_WORKSPACE_IS_PRIVATE"
 msgstr "privé"
@@ -516,6 +516,22 @@ msgstr "Rechiffrer l'espace de travail"
 
 msgid "ACTION_WORKSPACE_REENCRYPTION_CONFIRM"
 msgstr "Rechiffrer"
+
+msgid "TEXT_WORKPACE_REENCRYPT_OFFLINE_ERROR"
+msgstr "Echec réencryption, serveur injoignable."
+
+msgid "TEXT_WORKPACE_REENCRYPT_ACCESS_ERROR"
+msgstr ""
+"Echec réencryption, vous n'avez pas les droits pour accéder à cet espace."
+
+msgid "TEXT_WORKPACE_REENCRYPT_NOT_FOUND_ERROR"
+msgstr "Echec réencryption, espace introuvable."
+
+msgid "TEXT_WORKPACE_REENCRYPT_FS_ERROR"
+msgstr "Echec réencryption, espace en maintenance."
+
+msgid "TEXT_WORKSPACE_REENCRYPT_UNKOWN_ERROR"
+msgstr "Echec réencryption pour une raison inconnue."
 
 msgid "TEXT_WORKSPACE_NEW_TITLE"
 msgstr "Créer un espace de travail"

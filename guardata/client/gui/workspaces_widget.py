@@ -613,7 +613,8 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
                 else:
                     job = await self.client.user_fs.workspace_start_reencryption(workspace_id)
             while True:
-                total, done = await job.do_one_batch(size=1)
+                with _handle_fs_errors():
+                    total, done = await job.do_one_batch(size=1)
                 on_progress.emit(workspace_id, total, done)
                 if total == done:
                     break
@@ -636,8 +637,17 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
         self.reencrypting.remove(workspace_id)
 
     def _on_workspace_reencryption_error(self, job):
-        workspace_id = job.ret
-        self.reencrypting.remove(workspace_id)
+        if job.status == "offline-backend":
+            err_msg = _("TEXT_WORKPACE_REENCRYPT_OFFLINE_ERROR")
+        elif job.status == "access-error":
+            err_msg = _("TEXT_WORKPACE_REENCRYPT_ACCESS_ERROR")
+        elif job.status == "not-found":
+            err_msg = _("TEXT_WORKPACE_REENCRYPT_NOT_FOUND_ERROR")
+        elif job.status == "fs-error":
+            err_msg = _("TEXT_WORKPACE_REENCRYPT_FS_ERROR")
+        else:
+            err_msg = _("TEXT_WORKSPACE_REENCRYPT_UNKOWN_ERROR")
+        show_error(self, err_msg, exception=job.exc)
 
     def get_workspace_button(self, workspace_id, timestamp):
         for widget in self._iter_workspace_buttons():
