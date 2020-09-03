@@ -69,7 +69,7 @@ msgid "TEXT_FILE_DELETE_TITLE"
 msgstr "Supprimer un fichier"
 
 msgid "TEXT_FILE_DELETE_INSTRUCTIONS_name"
-msgstr "Êtes-vous sûr de vouloir supprimer le fichier <b>{name}</b> ?"
+msgstr "Êtes-vous sûrs de vouloir supprimer le fichier <b>{name}</b> ?"
 
 msgid "ACTION_FILE_DELETE"
 msgstr "Supprimer"
@@ -81,7 +81,7 @@ msgid "TEXT_FILE_DELETE_MULTIPLE_TITLE_count"
 msgstr "Supprimer plusieurs fichiers"
 
 msgid "TEXT_FILE_DELETE_MULTIPLE_INSTRUCTIONS_count"
-msgstr "Êtes-vous sûr de vouloir supprimer les {count} fichiers ?"
+msgstr "Êtes-vous sûrs de vouloir supprimer les {count} fichiers ?"
 
 msgid "ACTION_FILE_DELETE_MULTIPLE"
 msgstr "Supprimer"
@@ -91,7 +91,7 @@ msgstr "Ouvrir plusieurs fichiers"
 
 msgid "TEXT_FILE_OPEN_MULTIPLE_INSTRUCTIONS_count"
 msgstr ""
-"Êtes-vous sûr de vouloir ouvrir les {count} fichiers ? Cela peut prendre "
+"Êtes-vous sûrs de vouloir ouvrir les {count} fichiers ? Cela peut prendre "
 "du temps."
 
 msgid "ACTION_FILE_OPEN_MULTIPLE"
@@ -652,7 +652,7 @@ msgstr "Annuler l'invitation"
 
 msgid "TEXT_USER_INVITE_CANCEL_INVITE_QUESTION_CONTENT"
 msgstr ""
-"Êtes-vous sûr de vouloir annuler cette invitation ? Le lien d'invitation "
+"Êtes-vous sûrs de vouloir annuler cette invitation ? Le lien d'invitation "
 "qu'a reçu l'utilisateur par email deviendra invalide."
 
 msgid "TEXT_USER_INVITE_CANCEL_INVITE_ACCEPT"
@@ -689,7 +689,7 @@ msgstr ""
 "Un utilisateur révoqué n'aura plus accès à l'organisation et aux données "
 "stockées à l'intérieur.<br /><br />\n"
 "\n"
-"Êtes-vous sûr de vouloir révoquer l'utilisateur <b>{user}</b> ?"
+"Êtes-vous sûrs de vouloir révoquer l'utilisateur <b>{user}</b> ?"
 
 msgid "ACTION_USER_REVOCATION_CONFIRM"
 msgstr "Révoquer l'utilisateur"
@@ -1937,7 +1937,7 @@ msgstr "Fermer l'onglet"
 
 msgid "TEXT_TAB_CLOSE_INSTRUCTIONS_device"
 msgstr ""
-"Êtes-vous sûr de vouloir fermer cet onglet ? L'appareil \"{device}\" sera"
+"Êtes-vous sûrs de vouloir fermer cet onglet ? L'appareil \"{device}\" sera"
 " automatiquement déconnecté."
 
 msgid "TEXT_TRAY_GUARDATA_STILL_RUNNING_MESSAGE"
@@ -1947,7 +1947,7 @@ msgid "TEXT_GUARDATA_QUIT_TITLE"
 msgstr "Fermer guardata"
 
 msgid "TEXT_GUARDATA_QUIT_INSTRUCTIONS"
-msgstr "Êtes-vous sûr de vouloir fermer guardata ?"
+msgstr "Êtes-vous sûrs de vouloir fermer guardata ?"
 
 msgid "ACTION_GUARDATA_QUIT_CONFIRM"
 msgstr "Quitter"
