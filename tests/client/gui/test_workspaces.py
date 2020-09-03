@@ -237,7 +237,7 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         assert wk_button.button_open.isEnabled()
         assert wk_button.switch_button.isChecked()
 
-    await aqtbot.wait_until(_mounted)
+    await aqtbot.wait_until(_mounted, timeout=2000)
     _on_switch_clicked_mock.assert_called_once()
     _on_switch_clicked_mock.reset_mock()
 
@@ -259,5 +259,5 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         assert not wk_button.switch_button.isChecked()
         assert not wk_button.button_open.isEnabled()
 
-    await aqtbot.wait_until(_unmounted)
+    await aqtbot.wait_until(_unmounted, timeout=2000)
     _on_switch_clicked_mock.assert_called_once()

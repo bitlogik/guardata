@@ -26,7 +26,7 @@ async def test_init_online_backend_late_reply(
         return await backend.handle_client(stream)
 
     async with server_factory(_handle_client, alice.organization_addr):
-        with trio.fail_after(1):
+        with trio.fail_after(2):
             async with logged_client_factory(
                 config=client_config, device=alice, event_bus=event_bus
             ) as client:
@@ -49,7 +49,7 @@ async def test_init_offline_backend_late_reply(server_factory, client_config, al
         await stream.aclose()
 
     async with server_factory(_handle_client, alice.organization_addr):
-        with trio.fail_after(1):
+        with trio.fail_after(2):
             async with logged_client_factory(
                 config=client_config, device=alice, event_bus=event_bus
             ) as client:
