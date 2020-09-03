@@ -49,6 +49,10 @@ async def test_login(aqtbot, gui_factory, autoclose_dialog, client_config, alice
             central_widget.button_user.text()
             == f"{alice.organization_id}\n{alice.short_user_display}"
         )
+        assert (
+            gui.tab_center.tabText(0)
+            == f"{alice.organization_id} - {alice.short_user_display} - {alice.device_display}"
+        )
 
 
 @pytest.mark.gui
