@@ -2301,6 +2301,12 @@ msgstr "Filter users"
 msgid "ACTION_USER_INVITE_USER"
 msgstr "Invite a new user"
 
+msgid "ACTION_LIST_NEXT_PAGE"
+msgstr "Next page"
+
+msgid "ACTION_LIST_PREVIOUS_PAGE"
+msgstr "Previous page"
+
 msgid "TEXT_WORKSPACE_SWITCH_TOOLTIP"
 msgstr "Disable/Enable the workspace drive"
 

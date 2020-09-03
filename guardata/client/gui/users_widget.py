@@ -26,6 +26,8 @@ from guardata.client.gui.ui.user_button import Ui_UserButton
 from guardata.client.gui.ui.user_invitation_button import Ui_UserInvitationButton
 from guardata.client.gui.ui.users_widget import Ui_UsersWidget
 
+USERS_PER_PAGE = 100
+
 
 class UserInvitationButton(QWidget, Ui_UserInvitationButton):
     greet_clicked = pyqtSignal(UUID)
@@ -162,12 +164,9 @@ async def _do_list_users_and_invitations(client, page=1):
     try:
         users = []
         total = 1
-        while total != 0:
-            page_users, total = await client.find_humans(page=page, per_page=100)
-            users = users + page_users
-            page += 1
+        users, total = await client.find_humans(page=page, per_page=USERS_PER_PAGE)
         invitations = await client.list_invitations()
-        return users, [inv for inv in invitations if inv["type"] == InvitationType.USER]
+        return total, users, [inv for inv in invitations if inv["type"] == InvitationType.USER]
     except BackendNotAvailable as exc:
         raise JobResultError("offline") from exc
     except BackendConnectionError as exc:
@@ -218,6 +217,8 @@ class UsersWidget(QWidget, Ui_UsersWidget):
             self.button_add_user.clicked.connect(self.invite_user)
         else:
             self.button_add_user.hide()
+        self.button_previous_page.clicked.connect(self.show_previous_page)
+        self.button_next_page.clicked.connect(self.show_next_page)
         self.filter_timer = QTimer()
         self.filter_timer.setInterval(300)
         self.line_edit_search.textChanged.connect(self.filter_timer.start)
@@ -232,8 +233,18 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         self.cancel_invitation_error.connect(self._on_cancel_invitation_error)
 
     def show(self, page=1):
-        self.reset(page=page)
+        self._page = 1
+        self.reset()
         super().show()
+
+    def show_next_page(self):
+        self._page += 1
+        self.reset()
+
+    def show_previous_page(self):
+        if self._page > 1:
+            self._page -= 1
+        self.reset()
 
     def on_filter_timer_timeout(self):
         self.filter_users(self.line_edit_search.text())
@@ -385,27 +396,41 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         self.spinner.spinner_movie.stop()
         self.spinner.hide()
 
-        users, invitations = job.ret
+        total, users, invitations = job.ret
+        if total == 0 and self._page > 1:
+            self._page -= 1
+            self.reset()
         self._flush_users_list()
 
         current_user = self.client.device.user_id
         for user_info in users:
             self.add_user(user_info=user_info, is_current_user=current_user == user_info.user_id)
-
-        for invitation in invitations:
-            addr = BackendInvitationAddr.build(
-                backend_addr=self.client.device.organization_addr,
-                organization_id=self.client.device.organization_id,
-                invitation_type=InvitationType.USER,
-                token=invitation["token"],
-            )
-            self.add_user_invitation(invitation["claimer_email"], addr)
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
+        if total > USERS_PER_PAGE:
+            self.button_previous_page.show()
+            self.button_next_page.show()
+            if self._page * USERS_PER_PAGE >= total:
+                self.button_next_page.setEnabled(False)
+            else:
+                self.button_next_page.setEnabled(True)
+            if self._page <= 1:
+                self.button_previous_page.setEnabled(False)
+            else:
+                self.button_previous_page.setEnabled(True)
+        if self._page == 1:
+            for invitation in invitations:
+                addr = BackendInvitationAddr.build(
+                    backend_addr=self.client.device.organization_addr,
+                    organization_id=self.client.device.organization_id,
+                    invitation_type=InvitationType.USER,
+                    token=invitation["token"],
+                )
+                self.add_user_invitation(invitation["claimer_email"], addr)
 
     def _on_list_error(self, job):
         assert job.is_finished()
         assert job.status != "ok"
-        self.spinner.spinner_movie.stop()
-        self.spinner.hide()
 
         status = job.status
         if status in ["error", "offline"]:
@@ -416,6 +441,8 @@ class UsersWidget(QWidget, Ui_UsersWidget):
             return
         else:
             errmsg = _("TEXT_USER_LIST_RETRIEVABLE_FAILURE")
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
         show_error(self, errmsg, exception=job.exc)
 
     def _on_cancel_invitation_success(self, job):
@@ -450,8 +477,10 @@ class UsersWidget(QWidget, Ui_UsersWidget):
 
         show_error(self, errmsg, exception=job.exc)
 
-    def reset(self, page=1):
+    def reset(self):
         self.layout_users.clear()
+        self.button_previous_page.hide()
+        self.button_next_page.hide()
         self.spinner.spinner_movie.start()
         self.spinner.show()
 
@@ -460,5 +489,5 @@ class UsersWidget(QWidget, Ui_UsersWidget):
             ThreadSafeQtSignal(self, "list_error", QtToTrioJob),
             _do_list_users_and_invitations,
             client=self.client,
-            page=page,
+            page=self._page,
         )

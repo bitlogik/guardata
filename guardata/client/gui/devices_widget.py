@@ -16,6 +16,8 @@ from guardata.client.gui.flow_layout import FlowLayout
 from guardata.client.gui.ui.devices_widget import Ui_DevicesWidget
 from guardata.client.gui.ui.device_button import Ui_DeviceButton
 
+DEVICES_PER_PAGE = 100
+
 
 class DeviceButton(QWidget, Ui_DeviceButton):
     change_password_clicked = pyqtSignal()
@@ -66,7 +68,7 @@ async def _do_invite_device(client):
 
 async def _do_list_devices(client):
     try:
-        return await client.get_user_devices_info()
+        return await client.get_user_devices_info(per_page=DEVICES_PER_PAGE, page=1)
     except BackendNotAvailable as exc:
         raise JobResultError("offline") from exc
     except BackendConnectionError as exc:
@@ -91,6 +93,8 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
         self.layout_content.addLayout(self.layout_devices)
         self.button_add_device.clicked.connect(self.invite_device)
         self.button_add_device.apply_style()
+        self.button_previous_page.clicked.connect(self.show_previous_page)
+        self.button_next_page.clicked.connect(self.show_next_page)
         self.filter_timer = QTimer()
         self.filter_timer.setInterval(300)
         self.list_success.connect(self._on_list_success)
@@ -101,8 +105,19 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
         self.filter_timer.timeout.connect(self.on_filter_timer_timeout)
 
     def show(self):
+        self._page = 1
+
         self.reset()
         super().show()
+
+    def show_next_page(self):
+        self._page += 1
+        self.reset()
+
+    def show_previous_page(self):
+        if self._page > 1:
+            self._page -= 1
+        self.reset()
 
     def on_filter_timer_timeout(self):
         self.filter_devices(self.line_edit_search.text())
@@ -159,20 +174,35 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
         button.change_password_clicked.connect(self.change_password)
         button.show()
 
-    def _flush_devices_list(self):
-        self.layout_devices.clear()
-
     def _on_list_success(self, job):
         assert job.is_finished()
         assert job.status == "ok"
         self.spinner.spinner_movie.stop()
         self.spinner.hide()
 
-        devices = job.ret
+        devices, total = job.ret
+        # Securing if page go to far
+        if total == 0 and self._page > 1:
+            self._page -= 1
+            self.reset()
         current_device = self.client.device
-        self._flush_devices_list()
+        self.layout_devices.clear()
         for device in devices:
             self.add_device(device, is_current_device=current_device.device_id == device.device_id)
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
+        # Show/activate or hide/deactivate previous and next page button
+        if total > DEVICES_PER_PAGE:
+            self.button_previous_page.show()
+            self.button_next_page.show()
+            if self._page * DEVICES_PER_PAGE >= total:
+                self.button_next_page.setEnabled(False)
+            else:
+                self.button_next_page.setEnabled(True)
+            if self._page <= 1:
+                self.button_previous_page.setEnabled(False)
+            else:
+                self.button_previous_page.setEnabled(True)
 
     def _on_list_error(self, job):
         assert job.is_finished()
@@ -182,12 +212,17 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
 
         status = job.status
         if status in ["error", "offline"]:
-            self._flush_devices_list()
+            self.layout_devices.clear()
             label = QLabel(_("TEXT_DEVICE_LIST_RETRIEVABLE_FAILURE"))
             label.setAlignment(Qt.AlignHCenter | Qt.AlignVCenter)
             self.layout_devices.addWidget(label)
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
 
     def reset(self):
+        self.layout_devices.clear()
+        self.button_previous_page.hide()
+        self.button_next_page.hide()
         self.spinner.spinner_movie.start()
         self.spinner.show()
         self.jobs_ctx.submit_job(

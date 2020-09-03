@@ -4,10 +4,9 @@
 import os
 import trio
 import random
+from typing import Tuple
 from pathlib import Path
-from typing import Tuple, Optional
 from uuid import uuid4
-from sys import stderr
 
 from guardata.logging import configure_logging
 from guardata.client import logged_client_factory
@@ -42,11 +41,10 @@ async def initialize_test_organization(
     password: str,
     administration_token: str,
     force: bool,
-    add_random_users: int,
+    additional_users_number: int,
+    additional_devices_number: int,
 ) -> Tuple[LocalDevice, LocalDevice, LocalDevice]:
-
     configure_logging("WARNING")
-
     organization_id = OrganizationID("Org")
 
     # Create organization
@@ -62,8 +60,7 @@ async def initialize_test_organization(
         organization_bootstrap_addr = BackendOrganizationBootstrapAddr.build(
             backend_address, organization_id, bootstrap_token
         )
-
-    # Bootstrap organization and Alice user
+    # Bootstrap organization and Alice user and create device "laptop" for Alice
 
     async with apiv1_backend_anonymous_cmds_factory(organization_bootstrap_addr) as anonymous_cmds:
         alice_device = await bootstrap_organization(
@@ -73,202 +70,250 @@ async def initialize_test_organization(
         )
         save_device_with_password(config_dir, alice_device, password, force=force)
 
-    # Create a workspace for Alice
-
     config = load_config(config_dir, debug="DEBUG" in os.environ)
-    async with logged_client_factory(config, alice_device) as client:
-        alice_ws_id = await client.user_fs.workspace_create("alice_workspace")
-        await client.user_fs.sync()
+    # Create context manager, alice_client will be needed for the rest of the script
+    async with logged_client_factory(config, alice_device) as alice_client:
+        async with backend_authenticated_cmds_factory(
+            addr=alice_device.organization_addr,
+            device_id=alice_device.device_id,
+            signing_key=alice_device.signing_key,
+        ) as alice_cmds:
 
-    # Register a new device for Alice
-
-    other_alice_device = None
-    async with backend_authenticated_cmds_factory(
-        addr=alice_device.organization_addr,
-        device_id=alice_device.device_id,
-        signing_key=alice_device.signing_key,
-    ) as alice_cmds:
-
-        other_alice_device = await _invite_user_to_organization(
-            alice_cmds=alice_cmds,
-            alice_device=alice_device,
-            config_dir=config_dir,
-            password=password,
-            force=force,
-            device_label="pc",
-            claim="device",
-        )
-
-        # Invite Bob in
-        bob_device = await _invite_user_to_organization(
-            alice_cmds=alice_cmds,
-            alice_device=alice_device,
-            config_dir=config_dir,
-            password=password,
-            force=force,
-            claimer_email="bob@example.com",
-            label="Bob",
-            device_label="laptop",
-            claim="user",
-        )
-
-        # Add more users to workspace if add_random_users > 0
-        await _add_random_users_to_organization(
-            config=config,
-            alice_cmds=alice_cmds,
-            config_dir=config_dir,
-            password=password,
-            force=force,
-            add_random_users=add_random_users,
-            alice_ws_id=alice_ws_id,
-            alice_device=alice_device,
-        )
-
-    # Create bob workspace and share with Alice
-
-    async with logged_client_factory(config, bob_device) as client:
-        bob_ws_id = await client.user_fs.workspace_create("bob_workspace")
-        await client.user_fs.workspace_share(bob_ws_id, alice_device.user_id, WorkspaceRole.MANAGER)
-
-    # Share Alice workspace with bob
-
-    await _share_workspace_with_user(
-        config=config,
-        host_device=alice_device,
-        workspace_id=alice_ws_id,
-        invited_device=bob_device,
-        role=None,
-    )
+            # Create new device "pc" for Alice
+            other_alice_device = await _register_new_device(
+                cmds=alice_cmds,
+                password=password,
+                config_dir=config_dir,
+                device=alice_device,
+                requested_device_label="pc",
+                force=force,
+            )
+            # Add additional random device for alice
+            if additional_devices_number > 0:
+                await _add_random_device(
+                    cmds=alice_cmds,
+                    password=password,
+                    config_dir=config_dir,
+                    device=alice_device,
+                    force=force,
+                    additional_devices_number=additional_devices_number,
+                )
+            # Invite Bob in organization
+            bob_device = await _invite_user_to_organization(
+                cmds=alice_cmds,
+                host_device=alice_device,
+                config_dir=config_dir,
+                password=password,
+                claimer_email="bob@example.com",
+                requested_user_label="Bob",
+                requested_device_label="laptop",
+                force=force,
+                profile=UserProfile.STANDARD,
+            )
+            # Create Alice workspace
+            alice_ws_id = await alice_client.user_fs.workspace_create("alice_workspace")
+            # Create context manager
+            async with logged_client_factory(config, bob_device) as bob_client:
+                # Create Bob workspace
+                bob_ws_id = await bob_client.user_fs.workspace_create("bob_workspace")
+                # Bob share workspace with Alice
+                await bob_client.user_fs.workspace_share(
+                    bob_ws_id, alice_device.user_id, WorkspaceRole.MANAGER
+                )
+                # Alice share workspace with Bob
+                await alice_client.user_fs.workspace_share(
+                    alice_ws_id, bob_device.user_id, WorkspaceRole.MANAGER
+                )
+                # Add additional random users
+                if additional_users_number > 0:
+                    await _add_random_users(
+                        alice_cmds,
+                        alice_device,
+                        config_dir,
+                        password,
+                        force,
+                        alice_client,
+                        bob_client,
+                        alice_ws_id,
+                        bob_ws_id,
+                        additional_users_number,
+                    )
 
     # Synchronize every device
     for device in (alice_device, other_alice_device, bob_device):
         async with logged_client_factory(config, device) as client:
             await client.user_fs.process_last_messages()
             await client.user_fs.sync()
-
     return (alice_device, other_alice_device, bob_device)
 
 
-async def _share_workspace_with_user(
-    config, host_device, workspace_id, invited_device, role: Optional[WorkspaceRole]
-):
-    async with logged_client_factory(config, host_device) as client:
-        await client.user_fs.workspace_share(workspace_id, invited_device.user_id, role)
+async def _add_random_device(cmds, password, config_dir, device, force, additional_devices_number):
+    for _ in range(additional_devices_number):
+        requested_device_label = "device_" + str(uuid4())[:9]
+        await _register_new_device(
+            cmds=cmds,
+            password=password,
+            config_dir=config_dir,
+            device=device,
+            requested_device_label=requested_device_label,
+            force=force,
+        )
 
 
-async def _invite_user_to_organization(
-    alice_cmds,
-    alice_device,
+async def _add_random_users(
+    host_cmds,
+    host_device,
     config_dir,
     password,
     force,
-    claim,
-    device_label,
-    claimer_email=None,
-    label=None,
+    first_client,
+    second_client,
+    first_ws_id,
+    second_ws_id,
+    additional_users_number: int,
 ):
-    device = None
-    rep = None
-    Invitation_type = None
-    if claim == "user":
-        Invitation_type = InvitationType.USER
-        rep = await alice_cmds.invite_new(type=Invitation_type, claimer_email=claimer_email)
-    elif claim == "device":
-        Invitation_type = InvitationType.DEVICE
-        rep = await alice_cmds.invite_new(type=Invitation_type)
-    else:
-        return
+    """ Add random number of users with random role, and share workspaces with them.
+        1 out of 5 users will be revoked from organization.
+    """
+    for i in range(additional_users_number):
+        name = "test_" + str(uuid4())[:9]
+        user_profile = random.choice(list(UserProfile))
+        realm_role = random.choice(list(WorkspaceRole))
+        if user_profile == UserProfile.OUTSIDER and (
+            realm_role == WorkspaceRole.OWNER or realm_role == WorkspaceRole.MANAGER
+        ):
+            realm_role = WorkspaceRole.READER
+        # Workspace_choice : 0 = add user to first_ws, 1 = add to second_ws, 2 = add in both workspace, other = nothing
+        workspace_choice = random.randint(0, 3)
+        # invite user to organization
+        user_device = await _invite_user_to_organization(
+            cmds=host_cmds,
+            host_device=host_device,
+            config_dir=config_dir,
+            password=password,
+            claimer_email=f"{name}@gmail.com",
+            requested_user_label=name,
+            requested_device_label="no_device",
+            force=force,
+            profile=user_profile,
+        )
+        # Share workspace with new user
+        if workspace_choice == 0 or workspace_choice == 2:
+            await first_client.user_fs.workspace_share(first_ws_id, user_device.user_id, realm_role)
+        if workspace_choice == 1 or workspace_choice == 2:
+            await second_client.user_fs.workspace_share(
+                second_ws_id, user_device.user_id, realm_role
+            )
+        # One chance out of 5 to be revoked from organization
+        if not random.randint(0, 4):
+            await first_client.revoke_user(user_device.user_id)
+
+
+async def _init_ctx_create(cmds, token):
+    initial_ctx = UserGreetInitialCtx(cmds=cmds, token=token)
+    in_progress_ctx = await initial_ctx.do_wait_peer()
+    in_progress_ctx = await in_progress_ctx.do_wait_peer_trust()
+    in_progress_ctx = await in_progress_ctx.do_signify_trust()
+    in_progress_ctx = await in_progress_ctx.do_get_claim_requests()
+    return in_progress_ctx
+
+
+async def _init_ctx_claim(cmds):
+    initial_ctx = await claimer_retrieve_info(cmds=cmds)
+    in_progress_ctx = await initial_ctx.do_wait_peer()
+    in_progress_ctx = await in_progress_ctx.do_signify_trust()
+    in_progress_ctx = await in_progress_ctx.do_wait_peer_trust()
+    return in_progress_ctx
+
+
+async def _invite_user_task(cmds, token, host_device, profile: UserProfile = UserProfile.STANDARD):
+    in_progress_ctx = await _init_ctx_create(cmds=cmds, token=token)
+    await in_progress_ctx.do_create_new_user(
+        author=host_device,
+        human_handle=in_progress_ctx.requested_human_handle,
+        device_label=in_progress_ctx.requested_device_label,
+        profile=profile,
+    )
+
+
+async def _invite_device_task(cmds, device, device_label, token):
+    initial_ctx = DeviceGreetInitialCtx(cmds=cmds, token=token)
+    in_progress_ctx = await initial_ctx.do_wait_peer()
+    in_progress_ctx = await in_progress_ctx.do_wait_peer_trust()
+    in_progress_ctx = await in_progress_ctx.do_signify_trust()
+    in_progress_ctx = await in_progress_ctx.do_get_claim_requests()
+    await in_progress_ctx.do_create_new_device(
+        author=device, device_label=in_progress_ctx.requested_device_label
+    )
+
+
+async def _claim_user(cmds, claimer_email, requested_device_label, requested_user_label):
+    in_progress_ctx = await _init_ctx_claim(cmds)
+    new_device = await in_progress_ctx.do_claim_user(
+        requested_human_handle=HumanHandle(label=requested_user_label, email=claimer_email),
+        requested_device_label=requested_device_label,
+    )
+    return new_device
+
+
+async def _claim_device(cmds, requested_device_label):
+    initial_ctx = await claimer_retrieve_info(cmds=cmds)
+    in_progress_ctx = await initial_ctx.do_wait_peer()
+    in_progress_ctx = await in_progress_ctx.do_signify_trust()
+    in_progress_ctx = await in_progress_ctx.do_wait_peer_trust()
+    new_device = await in_progress_ctx.do_claim_device(
+        requested_device_label=requested_device_label
+    )
+    return new_device
+
+
+async def _invite_user_to_organization(
+    cmds,
+    host_device,
+    config_dir,
+    password,
+    claimer_email,
+    requested_user_label,
+    requested_device_label,
+    force,
+    profile,
+):
+    rep = await cmds.invite_new(type=InvitationType.USER, claimer_email=claimer_email)
     assert rep["status"] == "ok"
     invitation_addr = BackendInvitationAddr.build(
-        backend_addr=alice_device.organization_addr,
-        organization_id=alice_device.organization_id,
-        invitation_type=Invitation_type,
+        backend_addr=host_device.organization_addr,
+        organization_id=host_device.organization_id,
+        invitation_type=InvitationType.USER,
         token=rep["token"],
     )
     async with backend_invited_cmds_factory(addr=invitation_addr) as invited_cmds:
 
-        async def invite_task():
+        async with trio.open_service_nursery() as nursery:
+            nursery.start_soon(_invite_user_task, cmds, invitation_addr.token, host_device, profile)
+            new_device = await _claim_user(
+                invited_cmds, claimer_email, requested_device_label, requested_user_label
+            )
+    if requested_device_label != "no_device":
+        save_device_with_password(config_dir, new_device, password, force=force)
+    return new_device
 
-            if claim == "user":
-                initial_ctx = UserGreetInitialCtx(cmds=alice_cmds, token=invitation_addr.token)
-                in_progress_ctx = await initial_ctx.do_wait_peer()
-                in_progress_ctx = await in_progress_ctx.do_wait_peer_trust()
-                in_progress_ctx = await in_progress_ctx.do_signify_trust()
-                in_progress_ctx = await in_progress_ctx.do_get_claim_requests()
-                await in_progress_ctx.do_create_new_user(
-                    author=alice_device,
-                    human_handle=in_progress_ctx.requested_human_handle,
-                    device_label=in_progress_ctx.requested_device_label,
-                    profile=UserProfile.STANDARD,
-                )
-            elif claim == "device":
-                initial_ctx = DeviceGreetInitialCtx(cmds=alice_cmds, token=invitation_addr.token)
-                in_progress_ctx = await initial_ctx.do_wait_peer()
-                in_progress_ctx = await in_progress_ctx.do_wait_peer_trust()
-                in_progress_ctx = await in_progress_ctx.do_signify_trust()
-                in_progress_ctx = await in_progress_ctx.do_get_claim_requests()
-                await in_progress_ctx.do_create_new_device(
-                    author=alice_device, device_label=in_progress_ctx.requested_device_label
-                )
 
-        async def claim_task():
-            nonlocal device
-            initial_ctx = await claimer_retrieve_info(cmds=invited_cmds)
-            in_progress_ctx = await initial_ctx.do_wait_peer()
-            in_progress_ctx = await in_progress_ctx.do_signify_trust()
-            in_progress_ctx = await in_progress_ctx.do_wait_peer_trust()
-            if claim == "user":
-                device = await in_progress_ctx.do_claim_user(
-                    requested_human_handle=HumanHandle(label=label, email=claimer_email),
-                    requested_device_label=device_label,
-                )
-            elif claim == "device":
-                device = await in_progress_ctx.do_claim_device(requested_device_label=device_label)
+async def _register_new_device(cmds, config_dir, device, password, force, requested_device_label):
+    rep = await cmds.invite_new(type=InvitationType.DEVICE)
+    assert rep["status"] == "ok"
+    invitation_addr = BackendInvitationAddr.build(
+        backend_addr=device.organization_addr,
+        organization_id=device.organization_id,
+        invitation_type=InvitationType.DEVICE,
+        token=rep["token"],
+    )
+    async with backend_invited_cmds_factory(addr=invitation_addr) as invited_cmds:
 
         async with trio.open_service_nursery() as nursery:
-            nursery.start_soon(invite_task)
-            nursery.start_soon(claim_task)
-        if device_label != "no_device":
-            save_device_with_password(config_dir, device, password, force=force)
-
-    return device
-
-
-async def _add_random_users_to_organization(
-    alice_cmds,
-    config,
-    config_dir: Path,
-    password: str,
-    force: bool,
-    add_random_users: int,
-    alice_device,
-    alice_ws_id,
-):
-
-    if add_random_users <= 0:
-        return
-    if add_random_users > 200:
-        add_random_users = 200
-    print(f"Creating {add_random_users} random users", file=stderr)
-    while add_random_users > 0:
-        name = "test_" + str(uuid4())[:9]
-        device = await _invite_user_to_organization(
-            alice_cmds=alice_cmds,
-            alice_device=alice_device,
-            config_dir=config_dir,
-            force=force,
-            password=password,
-            claimer_email=f"{name}@gmail.com",
-            label=name,
-            claim="user",
-            device_label="no_device",
-        )
-        realm_role = random.choice(list(WorkspaceRole))
-        await _share_workspace_with_user(
-            config=config,
-            host_device=alice_device,
-            workspace_id=alice_ws_id,
-            invited_device=device,
-            role=realm_role,
-        )
-        add_random_users = add_random_users - 1
+            nursery.start_soon(
+                _invite_device_task, cmds, device, requested_device_label, invitation_addr.token
+            )
+            new_device = await _claim_device(invited_cmds, requested_device_label)
+    if requested_device_label != "no_device":
+        save_device_with_password(config_dir, new_device, password, force=force)
+    return new_device

@@ -179,6 +179,7 @@ async def restart_local_backend(administration_token, backend_port):
 )
 @click.option("--force/--no-force", show_default=True, default=False)
 @click.option("--add-random-users", show_default=True, default=0)
+@click.option("--add-random-devices", show_default=True, default=0)
 @click.option("-e", "--empty", is_flag=True)
 @click.option("--source-file", hidden=True)
 def main(**kwargs):
@@ -233,6 +234,7 @@ async def amain(
     empty,
     source_file,
     add_random_users,
+    add_random_devices,
 ):
     # Set up the temporary environment
     click.echo()
@@ -266,7 +268,13 @@ Using existing backend: {backend_address}
     # Initialize the test organization
     config_dir = get_default_config_dir(os.environ)
     alice_device, other_alice_device, bob_device = await initialize_test_organization(
-        config_dir, backend_address, password, administration_token, force, add_random_users
+        config_dir,
+        backend_address,
+        password,
+        administration_token,
+        force,
+        add_random_users,
+        add_random_devices,
     )
 
     # Report

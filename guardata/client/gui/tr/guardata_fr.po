@@ -2359,6 +2359,12 @@ msgstr "Filtrer les utilisateurs"
 msgid "ACTION_USER_INVITE_USER"
 msgstr "Inviter un utilisateur"
 
+msgid "ACTION_LIST_NEXT_PAGE"
+msgstr "Page suivante"
+
+msgid "ACTION_LIST_PREVIOUS_PAGE"
+msgstr "Page précédente"
+
 msgid "TEXT_WORKSPACE_SWITCH_TOOLTIP"
 msgstr "Dés/Activer le lecteur de cet espace"
 
