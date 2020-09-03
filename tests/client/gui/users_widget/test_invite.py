@@ -151,17 +151,21 @@ async def test_cancel_user_invitation(
     await aqtbot.mouse_click(u_w.button_add_user, QtCore.Qt.LeftButton)
 
     # def _new_invitation_displayed():
-    # assert u_w.layout_users.count() == 4
+    #     assert u_w.layout_users.count() == 4
+    #     assert autoclose_dialog.dialogs == [
+    #         ("", f"Invitation to join the group was successfuly sent to { email }",)
+    #     ]
 
     # await aqtbot.wait_until(_new_invitation_displayed)
-    # user_invitation_w = u_w.layout_users.itemAt(3).widget()
+    # autoclose_dialog.reset()
+    # user_invitation_w = u_w.layout_users.itemAt(0).widget()
     # assert user_invitation_w.email == email
 
     # # Cancel invitation
     # await aqtbot.mouse_click(user_invitation_w.button_cancel, QtCore.Qt.LeftButton)
 
     # def _new_invitation_removed():
-    # assert u_w.layout_users.count() == 3
+    #     assert u_w.layout_users.count() == 3
 
     # await aqtbot.wait_until(_new_invitation_removed)
     # assert not autoclose_dialog.dialogs

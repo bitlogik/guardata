@@ -674,6 +674,10 @@ msgstr "Failed to retrieve the user list from the server."
 msgid "TEXT_INVITE_USER_CANCEL_ERROR"
 msgstr "Could not cancel the invitation."
 
+msgid "TEXT_USER_INVITE_SUCCESS_EMAIL"
+msgstr ""
+"Invitation to join the group was successfuly sent to {email}"
+
 msgid "TEXT_INVITE_USER_INVITE_OFFLINE"
 msgstr "The server is offline or you have no access to the internet."
 
@@ -2323,6 +2327,12 @@ msgstr "Next page"
 
 msgid "ACTION_LIST_PREVIOUS_PAGE"
 msgstr "Previous page"
+
+msgid "ACTION_FILTER_LIST_USERS"
+msgstr "Search users"
+
+msgid "ACTION_FILTER_LIST_DEVICES"
+msgstr "Search devices"
 
 msgid "TEXT_WORKSPACE_SWITCH_TOOLTIP"
 msgstr "Disable/Enable the workspace drive"

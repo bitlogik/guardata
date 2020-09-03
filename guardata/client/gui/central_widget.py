@@ -240,7 +240,7 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         self.clear_widgets()
         self.menu.activate_users()
         self.label_title.setText(_("ACTION_MENU_USERS"))
-        self.users_widget.show(page=page)
+        self.users_widget.show()
 
     def show_devices_widget(self):
         self.clear_widgets()

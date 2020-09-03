@@ -716,6 +716,10 @@ msgstr "Impossible de récupérer la liste des utilisateurs depuis le serveur."
 msgid "TEXT_INVITE_USER_CANCEL_ERROR"
 msgstr "Impossible d'annuler l'invitation."
 
+msgid "TEXT_USER_INVITE_SUCCESS_EMAIL"
+msgstr ""
+"L'invitation pour rejoindre le groupe vient d'être envoyée à {email}"
+
 msgid "TEXT_INVITE_USER_INVITE_OFFLINE"
 msgstr "Le serveur est hors-ligne ou vous n'avez pas de connexion internet."
 
@@ -2380,6 +2384,12 @@ msgstr "Page suivante"
 
 msgid "ACTION_LIST_PREVIOUS_PAGE"
 msgstr "Page précédente"
+
+msgid "ACTION_FILTER_LIST_USERS"
+msgstr "Rechercher des utilisateurs"
+
+msgid "ACTION_FILTER_LIST_DEVICES"
+msgstr "Rechercher des appareils"
 
 msgid "TEXT_WORKSPACE_SWITCH_TOOLTIP"
 msgstr "Dés/Activer le lecteur de cet espace"

@@ -70,6 +70,13 @@
       </widget>
      </item>
      <item>
+      <widget class="QPushButton" name="button_users_filter">
+       <property name="text">
+        <string>ACTION_FILTER_LIST_USERS</string>
+       </property>
+      </widget>
+     </item>
+     <item>
       <widget class="Button" name="button_add_user">
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>
