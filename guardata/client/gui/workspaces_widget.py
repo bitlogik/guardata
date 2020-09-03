@@ -9,6 +9,8 @@ from PyQt5.QtWidgets import QWidget, QLabel
 
 import pendulum
 
+from contextlib import contextmanager
+
 from guardata.client.types import (
     WorkspaceEntry,
     UserInfo,
@@ -17,7 +19,15 @@ from guardata.client.types import (
     EntryName,
     BackendOrganizationFileLinkAddr,
 )
-from guardata.client.fs import WorkspaceFS, WorkspaceFSTimestamped, FSBackendOfflineError
+from guardata.client.fs import (
+    WorkspaceFS,
+    WorkspaceFSTimestamped,
+    FSBackendOfflineError,
+    FSError,
+    FSWorkspaceNoAccess,
+    FSWorkspaceNotFoundError,
+    FSWorkspaceInMaintenance,
+)
 from guardata.client.mountpoint.exceptions import (
     MountpointAlreadyMounted,
     MountpointNotMounted,
@@ -105,6 +115,11 @@ async def _do_workspace_list(client):
                 if not child_info.get("confined") or client.config.gui_show_confined:
                     files.append(child.name)
         except FSBackendOfflineError:
+            pass
+        except FSWorkspaceInMaintenance:
+            # If a reencryption has already been started, workspace files can not be fetched
+            # But the workspace need to be displayed to be able to trigger for example
+            # reencryption operation
             pass
         workspaces.append((workspace_fs, ws_entry, users_roles, files, timestamped))
 
@@ -554,8 +569,12 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
             on_finished=self.reset,
         )
 
-    def reencrypt_workspace(self, workspace_id, user_revoked, role_revoked):
-        if workspace_id in self.reencrypting or (not user_revoked and not role_revoked):
+    def reencrypt_workspace(
+        self, workspace_id, user_revoked, role_revoked, reencryption_already_in_progress
+    ):
+        if workspace_id in self.reencrypting or (
+            not user_revoked and not role_revoked and not reencryption_already_in_progress
+        ):
             return
 
         question = ""
@@ -574,8 +593,25 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
         if r != _("ACTION_WORKSPACE_REENCRYPTION_CONFIRM"):
             return
 
+        @contextmanager
+        def _handle_fs_errors():
+            try:
+                yield
+            except FSBackendOfflineError as exc:
+                raise JobResultError(ret=workspace_id, status="offline-backend", origin=exc)
+            except FSWorkspaceNoAccess as exc:
+                raise JobResultError(ret=workspace_id, status="access-error", origin=exc)
+            except FSWorkspaceNotFoundError as exc:
+                raise JobResultError(ret=workspace_id, status="not-found", origin=exc)
+            except FSError as exc:
+                raise JobResultError(ret=workspace_id, status="fs-error", origin=exc)
+
         async def _reencrypt(on_progress, workspace_id):
-            job = await self.client.user_fs.workspace_start_reencryption(workspace_id)
+            with _handle_fs_errors():
+                if reencryption_already_in_progress:
+                    job = await self.client.user_fs.workspace_continue_reencryption(workspace_id)
+                else:
+                    job = await self.client.user_fs.workspace_start_reencryption(workspace_id)
             while True:
                 total, done = await job.do_one_batch(size=1)
                 on_progress.emit(workspace_id, total, done)

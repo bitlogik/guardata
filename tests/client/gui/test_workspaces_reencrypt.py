@@ -19,6 +19,27 @@ async def revoke_user_workspace_right(workspace, owner_user_fs, invited_user_fs,
     await owner_user_fs.sync()
 
 
+async def display_reencryption_button(aqtbot, monkeypatch, workspace_widget):
+    def _workspace_displayed():
+        assert workspace_widget.layout_workspaces.count() == 1
+        wk_button = workspace_widget.layout_workspaces.itemAt(0).widget()
+        assert isinstance(wk_button, WorkspaceButton)
+        assert wk_button.name == "w1"
+
+    await aqtbot.wait_until(_workspace_displayed, timeout=2000)
+    wk_button = workspace_widget.layout_workspaces.itemAt(0).widget()
+
+    def _reencrypt_button_displayed():
+        assert wk_button.button_reencrypt.isVisible()
+
+    await aqtbot.wait_until(_reencrypt_button_displayed)
+
+    monkeypatch.setattr(
+        "guardata.client.gui.workspaces_widget.ask_question",
+        lambda *args, **kwargs: translate("ACTION_WORKSPACE_REENCRYPTION_CONFIRM"),
+    )
+
+
 @pytest.fixture
 async def shared_workspace(running_backend, alice_user_fs, bob_user_fs, bob):
     wid = await alice_user_fs.workspace_create("w1")
@@ -119,6 +140,53 @@ async def test_workspace_reencryption(
         "guardata.client.gui.workspaces_widget.ask_question",
         lambda *args, **kwargs: translate("ACTION_WORKSPACE_REENCRYPTION_CONFIRM"),
     )
+    async with aqtbot.wait_signals(
+        [wk_button.button_reencrypt.clicked, wk_button.reencrypt_clicked]
+    ):
+        await aqtbot.mouse_click(wk_button.button_reencrypt, QtCore.Qt.LeftButton)
+
+    def _reencrypt_button_not_displayed():
+        assert not wk_button.button_reencrypt.isVisible()
+
+    await aqtbot.wait_until(_reencrypt_button_not_displayed)
+
+
+@pytest.mark.gui
+@pytest.mark.trio
+async def test_workspace_reencryption_continue(
+    aqtbot,
+    running_backend,
+    gui_factory,
+    autoclose_dialog,
+    monkeypatch,
+    alice_user_fs,
+    bob_user_fs,
+    bob,
+    alice,
+):
+    # Create a shared workspace
+    wid = await alice_user_fs.workspace_create("w1")
+    workspace = alice_user_fs.get_workspace(wid)
+    await workspace.touch("/foo.txt")
+    await workspace.sync()
+    await alice_user_fs.sync()
+    await alice_user_fs.workspace_share(wid, bob.user_id, WorkspaceRole.OWNER)
+    await bob_user_fs.process_last_messages()
+
+    await alice_user_fs.workspace_start_reencryption(wid)
+
+    gui = await gui_factory()
+    await gui.test_switch_to_logged_in(bob)
+    w_w = gui.test_get_workspaces_widget()
+
+    await display_reencryption_button(aqtbot, monkeypatch, w_w)
+
+    monkeypatch.setattr(
+        "guardata.client.gui.workspaces_widget.ask_question",
+        lambda *args, **kwargs: translate("ACTION_WORKSPACE_REENCRYPTION_CONFIRM"),
+    )
+
+    wk_button = w_w.layout_workspaces.itemAt(0).widget()
     async with aqtbot.wait_signals(
         [wk_button.button_reencrypt.clicked, wk_button.reencrypt_clicked]
     ):

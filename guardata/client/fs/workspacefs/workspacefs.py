@@ -9,7 +9,7 @@ from pendulum import Pendulum, now as pendulum_now
 
 from guardata.api.data import BaseManifest as BaseRemoteManifest
 from guardata.api.data import FileManifest as RemoteFileManifest
-from guardata.api.protocol import UserID
+from guardata.api.protocol import UserID, MaintenanceType
 from guardata.client.types import (
     FsPath,
     EntryID,
@@ -18,6 +18,7 @@ from guardata.client.types import (
     RemoteFolderishManifests,
     DEFAULT_BLOCK_SIZE,
 )
+from guardata.client.backend_connection import BackendNotAvailable, BackendConnectionError
 from guardata.client.fs.remote_loader import RemoteLoader
 from guardata.client.fs import (
     workspacefs,
@@ -37,6 +38,8 @@ from guardata.client.fs.exceptions import (
     FSLocalMissError,
     FSInvalidArgumentError,
     FSNotADirectoryError,
+    FSBackendOfflineError,
+    FSError,
 )
 
 from guardata.client.fs.workspacefs.workspacefile import WorkspaceFile
@@ -48,10 +51,11 @@ AnyPath = Union[FsPath, str]
 class ReencryptionNeed:
     user_revoked: Tuple[UserID, ...]
     role_revoked: Tuple[UserID, ...]
+    reencryption_already_in_progress: bool = False
 
     @property
     def need_reencryption(self):
-        return self.role_revoked or self.user_revoked
+        return self.role_revoked or self.user_revoked or self.reencryption_already_in_progress
 
 
 class WorkspaceFS:
@@ -159,10 +163,27 @@ class WorkspaceFS:
         try:
             workspace_manifest = await self.local_storage.get_manifest(self.workspace_id)
             if workspace_manifest.is_placeholder:
-                return ReencryptionNeed(user_revoked=(), role_revoked=())
+                return ReencryptionNeed(
+                    user_revoked=(), role_revoked=(), reencryption_already_in_progress=False
+                )
 
         except FSLocalMissError:
             pass
+
+        try:
+            rep = await self.backend_cmds.realm_status(self.workspace_id)
+
+        except BackendNotAvailable as exc:
+            raise FSBackendOfflineError(str(exc)) from exc
+
+        except BackendConnectionError as exc:
+            raise FSError(
+                f"Cannot retrieve the remote status for workspace {self.workspace_id}: {exc}"
+            ) from exc
+
+        reencryption_already_in_progress = (
+            rep["in_maintenance"] and rep["maintenance_type"] == MaintenanceType.REENCRYPTION
+        )
 
         certificates = await self.remote_loader.load_realm_role_certificates()
         has_role = set()
@@ -182,7 +203,11 @@ class WorkspaceFS:
             if revoked_user and revoked_user.timestamp > wentry.encrypted_on:
                 user_revoked.append(user_id)
 
-        return ReencryptionNeed(user_revoked=tuple(user_revoked), role_revoked=tuple(role_revoked))
+        return ReencryptionNeed(
+            user_revoked=tuple(user_revoked),
+            role_revoked=tuple(role_revoked),
+            reencryption_already_in_progress=reencryption_already_in_progress,
+        )
 
     # Versioning
 
