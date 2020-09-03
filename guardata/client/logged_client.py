@@ -39,7 +39,7 @@ from guardata.client.remote_devices_manager import (
     RemoteDevicesManagerBackendOfflineError,
     RemoteDevicesManagerNotFoundError,
 )
-from guardata.client.mountpoint import mountpoint_manager_factory
+from guardata.client.mountpoint import mountpoint_manager_factory, MountpointManager
 from guardata.client.messages_monitor import monitor_messages
 from guardata.client.sync_monitor import monitor_sync
 from guardata.client.fs import UserFS
@@ -95,15 +95,15 @@ def get_pattern_filter(pattern_filter_path: Optional[Path] = None) -> Pattern:
     return pattern
 
 
-@attr.s(frozen=True, slots=True)
+@attr.s(frozen=True, slots=True, auto_attribs=True)
 class LoggedClient:
-    config = attr.ib()
-    device = attr.ib()
-    event_bus = attr.ib()
-    mountpoint_manager = attr.ib()
-    user_fs = attr.ib()
-    _remote_devices_manager = attr.ib()
-    _backend_conn = attr.ib()
+    config: ClientConfig
+    device: LocalDevice
+    event_bus: EventBus
+    mountpoint_manager: MountpointManager
+    user_fs: UserFS
+    _remote_devices_manager: RemoteDevicesManager
+    _backend_conn: BackendAuthenticatedConn
 
     def are_monitors_idle(self) -> bool:
         return self._backend_conn.are_monitors_idle()
