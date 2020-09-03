@@ -3,8 +3,9 @@
 
 from collections import namedtuple
 
-from PyQt5.QtCore import QCoreApplication, pyqtSignal
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtCore import QCoreApplication, pyqtSignal, QEvent, QTimer
+from PyQt5.QtGui import QPixmap, QColor
+from PyQt5.QtWidgets import QWidget, QComboBox
 
 from guardata.client.types import UserInfo
 from guardata.client.fs import FSError, FSBackendOfflineError
@@ -14,6 +15,7 @@ from guardata.client.backend_connection import BackendNotAvailable
 from guardata.client.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
 
 from guardata.client.gui.custom_dialogs import show_error, GreyedDialog
+from guardata.client.gui.custom_widgets import Pixmap
 from guardata.client.gui.lang import translate as _
 from guardata.client.gui.ui.workspace_sharing_widget import Ui_WorkspaceSharingWidget
 from guardata.client.gui.ui.sharing_widget import Ui_SharingWidget
@@ -86,6 +88,8 @@ class SharingWidget(QWidget, Ui_SharingWidget):
     def __init__(self, user_info, is_current_user, current_user_role, role, enabled):
         super().__init__()
         self.setupUi(self)
+
+        self.combo_role.installEventFilter(self)
         self.ROLES_TRANSLATIONS = {
             WorkspaceRole.READER: _("TEXT_WORKSPACE_ROLE_READER"),
             WorkspaceRole.CONTRIBUTOR: _("TEXT_WORKSPACE_ROLE_CONTRIBUTOR"),
@@ -97,7 +101,7 @@ class SharingWidget(QWidget, Ui_SharingWidget):
         self.current_user_role = current_user_role
         self.is_current_user = is_current_user
         self.user_info = user_info
-        if self.role == WorkspaceRole.OWNER:
+        if self.is_current_user:
             self.label_name.setText(f"<b>{self.user_info.short_user_display}</b>")
         else:
             self.label_name.setText(self.user_info.short_user_display)
@@ -121,9 +125,41 @@ class SharingWidget(QWidget, Ui_SharingWidget):
 
         self.combo_role.setCurrentIndex(_ROLES_TO_INDEX[self.role])
         self.combo_role.currentIndexChanged.connect(self.on_role_changed)
+        self.status_timer = QTimer()
+        self.status_timer.timeout.connect(self._refresh_status)
+
+    def _refresh_status(self):
+        self.label_status.setPixmap(QPixmap())
+
+    def set_status_updating(self):
+        p = Pixmap(":/icons/images/material/update.svg")
+        p.replace_color(QColor(0, 0, 0), QColor(0x99, 0x99, 0x99))
+        self.label_status.setPixmap(p)
+
+    def set_status_updated(self):
+        p = Pixmap(":/icons/images/material/done.svg")
+        p.replace_color(QColor(0, 0, 0), QColor(0x8B, 0xC3, 0x4A))
+        self.label_status.setPixmap(p)
+        self.status_timer.start(3000)
+
+    def set_status_update_failed(self):
+        p = Pixmap(":/icons/images/material/sync_problem.svg")
+        p.replace_color(QColor(0, 0, 0), QColor(0xF1, 0x96, 0x2B))
+        self.label_status.setPixmap(p)
+        self.status_timer.start(3000)
 
     def on_role_changed(self, index):
         self.role_changed.emit(self.user_info, _index_to_role(index))
+
+    def eventFilter(self, obj_src, event):
+        if event.type() == QEvent.Wheel and isinstance(obj_src, QComboBox):
+            event.ignore()
+            return True
+        return super().eventFilter(obj_src, event)
+
+    @property
+    def user_id(self):
+        return self.user_info.user_id
 
 
 class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
@@ -185,9 +221,19 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
         w.setEnabled(enabled)
         self.scroll_content.layout().insertWidget(self.scroll_content.layout().count() - 1, w)
 
+    def _get_sharing_widget(self, user_id):
+        for i in range(self.scroll_content.layout().count() - 1):
+            item = self.scroll_content.layout().itemAt(i)
+            if item and item.widget() and item.widget().user_id == user_id:
+                return item.widget()
+        return None
+
     def on_role_changed(self, user_info, role):
         if role == NOT_SHARED_KEY:
             role = None
+        sharing_widget = self._get_sharing_widget(user_info.user_id)
+        if sharing_widget:
+            sharing_widget.set_status_updating()
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "share_success", QtToTrioJob),
             ThreadSafeQtSignal(self, "share_error", QtToTrioJob),
@@ -199,6 +245,15 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
 
     def _on_share_success(self, job):
         workspace_name, successes, errors = job.ret
+        for result in successes:
+            sharing_widget = self._get_sharing_widget(result.user_info.user_id)
+            if sharing_widget:
+                sharing_widget.set_status_updated()
+        for result in errors:
+            sharing_widget = self._get_sharing_widget(result.user_info.user_id)
+            if sharing_widget:
+                sharing_widget.set_status_update_failed()
+
         if errors:
             self._process_sharing_errors(workspace_name, errors)
 
@@ -238,11 +293,12 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
             w.setParent(None)
         QCoreApplication.processEvents()
         for user_info, role in users.items():
-            self.add_participant(
-                user_info,
-                is_current_user=user_info.user_id == self.client.device.user_id,
-                role=role or "NOT_SHARED",
-            )
+            if not user_info.revoked_on:
+                self.add_participant(
+                    user_info,
+                    is_current_user=user_info.user_id == self.client.device.user_id,
+                    role=role or "NOT_SHARED",
+                )
         self.spinner.spinner_movie.stop()
         self.spinner.hide()
         self.widget_users.show()
