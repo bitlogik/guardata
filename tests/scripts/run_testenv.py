@@ -241,7 +241,10 @@ async def amain(
     await new_environment(source_file)
 
     # Configure MIME types locally
-    await configure_mime_types()
+    try:
+        await configure_mime_types()
+    except:
+        print("MIME registration failed")
 
     # Keep the environment empty
     if empty:
