@@ -15,6 +15,7 @@ import h11
 from backendService.config import BackendConfig
 from backendService import static as http_static_module
 from backendService.templates import get_template
+from backendService.templates.texts import *
 
 
 ACAO_domain = "https://guardata.app"  # use "" to disable ACAO
@@ -26,6 +27,8 @@ class HTTPRequest:
     path: str
     query: Dict[str, List[str]]
     headers: Dict[bytes, bytes]
+
+    default_lang = "en"
 
     async def get_data(self) -> bytes:
         # TODO: we don't need this yet ;-)
@@ -41,8 +44,23 @@ class HTTPRequest:
             method=h11_req.method.decode(),
             path=target_split.path,
             query=query_params,
-            headers=h11_req.headers,
+            headers=dict(h11_req.headers),
         )
+
+    def get_lang(self) -> str:
+        # get query language ISO 639-1
+        # lang of the browser through RFC7231 header
+        # default to default_lang in case unsupported
+        if b"accept-language" not in self.headers:
+            return HTTPRequest.default_lang
+        accept_language = self.headers[b"accept-language"].decode("ISO-8859-1")
+        match = re.search(r"^([a-z]{2,3})", accept_language)
+        if match is None:
+            return HTTPRequest.default_lang
+        lang = match.group(0)
+        if lang in all_texts:
+            return lang
+        return HTTPRequest.default_lang
 
 
 @attr.s(slots=True, auto_attribs=True)
@@ -114,7 +132,17 @@ class HTTPComponent:
         location_url = urlunsplit(
             (backend_addr_split.scheme, backend_addr_split.netloc, path, location_url_query, None)
         )
-        data = get_template("redirect.html").render(parsecurl=location_url, title="invitation")
+
+        req_lang = req.get_lang()
+        text_dict = all_texts[req_lang]["redirect"]
+
+        data = get_template("redirect.html").render(
+            parsecurl=location_url,
+            title="invitation",
+            trytxt=text_dict["TRYTXT"],
+            openg=text_dict["OPENG"],
+            urlcopy=text_dict["URLCOPY"],
+        )
         return HTTPResponse.build_html(200, data=data)
 
     async def _http_static(self, req: HTTPRequest, path: str) -> HTTPResponse:
