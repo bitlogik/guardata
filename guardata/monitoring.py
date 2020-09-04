@@ -48,7 +48,7 @@ def format_stack(coro):
 
 
 class TaskMonitoringInstrument(trio.abc.Instrument):
-    def __init__(self, cpu_threshold=0.2, io_threshold=0.1, trace_all=False):
+    def __init__(self, cpu_threshold=1.2, io_threshold=0.5, trace_all=False):
         self.start_dict = {}
         self.cpu_threshold = cpu_threshold
         self.io_threshold = io_threshold
