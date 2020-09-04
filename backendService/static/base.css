@@ -5,7 +5,7 @@ html {
 }
 
 .main-title {
-    margin: 30px, 10%, 30px;
+    margin: 30px 2% 30px;
 }
 
 .text-secondary {
@@ -58,9 +58,94 @@ html {
     border-width: 1px;
     border-color: #4CAF50;
     border-radius: 3px;
-    padding: 24px;
+    padding: 5px;
     background: #eeeeee;
     width: 80%;
-    max-width: 750px;
+    max-width: 650px;
     margin: auto;
+    overflow: hidden;
 }
+
+.urltxt {
+    width: 74%;
+    padding-top: 1em;
+    padding-bottom: 1em;
+    overflow-wrap: anywhere;
+    margin-left: 10px;
+}
+
+.tooltip {
+  position: relative;
+  z-index: 2;
+  cursor: pointer;
+  float: right;
+  margin-top: -3.5em;
+  margin-right: 0.5em;
+  border-radius: 6px;
+  background: white;
+  visibility: hidden;
+  border-style: none;
+  height: 40px;
+}
+
+.tooltip:before,
+.tooltip:after {
+  position: absolute;
+  visibility: hidden;
+  -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=0);
+  opacity: 0;
+  -webkit-transition:
+      opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        -webkit-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    -moz-transition:
+        opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        -moz-transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+    transition:
+        opacity 0.2s ease-in-out,
+        visibility 0.2s ease-in-out,
+        transform 0.2s cubic-bezier(0.71, 1.7, 0.77, 1.24);
+  -webkit-transform: translate3d(0, 0, 0);
+  -moz-transform:    translate3d(0, 0, 0);
+  transform:         translate3d(0, 0, 0);
+  pointer-events: none;
+  margin-left: -6px;
+  margin-bottom: -12px;
+  border-top-color: #000;
+  border-top-color: hsla(0, 0%, 20%, 0.9);
+  right: 110%;
+  bottom: 50%;
+  left: auto;
+}
+
+.tooltip:before {
+  z-index: 1001;
+  border: 6px solid transparent;
+  background: transparent;
+  content: "";
+  margin-left: 0;
+  margin-right: -11px;
+  margin-bottom: -5px;
+  border-top-color: transparent;
+  border-left-color: #000;
+  border-left-color: hsla(0, 0%, 20%, 0.9);
+}
+
+.tooltip:after {
+  z-index: 1000;
+  padding: 8px;
+  width: 160px;
+  background-color: #000;
+  background-color: hsla(0, 0%, 20%, 0.9);
+  color: #fff;
+  content: attr(data-tooltip);
+  font-size: 14px;
+  line-height: 1.2;
+  margin-left: 0;
+  margin-bottom: -16px;
+  border-radius: 4px;
+  margin-left: -80px;
+}
+

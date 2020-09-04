@@ -1,16 +1,42 @@
 {% extends "base.html" %}
 {% block body %}
 <div class="main-title" style="text-align: center">
-    <p class="font-weight-bolder text-center">
+    <div class="font-weight-bolder text-center">
         {{ trytxt }}
         <div><button onclick="window.location.href='{{ parsecurl }}';" class="openbtn">
             {{ openg }}
         </button></div>
-    </p>
+    </div>
     <p class="text-muted text-center">
         {{ urlcopy }}
     </p>
-    <div class="parsecLink">{{ parsecurl }}</div>
+    <div class="parsecLink">
+        <div class="urltxt">{{ parsecurl }}</div>
+        <div>
+            <button class="btncpy tooltip" data-clipboard-text="{{ parsecurl }}" data-tooltip="copied">
+                <img src="/static/copy.png" alt="Copy to clipboard" style="width:32px;height:32px">
+            </button>
+        </div>
+    </div>
     <div class="main-title-spacer bg-primary"></div>
 </div>
+<script src="https://unpkg.com/clipboard@2/dist/clipboard.min.js"></script>
+<script>
+(function(){a={_b:0,c:function(){this._b++;return this.b;}};HTMLElement.prototype.pseudoStyle=function(d,e,f){var g="pseudoStyles";var h=document.head||document.getElementsByTagName('head')[0];var i=document.getElementById(g)||document.createElement('style');i.id=g;var j="pseudoStyle"+a.c();this.className+=" "+j;i.innerHTML+=" ."+j+":"+d+"{"+e+":"+f+"}";h.appendChild(i);return this;};})();
+if (ClipboardJS.isSupported()) {
+    var clipboard = new ClipboardJS('.btncpy');
+    document.getElementsByClassName("tooltip").item(0).style.visibility = "visible";
+    clipboard.on('success', function(e) {
+        var tooltipDOM = document.getElementsByClassName("tooltip").item(0);
+        tooltipDOM.pseudoStyle("before","visibility","visible");
+        tooltipDOM.pseudoStyle("after","visibility","visible");
+        tooltipDOM.pseudoStyle("before","opacity",1);
+        tooltipDOM.pseudoStyle("after","opacity",1);
+        e.clearSelection();
+    });
+} else {
+    document.getElementsByClassName("tooltip").item(0).remove();
+    document.getElementsByClassName("urltxt").item(0).style.width = "91%";
+}
+</script>
 {% endblock %}

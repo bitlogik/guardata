@@ -28,8 +28,8 @@ Differences with the Parsec reference implementation :
 - Files blocks cut size is bigger, optimised for internet synchronization
 - SHA2 hash is replaced everywhere by Blake2b
 - More secure short codes for 2-way auth : from 40 bits with hmac-sha2 to 50 bits with argon2id
-- UX improved
 - Improve server socket management (parsec-cloud read data 5 bytes by 5 bytes, send header separated from data)
+- UX improved (invitation redirect)
 
 
 Install

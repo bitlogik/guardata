@@ -33,7 +33,7 @@ def backend_http_send(running_backend, backend_addr):
         data = await stream.receive_some()
         await stream.aclose()
         dataparts = data.split(b"\r\n\r\n")
-        if dataparts[1][:9] == b"<!doctype":
+        if dataparts[1][:9] == b"<!DOCTYPE":
             return data.decode("utf8")
         else:
             return dataparts[0].decode("utf8")
@@ -155,7 +155,9 @@ async def test_get_redirect(backend_http_send, backend_addr):
     rep = await backend_http_send("/redirect/foo/bar?a=1&b=2")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
     assert (
-        rep.find('<div class="parsecLink">parsec://example.com:9999/foo/bar?a=1&b=2&no_ssl=true')
+        rep.find(
+            '<div class="parsecLink">\n        <div class="urltxt">parsec://example.com:9999/foo/bar?a=1&b=2&no_ssl=true</div>'
+        )
         > 0
     )
 
@@ -165,7 +167,12 @@ async def test_get_redirect(backend_http_send, backend_addr):
 async def test_get_redirect_over_ssl(backend_http_send, backend_addr):
     rep = await backend_http_send("/redirect/foo/bar?a=1&b=2")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
-    assert rep.find('<div class="parsecLink">parsec://example.com:9999/foo/bar?a=1&b=2') > 0
+    assert (
+        rep.find(
+            '<div class="parsecLink">\n        <div class="urltxt">parsec://example.com:9999/foo/bar?a=1&b=2</div>'
+        )
+        > 0
+    )
 
 
 @pytest.mark.trio
@@ -174,7 +181,10 @@ async def test_get_redirect_no_ssl_param_overwritten(backend_http_send, backend_
     rep = await backend_http_send("/redirect/spam?no_ssl=false&a=1&b=2")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
     assert (
-        rep.find('<div class="parsecLink">parsec://example.com:9999/spam?a=1&b=2&no_ssl=true') > 0
+        rep.find(
+            '<div class="parsecLink">\n        <div class="urltxt">parsec://example.com:9999/spam?a=1&b=2&no_ssl=true</div>'
+        )
+        > 0
     )
 
 
@@ -185,7 +195,12 @@ async def test_get_redirect_no_ssl_param_overwritten_with_ssl_enabled(
 ):
     rep = await backend_http_send("/redirect/spam?a=1&b=2&no_ssl=true")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
-    assert rep.find('<div class="parsecLink">parsec://example.com:9999/spam?a=1&b=2') > 0
+    assert (
+        rep.find(
+            '<div class="parsecLink">\n        <div class="urltxt">parsec://example.com:9999/spam?a=1&b=2</div>'
+        )
+        > 0
+    )
 
 
 @pytest.mark.trio
@@ -201,7 +216,7 @@ async def test_get_redirect_invitation(backend_http_send, backend_addr):
     *_, target = invitation_addr.to_url().split("/")
     rep = await backend_http_send(f"/redirect/{target}")
     assert rep.startswith("HTTP/1.1 200 OK\r\n")
-    location_match = re.search(r'class="parsecLink">(.+)</div>', rep)
+    location_match = re.search(r'class="parsecLink">\n        <div class="urltxt">(.+)</div>', rep)
     location_addr = BackendInvitationAddr.from_url(location_match.group(1))
     assert location_addr == invitation_addr
 
