@@ -405,8 +405,6 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         current_user = self.client.device.user_id
         for user_info in users:
             self.add_user(user_info=user_info, is_current_user=current_user == user_info.user_id)
-        self.spinner.spinner_movie.stop()
-        self.spinner.hide()
         if total > USERS_PER_PAGE:
             self.button_previous_page.show()
             self.button_next_page.show()
@@ -431,7 +429,8 @@ class UsersWidget(QWidget, Ui_UsersWidget):
     def _on_list_error(self, job):
         assert job.is_finished()
         assert job.status != "ok"
-
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
         status = job.status
         if status in ["error", "offline"]:
             self._flush_users_list()
@@ -441,8 +440,6 @@ class UsersWidget(QWidget, Ui_UsersWidget):
             return
         else:
             errmsg = _("TEXT_USER_LIST_RETRIEVABLE_FAILURE")
-        self.spinner.spinner_movie.stop()
-        self.spinner.hide()
         show_error(self, errmsg, exception=job.exc)
 
     def _on_cancel_invitation_success(self, job):
