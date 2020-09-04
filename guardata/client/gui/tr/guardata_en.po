@@ -1765,7 +1765,7 @@ msgid "TEXT_BACKEND_STATE_API_MISMATCH_versions"
 msgstr "Application incompatible with the server"
 
 msgid "TEXT_BACKEND_STATE_REVOKED_DEVICE"
-msgstr "This device is revoked"
+msgstr "This user has been revoked"
 
 msgid "TEXT_BACKEND_STATE_ORGANIZATION_EXPIRED"
 msgstr "The organization has expired"
@@ -2331,7 +2331,7 @@ msgid "TEXT_WORKSPACE_IS_SHARED_TOOLTIP"
 msgstr "This workspace is shared"
 
 msgid "TEXT_WORKSPACE_IS_OWNER_TOOLTIP"
-msgstr "You are this workspace owner"
+msgstr "You are the owner of this workspace"
 
 msgid "TEXT_WORKSPACE_RENAME_TOOLTIP"
 msgstr "Rename the workspace"

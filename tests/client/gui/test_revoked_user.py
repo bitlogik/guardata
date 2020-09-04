@@ -30,7 +30,7 @@ async def test_revoked_notification(
 
     # Assert dialog
     def _revoked_notified():
-        assert autoclose_dialog.dialogs == [("Error", "This device is revoked")]
+        assert autoclose_dialog.dialogs == [("Error", "This user has been revoked")]
 
     await aqtbot.wait_until(_revoked_notified)
 
