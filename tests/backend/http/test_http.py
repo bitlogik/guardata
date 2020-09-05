@@ -30,14 +30,13 @@ def backend_http_send(running_backend, backend_addr):
             backend_addr.hostname.encode("idna"),
         )
         await stream.send_all(req)
-        headers = await stream.receive_some()
-        content = await stream.receive_some()
-        if content and content[:9] == b"<!doctype":
-            data = headers + content
-        else:
-            data = headers
+        data = await stream.receive_some()
         await stream.aclose()
-        return data.decode("utf8")
+        dataparts = data.split(b"\r\n\r\n")
+        if dataparts[1][:9] == b"<!doctype":
+            return data.decode("utf8")
+        else:
+            return dataparts[0].decode("utf8")
 
     return _http_send
 

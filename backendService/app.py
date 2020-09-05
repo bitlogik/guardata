@@ -194,7 +194,7 @@ class BackendApp:
             selected_logger.info("Connection dropped: invalid data", reason=str(exc))
 
     async def handle_client(self, stream):
-        MAX_RECV = 5
+        MAX_RECV = 1024
         try:
             conn = h11.Connection(h11.SERVER)
             first_request_data = b""
@@ -254,7 +254,7 @@ class BackendApp:
         rep.headers.append(("server", server_header))
 
         try:
-            await stream.send_all(
+            response_data = bytearray(
                 conn.send(
                     h11.Response(
                         status_code=rep.status_code, headers=rep.headers, reason=rep.reason
@@ -262,8 +262,9 @@ class BackendApp:
                 )
             )
             if rep.data:
-                await stream.send_all(conn.send(h11.Data(data=rep.data)))
-            await stream.send_all(conn.send(h11.EndOfMessage()))
+                response_data += conn.send(h11.Data(data=rep.data))
+            response_data += conn.send(h11.EndOfMessage())
+            await stream.send_all(response_data)
         except trio.BrokenResourceError:
             # Peer is already gone, nothing to do
             pass
