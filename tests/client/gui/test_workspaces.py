@@ -51,7 +51,7 @@ async def test_add_workspace(
             assert wk_button.name == "Workspace1"
             assert not autoclose_dialog.dialogs
 
-    await aqtbot.wait_until(_outcome_occured, timeout=2000)
+    await aqtbot.wait_until(_outcome_occured, timeout=2500)
 
 
 @pytest.mark.gui
@@ -72,7 +72,7 @@ async def test_rename_workspace(
         assert isinstance(wk_button, WorkspaceButton)
         assert wk_button.name == "Workspace1"
 
-    await aqtbot.wait_until(_workspace_displayed, timeout=2000)
+    await aqtbot.wait_until(_workspace_displayed, timeout=2500)
     wk_button = w_w.layout_workspaces.itemAt(0).widget()
 
     # Now do the rename
@@ -223,7 +223,7 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         nonlocal wk_button
         wk_button = get_wk_button()
 
-    await aqtbot.wait_until(_wksp1_visible)
+    await aqtbot.wait_until(_wksp1_visible, timeout=2500)
     assert wk_button.button_open.isEnabled()
     assert not wk_button.button_open.isChecked()
 
@@ -237,7 +237,7 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         assert wk_button.button_open.isEnabled()
         assert wk_button.switch_button.isChecked()
 
-    await aqtbot.wait_until(_mounted, timeout=2000)
+    await aqtbot.wait_until(_mounted, timeout=5000)
     _on_switch_clicked_mock.assert_called_once()
     _on_switch_clicked_mock.reset_mock()
 
@@ -259,5 +259,5 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         assert not wk_button.switch_button.isChecked()
         assert not wk_button.button_open.isEnabled()
 
-    await aqtbot.wait_until(_unmounted, timeout=2000)
+    await aqtbot.wait_until(_unmounted, timeout=5000)
     _on_switch_clicked_mock.assert_called_once()
