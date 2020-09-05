@@ -100,7 +100,7 @@ else:
 
     with _install_posix_file_lock(file1):
         ret = subprocess.run(
-            ["python", "-c", python_cmd], stdout=subprocess.PIPE, stderr=subprocess.PIPE
+            ["python3", "-c", python_cmd], stdout=subprocess.PIPE, stderr=subprocess.PIPE
         )
         print(ret.stdout.decode())
         print(ret.stderr.decode())

@@ -140,7 +140,7 @@ async def restart_local_backend(administration_token, backend_port):
 
     def _windows_target():
         for proc in psutil.process_iter():
-            if "python" in proc.name():
+            if "python" in proc.name() or "python3" in proc.name():
                 arguments = " ".join(proc.cmdline())
                 if re.search(pattern, arguments):
                     proc.kill()

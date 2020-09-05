@@ -83,11 +83,14 @@ def _short_cmd(cmd):
 def _run(cmd, env={}, timeout=20.0, capture=True):
     print(f"========= RUN {cmd} ==============")
     env = {**os.environ.copy(), "DEBUG": "true", **env}
-    cooked_cmd = ("python -m guardata.cli " + cmd).split()
+    python_bin = "python3"
+    if sys.platform == "win32":
+        python_bin = "python"
+    cooked_cmd = f"{python_bin} -m guardata.cli {cmd}"
     kwargs = {}
     if capture:
         kwargs["stdout"] = kwargs["stderr"] = subprocess.PIPE
-    ret = subprocess.run(cooked_cmd, cwd=CWD, env=env, timeout=timeout, **kwargs)
+    ret = subprocess.run(cooked_cmd.split(), cwd=CWD, env=env, timeout=timeout, **kwargs)
     if capture:
         print(ret.stdout.decode(), file=sys.stdout)
         print(ret.stderr.decode(), file=sys.stderr)
@@ -111,9 +114,12 @@ class LivingStream:
 @contextmanager
 def _running(cmd, wait_for=None, env={}):
     env = {**os.environ.copy(), "DEBUG": "true", **env}
-    cooked_cmd = ("python -m guardata.cli " + cmd).split()
+    python_bin = "python3"
+    if sys.platform == "win32":
+        python_bin = "python"
+    cooked_cmd = f"{python_bin} -m guardata.cli {cmd}"
     p = subprocess.Popen(
-        cooked_cmd,
+        cooked_cmd.split(),
         stdout=subprocess.PIPE,
         stderr=subprocess.PIPE,
         stdin=subprocess.PIPE,

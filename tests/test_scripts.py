@@ -15,7 +15,7 @@ from guardata.client.local_device import list_available_devices
 def kill_local_backend(backend_port=6888):
     pattern = f"guardata.* backend.* run.* -P {backend_port}"
     for proc in psutil.process_iter():
-        if "python" in proc.name():
+        if "python" in proc.name() or "python3" in proc.name():
             arguments = " ".join(proc.cmdline())
             if re.search(pattern, arguments):
                 proc.kill()
