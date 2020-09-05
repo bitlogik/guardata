@@ -97,8 +97,6 @@ async def test_change_password_success(
 
     await aqtbot.key_clicks(password_w.line_edit_password, "P2ssxdor!s32")
 
-    print(password_w.line_edit_password.text())
-
     tabw = logged_gui.test_get_tab()
 
     async with aqtbot.wait_signals([l_w.login_with_password_clicked, tabw.logged_in]):
