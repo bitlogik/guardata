@@ -103,7 +103,7 @@ async def test_open(alice_workspace, trio_file, random_text, tmp_path):
     f = await alice_workspace.open_file("/foo/unknow", "bw")
     await f.write(random_text)
     f = await alice_workspace.open_file("/foo/unknow", "rb")
-    f.read()
+    await f.read()
     await f.close()
 
 
