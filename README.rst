@@ -40,4 +40,4 @@ Install
 |
 
 
-More info to come
+Documentation to come soon
