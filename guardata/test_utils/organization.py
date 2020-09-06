@@ -90,6 +90,8 @@ async def initialize_test_organization(
             )
             # Add additional random device for alice
             if additional_devices_number > 0:
+                print(f"Adding {additional_devices_number} devices in the test group")
+                print(" ... please wait ...")
                 await _add_random_device(
                     cmds=alice_cmds,
                     password=password,
@@ -98,6 +100,7 @@ async def initialize_test_organization(
                     force=force,
                     additional_devices_number=additional_devices_number,
                 )
+                print(" Done ")
             # Invite Bob in organization
             bob_device = await _invite_user_to_organization(
                 cmds=alice_cmds,
@@ -126,6 +129,8 @@ async def initialize_test_organization(
                 )
                 # Add additional random users
                 if additional_users_number > 0:
+                    print(f"Adding {additional_users_number} users in the test group")
+                    print(" ... please wait ...")
                     await _add_random_users(
                         alice_cmds,
                         alice_device,
@@ -138,6 +143,7 @@ async def initialize_test_organization(
                         bob_ws_id,
                         additional_users_number,
                     )
+                    print(" Done ")
 
     # Synchronize every device
     for device in (alice_device, other_alice_device, bob_device):
