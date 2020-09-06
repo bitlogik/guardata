@@ -22,7 +22,7 @@ LIMIT 1
 
 
 @lru_cache()
-def _q_factory(query, omit_revoked):
+def _q_factory(query, omit_revoked, limit, offset):
     conditions = []
     if query:
         conditions.append("AND user_id ~* $query")
@@ -36,12 +36,13 @@ WHERE
     organization = { q_organization_internal_id("$organization_id") }
     { " ".join(conditions) }
 ORDER BY user_id
+LIMIT {limit} OFFSET {offset}
     """
     )
 
 
 @lru_cache()
-def _q_count_total_human(omit_revoked, omit_non_human, limit, offset):
+def _q_count_total_human(omit_revoked, omit_non_human):
     conditions = []
     if omit_revoked:
         conditions.append("AND (user_.revoked_on IS NULL OR user_.revoked_on > $now)")
@@ -54,7 +55,6 @@ FROM user_ LEFT JOIN human ON user_.human=human._id
 WHERE
     user_.organization = { q_organization_internal_id("$organization_id") }
     { " ".join(conditions) }
-LIMIT {limit} OFFSET {offset}
     """
     )
 
@@ -215,6 +215,9 @@ async def query_find_humans(
         *sorted(non_humans, key=lambda x: x.user_id.lower()),
     ]
     q = _q_count_total_human(omit_revoked=omit_revoked, omit_non_human=omit_non_human)
-    total = await conn.fetch(*q(organization_id=organization_id, now=pendulum_now()))
+    if omit_revoked:
+        total = await conn.fetchrow(*q(organization_id=organization_id, now=pendulum_now()))
+    else:
+        total = await conn.fetchrow(*q(organization_id=organization_id))
     result_page = results[(page - 1) * per_page : page * per_page]
-    return (result_page, total)
+    return (result_page, total[0])
