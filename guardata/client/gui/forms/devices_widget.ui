@@ -42,6 +42,9 @@
    </property>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout">
+     <property name="spacing">
+      <number>16</number>
+     </property>
      <property name="rightMargin">
       <number>0</number>
      </property>
