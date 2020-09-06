@@ -233,11 +233,10 @@ async def test_search_with_non_humans(access_testbed, organization_factory, loca
     assert rep == {
         "status": "ok",
         "results": [
-            {"user_id": hwang.user_id, "human_handle": hwang.human_handle, "revoked": False},
-            {"user_id": richard.user_id, "human_handle": richard.human_handle, "revoked": False},
-            # Non human should be ordered last no matter what
             {"user_id": ninja1.user_id, "human_handle": None, "revoked": False},
             {"user_id": ninja2.user_id, "human_handle": None, "revoked": False},
+            {"user_id": richard.user_id, "human_handle": richard.human_handle, "revoked": False},
+            {"user_id": hwang.user_id, "human_handle": hwang.human_handle, "revoked": False},
         ],
         "per_page": 100,
         "page": 1,
@@ -249,8 +248,8 @@ async def test_search_with_non_humans(access_testbed, organization_factory, loca
     assert rep == {
         "status": "ok",
         "results": [
-            {"user_id": hwang.user_id, "human_handle": hwang.human_handle, "revoked": False},
             {"user_id": richard.user_id, "human_handle": richard.human_handle, "revoked": False},
+            {"user_id": hwang.user_id, "human_handle": hwang.human_handle, "revoked": False},
         ],
         "per_page": 100,
         "page": 1,
@@ -279,11 +278,11 @@ async def test_pagination(access_testbed, organization_factory, local_device_fac
     assert rep == {
         "status": "ok",
         "results": [
-            {"user_id": blacky.user_id, "human_handle": blacky.human_handle, "revoked": False},
             {"user_id": godfrey1.user_id, "human_handle": godfrey1.human_handle, "revoked": False},
-            {"user_id": mike.user_id, "human_handle": mike.human_handle, "revoked": False},
             {"user_id": richard.user_id, "human_handle": richard.human_handle, "revoked": False},
             {"user_id": roger.user_id, "human_handle": roger.human_handle, "revoked": False},
+            {"user_id": mike.user_id, "human_handle": mike.human_handle, "revoked": False},
+            {"user_id": blacky.user_id, "human_handle": blacky.human_handle, "revoked": False},
         ],
         "per_page": 100,
         "page": 1,
@@ -295,9 +294,9 @@ async def test_pagination(access_testbed, organization_factory, local_device_fac
     assert rep == {
         "status": "ok",
         "results": [
-            {"user_id": blacky.user_id, "human_handle": blacky.human_handle, "revoked": False},
             {"user_id": godfrey1.user_id, "human_handle": godfrey1.human_handle, "revoked": False},
-            {"user_id": mike.user_id, "human_handle": mike.human_handle, "revoked": False},
+            {"user_id": richard.user_id, "human_handle": richard.human_handle, "revoked": False},
+            {"user_id": roger.user_id, "human_handle": roger.human_handle, "revoked": False},
         ],
         "per_page": 3,
         "page": 1,
@@ -309,8 +308,8 @@ async def test_pagination(access_testbed, organization_factory, local_device_fac
     assert rep == {
         "status": "ok",
         "results": [
-            {"user_id": richard.user_id, "human_handle": richard.human_handle, "revoked": False},
-            {"user_id": roger.user_id, "human_handle": roger.human_handle, "revoked": False},
+            {"user_id": mike.user_id, "human_handle": mike.human_handle, "revoked": False},
+            {"user_id": blacky.user_id, "human_handle": blacky.human_handle, "revoked": False},
         ],
         "per_page": 3,
         "page": 2,

@@ -35,15 +35,17 @@ FROM user_
 WHERE
     organization = { q_organization_internal_id("$organization_id") }
     { " ".join(conditions) }
-ORDER BY user_id
+ORDER BY user_.user_id
 LIMIT {limit} OFFSET {offset}
     """
     )
 
 
 @lru_cache()
-def _q_count_total_human(omit_revoked, omit_non_human):
+def _q_count_total_human(query, omit_revoked, omit_non_human):
     conditions = []
+    if query:
+        conditions.append(f"AND CONCAT(human.label,human.email,user_.user_id) ~* '{query}'")
     if omit_revoked:
         conditions.append("AND (user_.revoked_on IS NULL OR user_.revoked_on > $now)")
     if omit_non_human:
@@ -79,6 +81,7 @@ FROM user_ LEFT JOIN human ON user_.human=human._id
 WHERE
     user_.organization = { q_organization_internal_id("$organization_id") }
     { " ".join(conditions) }
+ORDER BY user_.user_id
 LIMIT {limit} OFFSET {offset}
     """
     )
@@ -118,9 +121,7 @@ async def query_find(
             args = q(organization_id=organization_id)
 
     all_results = await conn.fetch(*args)
-    # TODO: should user LIMIT and OFFSET in the SQL query instead
-    results = [UserID(x[0]) for x in all_results[(page - 1) * per_page : page * per_page]]
-    return results, len(all_results)
+    return all_results, len(all_results)
 
 
 @query()
@@ -146,10 +147,10 @@ async def query_find_humans(
     omit_revoked: bool,
     omit_non_human: bool,
 ) -> Tuple[List[HumanFindResultItem], int]:
-    if page > 1:
-        offset = ((page - 1) * per_page) - 1
+    if page >= 1:
+        offset = (page - 1) * per_page
     else:
-        offset = 0
+        return ([], 0)
     if query:
 
         if omit_revoked:
@@ -199,25 +200,14 @@ async def query_find_humans(
     humans = [
         HumanFindResultItem(
             user_id=UserID(user_id),
-            human_handle=HumanHandle(email=email, label=label),
+            human_handle=HumanHandle(email=email, label=label) if email is not None else None,
             revoked=revoked,
         )
         for user_id, email, label, revoked in raw_results
-        if email is not None
     ]
-    non_humans = [
-        HumanFindResultItem(user_id=UserID(user_id), human_handle=None, revoked=revoked)
-        for user_id, email, label, revoked in raw_results
-        if email is None
-    ]
-    results = [
-        *sorted(humans, key=lambda x: (x.human_handle.label.lower(), x.user_id.lower())),
-        *sorted(non_humans, key=lambda x: x.user_id.lower()),
-    ]
-    q = _q_count_total_human(omit_revoked=omit_revoked, omit_non_human=omit_non_human)
+    q = _q_count_total_human(query, omit_revoked=omit_revoked, omit_non_human=omit_non_human)
     if omit_revoked:
         total = await conn.fetchrow(*q(organization_id=organization_id, now=pendulum_now()))
     else:
         total = await conn.fetchrow(*q(organization_id=organization_id))
-    result_page = results[(page - 1) * per_page : page * per_page]
-    return (result_page, total[0])
+    return (humans, total[0])
