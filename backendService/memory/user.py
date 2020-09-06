@@ -223,7 +223,7 @@ class MemoryUserComponent(BaseUserComponent):
                 return ([], 0)
 
             results = [
-                user_id for user_id in users.keys() if user_id.lower().startswith(query.lower())
+                user_id for user_id in users.keys() if user_id.lower().find(query.lower()) != -1
             ]
 
         else:
@@ -267,7 +267,7 @@ class MemoryUserComponent(BaseUserComponent):
                     user_terms = (user.user_id.lower(),)
 
                 for qt in query_terms:
-                    if not any(ut.startswith(qt) for ut in user_terms):
+                    if not any(ut.find(qt) != -1 for ut in user_terms):
                         break
                 else:
                     # All query term have match the current user
