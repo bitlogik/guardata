@@ -216,7 +216,7 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         assert isinstance(wk_button, WorkspaceButton)
         return wk_button
 
-    # New workspace should show up umounted
+    # New workspace should show up mounted
     wk_button = None
 
     def _wksp1_visible():
@@ -224,7 +224,11 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         wk_button = get_wk_button()
 
     await aqtbot.wait_until(_wksp1_visible, timeout=2500)
-    assert wk_button.button_open.isEnabled()
+    # unmount
+    await aqtbot.mouse_click(wk_button.switch_button, QtCore.Qt.LeftButton)
+    await aqtbot.wait(250)
+    _on_switch_clicked_mock.reset_mock()
+    assert not wk_button.button_open.isEnabled()
     assert not wk_button.button_open.isChecked()
 
     # Now switch to mounted
@@ -237,7 +241,8 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         assert wk_button.button_open.isEnabled()
         assert wk_button.switch_button.isChecked()
 
-    await aqtbot.wait_until(_mounted, timeout=5000)
+    await aqtbot.wait(100)
+    await aqtbot.wait_until(_mounted)
     _on_switch_clicked_mock.assert_called_once()
     _on_switch_clicked_mock.reset_mock()
 
@@ -247,6 +252,7 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         open_workspace_mock.assert_called_once()
 
     await aqtbot.mouse_click(wk_button.button_open, QtCore.Qt.LeftButton)
+    await aqtbot.wait(100)
     await aqtbot.wait_until(_wk_opened)
 
     # Finally switch back to unmounted just to be sure
@@ -259,5 +265,6 @@ async def test_mountpoint_open_in_explorer_button(aqtbot, running_backend, logge
         assert not wk_button.switch_button.isChecked()
         assert not wk_button.button_open.isEnabled()
 
-    await aqtbot.wait_until(_unmounted, timeout=5000)
+    await aqtbot.wait(100)
+    await aqtbot.wait_until(_unmounted)
     _on_switch_clicked_mock.assert_called_once()
