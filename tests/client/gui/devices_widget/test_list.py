@@ -3,8 +3,7 @@
 import pytest
 
 from PyQt5.QtWidgets import QLabel
-from PyQt5 import QtCore
-from PyQt5.Qt import Qt
+from PyQt5.QtCore import Qt
 from tests.common import customize_fixtures
 from guardata.client.gui.lang import translate
 
@@ -59,7 +58,7 @@ async def test_filter_devices(aqtbot, running_backend, logged_gui):
 
     async with aqtbot.wait_signal(d_w.list_success):
         await aqtbot.key_clicks(d_w.line_edit_search, "2")
-        await aqtbot.mouse_click(d_w.button_devices_filter, QtCore.Qt.LeftButton)
+        await aqtbot.mouse_click(d_w.button_devices_filter, Qt.LeftButton)
 
     await aqtbot.wait_until(lambda: _devices_shown(count=1))
 
