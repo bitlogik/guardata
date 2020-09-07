@@ -25,7 +25,7 @@ LIMIT 1
 def _q_factory(query, omit_revoked, limit, offset):
     conditions = []
     if query:
-        conditions.append("AND user_id ~* $query")
+        conditions.append("AND user_id ILIKE $query")
     if omit_revoked:
         conditions.append("AND (revoked_on IS NULL OR revoked_on > $now)")
     return Q(
@@ -45,9 +45,9 @@ LIMIT {limit} OFFSET {offset}
 def _q_count_total_human(query, omit_revoked, omit_non_human, in_find=False):
     conditions = []
     if query:
-        conditions.append(f"AND CONCAT(human.label,human.email,user_.user_id) ~* '{query}'")
+        conditions.append(f"AND (human.label ILIKE '%{query}%' OR human.email ILIKE '%{query}%')")
         if in_find:
-            conditions = [f"AND user_id ~* '{query}'"]
+            conditions = [f"AND user_id ILIKE '%{query}%'"]
     if omit_revoked:
         conditions.append("AND (user_.revoked_on IS NULL OR user_.revoked_on > $now)")
     if omit_non_human:
@@ -67,7 +67,7 @@ WHERE
 def _q_human_factory(query, omit_revoked, omit_non_human, limit, offset):
     conditions = []
     if query:
-        conditions.append("AND CONCAT(human.label,human.email,user_.user_id) ~* $query")
+        conditions.append("AND (human.label ILIKE $query OR human.email ILIKE $query)")
     if omit_revoked:
         conditions.append("AND (user_.revoked_on IS NULL OR user_.revoked_on > $now)")
     if omit_non_human:
@@ -83,7 +83,7 @@ FROM user_ LEFT JOIN human ON user_.human=human._id
 WHERE
     user_.organization = { q_organization_internal_id("$organization_id") }
     { " ".join(conditions) }
-ORDER BY user_.user_id
+ORDER BY human.label, user_.user_id
 LIMIT {limit} OFFSET {offset}
     """
     )
@@ -106,11 +106,11 @@ async def query_find(
 
         if omit_revoked:
             q = _q_factory(query=True, omit_revoked=True, limit=per_page, offset=offset)
-            args = q(organization_id=organization_id, query=query, now=pendulum_now())
+            args = q(organization_id=organization_id, query="%" + query + "%", now=pendulum_now())
 
         else:
             q = _q_factory(query=True, omit_revoked=False, limit=per_page, offset=offset)
-            args = q(organization_id=organization_id, query=query)
+            args = q(organization_id=organization_id, query="%" + query + "%")
 
     else:
 
@@ -168,7 +168,7 @@ async def query_find_humans(
                 limit=per_page,
                 offset=offset,
             )
-            args = q(organization_id=organization_id, now=pendulum_now(), query=query)
+            args = q(organization_id=organization_id, now=pendulum_now(), query="%" + query + "%")
 
         else:
             q = _q_human_factory(
@@ -178,7 +178,7 @@ async def query_find_humans(
                 offset=offset,
                 limit=per_page,
             )
-            args = q(organization_id=organization_id, now=pendulum_now(), query=query)
+            args = q(organization_id=organization_id, now=pendulum_now(), query="%" + query + "%")
 
     else:
 

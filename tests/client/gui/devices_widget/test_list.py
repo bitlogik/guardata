@@ -3,8 +3,8 @@
 import pytest
 
 from PyQt5.QtWidgets import QLabel
-from PyQt5.QtCore import Qt
 from tests.common import customize_fixtures
+
 from guardata.client.gui.lang import translate
 
 
@@ -55,10 +55,10 @@ async def test_filter_devices(aqtbot, running_backend, logged_gui):
 
     d_w = await logged_gui.test_switch_to_devices_widget()
     await aqtbot.wait_until(lambda: _all_devices_visible(d_w=d_w))
+    await aqtbot.wait(250)
 
     async with aqtbot.wait_signal(d_w.list_success):
-        await aqtbot.key_clicks(d_w.line_edit_search, "2")
-        await aqtbot.mouse_click(d_w.button_devices_filter, Qt.LeftButton)
+        await aqtbot.key_clicks(d_w.line_edit_search, "v2", delay=250)
 
     await aqtbot.wait_until(lambda: _devices_shown(count=1))
 
@@ -72,10 +72,10 @@ async def test_filter_devices(aqtbot, running_backend, logged_gui):
         await aqtbot.wait_until(lambda: d_w.line_edit_search.setText(""))
 
     await aqtbot.wait_until(lambda: _all_devices_visible(d_w=d_w))
+    await aqtbot.wait(250)
 
     async with aqtbot.wait_signal(d_w.list_success):
-        await aqtbot.key_clicks(d_w.line_edit_search, "1")
-        await aqtbot.key_press(d_w.line_edit_search, Qt.Key_Enter)
+        await aqtbot.key_clicks(d_w.line_edit_search, "v1", delay=250)
 
     assert d_w.layout_devices.count() == 1
 

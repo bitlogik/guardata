@@ -4,7 +4,6 @@ import pytest
 
 from tests.common import customize_fixtures
 from PyQt5.QtWidgets import QLabel
-from PyQt5.QtCore import Qt
 
 from guardata.client.gui.lang import translate
 
@@ -126,12 +125,13 @@ async def test_filter_users(aqtbot, running_backend, logged_gui):
 
     u_w = await logged_gui.test_switch_to_users_widget()
     await aqtbot.wait_until(lambda: _all_users_visible(u_w=u_w))
+    await aqtbot.wait(250)
 
     async with aqtbot.wait_signal(u_w.list_success):
-        await aqtbot.key_clicks(u_w.line_edit_search, "bo")
-        await aqtbot.mouse_click(u_w.button_users_filter, Qt.LeftButton)
+        await aqtbot.key_click(u_w.line_edit_search, "b")
+        await aqtbot.key_click(u_w.line_edit_search, "o", delay=250)
 
-    await aqtbot.wait_until(lambda: _users_shown(count=1))
+    await aqtbot.wait_until(lambda: _users_shown(count=1), timeout=1750)
 
     bob_w = u_w.layout_users.itemAt(0).widget()
 
@@ -146,12 +146,12 @@ async def test_filter_users(aqtbot, running_backend, logged_gui):
         await aqtbot.wait_until(lambda: u_w.line_edit_search.setText(""))
 
     await aqtbot.wait_until(lambda: _all_users_visible(u_w=u_w))
+    await aqtbot.wait(250)
 
     async with aqtbot.wait_signal(u_w.list_success):
-        await aqtbot.key_clicks(u_w.line_edit_search, "m")
-        await aqtbot.key_clicks(u_w.line_edit_search, "c")
-        await aqtbot.key_clicks(u_w.line_edit_search, "a")
-        await aqtbot.key_press(u_w.line_edit_search, Qt.Key_Enter)
+        await aqtbot.key_click(u_w.line_edit_search, "m")
+        await aqtbot.key_click(u_w.line_edit_search, "c")
+        await aqtbot.key_click(u_w.line_edit_search, "a")
 
     await aqtbot.wait(250)
     assert u_w.layout_users.count() == 2

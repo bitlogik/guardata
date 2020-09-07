@@ -66,18 +66,26 @@ async def _do_invite_device(client):
         raise JobResultError("error") from exc
 
 
+def filter_devices(device, pattern):
+    return device.device_display.lower().find(pattern.lower()) != -1
+
+
 async def _do_list_devices(client, page, pattern=None):
     try:
-        if pattern is None:
-            return await client.get_user_devices_info(per_page=DEVICES_PER_PAGE, page=page)
-        else:
-            devices, total = await client.get_user_devices_info(
-                per_page=DEVICES_PER_PAGE, page=page
-            )
-            for device in devices:
-                if not device.device_display.startswith(pattern):
-                    devices.remove(device)
+        devices, total = await client.get_user_devices_info(per_page=DEVICES_PER_PAGE, page=page)
+        if pattern:
+            devices_filtered = filter(lambda x: filter_devices(x, pattern), devices)
+            # return all results without pagination
+            return devices_filtered, DEVICES_PER_PAGE - 1
+
+        # When without filter : put the current device first
+        for i, device in enumerate(devices):
+            if client.device.device_id == device.device_id:
+                curr_dev = devices.pop(i)
+                break
+        devices.insert(0, curr_dev)
         return devices, total
+
     except BackendNotAvailable as exc:
         raise JobResultError("offline") from exc
     except BackendConnectionError as exc:
@@ -108,9 +116,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
         self.list_error.connect(self._on_list_error)
         self.invite_success.connect(self._on_invite_success)
         self.invite_error.connect(self._on_invite_error)
-        self.button_devices_filter.clicked.connect(self.on_filter)
-        self.line_edit_search.editingFinished.connect(lambda: self.on_filter(editing_finished=True))
-        self.line_edit_search.textChanged.connect(lambda: self.on_filter(text_changed=True))
+        self.line_edit_search.textChanged.connect(self.on_filter)
 
     def show(self):
         self._page = 1
@@ -127,13 +133,11 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
             self._page -= 1
         self.reset()
 
-    def on_filter(self, editing_finished=False, text_changed=False):
+    def on_filter(self):
         self._page = 1
         pattern = self.line_edit_search.text()
-        if text_changed and len(pattern) <= 0:
+        if len(pattern) < 2:
             return self.reset()
-        elif text_changed:
-            return
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "list_success", QtToTrioJob),
             ThreadSafeQtSignal(self, "list_error", QtToTrioJob),

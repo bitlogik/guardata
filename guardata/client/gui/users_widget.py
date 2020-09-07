@@ -224,9 +224,7 @@ class UsersWidget(QWidget, Ui_UsersWidget):
             self.button_add_user.hide()
         self.button_previous_page.clicked.connect(self.show_previous_page)
         self.button_next_page.clicked.connect(self.show_next_page)
-        self.button_users_filter.clicked.connect(self.on_filter)
-        self.line_edit_search.textChanged.connect(lambda: self.on_filter(text_changed=True))
-        self.line_edit_search.editingFinished.connect(lambda: self.on_filter(editing_finished=True))
+        self.line_edit_search.textChanged.connect(self.on_filter)
         self.revoke_success.connect(self._on_revoke_success)
         self.revoke_error.connect(self._on_revoke_error)
         self.list_success.connect(self._on_list_success)
@@ -250,13 +248,11 @@ class UsersWidget(QWidget, Ui_UsersWidget):
             self._page -= 1
         self.reset()
 
-    def on_filter(self, editing_finished=False, text_changed=False):
+    def on_filter(self):
         self._page = 1
         pattern = self.line_edit_search.text()
-        if text_changed and len(pattern) <= 0:
+        if len(pattern) < 2:
             return self.reset()
-        elif text_changed:
-            return
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "list_success", QtToTrioJob),
             ThreadSafeQtSignal(self, "list_error", QtToTrioJob),

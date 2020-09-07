@@ -67,13 +67,6 @@
       </widget>
      </item>
      <item>
-      <widget class="QPushButton" name="button_devices_filter">
-       <property name="text">
-        <string>ACTION_FILTER_LIST_DEVICES</string>
-       </property>
-      </widget>
-     </item>
-     <item>
       <widget class="Button" name="button_add_device">
        <property name="cursor">
         <cursorShape>PointingHandCursor</cursorShape>

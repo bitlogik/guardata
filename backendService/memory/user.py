@@ -261,7 +261,6 @@ class MemoryUserComponent(BaseUserComponent):
                     user_terms = (
                         *[x.lower() for x in user.human_handle.label.split()],
                         user.human_handle.email.lower(),
-                        user.user_id.lower(),
                     )
                 else:
                     user_terms = (user.user_id.lower(),)
@@ -289,13 +288,10 @@ class MemoryUserComponent(BaseUserComponent):
         if omit_revoked:
             results = [res for res in results if not res.revoked]
 
-        # PostgreSQL does case insensitive sort
-        results = sorted([res for res in results], key=lambda r: r.user_id.lower())
-
-        if omit_non_human:
-            results = sorted(
-                [res for res in results if res.human_handle], key=lambda r: r.user_id.lower()
-            )
+        # Find humans only returns humans, PostgreSQL does case insensitive sort
+        results = sorted(
+            [res for res in results if res.human_handle], key=lambda r: str(r.human_handle).lower()
+        )
 
         total = len(results)
         result_page = results[(page - 1) * per_page : page * per_page]
