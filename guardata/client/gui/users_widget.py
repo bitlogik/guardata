@@ -438,6 +438,8 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         assert job.is_finished()
         assert job.status != "ok"
         status = job.status
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
         if status in ["error", "offline"]:
             self._flush_users_list()
             label = QLabel(_("TEXT_USER_LIST_RETRIEVABLE_FAILURE"))
@@ -446,8 +448,6 @@ class UsersWidget(QWidget, Ui_UsersWidget):
             return
         else:
             errmsg = _("TEXT_USER_LIST_RETRIEVABLE_FAILURE")
-        self.spinner.spinner_movie.stop()
-        self.spinner.hide()
         show_error(self, errmsg, exception=job.exc)
 
     def _on_cancel_invitation_success(self, job):
