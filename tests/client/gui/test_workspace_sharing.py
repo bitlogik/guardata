@@ -39,7 +39,7 @@ async def gui_workspace_sharing(
         assert wk_button.name == "Workspace"
         assert not autoclose_dialog.dialogs
 
-    await aqtbot.wait_until(_workspace_added, timeout=2000)
+    await aqtbot.wait_until(_workspace_added, timeout=4000)
     wk_button = w_w.layout_workspaces.itemAt(0).widget()
 
     await aqtbot.mouse_click(wk_button.button_share, QtCore.Qt.LeftButton)
@@ -138,7 +138,7 @@ async def test_share_workspace(
         assert wk_button.name == "Workspace"
         assert not autoclose_dialog.dialogs
 
-    await aqtbot.wait_until(_workspace_listed, timeout=2500)
+    await aqtbot.wait_until(_workspace_listed, timeout=4000)
 
     w_b = w_w.layout_workspaces.itemAt(0).widget()
     assert isinstance(w_b, WorkspaceButton)
@@ -255,7 +255,7 @@ async def test_rename_workspace_when_revoked(
         assert not wk_button.is_shared
         wk_button.name == "Workspace"
 
-    await aqtbot.wait_until(_workspace_not_shared_listed, timeout=2500)
+    await aqtbot.wait_until(_workspace_not_shared_listed, timeout=4000)
 
     wid = w_w.layout_workspaces.itemAt(0).widget().workspace_fs.workspace_id
     await client.user_fs.workspace_share(wid, bob.user_id, WorkspaceRole.MANAGER)
@@ -271,11 +271,11 @@ async def test_rename_workspace_when_revoked(
         assert wk_button.label_title.toolTip() == "Workspace (shared with Boby McBobFace)"
         assert wk_button.label_title.text() == "Workspace (shared wi..."
 
-    await aqtbot.wait_until(_workspace_shared_listed, timeout=3000)
+    await aqtbot.wait_until(_workspace_shared_listed, timeout=4000)
 
     await client.revoke_user(bob.user_id)
 
     await logged_gui.test_switch_to_users_widget()
     w_w = await logged_gui.test_switch_to_workspaces_widget()
 
-    await aqtbot.wait_until(_workspace_not_shared_listed, timeout=3000)
+    await aqtbot.wait_until(_workspace_not_shared_listed, timeout=4000)
