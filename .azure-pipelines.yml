@@ -34,7 +34,7 @@ jobs:
       set -eux
       sudo apt-get update
       python --version
-      pip install pre-commit
+      pip3 install pre-commit
     displayName: 'Bootstrap'
   - bash: |
       set -eux
@@ -63,7 +63,7 @@ jobs:
       set -eux
       sudo apt-get update
       python --version
-      pip install -r pre-requirements.txt
+      pip3 install -r pre-requirements.txt
     displayName: 'Bootstrap'
   - bash: |
       set -eux
@@ -110,20 +110,20 @@ jobs:
       # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
       echo $WHEEL
-      pip install $WHEEL[all]
+      pip3 install $WHEEL[all]
       # Check dependency compatibility
-      pip check guardata[all]
+      pip3 check guardata[all]
     displayName: 'Install'
   - bash: |
       set -eux
-      py.test $(pytest.base_args) \
+      python3 -m pytest $(pytest.base_args) \
         tests --runmountpoint --runslow \
         -n auto --max-worker-restart=0 -x \
         --junitxml=test-results-memory.xml
     displayName: 'Tests memory'
   - bash: |
       set -eux
-      py.test $(pytest.base_args) \
+      python3 -m pytest $(pytest.base_args) \
         tests/backend tests/test_cli.py --postgresql --runslow \
         -n auto --max-worker-restart=0 -x \
         --junitxml=test-results-postgresql.xml
@@ -190,33 +190,25 @@ jobs:
     displayName: 'Install'
   - bash: |
       set -eux
-      # Install pytest-repeat
-      pip install pytest-repeat
-      # Repeat flaky tests X times
-      py.test tests --runmountpoint --runslow --rungui -m flaky --count $(debug.stress_flaky_tests) -v
-    displayName: 'Debug: stress flaky tests'
-    condition: and(succeeded(), gt(variables['debug.stress_flaky_tests'], 0))
-  - bash: |
-      set -eux
-      py.test $(pytest.base_args) \
+      python.exe -m pytest $(pytest.base_args) \
         tests -n auto --max-worker-restart=0 -x \
         --junitxml=test-results-fast.xml
     displayName: 'Tests fast'
   - bash: |
       set -eux
-      py.test $(pytest.base_args) \
+      python.exe -m pytest $(pytest.base_args) \
         tests --runmountpoint --runslow -m mountpoint -x \
         --junitxml=test-results-mountpoint.xml
     displayName: 'Tests mountpoint'
   - bash: |
       set -eux
-      py.test $(pytest.base_args) \
+      python.exe -m pytest $(pytest.base_args) \
         tests --runmountpoint --runslow --rungui -m gui -x \
         --junitxml=test-results-gui.xml
     displayName: 'Tests GUI'
   - bash: |
       set -eux
-      py.test $(pytest.base_args) \
+      python.exe -m pytest $(pytest.base_args) \
         tests --runslow -m slow \
         -n auto --max-worker-restart=0 -x \
         --junitxml=test-results-slow.xml
