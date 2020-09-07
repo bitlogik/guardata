@@ -290,10 +290,8 @@ class MemoryUserComponent(BaseUserComponent):
             results = [res for res in results if not res.revoked]
 
         # PostgreSQL does case insensitive sort
-        results = sorted(
-            [res for res in results],
-            key=lambda r: (r.human_handle.label.lower(), r.user_id.lower()),
-        )
+        results = sorted([res for res in results], key=lambda r: r.user_id.lower())
+
         if omit_non_human:
             results = sorted(
                 [res for res in results if res.human_handle], key=lambda r: r.user_id.lower()
