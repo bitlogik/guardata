@@ -42,10 +42,12 @@ LIMIT {limit} OFFSET {offset}
 
 
 @lru_cache()
-def _q_count_total_human(query, omit_revoked, omit_non_human):
+def _q_count_total_human(query, omit_revoked, omit_non_human, in_find=False):
     conditions = []
     if query:
         conditions.append(f"AND CONCAT(human.label,human.email,user_.user_id) ~* '{query}'")
+        if in_find:
+            conditions = [f"AND user_id ~* '{query}'"]
     if omit_revoked:
         conditions.append("AND (user_.revoked_on IS NULL OR user_.revoked_on > $now)")
     if omit_non_human:
@@ -120,8 +122,13 @@ async def query_find(
             q = _q_factory(query=False, omit_revoked=False, limit=per_page, offset=offset)
             args = q(organization_id=organization_id)
 
-    all_results = await conn.fetch(*args)
-    return all_results, len(all_results)
+    all_results = [user["user_id"] for user in await conn.fetch(*args)]
+    q = _q_count_total_human(query, omit_revoked=omit_revoked, omit_non_human=True, in_find=True)
+    if omit_revoked:
+        total = await conn.fetchrow(*q(organization_id=organization_id, now=pendulum_now()))
+    else:
+        total = await conn.fetchrow(*q(organization_id=organization_id))
+    return all_results, total[0]
 
 
 @query()
