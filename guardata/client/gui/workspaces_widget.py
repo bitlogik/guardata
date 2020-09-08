@@ -191,7 +191,7 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
         self.reencrypting = set()
         self.disabled_workspaces = self.client.config.disabled_workspaces
 
-        self.layout_workspaces = FlowLayout(spacing=40)
+        self.layout_workspaces = FlowLayout(spacing=24)
         self.layout_content.addLayout(self.layout_workspaces)
 
         self.button_add_workspace.clicked.connect(self.create_workspace_clicked)

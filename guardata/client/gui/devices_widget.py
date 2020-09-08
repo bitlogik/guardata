@@ -98,7 +98,7 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
         self.jobs_ctx = jobs_ctx
         self.client = client
         self.event_bus = event_bus
-        self.layout_devices = FlowLayout(spacing=40)
+        self.layout_devices = FlowLayout(spacing=24)
         self.layout_content.addLayout(self.layout_devices)
         self.button_add_device.clicked.connect(self.invite_device)
         self.button_add_device.apply_style()

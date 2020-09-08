@@ -215,7 +215,7 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         self.client = client
         self.jobs_ctx = jobs_ctx
         self.event_bus = event_bus
-        self.layout_users = FlowLayout(spacing=40)
+        self.layout_users = FlowLayout(spacing=24)
         self.layout_content.addLayout(self.layout_users)
         self.button_add_user.apply_style()
         if client.device.is_admin:
