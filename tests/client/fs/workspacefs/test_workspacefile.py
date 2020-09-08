@@ -5,7 +5,11 @@ import trio
 from enum import IntEnum
 from typing import Union
 import io
-from guardata.client.fs.exceptions import FSUnsupportedOperation, FSOffsetError
+from guardata.client.fs.exceptions import (
+    FSUnsupportedOperation,
+    FSOffsetError,
+    FSInvalidFileDescriptor,
+)
 from guardata.client.fs.workspacefs.workspacefile import WorkspaceFile
 from guardata.client.types import FsPath
 
@@ -461,8 +465,13 @@ async def test_file_state(alice_workspace, trio_file, random_text):
     async with await open_file_no_init(alice_workspace, "/foo/bar", "wb") as f2:
         # testing that file state is in OPEN mode.
         assert int(f2.state) == int(FileState.OPEN)
+        # File descriptor is accessible
+        await f2.file_stat()
     # testing that file is closed after context manager
     assert int(f2.state) == int(FileState.CLOSED)
+    # File descriptor is no longer accessible
+    with pytest.raises(FSInvalidFileDescriptor):
+        await f2._transactions.fd_info(f2._fd, "/foo/bar")
 
 
 @pytest.mark.trio
@@ -479,6 +488,10 @@ async def test_close(alice_workspace, trio_file, random_text):
     await f.close()
     await triof.aclose()
     assert f.closed == triof.closed is True
+
+    # File descriptor is no longer accessible
+    with pytest.raises(FSInvalidFileDescriptor):
+        await f._transactions.fd_info(f._fd, "/foo/bar")
 
     # closing a 2nd time
     await f.close()
