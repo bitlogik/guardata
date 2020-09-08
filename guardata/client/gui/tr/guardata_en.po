@@ -429,6 +429,9 @@ msgstr "Cannot rename the workspace."
 msgid "TEXT_WORKSPACE_NO_WORKSPACES"
 msgstr "No workspace has been created yet."
 
+msgid "TEXT_WORKSPACE_ERROR_WORKSPACES"
+msgstr "Error getting the workspaces"
+
 msgid "TEXT_WORKSPACE_CANNOT_MOUNT"
 msgstr ""
 "An internal error prevents guardata from accessing the files in this "

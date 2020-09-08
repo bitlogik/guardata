@@ -459,6 +459,9 @@ msgstr "Impossible de renommer l'espace de travail."
 msgid "TEXT_WORKSPACE_NO_WORKSPACES"
 msgstr "Aucun espace de travail n'a été créé."
 
+msgid "TEXT_WORKSPACE_ERROR_WORKSPACES"
+msgstr "Erreur lors de la récupération des espaces de travail"
+
 msgid "TEXT_WORKSPACE_CANNOT_MOUNT"
 msgstr ""
 "Une erreur interne empêche guardata d'accéder aux fichiers de cet espace de"
