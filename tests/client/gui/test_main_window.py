@@ -5,6 +5,7 @@ from PyQt5 import QtCore, QtWidgets
 
 from guardata.client.gui.lang import translate
 from guardata.client.types import BackendOrganizationFileLinkAddr
+from guardata.client.local_device import save_device_with_password
 
 
 @pytest.fixture
@@ -192,3 +193,108 @@ async def test_file_link_disconnected(
     await aqtbot.wait_until(assert_dialogs, timeout=2000)
 
     assert logged_gui.tab_center.count() == 1
+
+
+@pytest.mark.gui
+@pytest.mark.trio
+async def test_tab_login_logout(
+    aqtbot, running_backend, gui_factory, autoclose_dialog, client_config, alice
+):
+    password = "P2ssxdor!s3"
+    save_device_with_password(client_config.config_dir, alice, password)
+    gui = await gui_factory()
+
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")
+    assert not gui.add_tab_button.isEnabled()
+    first_created_tab = gui.test_get_tab()
+
+    await gui.test_switch_to_logged_in(alice)
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == "CoolOrg - Alicey McAliceFace - My dev1 machine"
+    assert gui.add_tab_button.isEnabled()
+    assert gui.test_get_tab() == first_created_tab
+
+    await gui.test_logout()
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")
+    assert not gui.add_tab_button.isEnabled()
+    assert gui.test_get_tab() != first_created_tab
+
+
+@pytest.mark.gui
+@pytest.mark.trio
+async def test_tab_login_logout_two_tabs(
+    aqtbot, running_backend, gui_factory, autoclose_dialog, client_config, alice
+):
+    password = "P2ssxdor!s3"
+    save_device_with_password(client_config.config_dir, alice, password)
+    gui = await gui_factory()
+
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")
+    first_created_tab = gui.test_get_tab()
+
+    await gui.test_switch_to_logged_in(alice)
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == "CoolOrg - Alicey McAliceFace - My dev1 machine"
+    logged_tab = gui.test_get_tab()
+
+    await aqtbot.mouse_click(gui.add_tab_button, QtCore.Qt.LeftButton)
+    assert gui.tab_center.count() == 2
+    assert gui.tab_center.tabText(0) == "CoolOrg - Alicey McAliceFace - My dev1 machine"
+    assert gui.tab_center.tabText(1) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")
+
+    gui.switch_to_tab(0)
+
+    def _logged_tab_displayed():
+        assert logged_tab == gui.test_get_tab()
+
+    await aqtbot.wait_until(_logged_tab_displayed)
+    await gui.test_logout()
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")
+    assert gui.test_get_tab() != first_created_tab
+
+
+@pytest.mark.gui
+@pytest.mark.trio
+async def test_tab_login_logout_two_tabs_logged_in(
+    aqtbot, running_backend, gui_factory, autoclose_dialog, client_config, alice, bob
+):
+    password = "P2ssxdor!s3"
+    save_device_with_password(client_config.config_dir, alice, password)
+    gui = await gui_factory()
+
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")
+
+    await gui.test_switch_to_logged_in(alice)
+    assert gui.tab_center.count() == 1
+    assert gui.tab_center.tabText(0) == "CoolOrg - Alicey McAliceFace - My dev1 machine"
+    alice_logged_tab = gui.test_get_tab()
+
+    await aqtbot.mouse_click(gui.add_tab_button, QtCore.Qt.LeftButton)
+    assert gui.tab_center.count() == 2
+    assert gui.tab_center.tabText(0) == "CoolOrg - Alicey McAliceFace - My dev1 machine"
+    assert gui.tab_center.tabText(1) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")
+
+    save_device_with_password(client_config.config_dir, bob, password)
+    await gui.test_switch_to_logged_in(bob)
+    assert gui.tab_center.count() == 2
+    assert gui.tab_center.tabText(0) == "CoolOrg - Alicey McAliceFace - My dev1 machine"
+    assert gui.tab_center.tabText(1) == "CoolOrg - Boby McBobFace - My dev1 machine"
+    bob_logged_tab = gui.test_get_tab()
+    assert bob_logged_tab != alice_logged_tab
+
+    gui.switch_to_tab(0)
+
+    def _logged_tab_displayed():
+        assert alice_logged_tab == gui.test_get_tab()
+
+    await aqtbot.wait_until(_logged_tab_displayed)
+
+    await gui.test_logout()
+    assert gui.tab_center.count() == 2
+    assert gui.tab_center.tabText(0) == "CoolOrg - Boby McBobFace - My dev1 machine"
+    assert gui.tab_center.tabText(1) == translate("TEXT_TAB_TITLE_LOG_IN_SCREEN")

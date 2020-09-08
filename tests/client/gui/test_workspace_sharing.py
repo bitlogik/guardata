@@ -119,7 +119,7 @@ async def test_share_workspace(
     def _password_widget_shown():
         assert isinstance(login_w.widget.layout().itemAt(0).widget(), LoginPasswordInputWidget)
 
-    await aqtbot.wait_until(_password_widget_shown)
+    await aqtbot.wait_until(_password_widget_shown, timeout=4000)
 
     password_w = login_w.widget.layout().itemAt(0).widget()
     await aqtbot.key_clicks(password_w.line_edit_password, password)

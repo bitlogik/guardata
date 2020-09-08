@@ -154,8 +154,6 @@ class InstanceWidget(QWidget):
                     self, _("TEXT_LOGIN_UNKNOWN_ERROR"), exception=self.running_client_job.exc
                 )
         self.running_client_job = None
-        self.client_jobs_ctx = None
-        self.client = None
         self.logged_out.emit()
 
     def on_client_run_done(self):
@@ -168,8 +166,6 @@ class InstanceWidget(QWidget):
                 ClientEvent.GUI_CONFIG_CHANGED, self.on_client_config_updated
             )
         self.running_client_job = None
-        self.client_jobs_ctx = None
-        self.client = None
         self.logged_out.emit()
 
     def stop_client(self):
@@ -177,7 +173,7 @@ class InstanceWidget(QWidget):
             self.running_client_job.cancel_and_join()
 
     def on_logged_out(self):
-        self.state_changed.emit(self, "login")
+        self.state_changed.emit(self, "logout")
         self.show_login_widget()
 
     def on_logged_in(self):
