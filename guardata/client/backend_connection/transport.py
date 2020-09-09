@@ -37,6 +37,8 @@ from guardata.client.backend_connection.exceptions import (
 
 logger = get_logger()
 
+TIMEOUT_SERVER_CONNECT = 8
+
 
 async def apiv1_connect(
     addr: Union[BackendAddr, BackendOrganizationBootstrapAddr, BackendOrganizationAddr],
@@ -112,9 +114,10 @@ async def _connect(
     handshake: BaseClientHandshake,
 ) -> Transport:
     try:
-        stream = await trio.open_tcp_stream(hostname, port)
+        with trio.fail_after(TIMEOUT_SERVER_CONNECT):
+            stream = await trio.open_tcp_stream(hostname, port)
 
-    except OSError as exc:
+    except (OSError, trio.TooSlowError) as exc:
         logger.debug("Impossible to connect to backend", reason=exc)
         raise BackendNotAvailable(exc) from exc
 
