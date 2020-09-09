@@ -55,10 +55,10 @@ async def test_filter_devices(aqtbot, running_backend, logged_gui):
 
     d_w = await logged_gui.test_switch_to_devices_widget()
     await aqtbot.wait_until(lambda: _all_devices_visible(d_w=d_w))
-    await aqtbot.wait(250)
+    await aqtbot.wait(100)
 
     async with aqtbot.wait_signal(d_w.list_success):
-        await aqtbot.key_clicks(d_w.line_edit_search, "v2", delay=250)
+        await aqtbot.key_clicks(d_w.line_edit_search, "v2", delay=100)
 
     await aqtbot.wait_until(lambda: _devices_shown(count=1))
 
@@ -66,22 +66,23 @@ async def test_filter_devices(aqtbot, running_backend, logged_gui):
     assert dev2_w.isVisible() is True
 
     with pytest.raises(AttributeError):
-        dev1_w = d_w.layout_devices.itemAt(1).widget()
+        d_w.layout_devices.itemAt(1).widget()
 
     async with aqtbot.wait_signal(d_w.list_success):
         await aqtbot.wait_until(lambda: d_w.line_edit_search.setText(""))
 
     await aqtbot.wait_until(lambda: _all_devices_visible(d_w=d_w))
-    await aqtbot.wait(250)
+    await aqtbot.wait(100)
 
     async with aqtbot.wait_signal(d_w.list_success):
-        await aqtbot.key_clicks(d_w.line_edit_search, "v1", delay=250)
+        await aqtbot.key_clicks(d_w.line_edit_search, "v1", delay=100)
 
-    assert d_w.layout_devices.count() == 1
+    def _v1_visible():
+        assert d_w.layout_devices.count() == 1
+        dev1_w = d_w.layout_devices.itemAt(0).widget()
+        assert dev1_w.isVisible() is True
 
-    dev1_w = d_w.layout_devices.itemAt(0).widget()
-
-    assert dev1_w.isVisible() is True
+    await aqtbot.wait_until(_v1_visible, timeout=500)
 
     with pytest.raises(AttributeError):
-        dev2_w = d_w.layout_devices.itemAt(1).widget()
+        d_w.layout_devices.itemAt(1).widget()

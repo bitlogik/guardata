@@ -129,7 +129,7 @@ async def test_filter_users(aqtbot, running_backend, logged_gui):
 
     async with aqtbot.wait_signal(u_w.list_success):
         await aqtbot.key_click(u_w.line_edit_search, "b")
-        await aqtbot.key_click(u_w.line_edit_search, "o", delay=250)
+        await aqtbot.key_click(u_w.line_edit_search, "o", delay=100)
 
     await aqtbot.wait_until(lambda: _users_shown(count=1), timeout=1750)
 
