@@ -21,6 +21,7 @@ async def test_change_password_invalid_old_password(
     db_w = d_w.layout_devices.itemAt(0).widget()
     assert db_w.is_current_device is True
 
+    await aqtbot.wait(250)
     await aqtbot.run(db_w.change_password_clicked.emit)
     pc_w = await catch_password_change_widget()
 
@@ -46,6 +47,7 @@ async def test_change_password_invalid_password_check(
     db_w = d_w.layout_devices.itemAt(0).widget()
     assert db_w.is_current_device is True
 
+    await aqtbot.wait(250)
     await aqtbot.run(db_w.change_password_clicked.emit)
     pc_w = await catch_password_change_widget()
 
