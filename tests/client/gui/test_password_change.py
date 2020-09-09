@@ -52,6 +52,8 @@ async def test_change_password_invalid_password_check(
     await aqtbot.key_clicks(pc_w.line_edit_old_password, "P2ssxdor!s3")
     await aqtbot.key_clicks(pc_w.line_edit_password, "P2ssxdor!s32")
     await aqtbot.key_clicks(pc_w.line_edit_password_check, "P2ssxdor!s33")
+    await aqtbot.wait(500)
+    assert not pc_w.button_change.isEnabled()
 
 
 @pytest.mark.gui
@@ -78,6 +80,7 @@ async def test_change_password_success(
     await aqtbot.key_clicks(pc_w.line_edit_password, "P2ssxdor!s32")
     await aqtbot.key_clicks(pc_w.line_edit_password_check, "P2ssxdor!s32")
     await aqtbot.wait(500)
+    assert pc_w.button_change.isEnabled()
     await aqtbot.mouse_click(pc_w.button_change, QtCore.Qt.LeftButton)
 
     assert autoclose_dialog.dialogs == [("", "The password has been successfully changed.")]
