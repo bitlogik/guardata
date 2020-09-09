@@ -116,9 +116,13 @@ def decorator_fix_windir(func):
 
 @decorator_fix_windir
 def get_key_file(config_dir: Path, device: LocalDevice) -> Path:
+    key_path = ""
     for available_device in _iter_available_devices(config_dir):
         if available_device.slug == device.slug:
-            return available_device.key_file_path
+            key_path = available_device.key_file_path
+            break
+    if key_path:
+        return key_path
     raise FileNotFoundError
 
 
@@ -170,13 +174,15 @@ class AvailableDevice:
 
 def _iter_available_devices(config_dir: Path) -> Iterator[AvailableDevice]:
     try:
-        key_file_paths = list(get_devices_dir(config_dir).rglob("*.keys"))
+        device_dir = get_devices_dir(config_dir)
+        key_files = device_dir.rglob("*.keys")
     except FileNotFoundError:
         return
 
     # Sanity checks
-    for key_file_path in key_file_paths:
+    for key_file in key_files:
 
+        key_file_path = fix_dir_win(device_dir / key_file)
         try:
             data = key_file_serializer.loads(key_file_path.read_bytes())
         except (FileNotFoundError, LocalDeviceError):

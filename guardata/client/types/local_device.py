@@ -79,7 +79,7 @@ class LocalDevice(BaseLocalData):
 
     @property
     def slug(self) -> str:
-        # Add a hash to avoid clash when the backend is reseted
+        # Add a hash to avoid clash when the backend is reset
         # and we recreate a device with same organization/device_id
         # organization and device_id than a previous one
         return f"{self.root_verify_key_hash}#{self.organization_id}#{self.device_id}"
