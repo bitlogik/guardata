@@ -55,7 +55,8 @@ async def new_environment(source_file=None):
         }
     env["PYTEST_CURRENT_TEST"] = "TestsScripts"
     for key, value in env.items():
-        await trio.Path(value).mkdir(exist_ok=True)
+        if key.startswith("XDG") or key.find("DATA") != -1:
+            await trio.Path(value).mkdir(exist_ok=True)
         os.environ[key] = value
         export_lines.append(f"{export} {key}={value}")
 
@@ -178,8 +179,8 @@ async def restart_local_backend(administration_token, backend_port):
     "-T", "--administration-token", show_default=True, default=DEFAULT_ADMINISTRATION_TOKEN
 )
 @click.option("--force/--no-force", show_default=True, default=False)
-@click.option("--add-random-users", show_default=True, default=0)
-@click.option("--add-random-devices", show_default=True, default=0)
+@click.option("--add-users", show_default=True, default=0)
+@click.option("--add-devices", show_default=True, default=0)
 @click.option("-e", "--empty", is_flag=True)
 @click.option("--source-file", hidden=True)
 def main(**kwargs):
@@ -233,8 +234,8 @@ async def amain(
     force,
     empty,
     source_file,
-    add_random_users,
-    add_random_devices,
+    add_users,
+    add_devices,
 ):
     # Set up the temporary environment
     click.echo()
@@ -271,13 +272,7 @@ Using existing backend: {backend_address}
     # Initialize the test organization
     config_dir = get_default_config_dir(os.environ)
     alice_device, other_alice_device, bob_device = await initialize_test_organization(
-        config_dir,
-        backend_address,
-        password,
-        administration_token,
-        force,
-        add_random_users,
-        add_random_devices,
+        config_dir, backend_address, password, administration_token, force, add_users, add_devices
     )
 
     # Report

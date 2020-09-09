@@ -7,8 +7,8 @@ in the current shell:
 
     # On linux
     $ source tests/scripts/run_testenv.sh
-	# On windows
-	$ ./tests/scripts/run_testenv.bat
+    # On windows
+    $ ./tests/scripts/run_testenv.bat
 
 
 The requirements for running this script is a python virtualenv with a full installation
@@ -28,14 +28,14 @@ to this test session. The environment variables are then set accordingly.
 Check that the script has been properly sourced using:
 
     # On linux
-	$ echo $XDG_CONFIG_HOME
-	# On windows
-	$ echo %APPDATA%
+    $ echo $XDG_CONFIG_HOME
+    # On windows
+    $ echo %APPDATA%
 
 It will then proceed to configure the MIME types of this environment in order to
 support the `parsec://` schema properly (Linux only).
 
-Check that the schema is properly registered using `xdg-open`:
+One can check that the schema is properly registered using `xdg-open`:
 
     $ xdg-open parsec://this-url-is-not-valid
 
@@ -45,7 +45,7 @@ be killed.
 
 Check that the backend is running using `netstat`:
 
-	$ netstat -tlp | grep 6888
+    $ netstat -tlp | grep 6888
 
 It will then proceed to the initialization of a test organization, using the
 `guardata.test_utils.initialize_test_organization` function. More precisely, the
@@ -69,23 +69,25 @@ Parameterize `run_testenv`
 The script can be customized with many options. The full list is available through
 the `--help` option:
 
-	$ source tests/scripts/run_testenv.sh --help
+    $ source tests/scripts/run_testenv.sh --help
     [...]
-	Options
-		-B, --backend-address FROM_URL
-		-p, --backend-port INTEGER      [default: 6888]
-		-O, --organization-id ORGANIZATIONID
-			                            [default: corp]
-		-a, --alice-device-id DEVICEID  [default: alice@laptop]
-		-b, --bob-device-id DEVICEID    [default: bob@laptop]
-		-o, --other-device-name TEXT    [default: pc]
-		-x, --alice-workspace TEXT      [default: alice_workspace]
-		-y, --bob-workspace TEXT        [default: bob_workspace]
-		-P, --password TEXT             [default: test]
-		-T, --administration-token TEXT
+    Options
+        -B, --backend-address FROM_URL
+        -p, --backend-port INTEGER      [default: 6888]
+        -O, --organization-id ORGANIZATIONID
+                                        [default: corp]
+        -a, --alice-device-id DEVICEID  [default: alice@laptop]
+        -b, --bob-device-id DEVICEID    [default: bob@laptop]
+        -o, --other-device-name TEXT    [default: pc]
+        -x, --alice-workspace TEXT      [default: alice_workspace]
+        -y, --bob-workspace TEXT        [default: bob_workspace]
+        -P, --password TEXT             [default: test]
+        -T, --administration-token TEXT
                                         [default: V8VjaXrOz6gUC6ZEHPab0DSsjfq6DmcJ]
-	    --force / --no-force            [default: False]
-	    -e, --empty
+        --force / --no-force            [default: False]
+        --add-users                     [default=0] Limited to 200
+        --add-devices                   [default=0] Limited to 200
+        -e, --empty
 
 In particular:
  - `--backend-address` can be used to connect to an existing backend instead of
@@ -94,6 +96,8 @@ In particular:
    killing the previously started backend
  - `--empty` that can be used to initialize and empty environment. This is especially
    useful for testing the invitation procedure.
+ - `--add-users` can be used to add X random users. This is limited to 200 additionnal users.
+ - `--add-devices` can be used to add X random devices. This is limited to 200 additionnal devices.
 
 
 Example: testing the invitation procedure
@@ -104,17 +108,17 @@ using the `run_testenv` script and two terminals.
 
 In a first terminal, run the following commands:
 
-	$ source tests/scripts/run_testenv.sh
-	$ guardata client gui
+    $ source tests/scripts/run_testenv.sh
+    $ guardata client gui
     # Connect as bob@laptop (pwd=test) and register a new device called pc
     # Copy the URL
 
 
 Then, in a second terminal:
 
-	$ source tests/scripts/run_testenv.sh --empty
-	$ xdg-open "<paste the URL here>"  # Or
-	$ firefox --no-remote "<paste the URL here>"
+    $ source tests/scripts/run_testenv.sh --empty
+    $ xdg-open "<paste the URL here>"  # Or
+    $ firefox --no-remote "<paste the URL here>"
     # A second instance of guardata pops-up
     # Enter the tokens to complete the registration
 
