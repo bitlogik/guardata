@@ -93,7 +93,7 @@ async def test_file_link(
         assert folder
         assert folder.text() == "dir1"
 
-    await aqtbot.wait_until(folder_ready, timeout=2000)
+    await aqtbot.wait_until(folder_ready, timeout=3000)
 
     assert logged_gui.tab_center.count() == 1
 
@@ -123,7 +123,7 @@ async def test_file_link_invalid_path(
         assert len(autoclose_dialog.dialogs) == 1
         assert autoclose_dialog.dialogs == [("Error", translate("TEXT_FILE_GOTO_LINK_NOT_FOUND"))]
 
-    await aqtbot.wait_until(assert_dialogs, timeout=2000)
+    await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
     assert logged_gui.tab_center.count() == 1
 
@@ -153,7 +153,7 @@ async def test_file_link_invalid_workspace(
         assert len(autoclose_dialog.dialogs) == 1
         assert autoclose_dialog.dialogs == [("Error", translate("TEXT_INVALID_URL"))]
 
-    await aqtbot.wait_until(assert_dialogs, timeout=2000)
+    await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
 
 @pytest.mark.gui
@@ -190,7 +190,7 @@ async def test_file_link_disconnected(
             )
         ]
 
-    await aqtbot.wait_until(assert_dialogs, timeout=2000)
+    await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
     assert logged_gui.tab_center.count() == 1
 

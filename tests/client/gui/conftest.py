@@ -538,7 +538,10 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
 
             await aqtbot.key_clicks(password_w.line_edit_password, "P2ssxdor!s3")
 
-            async with aqtbot.wait_signals([lw.login_with_password_clicked, tabw.logged_in]):
+            async with aqtbot.wait_signals(
+                [lw.login_with_password_clicked, tabw.logged_in], timeout=2500
+            ):
+
                 await aqtbot.mouse_click(password_w.button_login, QtCore.Qt.LeftButton)
 
             central_widget = self.test_get_central_widget()
