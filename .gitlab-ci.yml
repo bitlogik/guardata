@@ -76,7 +76,7 @@ windows-tests:
     - python.exe -m pytest --log-level=DEBUG --durations=10 -v tests -n auto --max-worker-restart=0 -x
     - python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow -m mountpoint -x
     - $env:QT_QPA_PLATFORM="offscreen"
-    - python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow --rungui -m gui -x
+    - python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow --rungui -m gui -x -n 1
     - python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runslow -m slow -n auto --max-worker-restart=0 -x
 
 pip-build:

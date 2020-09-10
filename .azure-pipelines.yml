@@ -191,7 +191,7 @@ jobs:
   - bash: |
       set -eux
       python.exe -m pytest $(pytest.base_args) \
-        tests --runmountpoint --runslow --rungui -m gui -x
+        tests --runmountpoint --runslow --rungui -m gui -x -n 1
     displayName: 'Tests GUI'
   - bash: |
       set -eux
