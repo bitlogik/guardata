@@ -4,7 +4,7 @@
 import trio
 from enum import Enum
 from async_generator import asynccontextmanager
-from typing import Optional, List, AsyncGenerator, Callable
+from typing import Optional, List, AsyncGenerator, Callable, TypeVar
 from structlog import get_logger
 from functools import partial
 
@@ -25,8 +25,15 @@ from guardata.client.client_events import ClientEvent
 
 logger = get_logger()
 
-
 BackendConnStatus = Enum("BackendConnStatus", "READY LOST INITIALIZING REFUSED CRASHED")
+BaseExceptionTypeVar = TypeVar("BaseExceptionTypeVar", bound=BaseException)
+
+
+def copy_exception(exception: BaseExceptionTypeVar) -> BaseExceptionTypeVar:
+    # Helper to copy an exception (discards the traceback but keeps the cause)
+    result = type(exception)(*exception.args)
+    result.__cause__ = exception.__cause__
+    return result
 
 
 class BackendAuthenticatedCmds:
@@ -126,6 +133,9 @@ class BackendAuthenticatedConn:
 
     @property
     def status_exc(self) -> Optional[Exception]:
+        # This exception still contains contextual information (e.g. cause, traceback)
+        # For this reason, it shouldn't be re-raised as it mutates its internal state
+        # Instead, the exception is copied using `copy_exception`
         return self._status_exc
 
     @property
@@ -261,7 +271,10 @@ class BackendAuthenticatedConn:
     ):
         if not ignore_status:
             if self.status_exc:
-                raise self.status_exc
+                # Re-raising an already raised exception is bad practice
+                # as its internal state gets mutated everytime is raised.
+                # Note that this copy preserves the __cause__ attribute.
+                raise copy_exception(self.status_exc)
 
         try:
             async with self._transport_pool.acquire(force_fresh=force_fresh) as transport:
