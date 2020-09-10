@@ -15,6 +15,11 @@ quality-control:
   image: python:3.8-alpine
   stage: quickQC
   timeout: 4m
+  variables:
+    PRE_COMMIT_HOME: ${CI_PROJECT_DIR}/.cache/pre-commit
+  cache:
+    paths:
+      - ${PRE_COMMIT_HOME}
   before_script:
     - apk update
     - apk add git build-base
