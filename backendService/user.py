@@ -359,7 +359,7 @@ class BaseUserComponent:
         # given this function will send the `user.claimed` event the creator
         # is waiting for.
 
-        send_channel, recv_channel = trio.open_memory_channel(1000)
+        send_channel, recv_channel = trio.open_memory_channel(4096)
 
         def _on_organization_events(
             event,

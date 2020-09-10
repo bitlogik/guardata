@@ -70,7 +70,7 @@ class AuthenticatedClientContext(BaseClientContext):
         self.verify_key = verify_key
 
         self.event_bus_ctx = None  # Overwritten in BackendApp.handle_client
-        self.channels = trio.open_memory_channel(100)
+        self.channels = trio.open_memory_channel(4096)
         self.realms = set()
         self.events_subscribed = False
 
