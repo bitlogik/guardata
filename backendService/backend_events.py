@@ -9,7 +9,6 @@ class BackendEvent(Enum):
     """ Backend internal events"""
 
     DEVICE_CLAIMED = "device.claimed"
-    DEVICE_CREATED = "device.created"
     DEVICE_INVITATION_CANCELLED = "device.invitation.cancelled"
     INVITE_CONDUIT_UPDATED = "invite.conduit_updated"
     USER_CLAIMED = "user.claimed"

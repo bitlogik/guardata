@@ -419,12 +419,6 @@ class AuthenticatedClientHandshake(BaseClientHandshake):
         )
 
 
-class APIV1_AuthenticatedClientHandshake(AuthenticatedClientHandshake):
-    SUPPORTED_API_VERSIONS = (API_V1_VERSION,)
-    HANDSHAKE_TYPE = APIV1_HandshakeType.AUTHENTICATED
-    HANDSHAKE_ANSWER_SERIALIZER = apiv1_handshake_answer_serializer
-
-
 class InvitedClientHandshake(BaseClientHandshake):
     SUPPORTED_API_VERSIONS = (API_V2_VERSION,)
 

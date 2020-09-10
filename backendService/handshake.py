@@ -43,11 +43,6 @@ async def do_handshake(
                 backend, transport, handshake
             )
 
-        elif handshake.answer_type == APIV1_HandshakeType.AUTHENTICATED:
-            context, result_req, error_infos = await _apiv1_process_authenticated_answer(
-                backend, transport, handshake
-            )
-
         elif handshake.answer_type == APIV1_HandshakeType.ANONYMOUS:
             context, result_req, error_infos = await _apiv1_process_anonymous_answer(
                 backend, transport, handshake
@@ -175,14 +170,6 @@ async def _process_invited_answer(
     )
     result_req = handshake.build_result_req()
     return context, result_req, None
-
-
-async def _apiv1_process_authenticated_answer(
-    backend, transport: Transport, handshake: ServerHandshake
-) -> Tuple[Optional[BaseClientContext], bytes, Optional[Dict]]:
-    return await _do_process_authenticated_answer(
-        backend, transport, handshake, APIV1_HandshakeType.AUTHENTICATED
-    )
 
 
 async def _apiv1_process_anonymous_answer(

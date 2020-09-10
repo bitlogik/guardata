@@ -13,7 +13,6 @@ from guardata.api.protocol import (
 from guardata.api.protocol.handshake import HandshakeOrganizationExpired
 
 from tests.common import freeze_time, customize_fixtures
-from tests.backend.common import ping
 from tests.fixtures import local_device_to_backend_user
 
 
@@ -174,23 +173,6 @@ async def test_organization_create_and_bootstrap(
         )
     ]
 
-    # 3) Now our new device can connect the backend
-
-    async with apiv1_backend_sock_factory(backend, newalice) as sock:
-        await ping(sock)
-
-    # 4) Make sure alice from the other organization is still working
-
-    async with apiv1_backend_sock_factory(backend, alice) as sock:
-        await ping(sock)
-
-    # 5) Finally, check the resulting data in the backend
-    backend_user, backend_device = await backend.user.get_user_with_device(
-        newalice.organization_id, newalice.device_id
-    )
-    assert backend_user == backend_newalice
-    assert backend_device == backend_newalice_first_device
-
 
 @pytest.mark.trio
 async def test_organization_with_expiration_date_create_and_bootstrap(
@@ -232,26 +214,6 @@ async def test_organization_with_expiration_date_create_and_bootstrap(
                 neworg.root_verify_key,
             )
         assert rep == {"status": "ok"}
-
-        # 3) Now our new device can connect the backend
-
-        async with apiv1_backend_sock_factory(backend, newalice) as sock:
-            await ping(sock)
-
-        # 4) Make sure alice from the other organization is still working
-
-        async with apiv1_backend_sock_factory(backend, alice) as sock:
-            await ping(sock)
-
-    # 5) Now advance after the expiration
-    with freeze_time("2000-01-02"):
-        # Both anonymous and authenticated connections are refused
-        with pytest.raises(HandshakeOrganizationExpired):
-            async with apiv1_backend_sock_factory(backend, newalice):
-                pass
-        with pytest.raises(HandshakeOrganizationExpired):
-            async with apiv1_backend_sock_factory(backend, neworg.organization_id):
-                pass
 
 
 @pytest.mark.trio

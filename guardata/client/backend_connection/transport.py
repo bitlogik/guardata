@@ -18,7 +18,6 @@ from guardata.api.protocol import (
     AuthenticatedClientHandshake,
     InvitedClientHandshake,
     APIV1_AnonymousClientHandshake,
-    APIV1_AuthenticatedClientHandshake,
     APIV1_AdministrationClientHandshake,
 )
 from guardata.client.types import (
@@ -70,16 +69,7 @@ async def apiv1_connect(
             )
 
     else:
-        if not isinstance(addr, BackendOrganizationAddr):
-            raise BackendConnectionError(
-                f"Invalid url format `{addr}` (should be an organization url)"
-            )
-
-        if not signing_key:
-            raise BackendConnectionError(f"Missing signing_key to connect as `{device_id}`")
-        handshake = APIV1_AuthenticatedClientHandshake(
-            addr.organization_id, device_id, signing_key, addr.root_verify_key
-        )
+        raise BackendConnectionError("Invalid v1 auth method")
 
     return await _connect(addr.hostname, addr.port, addr.use_ssl, keepalive, handshake)
 

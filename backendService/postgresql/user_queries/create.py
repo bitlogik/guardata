@@ -1,6 +1,5 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from backendService.backend_events import BackendEvent
 import itertools
 from typing import Optional
 from triopg import UniqueViolationError
@@ -9,7 +8,6 @@ from pendulum import now as pendulum_now
 
 from guardata.api.protocol import OrganizationID
 from backendService.user import User, Device, UserError, UserNotFoundError, UserAlreadyExistsError
-from backendService.postgresql.handler import send_signal
 from backendService.postgresql.utils import (
     Q,
     query,
@@ -212,17 +210,6 @@ async def _create_user(
 
     await _create_device(conn, organization_id, first_device, first_device=True)
 
-    # TODO: should be no longer needed once APIv1 is removed
-    await send_signal(
-        conn,
-        BackendEvent.USER_CREATED,
-        organization_id=organization_id,
-        user_id=user.user_id,
-        user_certificate=user.user_certificate,
-        first_device_id=first_device.device_id,
-        first_device_certificate=first_device.device_certificate,
-    )
-
 
 @query(in_transaction=True)
 async def query_create_user(
@@ -273,11 +260,3 @@ async def query_create_device(
     conn, organization_id: OrganizationID, device: Device, encrypted_answer: bytes = b""
 ) -> None:
     await _create_device(conn, organization_id, device, encrypted_answer)
-    await send_signal(
-        conn,
-        BackendEvent.DEVICE_CREATED,
-        organization_id=organization_id,
-        device_id=device.device_id,
-        device_certificate=device.device_certificate,
-        encrypted_answer=encrypted_answer,
-    )

@@ -16,7 +16,6 @@ class BasePingComponent:
         handshake_types=(
             HandshakeType.AUTHENTICATED,
             HandshakeType.INVITED,
-            APIV1_HandshakeType.AUTHENTICATED,
             APIV1_HandshakeType.ANONYMOUS,
             APIV1_HandshakeType.ADMINISTRATION,
         ),

@@ -34,7 +34,6 @@ from guardata.api.protocol.handshake import (
     AuthenticatedClientHandshake,
     InvitedClientHandshake,
     APIV1_HandshakeType,
-    APIV1_AuthenticatedClientHandshake,
     APIV1_AnonymousClientHandshake,
     APIV1_AdministrationClientHandshake,
 )
@@ -118,7 +117,6 @@ from guardata.api.protocol.vlob import (
 from guardata.api.protocol.cmds import (
     AUTHENTICATED_CMDS,
     INVITED_CMDS,
-    APIV1_AUTHENTICATED_CMDS,
     APIV1_ANONYMOUS_CMDS,
     APIV1_ADMINISTRATION_CMDS,
 )
@@ -144,7 +142,6 @@ __all__ = (
     "AuthenticatedClientHandshake",
     "InvitedClientHandshake",
     "APIV1_HandshakeType",
-    "APIV1_AuthenticatedClientHandshake",
     "APIV1_AnonymousClientHandshake",
     "APIV1_AdministrationClientHandshake",
     # Types
@@ -237,7 +234,6 @@ __all__ = (
     # List of cmds
     "AUTHENTICATED_CMDS",
     "INVITED_CMDS",
-    "APIV1_AUTHENTICATED_CMDS",
     "APIV1_ANONYMOUS_CMDS",
     "APIV1_ADMINISTRATION_CMDS",
 )

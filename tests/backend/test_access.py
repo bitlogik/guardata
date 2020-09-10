@@ -9,7 +9,6 @@ from guardata.api.protocol import (
     AUTHENTICATED_CMDS,
     INVITED_CMDS,
     APIV1_ADMINISTRATION_CMDS,
-    APIV1_AUTHENTICATED_CMDS,
     APIV1_ANONYMOUS_CMDS,
 )
 
@@ -60,8 +59,7 @@ async def test_authenticated_has_limited_access(alice_backend_sock):
 @pytest.mark.trio
 async def test_apiv1_administration_has_limited_access(administration_backend_sock):
     await check_forbidden_cmds(
-        administration_backend_sock,
-        (APIV1_ANONYMOUS_CMDS | APIV1_AUTHENTICATED_CMDS) - APIV1_ADMINISTRATION_CMDS,
+        administration_backend_sock, (APIV1_ANONYMOUS_CMDS) - APIV1_ADMINISTRATION_CMDS
     )
     await check_allowed_cmds(administration_backend_sock, APIV1_ADMINISTRATION_CMDS)
 
@@ -69,16 +67,6 @@ async def test_apiv1_administration_has_limited_access(administration_backend_so
 @pytest.mark.trio
 async def test_apiv1_anonymous_has_limited_access(apiv1_anonymous_backend_sock):
     await check_forbidden_cmds(
-        apiv1_anonymous_backend_sock,
-        (APIV1_ADMINISTRATION_CMDS | APIV1_AUTHENTICATED_CMDS) - APIV1_ANONYMOUS_CMDS,
+        apiv1_anonymous_backend_sock, (APIV1_ADMINISTRATION_CMDS) - APIV1_ANONYMOUS_CMDS
     )
     await check_allowed_cmds(apiv1_anonymous_backend_sock, APIV1_ANONYMOUS_CMDS)
-
-
-@pytest.mark.trio
-async def test_apiv1_authenticated_has_limited_access(apiv1_alice_backend_sock):
-    await check_forbidden_cmds(
-        apiv1_alice_backend_sock,
-        (APIV1_ADMINISTRATION_CMDS | APIV1_ANONYMOUS_CMDS) - APIV1_AUTHENTICATED_CMDS,
-    )
-    await check_allowed_cmds(apiv1_alice_backend_sock, APIV1_AUTHENTICATED_CMDS)

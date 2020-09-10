@@ -35,7 +35,6 @@ from guardata.client.types import (
 
 # TODO: handle exceptions status...
 from guardata.client.backend_connection import (
-    APIV1_BackendAuthenticatedCmds,
     BackendAuthenticatedCmds,
     BackendConnectionError,
     BackendNotAvailable,
@@ -150,7 +149,7 @@ class UserFS:
         self,
         device: LocalDevice,
         path: Path,
-        backend_cmds: Union[APIV1_BackendAuthenticatedCmds, BackendAuthenticatedCmds],
+        backend_cmds: BackendAuthenticatedCmds,
         remote_devices_manager: RemoteDevicesManager,
         event_bus: EventBus,
         pattern_filter: Pattern,

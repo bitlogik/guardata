@@ -12,7 +12,6 @@ from guardata.api.protocol import (
     InvitationType,
     AuthenticatedClientHandshake,
     InvitedClientHandshake,
-    APIV1_AuthenticatedClientHandshake,
     APIV1_AnonymousClientHandshake,
     APIV1_AdministrationClientHandshake,
 )
@@ -48,21 +47,14 @@ def apiv1_backend_sock_factory(backend_raw_transport_factory, coolorg):
             backend, freeze_on_transport_error=freeze_on_transport_error
         ) as transport:
             if auth_as:
-                # Handshake
                 if isinstance(auth_as, OrganizationID):
+                    # org bootstrap
                     ch = APIV1_AnonymousClientHandshake(auth_as)
-                elif auth_as == "anonymous":
+                if auth_as == "anonymous":
                     # TODO: for legacy test, refactorise this ?
                     ch = APIV1_AnonymousClientHandshake(coolorg.organization_id)
                 elif auth_as == "administration":
                     ch = APIV1_AdministrationClientHandshake(backend.config.administration_token)
-                else:
-                    ch = APIV1_AuthenticatedClientHandshake(
-                        auth_as.organization_id,
-                        auth_as.device_id,
-                        auth_as.signing_key,
-                        auth_as.root_verify_key,
-                    )
                 challenge_req = await transport.recv()
                 answer_req = ch.process_challenge_req(challenge_req)
                 await transport.send(answer_req)
@@ -84,36 +76,6 @@ async def apiv1_anonymous_backend_sock(apiv1_backend_sock_factory, backend):
 @pytest.fixture
 async def administration_backend_sock(apiv1_backend_sock_factory, backend):
     async with apiv1_backend_sock_factory(backend, "administration") as sock:
-        yield sock
-
-
-@pytest.fixture
-async def apiv1_alice_backend_sock(apiv1_backend_sock_factory, backend, alice):
-    async with apiv1_backend_sock_factory(backend, alice) as sock:
-        yield sock
-
-
-@pytest.fixture
-async def apiv1_alice2_backend_sock(apiv1_backend_sock_factory, backend, alice2):
-    async with apiv1_backend_sock_factory(backend, alice2) as sock:
-        yield sock
-
-
-@pytest.fixture
-async def apiv1_otheralice_backend_sock(apiv1_backend_sock_factory, backend, otheralice):
-    async with apiv1_backend_sock_factory(backend, otheralice) as sock:
-        yield sock
-
-
-@pytest.fixture
-async def apiv1_adam_backend_sock(apiv1_backend_sock_factory, backend, adam):
-    async with apiv1_backend_sock_factory(backend, adam) as sock:
-        yield sock
-
-
-@pytest.fixture
-async def apiv1_bob_backend_sock(apiv1_backend_sock_factory, backend, bob):
-    async with apiv1_backend_sock_factory(backend, bob) as sock:
         yield sock
 
 

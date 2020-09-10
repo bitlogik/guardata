@@ -79,13 +79,6 @@ class MemoryUserComponent(BaseUserComponent):
             raise UserAlreadyExistsError(f"Device `{device.device_id}` already exists")
 
         user_devices[device.device_name] = device
-        await self._send_event(
-            BackendEvent.DEVICE_CREATED,
-            organization_id=organization_id,
-            device_id=device.device_id,
-            device_certificate=device.device_certificate,
-            encrypted_answer=encrypted_answer,
-        )
 
     async def _get_trustchain(
         self, organization_id: OrganizationID, *devices_ids, redacted: bool = False
