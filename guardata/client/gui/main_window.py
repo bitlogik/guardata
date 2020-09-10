@@ -86,7 +86,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.menu_button.setProperty("color", QColor(0x00, 0x92, 0xFF))
         self.menu_button.setProperty("hover_color", QColor(0x00, 0x70, 0xDD))
         self.menu_button.setStyleSheet(
-            "#MenuButton {background: none; border: none; color: #0092FF;}"
+            "#MenuButton {background: none; border: none; color: #2185d0;}"
             "#MenuButton:hover {color: #0070DD;}"
         )
         self.menu_button.apply_style()

@@ -7,7 +7,7 @@ QMainWindow {
 /* PushButton: ENABLED, DISABLED */
 
 QPushButton {
-    background-color: #0092FF;
+    background-color: #2185d0;
     color: #FFFFFF;
     border: none;
     border-radius: 4px;
@@ -89,7 +89,7 @@ QComboBox QListView::item {
 }
 
 QComboBox QListView::item:selected {
-    background-color: #0092FF;
+    background-color: #2185d0;
     color: #FFFFFF;
 }
 
@@ -374,7 +374,7 @@ QMenu::item::disabled {
 }
 
 QMenu::item:selected {
-    background-color: #0092FF;
+    background-color: #2185d0;
     color: #FFFFFF;
 }
 
@@ -465,6 +465,6 @@ QProgressBar {
 }
 
 QProgressBar::chunk {
-    background-color: #0092FF;
+    background-color: #2185d0;
     width: 20px;
 }

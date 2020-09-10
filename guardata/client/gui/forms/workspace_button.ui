@@ -6,25 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>300</width>
-    <height>250</height>
+    <width>325</width>
+    <height>270</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>300</width>
-    <height>250</height>
+    <width>325</width>
+    <height>270</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>300</width>
-    <height>250</height>
+    <width>325</width>
+    <height>270</height>
    </size>
   </property>
   <property name="font">
    <font>
-    <pointsize>12</pointsize>
+    <pointsize>14</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -62,7 +62,7 @@ QWidget#widget_title {
 }
 
 #file1_name, #file2_name, #file3_name, #file4_name {
-	color: #999999;
+	color: #808080;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -171,9 +171,9 @@ QWidget#widget_title {
            </property>
            <property name="color" stdset="0">
             <color>
-             <red>153</red>
-             <green>153</green>
-             <blue>153</blue>
+             <red>140</red>
+             <green>140</green>
+             <blue>150</blue>
             </color>
            </property>
           </widget>
@@ -206,9 +206,9 @@ QWidget#widget_title {
            </property>
            <property name="color" stdset="0">
             <color>
-             <red>153</red>
-             <green>153</green>
-             <blue>153</blue>
+             <red>140</red>
+             <green>140</green>
+             <blue>150</blue>
             </color>
            </property>
           </widget>
@@ -489,9 +489,9 @@ QWidget#widget_title {
            </property>
            <property name="color" stdset="0">
             <color>
-             <red>153</red>
-             <green>153</green>
-             <blue>153</blue>
+             <red>140</red>
+             <green>140</green>
+             <blue>150</blue>
             </color>
            </property>
           </widget>
@@ -534,9 +534,9 @@ QWidget#widget_title {
            </property>
            <property name="color" stdset="0">
             <color>
-             <red>153</red>
-             <green>153</green>
-             <blue>153</blue>
+             <red>140</red>
+             <green>140</green>
+             <blue>150</blue>
             </color>
            </property>
           </widget>
@@ -579,9 +579,9 @@ QWidget#widget_title {
            </property>
            <property name="color" stdset="0">
             <color>
-             <red>153</red>
-             <green>153</green>
-             <blue>153</blue>
+             <red>140</red>
+             <green>140</green>
+             <blue>150</blue>
             </color>
            </property>
           </widget>
@@ -624,9 +624,9 @@ QWidget#widget_title {
            </property>
            <property name="color" stdset="0">
             <color>
-             <red>153</red>
-             <green>153</green>
-             <blue>153</blue>
+             <red>140</red>
+             <green>140</green>
+             <blue>150</blue>
             </color>
            </property>
           </widget>
@@ -714,9 +714,9 @@ QWidget#widget_title {
            </property>
            <property name="color" stdset="0">
             <color>
-             <red>153</red>
-             <green>153</green>
-             <blue>153</blue>
+             <red>140</red>
+             <green>140</green>
+             <blue>150</blue>
             </color>
            </property>
           </widget>

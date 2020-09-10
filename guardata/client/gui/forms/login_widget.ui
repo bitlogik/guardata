@@ -36,7 +36,7 @@
     <number>0</number>
    </property>
    <property name="topMargin">
-    <number>0</number>
+    <number>10</number>
    </property>
    <property name="rightMargin">
     <number>0</number>
@@ -72,7 +72,7 @@
       <number>0</number>
      </property>
      <property name="bottomMargin">
-      <number>0</number>
+      <number>10</number>
      </property>
      <item>
       <spacer name="verticalSpacer">
@@ -126,7 +126,7 @@
       <widget class="QWidget" name="widget" native="true">
        <property name="minimumSize">
         <size>
-         <width>500</width>
+         <width>400</width>
          <height>300</height>
         </size>
        </property>
@@ -150,7 +150,7 @@
          <number>0</number>
         </property>
         <property name="bottomMargin">
-         <number>0</number>
+         <number>10</number>
         </property>
        </layout>
       </widget>

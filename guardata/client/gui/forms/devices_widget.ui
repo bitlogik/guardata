@@ -17,7 +17,7 @@
    <string notr="true">#button_add_device {
 	background-color: none;
 	border: none;
-	color: #0092FF;
+	color: #2185d0;
 }
 
 #button_add_device:hover {

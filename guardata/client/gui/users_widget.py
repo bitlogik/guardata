@@ -38,8 +38,6 @@ class UserInvitationButton(QWidget, Ui_UserInvitationButton):
         self.setupUi(self)
         self.addr = addr
         self.email = email
-        self.label_addr.setText(ensure_string_size(str(self.addr), 260, self.label_addr.font()))
-        self.label_addr.setToolTip(str(self.addr))
         self.label_email.setText(ensure_string_size(self.email, 260, self.label_email.font()))
         self.label_email.setToolTip(self.email)
 

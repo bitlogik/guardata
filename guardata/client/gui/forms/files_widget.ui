@@ -23,7 +23,7 @@
    <string notr="true">#button_import_folder, #button_import_files, #button_create_folder {
     background-color: none;
     border: none;
-    color: #0092FF;
+    color: #2185d0;
 }
 
 #button_back {

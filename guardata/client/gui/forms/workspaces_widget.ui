@@ -17,7 +17,7 @@
    <string notr="true">#button_goto_file, #button_add_workspace {
 	background-color: none;
 	border: none;
-	color: #0092FF;
+	color: #2185d0;
 }
 
 #button_goto_file:hover, #button_add_workspace:hover {

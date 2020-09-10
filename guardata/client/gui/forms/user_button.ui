@@ -6,25 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>280</height>
+    <width>200</width>
+    <height>185</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>280</width>
-    <height>280</height>
+    <width>200</width>
+    <height>185</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>280</width>
-    <height>280</height>
+    <width>200</width>
+    <height>185</height>
    </size>
   </property>
   <property name="font">
    <font>
-    <pointsize>12</pointsize>
+    <pointsize>14</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -32,7 +32,7 @@
   </property>
   <property name="styleSheet">
    <string notr="true">#label_created_title, #label_role, #label_user_is_current, #label_revoked {
-	color: #999999;
+	color: #707070;
 }
 
 #UserButton, #widget {
@@ -41,7 +41,7 @@
 }
 
 #label_username {
-color: #0092FF;
+color: #2185d0;
 }
 </string>
   </property>
@@ -65,19 +65,19 @@ color: #0092FF;
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
-       <number>10</number>
+       <number>8</number>
       </property>
       <property name="leftMargin">
        <number>10</number>
       </property>
       <property name="topMargin">
-       <number>10</number>
+       <number>5</number>
       </property>
       <property name="rightMargin">
        <number>10</number>
       </property>
       <property name="bottomMargin">
-       <number>10</number>
+       <number>5</number>
       </property>
       <item>
        <spacer name="verticalSpacer">
@@ -89,8 +89,8 @@ color: #0092FF;
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>50</height>
+          <width>18</width>
+          <height>10</height>
          </size>
         </property>
        </spacer>
@@ -104,7 +104,7 @@ color: #0092FF;
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
+            <width>35</width>
             <height>20</height>
            </size>
           </property>
@@ -114,14 +114,14 @@ color: #0092FF;
          <widget class="IconLabel" name="label_icon">
           <property name="minimumSize">
            <size>
-            <width>64</width>
-            <height>64</height>
+            <width>48</width>
+            <height>48</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>64</width>
-            <height>64</height>
+            <width>48</width>
+            <height>48</height>
            </size>
           </property>
           <property name="text">
@@ -135,9 +135,9 @@ color: #0092FF;
           </property>
           <property name="color" stdset="0">
            <color>
-            <red>153</red>
-            <green>153</green>
-            <blue>153</blue>
+            <red>140</red>
+            <green>140</green>
+            <blue>150</blue>
            </color>
           </property>
          </widget>
@@ -149,8 +149,8 @@ color: #0092FF;
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>35</width>
+            <height>18</height>
            </size>
           </property>
          </spacer>
@@ -161,7 +161,7 @@ color: #0092FF;
        <widget class="QLabel" name="label_username">
         <property name="font">
          <font>
-          <pointsize>12</pointsize>
+          <pointsize>14</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
@@ -182,6 +182,11 @@ color: #0092FF;
         <property name="alignment">
          <set>Qt::AlignCenter</set>
         </property>
+        <property name="font">
+         <font>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
        </widget>
       </item>
       <item>
@@ -201,8 +206,8 @@ color: #0092FF;
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>40</height>
+          <width>18</width>
+          <height>16</height>
          </size>
         </property>
        </spacer>

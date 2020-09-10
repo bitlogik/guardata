@@ -6,25 +6,25 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>280</width>
-    <height>280</height>
+    <width>180</width>
+    <height>180</height>
    </rect>
   </property>
   <property name="minimumSize">
    <size>
-    <width>280</width>
-    <height>280</height>
+    <width>180</width>
+    <height>180</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
-    <width>280</width>
-    <height>280</height>
+    <width>180</width>
+    <height>180</height>
    </size>
   </property>
   <property name="font">
    <font>
-    <pointsize>12</pointsize>
+    <pointsize>14</pointsize>
    </font>
   </property>
   <property name="windowTitle">
@@ -39,12 +39,12 @@ border-radius: 8px;
 
 #label_is_current
 {
-color: #999999;
+color: #707070;
 }
 
 #label_device_name
 {
-color: #0092FF;
+color: #2185d0;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -67,7 +67,7 @@ color: #0092FF;
     <widget class="QWidget" name="widget" native="true">
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
-       <number>10</number>
+       <number>8</number>
       </property>
       <property name="leftMargin">
        <number>10</number>
@@ -79,7 +79,7 @@ color: #0092FF;
        <number>10</number>
       </property>
       <property name="bottomMargin">
-       <number>10</number>
+       <number>5</number>
       </property>
       <item>
        <spacer name="verticalSpacer">
@@ -88,8 +88,8 @@ color: #0092FF;
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>40</height>
+          <width>18</width>
+          <height>28</height>
          </size>
         </property>
        </spacer>
@@ -103,8 +103,8 @@ color: #0092FF;
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>35</width>
+            <height>30</height>
            </size>
           </property>
          </spacer>
@@ -113,14 +113,14 @@ color: #0092FF;
          <widget class="IconLabel" name="label_icon">
           <property name="minimumSize">
            <size>
-            <width>64</width>
-            <height>64</height>
+            <width>76</width>
+            <height>76</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>64</width>
-            <height>64</height>
+            <width>76</width>
+            <height>76</height>
            </size>
           </property>
           <property name="text">
@@ -134,9 +134,9 @@ color: #0092FF;
           </property>
           <property name="color" stdset="0">
            <color>
-            <red>153</red>
-            <green>153</green>
-            <blue>153</blue>
+            <red>140</red>
+            <green>140</green>
+            <blue>150</blue>
            </color>
           </property>
          </widget>
@@ -148,8 +148,8 @@ color: #0092FF;
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>35</width>
+            <height>28</height>
            </size>
           </property>
          </spacer>
@@ -160,7 +160,7 @@ color: #0092FF;
        <widget class="QLabel" name="label_device_name">
         <property name="font">
          <font>
-          <pointsize>12</pointsize>
+          <pointsize>14</pointsize>
           <weight>75</weight>
           <bold>true</bold>
          </font>
@@ -190,8 +190,8 @@ color: #0092FF;
         </property>
         <property name="sizeHint" stdset="0">
          <size>
-          <width>20</width>
-          <height>40</height>
+          <width>18</width>
+          <height>35</height>
          </size>
         </property>
        </spacer>
