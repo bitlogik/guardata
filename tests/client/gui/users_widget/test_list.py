@@ -125,7 +125,6 @@ async def test_filter_users(aqtbot, running_backend, logged_gui):
 
     u_w = await logged_gui.test_switch_to_users_widget()
     await aqtbot.wait_until(lambda: _all_users_visible(u_w=u_w))
-    await aqtbot.wait(250)
 
     async with aqtbot.wait_signal(u_w.list_success):
         await aqtbot.key_click(u_w.line_edit_search, "b")
@@ -146,12 +145,10 @@ async def test_filter_users(aqtbot, running_backend, logged_gui):
         await aqtbot.wait_until(lambda: u_w.line_edit_search.setText(""))
 
     await aqtbot.wait_until(lambda: _all_users_visible(u_w=u_w))
-    await aqtbot.wait(250)
 
     async with aqtbot.wait_signal(u_w.list_success):
-        await aqtbot.key_click(u_w.line_edit_search, "m")
-        await aqtbot.key_click(u_w.line_edit_search, "c")
-        await aqtbot.key_click(u_w.line_edit_search, "a")
+        await aqtbot.key_clicks(u_w.line_edit_search, "mc", delay=100)
+        await aqtbot.key_click(u_w.line_edit_search, "a", delay=100)
 
     await aqtbot.wait(250)
     assert u_w.layout_users.count() == 2
