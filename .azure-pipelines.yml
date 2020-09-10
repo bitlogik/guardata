@@ -33,7 +33,7 @@ jobs:
   - bash: |
       set -eux
       sudo apt-get update
-      python --version
+      python3 --version
       pip3 install pre-commit
     displayName: 'Bootstrap'
   - bash: |
@@ -62,7 +62,7 @@ jobs:
   - bash: |
       set -eux
       sudo apt-get update
-      python --version
+      python3 --version
       pip3 install -r pre-requirements.txt
     displayName: 'Bootstrap'
   - bash: |
@@ -97,10 +97,8 @@ jobs:
       set -eux
       sudo apt-get update
       python --version
-      pip install -r pre-requirements.txt
-      sudo apt-get install \
-        postgresql-$(postgresql.version) \
-        desktop-file-utils  # Provides `update-desktop-database` used by `tests/scripts/run_testenv.sh`
+      pip3 install -r pre-requirements.txt
+      sudo apt-get install postgresql-$(postgresql.version)
       psql --version
     displayName: 'Bootstrap'
   - bash: |
@@ -109,7 +107,6 @@ jobs:
       rm -rf guardata
       # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
-      echo $WHEEL
       pip3 install $WHEEL[all]
       # Check dependency compatibility
       pip3 check guardata[all]
@@ -118,28 +115,14 @@ jobs:
       set -eux
       python3 -m pytest $(pytest.base_args) \
         tests --runmountpoint --runslow \
-        -n auto --max-worker-restart=0 -x \
-        --junitxml=test-results-memory.xml
+        -n auto --max-worker-restart=0 -x
     displayName: 'Tests memory'
   - bash: |
       set -eux
       python3 -m pytest $(pytest.base_args) \
         tests/backend tests/test_cli.py --postgresql --runslow \
-        -n auto --max-worker-restart=0 -x \
-        --junitxml=test-results-postgresql.xml
+        -n auto --max-worker-restart=0 -x
     displayName: 'Tests postgresql'
-  # TODO: run gui tests with xvfb
-  # - bash: |
-  #     set -eux
-  #     py.test $(pytest.base_args) \
-  #       tests -m gui --runmountpoint --runslow --rungui -x \
-  #       --junitxml=test-results-gui.xml
-  #   displayName: 'Tests GUI'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '$(Agent.TempDirectory)/test-results-*.xml'
-      testRunTitle: 'Linux'
-    condition: succeededOrFailed()
 
 
 #################################################################################
@@ -191,31 +174,22 @@ jobs:
   - bash: |
       set -eux
       python.exe -m pytest $(pytest.base_args) \
-        tests -n auto --max-worker-restart=0 -x \
-        --junitxml=test-results-fast.xml
+        tests -n auto --max-worker-restart=0 -x
     displayName: 'Tests fast'
   - bash: |
       set -eux
       python.exe -m pytest $(pytest.base_args) \
-        tests --runmountpoint --runslow -m mountpoint -x \
-        --junitxml=test-results-mountpoint.xml
+        tests --runmountpoint --runslow -m mountpoint -x
     displayName: 'Tests mountpoint'
   - bash: |
       set -eux
       python.exe -m pytest $(pytest.base_args) \
-        tests --runmountpoint --runslow --rungui -m gui -x \
-        --junitxml=test-results-gui.xml
+        tests --runmountpoint --runslow --rungui -m gui -x
     displayName: 'Tests GUI'
   - bash: |
       set -eux
       python.exe -m pytest $(pytest.base_args) \
         tests --runslow -m slow \
-        -n auto --max-worker-restart=0 -x \
-        --junitxml=test-results-slow.xml
+        -n auto --max-worker-restart=0 -x
     displayName: 'Tests slow'
-  - task: PublishTestResults@2
-    inputs:
-      testResultsFiles: '$(Agent.TempDirectory)/test-results-*.xml'
-      testRunTitle: 'Windows'
-    condition: succeededOrFailed()
 

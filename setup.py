@@ -272,7 +272,6 @@ requirements = [
 test_requirements = [
     "jinja2==2.11.2",
     "pytest==5.4.3",
-    "pytest-cov==2.10.0",
     "pytest-xdist==1.32.0",
     "pytest-trio==0.5.2",
     "pytest-qt==3.3.0",
