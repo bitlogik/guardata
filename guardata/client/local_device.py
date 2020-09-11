@@ -101,9 +101,11 @@ def generate_new_device(
 
 def fix_dir_win(path: Path) -> Path:
     if osname == "nt":
-        return Path("\\\\?\\" + fspath(path.resolve()))
-    else:
-        return path
+        path_str = fspath(path)
+        if not path_str.startswith("\\\\?\\"):
+            path_str = "\\\\?\\" + path_str
+            return Path(path_str)
+    return path
 
 
 def decorator_fix_windir(func):
