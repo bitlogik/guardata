@@ -6,6 +6,7 @@ import attr
 import json
 from typing import Optional, FrozenSet
 from pathlib import Path
+from shutil import move
 from structlog import get_logger
 
 from guardata.api.data import EntryID
@@ -14,9 +15,17 @@ from guardata.api.data import EntryID
 logger = get_logger()
 
 
+def move_from_roaming_to_local(environ):
+    # In case guardata was installed prior to v0.1.0
+    if environ != {} and (Path(environ["APPDATA"]) / "guardata/config/config.json").exists():
+        if Path(environ["APPDATA"]) != Path(environ["LOCALAPPDATA"]):
+            move(environ["APPDATA"] + "\\guardata", environ["LOCALAPPDATA"] + "\\guardata")
+
+
 def get_default_data_base_dir(environ: dict) -> Path:
     if os.name == "nt":
-        return Path(environ["APPDATA"]) / "guardata/data"
+        move_from_roaming_to_local(environ)
+        return Path(environ["LOCALAPPDATA"]) / "guardata/data"
     else:
         path = environ.get("XDG_DATA_HOME")
         if not path:
@@ -26,7 +35,8 @@ def get_default_data_base_dir(environ: dict) -> Path:
 
 def get_default_cache_base_dir(environ: dict) -> Path:
     if os.name == "nt":
-        return Path(environ["APPDATA"]) / "guardata/cache"
+        move_from_roaming_to_local(environ)
+        return Path(environ["LOCALAPPDATA"]) / "guardata/cache"
     else:
         path = environ.get("XDG_CACHE_HOME")
         if not path:
@@ -36,7 +46,8 @@ def get_default_cache_base_dir(environ: dict) -> Path:
 
 def get_default_config_dir(environ: dict) -> Path:
     if os.name == "nt":
-        return Path(environ["APPDATA"]) / "guardata/config"
+        move_from_roaming_to_local(environ)
+        return Path(environ["LOCALAPPDATA"]) / "guardata/config"
     else:
         path = environ.get("XDG_CONFIG_HOME")
         if not path:
