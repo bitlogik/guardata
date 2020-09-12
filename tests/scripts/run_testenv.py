@@ -53,6 +53,7 @@ async def new_environment(source_file=None):
             "XDG_DATA_HOME": f"{tempdir}/share",
             "XDG_CONFIG_HOME": f"{tempdir}/config",
         }
+    env["EMAIL_CONFIG"] = "DUMMY_SERVICE"
     env["PYTEST_CURRENT_TEST"] = "TestsScripts"
     for key, value in env.items():
         if key.startswith("XDG") or key.find("DATA") != -1:

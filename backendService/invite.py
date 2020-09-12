@@ -173,7 +173,8 @@ def generate_invite_email(
 async def send_email(email_config: EmailConfig, to_addr: str, message: dict) -> None:
     def _do():
         try:
-            pass
+            print(" Email content in the invitation : (printed for testing)")
+            print(message["text"])
             # Bring your own code base to send an email reliably
             #     email_config.sender
             #     to_addr
