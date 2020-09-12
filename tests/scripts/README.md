@@ -8,7 +8,7 @@ in the current shell:
     # On linux
     $ source tests/scripts/run_testenv.sh
     # On windows
-    $ ./tests/scripts/run_testenv.bat
+    $ .\tests\scripts\run_testenv.bat
 
 
 The requirements for running this script is a python virtualenv with a full installation
@@ -23,14 +23,14 @@ Default behavior for `run_testenv`
 The `run_testenv` script starts by creating a temporary directory dedicated
 to this test session. The environment variables are then set accordingly.
 - On linux: `XDG_CACHE_HOME`, `XDG_DATA_HOME` and `XDG_CONFIG_HOME`
-- On windows: `APPDATA`
+- On windows: `LOCALAPPDATA`
 
 Check that the script has been properly sourced using:
 
     # On linux
     $ echo $XDG_CONFIG_HOME
     # On windows
-    $ echo %APPDATA%
+    $ echo %LOCALAPPDATA%
 
 It will then proceed to configure the MIME types of this environment in order to
 support the `parsec://` schema properly (Linux only).
