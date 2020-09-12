@@ -11,6 +11,7 @@ snap-build:
   stage: build
   timeout: 15m
   before_script:
+    - sudo apt-get -y update
     - cp -R packaging/snap snapbuild
     - cat CHANGELOG.rst >> README.rst
     - cd snapbuild
