@@ -35,7 +35,7 @@ parts:
     override-pull: |
       snapcraftctl pull
     stage-packages:
-      # fuse package contains fusermount which is sometime needed by libfuse2
+      # fuse package contains fusermount which is sometimes needed by libfuse2
       # (see: https://github.com/Scille/parsec-cloud/issues/1253)
       - fuse
       - libfuse2

@@ -137,12 +137,13 @@ windows-build:
       - packaging/win32/build/guardata*-setup.exe
 
 snap-build:
-  image: cibuilds/snapcraft:core18
+  image: kyrofa/github-snap-builder:core18
   only:
     - tags
   stage: build
   timeout: 15m
   before_script:
+    - sudo apt-get -y update
     - cp -R packaging/snap snapbuild
     - cat CHANGELOG.rst >> README.rst
     - cd snapbuild
