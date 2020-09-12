@@ -143,13 +143,12 @@ snap-build:
   stage: build
   timeout: 15m
   before_script:
-    - apt-get -y update
     - cp -R packaging/snap snapbuild
+    - cat CHANGELOG.rst >> README.rst
     - cd snapbuild
     - mkdir src
     - cp -R ../guardata src
     - cp ../setup.py src
-    - cat CHANGELOG.rst >> README.rst
     - cp ../README.rst src
   script:
     - sed -i "s#^\\(__version__ = \\).*\$#\\1'$CI_COMMIT_TAG'#" src/guardata/_version.py
