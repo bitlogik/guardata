@@ -7,7 +7,7 @@
   - windows-1809
 
 snap-build:
-  image: kyrofa/github-snap-builder:core18
+  image: diddledan/snapcraft:core18
   stage: build
   timeout: 15m
   before_script:
