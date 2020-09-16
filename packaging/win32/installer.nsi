@@ -33,7 +33,6 @@
 !endif
 
 ; Python files generated
-!define LICENSE_FILEPATH "${GUARDATA_FREEZE_BUILD_DIR}\LICENSE.txt"
 !define INSTALLER_FILENAME "guardata-${PROGRAM_VERSION}-${PROGRAM_PLATFORM}-setup.exe"
 
 !define WINFSP_INSTALLER "winfsp-1.7.20172.msi"
@@ -65,28 +64,18 @@ SetCompressorDictSize 64
 !define MUI_UNFINISHPAGE_NOAUTOCLOSE
 ; Add shortcut
 !define MUI_FINISHPAGE_SHOWREADME ""
-!define MUI_FINISHPAGE_SHOWREADME_NOTCHECKED
 !define MUI_FINISHPAGE_SHOWREADME_TEXT "Create Desktop Shortcut"
 !define MUI_FINISHPAGE_SHOWREADME_FUNCTION CreateDesktopShortcut
 ; Run guardata after install, using explorer.exe to un-elevate priviledges
 !define MUI_FINISHPAGE_RUN "$WINDIR\explorer.exe"
 !define MUI_FINISHPAGE_RUN_PARAMETERS "$INSTDIR\guardata.exe"
 !define MUI_FINISHPAGE_RUN_TEXT "Run guardata"
-!define MUI_FINISHPAGE_RUN_NOTCHECKED
 
 ; --- Start of Modern User Interface ---
 Var StartMenuFolder
 
-; Welcome, License
+; Welcome
 !insertmacro MUI_PAGE_WELCOME
-!insertmacro MUI_PAGE_LICENSE ${LICENSE_FILEPATH}
-
-; Skipping the components page
-; !insertmacro MUI_PAGE_COMPONENTS
-
-; Let the user select the installation directory
-!insertmacro MUI_PAGE_DIRECTORY
-!insertmacro MUI_PAGE_STARTMENU Application $StartMenuFolder
 
 ; Run installation
 !insertmacro MUI_PAGE_INSTFILES
@@ -188,14 +177,12 @@ Section "guardata : trustless data cloud storage" Section1
     SetOutPath "$INSTDIR"
     WriteIniStr "$INSTDIR\homepage.url" "InternetShortcut" "URL" "${PROGRAM_WEB_SITE}"
 
-    !insertmacro MUI_STARTMENU_WRITE_BEGIN Application
-        SetShellVarContext all
-        CreateDirectory "$SMPROGRAMS\$StartMenuFolder"
-        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\guardata.lnk" "$INSTDIR\guardata.exe"
-        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Website.lnk" "$INSTDIR\homepage.url"
-        CreateShortCut "$SMPROGRAMS\$StartMenuFolder\Uninstall guardata.lnk" ${PROGRAM_UNINST_FILENAME}
-        SetShellVarContext current
-    !insertmacro MUI_STARTMENU_WRITE_END
+    SetShellVarContext all
+    CreateDirectory "$SMPROGRAMS\guardata"
+    CreateShortCut "$SMPROGRAMS\guardata\guardata.lnk" "$INSTDIR\guardata.exe"
+    CreateShortCut "$SMPROGRAMS\guardata\Website.lnk" "$INSTDIR\homepage.url"
+    CreateShortCut "$SMPROGRAMS\guardata\Uninstall guardata.lnk" ${PROGRAM_UNINST_FILENAME}
+    SetShellVarContext current
 SectionEnd
 
 !macro InstallWinFSP
@@ -257,14 +244,13 @@ Section Uninstall
     RmDir "$INSTDIR"
 
     ; Delete Start Menu items.
-    !insertmacro MUI_STARTMENU_GETFOLDER Application $StartMenuFolder
-        SetShellVarContext all
-        Delete "$SMPROGRAMS\$StartMenuFolder\guardata.lnk"
-        Delete "$SMPROGRAMS\$StartMenuFolder\Uninstall guardata.lnk"
-        Delete "$SMPROGRAMS\$StartMenuFolder\guardata Website.lnk"
-        RmDir "$SMPROGRAMS\$StartMenuFolder"
-        DeleteRegKey /ifempty HKCR "Software\guardata"
-        SetShellVarContext current
+    SetShellVarContext all
+    Delete "$SMPROGRAMS\guardata\guardata.lnk"
+    Delete "$SMPROGRAMS\guardata\Uninstall guardata.lnk"
+    Delete "$SMPROGRAMS\guardata\guardata Website.lnk"
+    RmDir "$SMPROGRAMS\guardata"
+    DeleteRegKey /ifempty HKCR "Software\guardata"
+    SetShellVarContext current
     Delete "$DESKTOP\guardata.lnk"
 
     ; Delete registry keys.
