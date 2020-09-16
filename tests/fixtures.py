@@ -154,9 +154,9 @@ def local_device_factory(coolorg):
         org_addr = addr_with_device_subdomain(org.addr, device_id)
 
         device = generate_new_device(
-            device_id,
             org_addr,
-            profile=profile,
+            profile,
+            device_id=device_id,
             human_handle=human_handle,
             device_label=device_label,
         )

@@ -6,7 +6,7 @@ from pendulum import now as pendulum_now
 
 from guardata.crypto import SigningKey
 from guardata.api.data import UserCertificateContent, DeviceCertificateContent, UserProfile
-from guardata.api.protocol import HumanHandle, DeviceID
+from guardata.api.protocol import HumanHandle
 from guardata.client.types import LocalDevice, BackendOrganizationAddr
 from guardata.client.local_device import generate_new_device
 from guardata.client.backend_connection import APIV1_BackendAnonymousCmds
@@ -44,7 +44,6 @@ async def bootstrap_organization(
     )
 
     device = generate_new_device(
-        device_id=DeviceID.new(),
         organization_addr=organization_addr,
         profile=UserProfile.ADMIN,
         human_handle=human_handle,

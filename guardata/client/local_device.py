@@ -77,9 +77,9 @@ key_file_serializer = MsgpackSerializer(
 
 
 def generate_new_device(
-    device_id: DeviceID,
     organization_addr: BackendOrganizationAddr,
     profile: UserProfile = UserProfile.STANDARD,
+    device_id: Optional[DeviceID] = None,
     human_handle: Optional[HumanHandle] = None,
     device_label: Optional[str] = None,
     signing_key: Optional[SigningKey] = None,
@@ -87,7 +87,7 @@ def generate_new_device(
 ) -> LocalDevice:
     return LocalDevice(
         organization_addr=organization_addr,
-        device_id=device_id,
+        device_id=device_id or DeviceID.new(),
         device_label=device_label,
         human_handle=human_handle,
         signing_key=signing_key or SigningKey.generate(),
