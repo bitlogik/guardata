@@ -61,7 +61,9 @@ def main():
     mountdir.mkdir(exist_ok=True)
 
     # Start backend & create organization
-    with keep_running_cmd(f"{GUARDATA_CLI} backend run --port={PORT}"):
+    with keep_running_cmd(
+        f"{GUARDATA_CLI} backend run --port={PORT} --backend-addr=parsec://127.0.0.1:{PORT}"
+    ):
         backend_addr = f"parsec://127.0.0.1:{PORT}?no_ssl=true"
 
         out = run_cmd(

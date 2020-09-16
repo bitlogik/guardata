@@ -174,7 +174,6 @@ def local_device_factory(coolorg):
 
 @pytest.fixture
 def coolorg(organization_factory):
-    # Fonzie approve this
     return organization_factory("CoolOrg")
 
 

@@ -32,8 +32,17 @@ from backendService.http import HTTPRequest
 logger = get_logger()
 
 
+DISABLE_STRICT_AUTH_CHECK = False
+
+
 def _filter_binary_fields(data):
     return {k: v if not isinstance(v, bytes) else b"[...]" for k, v in data.items()}
+
+
+def _get_header(zhds, hkey: bytes) -> bytes:
+    if hkey not in zhds:
+        return b""
+    return zhds[hkey].lower()
 
 
 @asynccontextmanager
@@ -82,6 +91,10 @@ class BackendApp:
         block,
         events,
     ):
+        self.host_domain = None
+        if config.backend_addr:
+            if config.backend_addr._hostname:
+                self.host_domain = config.backend_addr._hostname.encode("idna")
         self.config = config
         self.event_bus = event_bus
 
@@ -223,8 +236,22 @@ class BackendApp:
                 await stream.aclose()
                 return
 
+            # get headers as a dict
+            headers = dict(event.headers)
+
             # Websocket upgrade, else HTTP
-            if (b"connection", b"Upgrade") in event.headers:
+            host_rcvd = _get_header(headers, b"host")
+            if (
+                event.http_version == b"1.1"
+                and event.method == b"GET"
+                and event.target == b"/ws"
+                and _get_header(headers, b"connection") == b"upgrade"
+                and _get_header(headers, b"upgrade") == b"websocket"
+                and (
+                    (len(host_rcvd) > 3 and host_rcvd == self.host_domain)
+                    or DISABLE_STRICT_AUTH_CHECK
+                )
+            ):
                 await self.handle_client_websocket(
                     stream, event, first_request_data=first_request_data
                 )
@@ -252,6 +279,8 @@ class BackendApp:
         else:
             server_header = "guardata"
         rep.headers.append(("server", server_header))
+        # Tell no support for keep-alive (h11 will know what to do from there)
+        rep.headers.append(("connection", "close"))
 
         try:
             response_data = bytearray(

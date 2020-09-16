@@ -116,6 +116,10 @@ def pytest_configure(config):
             structlog.dev.ConsoleRenderer(),
         ],
     )
+    # Disable strict domain check in backend
+    import backendService
+
+    backendService.app.DISABLE_STRICT_AUTH_CHECK = True
     # Lock configuration
     structlog.configure = lambda *args, **kwargs: None
     # Add helper to caplog

@@ -269,6 +269,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
     with _running(
         (
             f"backend run --db=MOCKED --blockstore=MOCKED"
+            f" --backend-addr parsec://localhost:{unused_tcp_port}"
             f" --administration-token={administration_token}"
             f" --port={unused_tcp_port}"
             f" {ssl_conf.backend_opts}"
