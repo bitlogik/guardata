@@ -123,7 +123,8 @@ class LoginWidget(QWidget, Ui_LoginWidget):
     def reload_devices(self):
         self._clear_widget()
         devices = list_available_devices(self.config.config_dir)
-        if not len(devices):
+        n_devices = len(devices)
+        if n_devices < 1:
             no_device_widget = LoginNoDevicesWidget()
             no_device_widget.create_organization_clicked.connect(
                 self.create_organization_clicked.emit
@@ -131,6 +132,8 @@ class LoginWidget(QWidget, Ui_LoginWidget):
             no_device_widget.join_organization_clicked.connect(self.join_organization_clicked.emit)
             self.widget.layout().addWidget(no_device_widget)
             no_device_widget.setFocus()
+        elif n_devices == 1:
+            self._on_account_clicked(devices[0])
         else:
             accounts_widget = LoginAccountsWidget(devices)
             accounts_widget.account_clicked.connect(self._on_account_clicked)

@@ -27,11 +27,6 @@ async def test_login(aqtbot, gui_factory, autoclose_dialog, client_config, alice
     accounts_w = lw.widget.layout().itemAt(0).widget()
     assert accounts_w
 
-    async with aqtbot.wait_signal(accounts_w.account_clicked):
-        await aqtbot.mouse_click(
-            accounts_w.accounts_widget.layout().itemAt(0).widget(), QtCore.Qt.LeftButton
-        )
-
     def _password_widget_shown():
         assert isinstance(lw.widget.layout().itemAt(0).widget(), LoginPasswordInputWidget)
 
@@ -60,11 +55,12 @@ async def test_login(aqtbot, gui_factory, autoclose_dialog, client_config, alice
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_login_back_to_account_list(
-    aqtbot, gui_factory, autoclose_dialog, client_config, alice
+    aqtbot, gui_factory, autoclose_dialog, client_config, alice, bob
 ):
     # Create an existing device before starting the gui
     password = "P2ssxdor!s3"
     save_device_with_password(client_config.config_dir, alice, password)
+    save_device_with_password(client_config.config_dir, bob, password)
 
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
@@ -103,9 +99,10 @@ async def test_login_no_devices(aqtbot, gui_factory, autoclose_dialog, client_co
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_login_device_list(aqtbot, gui_factory, autoclose_dialog, client_config, alice):
+async def test_login_device_list(aqtbot, gui_factory, autoclose_dialog, client_config, alice, bob):
     password = "P2ssxdor!s3"
     save_device_with_password(client_config.config_dir, alice, password)
+    save_device_with_password(client_config.config_dir, bob, password)
 
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
@@ -113,12 +110,23 @@ async def test_login_device_list(aqtbot, gui_factory, autoclose_dialog, client_c
     accounts_w = lw.widget.layout().itemAt(0).widget()
     assert accounts_w
 
-    assert accounts_w.accounts_widget.layout().count() == 2
-    alice_w = accounts_w.accounts_widget.layout().itemAt(0).widget()
+    assert accounts_w.accounts_widget.layout().count() == 3
+    dev1_w = accounts_w.accounts_widget.layout().itemAt(0).widget()
+    dev2_w = accounts_w.accounts_widget.layout().itemAt(1).widget()
 
-    assert alice_w.label_device.text() == "My dev1 machine"
-    assert alice_w.label_name.text() == "Alicey McAliceFace"
-    assert alice_w.label_organization.text() == "CoolOrg"
+    case1 = (
+        dev1_w.label_name.text() == "Alicey McAliceFace"
+        and dev2_w.label_name.text() == "Boby McBobFace"
+    )
+    case2 = (
+        dev2_w.label_name.text() == "Alicey McAliceFace"
+        and dev1_w.label_name.text() == "Boby McBobFace"
+    )
+    assert case1 ^ case2
+    assert dev1_w.label_device.text() == "My dev1 machine"
+    assert dev1_w.label_organization.text() == "CoolOrg"
+    assert dev2_w.label_device.text() == "My dev1 machine"
+    assert dev2_w.label_organization.text() == "CoolOrg"
 
 
 @pytest.mark.gui
