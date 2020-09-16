@@ -13,7 +13,6 @@
         <file>translations/guardata_fr.mo</file>
     </qresource>
     <qresource prefix="/fonts">
-        <file>fonts/ProximaNova.otf</file>
         <file>fonts/Roboto-Regular.ttf</file>
         <file>fonts/OpenSans.ttf</file>
     </qresource>
