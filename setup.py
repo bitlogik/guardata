@@ -245,7 +245,7 @@ BABEL_DEP = "Babel==2.6.0"
 requirements = [
     "attrs==19.2.0",
     "click==7.0",
-    "msgpack==0.6.0",
+    "msgpack==0.6.2",
     "wsproto==0.15.0",
     "toastedmarshmallow==0.2.6",
     "pendulum==1.3.1",
