@@ -325,7 +325,7 @@ setup(
     zip_safe=False,
     keywords="cloud data storage sharing cryptography",
     classifiers=[
-        "Development Status :: 4 - Beta",
+        "Development Status :: 5 - Production/Stable",
         "Programming Language :: Python :: 3",
         "License :: OSI Approved :: GNU Affero General Public License v3",
         "Operating System :: Microsoft :: Windows :: Windows 8",
