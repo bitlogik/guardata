@@ -243,6 +243,13 @@ class InstanceWidget(QWidget):
                 return item.widget()
         return None
 
+    def get_login_widget(self):
+        item = self.layout().itemAt(0)
+        if item:
+            if isinstance(item.widget(), LoginWidget):
+                return item.widget()
+        return None
+
     def clear_widgets(self):
         item = self.layout().takeAt(0)
         if item:
