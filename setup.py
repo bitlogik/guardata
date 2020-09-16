@@ -281,8 +281,6 @@ test_requirements = [
     "trustme==0.6.0",
     'pywin32==227;platform_system=="Windows"',
     "pbr==4.0.2",
-    "python_http_client>=3.2.1",
-    "starkbank-ecdsa>=1.0.0",
     "triopg==0.3.0",
     "trio-asyncio==0.11.0",
 ]
