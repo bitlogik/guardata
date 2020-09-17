@@ -110,6 +110,9 @@ class HTTPComponent:
         self._config = config
         self._org = org
 
+    async def _http_400(self, req: HTTPRequest) -> HTTPResponse:
+        return HTTPResponse.build_html(400, data="")
+
     async def _http_404(self, req: HTTPRequest) -> HTTPResponse:
         data = get_template("404.html").render(title="not found")
         return HTTPResponse.build_html(404, data=data)
@@ -188,6 +191,7 @@ class HTTPComponent:
         (r"^\/redirect(?P<path>.*)$", _http_redirect),
         (r"^\/static\/(?P<path>.*)$", _http_static),
         (r"^\/creategroup\/(?P<path>\w+)$", _http_creategroup),
+        (r"^\/ws$", _http_400),
     ]
 
     async def handle_request(self, req: HTTPRequest) -> HTTPResponse:
