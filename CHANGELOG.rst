@@ -2,6 +2,18 @@
 guardata history
 ----------------
 
+0.1.2 - 2020-XX ?
+^^^^^^^^^^^^^^^^^
+
+* Fix Snap building
+* GUI : refresh login list when logout
+* Cleanups (pkg, files)
+* Windows installer simplified
+* Script for dev to add devices/users much faster
+* msgpack dependency updated
+* Improve backend management of websocket
+
+
 0.1.0 - 2020-09-12
 ^^^^^^^^^^^^^^^^^^
 
