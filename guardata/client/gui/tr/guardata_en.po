@@ -1609,8 +1609,9 @@ msgstr ""
 
 msgid "TEXT_LOGIN_ERROR_FUSE_NOT_AVAILABLE"
 msgstr ""
-"Fuse could not be loaded. \n"
-"Please check your installation."
+"Fuse could not be loaded.\n"
+"On Mac, install osxfuse (FUSE for MacOS).\n"
+"https://osxfuse.github.io/2020/07/04/OSXFUSE-3.11.0.html"
 
 msgid "TEXT_LOGIN_UNKNOWN_ERROR"
 msgstr "Cannot log in."

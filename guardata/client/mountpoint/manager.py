@@ -8,6 +8,7 @@ import logging
 from pathlib import PurePath
 from pendulum import Pendulum
 from structlog import get_logger
+from sys import platform
 from typing import Sequence, Optional
 from importlib import __import__ as import_function
 
@@ -282,9 +283,19 @@ async def mountpoint_manager_factory(
 
     runner = get_mountpoint_runner()
 
-    # Now is a good time to perform some cleanup in the registry
+    # Now is a good time to perform some cleanup
     if os.name == "nt":
         cleanup_guardata_drive_icons()
+
+    elif platform == "darwin":
+        if os.path.isdir(base_mountpoint_path):
+            for dirs in os.listdir(base_mountpoint_path):
+                dir_path = str(base_mountpoint_path) + "/" + str(dirs)
+                stats = os.statvfs(dir_path)
+                if stats.f_blocks == 0 and stats.f_ffree == 0 and stats.f_bavail == 0:
+                    await trio.run_process(["diskutil", "unmount", dir_path])
+                    if dirs in os.listdir(base_mountpoint_path):
+                        await trio.run_process(["rm", "-d", dir_path])
 
     def on_event(event, new_entry, previous_entry=None):
         # Workspace created

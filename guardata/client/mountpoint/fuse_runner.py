@@ -31,10 +31,6 @@ def on_mac():
     return sys.platform == "darwin"
 
 
-def on_linux():
-    return sys.platform.startswith("linux")
-
-
 @contextmanager
 def _reset_signals(signals=None):
     """A context that save the current signal handlers restore them when leaving.
@@ -138,15 +134,13 @@ async def fuse_mountpoint_runner(
             encoding = sys.getfilesystemencoding()
 
             def _run_fuse_thread():
-                plt_options = {}
+                plt_options = {"auto_unmount": True}
                 if on_mac():
                     plt_options = {
                         "local": True,
                         "volname": workspace_fs.get_workspace_name(),
                         "volicon": Path(resources.__file__).absolute().parent / "guardata.icns",
                     }
-                if on_linux():
-                    plt_options = {"auto_unmount": True}
                 logger.info("Starting fuse thread...", mountpoint=mountpoint_path)
                 try:
                     fuse_thread_started.set()
@@ -222,9 +216,8 @@ async def _stop_fuse_thread(mountpoint_path, fuse_operations, fuse_thread_stoppe
     with trio.CancelScope(shield=True):
         logger.info("Stopping fuse thread...", mountpoint=mountpoint_path)
         if on_mac():
-            await trio.run_process(["diskutil", "unmount", str(mountpoint_path)])
-        else:
-            fuse_operations.schedule_exit()
+            await trio.run_process(["diskutil", "umount", str(mountpoint_path)])
+        fuse_operations.schedule_exit()
         try:
             await trio.Path(mountpoint_path / "__shutdown_fuse__").exists()
         except OSError:

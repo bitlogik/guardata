@@ -57,6 +57,9 @@ jobs:
   steps:
   - checkout: self
     submodules: true
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.7'
   - download: current
     artifact: wheel
   - bash: |
@@ -75,18 +78,18 @@ jobs:
   - bash: |
       set -eux
       python3 -m pytest $(pytest.base_args) \
-        tests --runslow --runmountpoint \
+        tests --ignore=tests/backend --runslow --runmountpoint \
         -n auto --max-worker-restart=0 -x
-    displayName: 'Tests memory'
+    displayName: 'Tests client'
   - bash: |
       set -eux
-      python.exe -m pytest $(pytest.base_args) \
+      python3 -m pytest $(pytest.base_args) \
         tests --runslow --runmountpoint --rungui -m gui -x -n 1
     displayName: 'Tests GUI'
   - bash: |
       set -eux
-      python.exe -m pytest $(pytest.base_args) \
-        tests --runslow -m slow \
+      python3 -m pytest $(pytest.base_args) \
+        tests --ignore=tests/backend --runslow -m slow \
         -n auto --max-worker-restart=0 -x
     displayName: 'Tests slow'
   - bash: |

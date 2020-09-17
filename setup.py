@@ -313,7 +313,7 @@ setup(
         "generate_pyqt": build_py_with_pyqt,
         "build_py": build_py_with_pyqt,
     },
-    package_data={"guardata.client.resources": ["*.ico", "*.ignore"]},
+    package_data={"guardata.client.resources": ["*.ico", "*.icns", "*.ignore"]},
     entry_points={
         "console_scripts": ["guardata = guardata.cli:cli"],
         "babel.extractors": ["extract_qt = misc.babel_qt_extractor.extract_qt"],

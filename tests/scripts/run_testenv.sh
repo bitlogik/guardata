@@ -8,37 +8,39 @@ Run `tests/scripts/run_testenv.sh --help` for more information.
 # Make sure this script is sourced
 if [[ "${BASH_SOURCE[0]}" == "${0}" ]]
 then
-echo "This script must be sourced. Use --help for more information."
-exit 1
+  echo "This script must be sourced. Use --help for more information."
+  exit 1
 fi
 
 realpathOSX() {
   OURPWD=$PWD
-  cd "$(dirname "$1")"
-  LINK=$(readlink "$(basename "$1")")
+  cd "$(dirname "$2")"
+  LINK=$(readlink "$(basename "$2")")
   while [ "$LINK" ]; do
     cd "$(dirname "$LINK")"
-    LINK=$(readlink "$(basename "$1")")
+    LINK=$(readlink "$(basename "$2")")
   done
-  REALPATH="$PWD/$(basename "$1")"
+  REALPATH="$PWD/$(basename "$2")"
   cd "$OURPWD"
   echo "$REALPATH"
 }
 
-if [ "$(uname)" == "Darwin" ]
+if [[ "$(uname)" == "Darwin" ]]
 then
-  script_dir=$(dirname $(realpathOSX $BASH_SOURCE))
+  realpath='realpathOSX'
 else
-  # Cross-shell script directory detection
-  if [ -n "$BASH_SOURCE" ]; then
-    script_dir=$(dirname $(realpath -s $BASH_SOURCE))
-  elif [ -n "$ZSH_VERSION" ]; then
-    script_dir=$(dirname $(realpath -s $0))
-  fi
+  realpath='realpath'
+fi
+
+# Cross-shell script directory detection
+if [ -n "$BASH_SOURCE" ]; then
+  script_dir=$(dirname $($realpath -s "$BASH_SOURCE"))
+elif [ -n "$ZSH_VERSION" ]; then
+  script_dir=$(dirname $($realpath -s $0))
 fi
 
 # Run python script and source
-if [ "$(uname)" == "Darwin" ]
+if [[ "$(uname)" == "Darwin" ]]
 then
   source_file=$TMPDIR/guardata-temp
   if [ -f $source_file ]; then

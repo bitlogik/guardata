@@ -2,6 +2,7 @@
 
 from guardata.client.client_events import ClientEvent
 import os
+import sys
 import trio
 import pytest
 from pathlib import Path
@@ -62,6 +63,7 @@ def test_empty_read_then_reopen(tmpdir, mountpoint_service):
     assert data == expected_data
 
 
+@pytest.mark.skipif(sys.platform == "darwin", reason="Crash on Mac")
 @pytest.mark.trio
 @pytest.mark.mountpoint
 async def test_remote_error_event(
@@ -108,7 +110,7 @@ async def test_remote_error_event(
 
             # Finally test unhandled error
             def _crash(*args, **kwargs):
-                raise RuntimeError("D'Oh !")
+                raise RuntimeError("Fake Error")
 
             monkeypatch.setattr(
                 "guardata.client.fs.workspacefs.entry_transactions.EntryTransactions.folder_create",

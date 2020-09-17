@@ -107,6 +107,7 @@ async def test_new_sharing_trigger_event(alice_client, bob_client, running_backe
                 ),
                 "previous_entry": None,
             },
+            timeout=3,
         )
 
 
@@ -142,6 +143,7 @@ async def test_revoke_sharing_trigger_event(alice_client, bob_client, running_ba
                     role=WorkspaceRole.MANAGER,
                 ),
             },
+            timeout=3,
         )
 
 
@@ -177,6 +179,7 @@ async def test_new_reencryption_trigger_event(alice_client, bob_client, running_
                     role=WorkspaceRole.OWNER,
                 ),
             },
+            timeout=3,
         )
         await bspy.wait_with_timeout(
             ClientEvent.SHARING_UPDATED,
@@ -200,4 +203,5 @@ async def test_new_reencryption_trigger_event(alice_client, bob_client, running_
                     role=WorkspaceRole.MANAGER,
                 ),
             },
+            timeout=3,
         )
