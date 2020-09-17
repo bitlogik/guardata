@@ -60,7 +60,7 @@ def get_mountpoint_runner():
 
         return winfsp_mountpoint_runner
 
-    # Linux
+    # Linux or MacOSX
     else:
         try:
             # Use import function for easier mock up

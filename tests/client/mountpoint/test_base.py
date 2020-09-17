@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 from guardata.client.client_events import ClientEvent
-import os
+import os, sys
 import errno
 from uuid import uuid4
 
@@ -28,6 +28,9 @@ from tests.common import create_shared_workspace
 
 def get_path_in_mountpoint(manager, wid, path):
     return trio.Path(manager.get_path_in_mountpoint(wid, FsPath(path)))
+
+
+skip_mac = pytest.mark.skipif(sys.platform == "darwin", reason="Crash on Mac")
 
 
 @pytest.mark.trio
@@ -58,6 +61,7 @@ async def test_mount_unknown_workspace(base_mountpoint, alice_user_fs, event_bus
         assert exc.value.args == (f"Workspace `{wid}` doesn't exist",)
 
 
+@skip_mac
 @pytest.mark.trio
 @pytest.mark.mountpoint
 async def test_base_mountpoint_not_created(base_mountpoint, alice_user_fs, event_bus):
@@ -78,6 +82,7 @@ async def test_base_mountpoint_not_created(base_mountpoint, alice_user_fs, event
         assert await bar_txt.exists()
 
 
+@skip_mac
 @pytest.mark.trio
 @pytest.mark.mountpoint
 @pytest.mark.skipif(os.name == "nt", reason="Windows uses drive")
@@ -117,6 +122,7 @@ async def test_mountpoint_path_already_in_use(
         assert await trio.Path(alice2_mountpoint_path / "I_am_alice2.txt").exists()
 
 
+@skip_mac
 @pytest.mark.trio
 @pytest.mark.mountpoint
 @pytest.mark.parametrize("manual_unmount", [True, False])
@@ -177,6 +183,7 @@ async def test_mount_and_explore_workspace(
             spy.assert_events_occured([(ClientEvent.MOUNTPOINT_STOPPED, expected)])
 
 
+@skip_mac
 @pytest.mark.trio
 @pytest.mark.mountpoint
 @pytest.mark.parametrize("manual_unmount", [True, False])

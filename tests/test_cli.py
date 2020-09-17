@@ -156,8 +156,8 @@ def _running(cmd, wait_for=None, env={}):
 
 
 def _wait_for(p, wait_txt):
-    for _ in range(10):
-        sleep(0.1)
+    for _ in range(20):
+        sleep(0.25)
         stdout = p.live_stdout.read()
         if wait_txt in stdout:
             return stdout
@@ -166,7 +166,7 @@ def _wait_for(p, wait_txt):
 
 
 def _wait_for_regex(p, regex):
-    for _ in range(20):
+    for _ in range(50):
         sleep(0.25)
         stdout = p.live_stdout.read()
         match = re.search(regex, stdout, re.MULTILINE)

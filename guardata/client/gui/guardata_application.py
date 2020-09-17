@@ -1,9 +1,11 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
+from sys import modules
+from os import path
 from PyQt5.QtWidgets import QApplication
 from PyQt5.QtCore import QFile
-from PyQt5.QtGui import QFont, QFontDatabase
+from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 
 
 class guardataApp(QApplication):
@@ -14,6 +16,10 @@ class guardataApp(QApplication):
         self.setOrganizationName("BitLogiK")
         self.setOrganizationDomain("cloud.guardata.app")
         self.setApplicationName("guardata")
+        path_icon = path.join(
+            path.dirname(modules[__name__].__file__), "rc/images/icons/guardata.png"
+        )
+        self.setWindowIcon(QIcon(path_icon))
 
     def load_stylesheet(self, res=":/styles/styles/main.css"):
         rc = QFile(res)

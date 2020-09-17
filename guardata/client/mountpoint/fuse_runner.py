@@ -13,7 +13,9 @@ from fuse import FUSE
 from structlog import get_logger
 from contextlib import contextmanager
 from itertools import count
+from pathlib import Path
 
+from guardata.client import resources
 from guardata.client.mountpoint.fuse_operations import FuseOperations
 from guardata.client.mountpoint.thread_fs_access import ThreadFSAccess
 from guardata.client.mountpoint.exceptions import MountpointDriverCrash
@@ -23,6 +25,14 @@ __all__ = ("fuse_mountpoint_runner",)
 
 
 logger = get_logger()
+
+
+def on_mac():
+    return sys.platform == "darwin"
+
+
+def on_linux():
+    return sys.platform.startswith("linux")
 
 
 @contextmanager
@@ -128,6 +138,15 @@ async def fuse_mountpoint_runner(
             encoding = sys.getfilesystemencoding()
 
             def _run_fuse_thread():
+                plt_options = {}
+                if on_mac():
+                    plt_options = {
+                        "local": True,
+                        "volname": workspace_fs.get_workspace_name(),
+                        "volicon": Path(resources.__file__).absolute().parent / "guardata.icns",
+                    }
+                if on_linux():
+                    plt_options = {"auto_unmount": True}
                 logger.info("Starting fuse thread...", mountpoint=mountpoint_path)
                 try:
                     fuse_thread_started.set()
@@ -135,8 +154,8 @@ async def fuse_mountpoint_runner(
                         fuse_operations,
                         str(mountpoint_path.absolute()),
                         foreground=True,
-                        auto_unmount=True,
                         encoding=encoding,
+                        **plt_options,
                         **config,
                     )
 
@@ -202,7 +221,10 @@ async def _stop_fuse_thread(mountpoint_path, fuse_operations, fuse_thread_stoppe
 
     with trio.CancelScope(shield=True):
         logger.info("Stopping fuse thread...", mountpoint=mountpoint_path)
-        fuse_operations.schedule_exit()
+        if on_mac():
+            await trio.run_process(["diskutil", "unmount", str(mountpoint_path)])
+        else:
+            fuse_operations.schedule_exit()
         try:
             await trio.Path(mountpoint_path / "__shutdown_fuse__").exists()
         except OSError:

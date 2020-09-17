@@ -133,11 +133,11 @@ MimeType=x-scheme-handler/parsec;
 
 
 async def restart_local_backend(administration_token, backend_port):
-    pattern = f"guardata.* backend.* run.* -P {backend_port}"
+    pattern = f"guardata\\.cli backend run -P {backend_port}"
     command = (
-        f"{sys.executable} -Wignore -m guardata.cli backend run -b MOCKED --db MOCKED "
-        f"-P {backend_port} --administration-token {administration_token} "
-        f"--backend-addr parsec://localhost:{backend_port}?no_ssl=true"
+        f"{sys.executable} -Wignore -m guardata.cli backend run -P {backend_port}"
+        f" -b MOCKED --db MOCKED --administration-token {administration_token}"
+        f" --backend-addr parsec://localhost:{backend_port}?no_ssl=true"
         f" --email-sender aaa@mydomain.com"
     )
 
@@ -156,12 +156,11 @@ async def restart_local_backend(administration_token, backend_port):
         backend_process.stdout.close()
 
     # Windows restart
-    if os.name == "nt" or True:
+    if os.name == "nt":
         await trio.to_thread.run_sync(_windows_target)
 
-    # Linux restart
+    # Linux or MacOSX restart
     else:
-
         await trio.run_process(["pkill", "-f", pattern], check=False)
         backend_process = await trio.open_process(command.split(), stdout=subprocess.PIPE)
         async with backend_process.stdout:

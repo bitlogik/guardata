@@ -82,6 +82,15 @@ class FuseOperations(LoggingMixIn, Operations):
     def init(self, path: FsPath):
         pass
 
+    def statfs(self, path: FsPath):
+        return {
+            "f_bsize": 512 * 1024,  # 512 KB, the default block size
+            "f_frsize": 512 * 1024,
+            "f_blocks": 2048 * 1024,  # 2048 k blocks is 1 TB
+            "f_bfree": 2047 * 1024,
+            "f_bavail": 2047 * 1024,
+        }
+
     def getattr(self, path: FsPath, fh: Optional[int] = None):
         if self._need_exit:
             fuse_exit()

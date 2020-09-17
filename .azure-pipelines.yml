@@ -17,46 +17,10 @@ variables:
 jobs:
 
 #################################################################################
-# Step 0: Quality Control
-
-- job: 's0_qc'
-  displayName: 'Quality Control'
-  timeoutInMinutes: 4
-  pool:
-    vmImage: 'ubuntu-latest'
-  variables:
-    PRE_COMMIT_HOME: $(Pipeline.Workspace)/pre-commit-cache
-  steps:
-  - checkout: self
-    submodules: true
-  - script: echo "##vso[task.setvariable variable=PY]$(python -VV)"
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-  - task: CacheBeta@0
-    inputs:
-      key: pre-commit | .pre-commit-config.yaml | "$(PY)"
-      path: $(PRE_COMMIT_HOME)
-  - bash: |
-      set -eux
-      sudo apt-get update
-      python3 --version
-      pip3 install pre-commit
-    displayName: 'Bootstrap'
-  - bash: |
-      set -eux
-      # Run all pre-commit hooks on all files
-      pre-commit run --all-files --show-diff-on-failure
-    displayName: 'Pre-commit hooks check'
-
-
-#################################################################################
 # Step 1: Binary wheel build
 
 - job: 's1_build_wheel'
   displayName: 'Build wheel'
-  dependsOn:
-    - s0_qc
   timeoutInMinutes: 8
   pool:
     vmImage: 'ubuntu-latest'
@@ -81,35 +45,25 @@ jobs:
 
 
 #################################################################################
-# Step 2.a: Tests on Linux
+# Step 2.c: Tests on MacOSX
 
-- job: 's2_linux_test'
-  displayName: 'Linux tests'
+- job: 's2_mac_test'
+  displayName: 'MacOSX tests'
   dependsOn:
     - s1_build_wheel
   timeoutInMinutes: 40
   pool:
-    vmImage: 'ubuntu-latest'
-  variables:
-    PGINSTALLATION: '/usr/lib/postgresql/$(postgresql.version)/bin'
+    vmImage: 'macos-10.15'
   steps:
   - checkout: self
     submodules: true
   - download: current
     artifact: wheel
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
   - bash: |
       set -eux
-      sudo apt-get update
-      python --version
-      pip3 install -r pre-requirements.txt
-      sudo apt-get install postgresql-$(postgresql.version)
+      python3 --version
       psql --version
-    displayName: 'Bootstrap'
-  - bash: |
-      set -eux
+      brew cask install osxfuse
       # Remove the guardata folder (force to use the wheel)
       rm -rf guardata
       # Install the guardata wheel with all dependencies
@@ -121,77 +75,13 @@ jobs:
   - bash: |
       set -eux
       python3 -m pytest $(pytest.base_args) \
-        tests --runmountpoint --runslow \
+        tests --runslow --runmountpoint \
         -n auto --max-worker-restart=0 -x
     displayName: 'Tests memory'
   - bash: |
       set -eux
-      python3 -m pytest $(pytest.base_args) \
-        tests/backend tests/test_cli.py --postgresql --runslow \
-        -n auto --max-worker-restart=0 -x
-    displayName: 'Tests postgresql'
-
-
-#################################################################################
-# Step 2.b: Tests on Windows
-
-- job: 's2_windows_test'
-  displayName: 'Windows tests'
-  dependsOn:
-    - s1_build_wheel
-  timeoutInMinutes: 40
-  pool:
-    vmImage: 'windows-latest'
-  variables:
-    PGINSTALLATION: C:\\Program Files\\PostgreSQL\\$(postgresql.version)\\bin
-  steps:
-  - checkout: self
-    submodules: true
-  - download: current
-    artifact: wheel
-  - task: UsePythonVersion@0
-    inputs:
-      versionSpec: '$(python.version)'
-      architecture: 'x64'
-  - bash: |
-      set -eux
-      python.exe --version
-      pip install -r pre-requirements.txt
-      choco install -y --no-progress winfsp --pre --version=$(winfsp.version)
-      # Install winfsp-test and put it in PATH
-      mkdir winfsp-test
-      curl -L https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-tests-1.7.20172.zip -o winfsp-test/winfsp-tests.zip
-      unzip winfsp-test/winfsp-tests.zip -d winfsp-test
-      echo "##vso[task.prependpath]$(Build.SourcesDirectory)\\winfsp-test"
-    displayName: 'Bootstrap'
-  - bash: |
-      set -eux
-      # Remove the guardata folder from the source to force use of the wheel
-      rm -rf guardata
-      # Install the guardata wheel with all dependencies
-      WHEEL_DIRECTORY=`python -c 'print(r"$(Pipeline.Workspace)/wheel".replace("\\\\", "/"))'`
-      WHEEL=$(ls $WHEEL_DIRECTORY/guardata-*.whl)
-      echo $WHEEL
-      pip install $WHEEL[all]
-      # Check dependency compatibility
-      pip check guardata[all]
-      # Check winfsp-tests availability
-      python.exe -c "import winfspy.tests.winfsp_tests"
-    displayName: 'Install'
-  - bash: |
-      set -eux
       python.exe -m pytest $(pytest.base_args) \
-        tests -n auto --max-worker-restart=0 -x
-    displayName: 'Tests fast'
-  - bash: |
-      set -eux
-      python.exe -m pytest $(pytest.base_args) \
-        tests --runmountpoint --runslow -m mountpoint -x
-    displayName: 'Tests mountpoint'
-  - bash: |
-      set -eux
-      python.exe -m pytest $(pytest.base_args) \
-        tests --runmountpoint --runslow --rungui -m gui -x -n 1
+        tests --runslow --runmountpoint --rungui -m gui -x -n 1
     displayName: 'Tests GUI'
   - bash: |
       set -eux
@@ -199,4 +89,11 @@ jobs:
         tests --runslow -m slow \
         -n auto --max-worker-restart=0 -x
     displayName: 'Tests slow'
+  - bash: |
+      set -eux
+      python3 -m pytest $(pytest.base_args) \
+        tests/backend tests/test_cli.py --postgresql --runslow \
+        -n auto --max-worker-restart=0 -x
+    displayName: 'Tests postgresql'
+
 
