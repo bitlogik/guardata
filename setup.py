@@ -248,10 +248,10 @@ requirements = [
     "msgpack==0.6.2",
     "wsproto==0.15.0",
     "toastedmarshmallow==0.2.6",
-    "pendulum==1.3.1",
+    "pendulum==1.5.1",
     "PyNaCl==1.4.0",
-    "trio==0.13.0",
-    "python-interface==1.4.0",
+    "trio==0.14.0",
+    "python-interface==1.6.0",
     "async_generator>=1.9",
     'contextvars==2.1;python_version<"3.7"',
     "structlog==19.2.0",
@@ -264,7 +264,7 @@ requirements = [
     BABEL_DEP,
     'fusepy==3.0.1;platform_system=="Linux"',
     'winfspy==0.8.0;platform_system=="Windows"',
-    "zxcvbn==4.4.27",
+    "zxcvbn==4.4.28",
     "psutil==5.6.3",
 ]
 
@@ -281,16 +281,15 @@ test_requirements = [
     "trustme==0.6.0",
     'pywin32==227;platform_system=="Windows"',
     "pbr==4.0.2",
-    "triopg==0.3.0",
+    "triopg==0.5.0",
     "trio-asyncio==0.11.0",
 ]
 
 
 WHEEL_DEP = "wheel==0.34.2"
-extra_requirements = {
-    "dev": test_requirements,
-}
-extra_requirements["all"] = sum(extra_requirements.values(), [])
+
+extra_requirements = {"dev": test_requirements}
+extra_requirements["all"] = extra_requirements["dev"]
 
 setup(
     name="guardata",
