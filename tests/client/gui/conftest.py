@@ -5,12 +5,14 @@ import pytest
 from unittest.mock import patch
 from functools import wraps, partial
 import trio
+from pytestqt.exceptions import TimeoutError
 from trio.testing import trio_test as vanilla_trio_test
 import queue
 import threading
 from concurrent import futures
 from importlib import import_module
 from PyQt5 import QtCore
+from sys import platform
 
 from guardata import __version__ as guardata_version
 from guardata.client.local_device import save_device_with_password
@@ -181,12 +183,46 @@ class AsyncQtBot:
             wrapper.__name__ = f"{fnname}"
             return wrapper
 
+        # Rewrite pytestqt.qtbot wait_until method for MacOSX : wait timeout then assert callback
+        # Workaround for https://github.com/pytest-dev/pytest-qt/issues/313
+        # else the wait_until freezes forever on Mac
+        async def wait_until_macosx(fct, **kwargs):
+            def try_callback(tmo=True):
+                try:
+                    ret = fct()
+                except AssertionError:
+                    if tmo:
+                        raise TimeoutError(timeout_msg)
+                    else:
+                        return False
+                if ret not in (None, True, False):
+                    msg = "wait_until callback must return None, True or False : returned %r"
+                    raise ValueError(msg % ret)
+                if ret is None:
+                    return True
+                if ret is True:
+                    return True
+                if ret is False:
+                    if tmo:
+                        raise TimeoutError(timeout_msg)
+                    return ret
+
+            timeout = kwargs.get("timeout", 1000)
+            if timeout < 20:
+                timeout = 20
+            timeout_msg = f"waitUntil timed out in {timeout} miliseconds"
+            for t in range(20):
+                self.qtbot.wait(timeout // 20)
+                cbret = try_callback(t == 19)
+                if cbret is True:
+                    break
+            self.qtbot.wait(100)
+
         self.key_click = _autowrap("keyClick")
         self.key_clicks = _autowrap("keyClicks")
         self.key_event = _autowrap("keyEvent")
         self.key_press = _autowrap("keyPress")
         self.key_release = _autowrap("keyRelease")
-        # self.key_to_ascii = self.qtbot.keyToAscii  # available ?
         self.mouse_click = _autowrap("mouseClick")
         self.mouse_d_click = _autowrap("mouseDClick")
         self.mouse_move = _autowrap("mouseMove")
@@ -196,7 +232,10 @@ class AsyncQtBot:
         self.add_widget = _autowrap("add_widget")
         self.stop = _autowrap("stop")
         self.wait = _autowrap("wait")
-        self.wait_until = _autowrap("wait_until")
+        if platform == "darwin":
+            self.wait_until = wait_until_macosx
+        else:
+            self.wait_until = _autowrap("wait_until")
 
         def _autowrap_ctx_manager(fnname):
             def wrapper(*args, **kwargs):
@@ -263,6 +302,7 @@ def widget_catcher_factory(aqtbot, monkeypatch):
             def _invitation_shown():
                 assert len(widgets)
 
+            await aqtbot.wait(100)
             await aqtbot.wait_until(_invitation_shown)
             return widgets.pop(0)
 
@@ -319,6 +359,8 @@ def gui_factory(
 
             def right_main_window():
                 assert guardataApp.get_main_window() is main_w
+
+            qtbot.wait(200)
 
             # For some reasons, the main window from the previous test might
             # still be around. Simply wait for things to settle down until
@@ -412,6 +454,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
 
             async with aqtbot.wait_signal(tabw.logged_out):
                 await qt_thread_gateway.send_action(_trigger_logout_menu)
+            await aqtbot.wait(200)
 
             def _wait_logged_out():
                 assert not central_widget.isVisible()
@@ -436,6 +479,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
                     await aqtbot.mouse_click(
                         accounts_w.accounts_widget.layout().itemAt(0).widget(), QtCore.Qt.LeftButton
                     )
+            await aqtbot.wait(200)
 
             def _password_widget_shown():
                 assert isinstance(l_w.widget.layout().itemAt(0).widget(), LoginPasswordInputWidget)
@@ -447,6 +491,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             signal = tabw.logged_in if not error else tabw.login_failed
             async with aqtbot.wait_signals([l_w.login_with_password_clicked, signal]):
                 await aqtbot.mouse_click(password_w.button_login, QtCore.Qt.LeftButton)
+            await aqtbot.wait(200)
 
             def _wait_logged_in():
                 assert not l_w.isVisible()
@@ -500,6 +545,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
                 f_w.folder_changed, timeout=2500
             ):
                 await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
+            await aqtbot.wait(200)
 
             # Sanity check just to be sure...
             def _entry_available():
@@ -529,6 +575,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
                     await aqtbot.mouse_click(
                         accounts_w.accounts_widget.layout().itemAt(0).widget(), QtCore.Qt.LeftButton
                     )
+            await aqtbot.wait(200)
 
             def _password_widget_shown():
                 assert isinstance(lw.widget.layout().itemAt(0).widget(), LoginPasswordInputWidget)

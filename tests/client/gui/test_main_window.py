@@ -30,6 +30,8 @@ async def logged_gui_with_files(
         wk_button = w_w.layout_workspaces.itemAt(0).widget()
         assert not isinstance(wk_button, QtWidgets.QLabel)
 
+    await aqtbot.wait(200)
+
     await aqtbot.wait_until(workspace_button_ready, timeout=5000)
 
     f_w = logged_gui.test_get_files_widget()
@@ -41,6 +43,8 @@ async def logged_gui_with_files(
         assert f_w.workspace_fs.get_workspace_name() == "w1"
         assert f_w.table_files.rowCount() == 1
 
+    await aqtbot.wait(200)
+
     await aqtbot.wait_until(_entry_available, timeout=2000)
 
     def folder_ready():
@@ -50,8 +54,10 @@ async def logged_gui_with_files(
         assert folder
         assert folder.text() == "dir1"
 
+    await aqtbot.wait(2000)
     async with aqtbot.wait_signal(f_w.folder_stat_success, timeout=3000):
         await aqtbot.mouse_click(f_w.button_create_folder, QtCore.Qt.LeftButton)
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(folder_ready, timeout=2000)
 
@@ -59,6 +65,7 @@ async def logged_gui_with_files(
 
     def device_widget_ready():
         assert d_w.isVisible()
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(device_widget_ready, timeout=2000)
 
@@ -92,6 +99,7 @@ async def test_file_link(
         folder = f_w.table_files.item(1, 1)
         assert folder
         assert folder.text() == "dir1"
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(folder_ready, timeout=3000)
 
@@ -122,6 +130,7 @@ async def test_file_link_invalid_path(
     def assert_dialogs():
         assert len(autoclose_dialog.dialogs) == 1
         assert autoclose_dialog.dialogs == [("Error", translate("TEXT_FILE_GOTO_LINK_NOT_FOUND"))]
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
@@ -152,6 +161,7 @@ async def test_file_link_invalid_workspace(
     def assert_dialogs():
         assert len(autoclose_dialog.dialogs) == 1
         assert autoclose_dialog.dialogs == [("Error", translate("TEXT_INVALID_URL"))]
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
@@ -189,6 +199,7 @@ async def test_file_link_disconnected(
                 ),
             )
         ]
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
@@ -249,6 +260,7 @@ async def test_tab_login_logout_two_tabs(
 
     def _logged_tab_displayed():
         assert logged_tab == gui.test_get_tab()
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(_logged_tab_displayed)
     await gui.test_logout()
@@ -291,6 +303,7 @@ async def test_tab_login_logout_two_tabs_logged_in(
 
     def _logged_tab_displayed():
         assert alice_logged_tab == gui.test_get_tab()
+    await aqtbot.wait(200)
 
     await aqtbot.wait_until(_logged_tab_displayed)
 

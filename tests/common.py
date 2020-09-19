@@ -183,7 +183,7 @@ async def create_shared_workspace(name, creator, *shared_with):
             if not recipient_client:
                 await recipient_user_fs.process_last_messages()
 
-        with trio.fail_after(1):
+        with trio.fail_after(4):
             if creator_spy:
                 await creator_spy.wait_multiple(
                     [ClientEvent.FS_WORKSPACE_CREATED, ClientEvent.BACKEND_REALM_ROLES_UPDATED]

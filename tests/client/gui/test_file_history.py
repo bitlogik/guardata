@@ -24,6 +24,8 @@ async def test_file_history(
     def _workspace_available():
         assert w_w.layout_workspaces.count() == 1
 
+    await aqtbot.wait(200)
+
     await aqtbot.wait_until(_workspace_available)
 
     f_w = await logged_gui.test_switch_to_files_widget("wksp1")
@@ -37,7 +39,10 @@ async def test_file_history(
     def _entry_available():
         assert f_w.table_files.rowCount() == 2
 
+    await aqtbot.wait(200)
+
     await aqtbot.wait_until(_entry_available)
+    await aqtbot.wait(200)
 
     # First select the entry...
     await aqtbot.run(
