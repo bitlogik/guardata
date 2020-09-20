@@ -87,8 +87,13 @@ def get_pattern_filter(pattern_filter_path: Optional[Path] = None) -> Pattern:
         pattern = _get_pattern_filter(pattern_filter_path)
     # Default to the pattern from the ignore file in the core resources
     if pattern is None:
-        with importlib_resources.path(guardata.client.resources, "default_pattern.ignore") as path:
-            pattern = _get_pattern_filter(path)
+        try:
+            with importlib_resources.path(
+                guardata.client.resources, "default_pattern.ignore"
+            ) as path:
+                pattern = _get_pattern_filter(path)
+        except OSError:
+            pass
     # As a last resort use the failsafe
     if pattern is None:
         return FAILSAFE_PATTERN_FILTER
