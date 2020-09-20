@@ -1,5 +1,6 @@
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 # Copyright (c) 2013-2020, PyInstaller Development Team.
+# Copyright 2020 BitLogiK for guardata (https://guardata.app)
 #
 # Distributed under the terms of the GNU General Public License (version 2
 # or later) with exception for distributing the bootloader.
@@ -7,49 +8,24 @@
 # The full license is in the file COPYING.txt, distributed with this software.
 #
 # SPDX-License-Identifier: (GPL-2.0-or-later WITH Bootloader-exception)
-#-----------------------------------------------------------------------------
+# -----------------------------------------------------------------------------
 
 
 import os
 import sys
 import locale
 
-from PyInstaller.compat import is_win, is_darwin, is_unix, is_venv, \
-    base_prefix, open_file, text_read_mode
+from PyInstaller.compat import (
+    is_win,
+    is_darwin,
+    is_unix,
+    open_file,
+    text_read_mode,
+)
 from PyInstaller.compat import modname_tkinter
 from PyInstaller.depend.bindepend import selectImports, getImports
 from PyInstaller.building.datastruct import Tree
 from PyInstaller.utils.hooks import exec_statement, logger
-
-
-def _handle_broken_tcl_tk():
-    """
-    When freezing from a Windows venv, overwrite the values of the standard
-    `${TCL_LIBRARY}`, `${TK_LIBRARY}`, and `${TIX_LIBRARY}` environment
-    variables.
-
-    This is a workaround for broken Tcl/Tk detection in Windows virtual
-    environments. Older versions of `virtualenv` set such variables erroneously,
-    preventing PyInstaller from properly detecting Tcl/Tk. This issue has been
-    noted for `virtualenv` under Python 2.4 and Windows 7.
-
-    See Also
-    -------
-    https://github.com/pypa/virtualenv/issues/93
-    """
-    if is_win and is_venv:
-        basedir = os.path.join(base_prefix, 'tcl')
-        files = os.listdir(basedir)
-
-        # Detect Tcl/Tk paths.
-        for f in files:
-            abs_path = os.path.join(basedir, f)
-            if f.startswith('tcl') and os.path.isdir(abs_path):
-                os.environ['TCL_LIBRARY'] = abs_path
-            elif f.startswith('tk') and os.path.isdir(abs_path):
-                os.environ['TK_LIBRARY'] = abs_path
-            elif f.startswith('tix') and os.path.isdir(abs_path):
-                os.environ['TIX_LIBRARY'] = abs_path
 
 
 def _warn_if_activetcl_or_teapot_installed(tcl_root, tcltree):
@@ -74,7 +50,7 @@ def _warn_if_activetcl_or_teapot_installed(tcl_root, tcltree):
 
     # Absolute path of the "init.tcl" script.
     try:
-        init_resource = [r[1] for r in tcltree if r[1].endswith('init.tcl')][0]
+        init_resource = [r[1] for r in tcltree if r[1].endswith("init.tcl")][0]
     # If such script could not be found, silently return.
     except IndexError:
         return
@@ -82,15 +58,16 @@ def _warn_if_activetcl_or_teapot_installed(tcl_root, tcltree):
     mentions_activetcl = False
     mentions_teapot = False
     # TCL/TK reads files using the `system encoding <https://www.tcl.tk/doc/howto/i18n.html#system_encoding>`_.
-    with open_file(init_resource, text_read_mode,
-                   encoding=locale.getpreferredencoding()) as init_file:
+    with open_file(
+        init_resource, text_read_mode, encoding=locale.getpreferredencoding()
+    ) as init_file:
         for line in init_file.readlines():
             line = line.strip().lower()
-            if line.startswith('#'):
+            if line.startswith("#"):
                 continue
-            if 'activetcl' in line:
+            if "activetcl" in line:
                 mentions_activetcl = True
-            if 'teapot' in line:
+            if "teapot" in line:
                 mentions_teapot = True
             if mentions_activetcl and mentions_teapot:
                 break
@@ -104,7 +81,9 @@ difficulty freezing. To fix this, comment out all references to "teapot" in:
      %s
 
 See https://github.com/pyinstaller/pyinstaller/issues/621 for more information.
-            """ % init_resource)
+            """
+            % init_resource
+        )
 
 
 def _find_tcl_tk_darwin_frameworks(binaries):
@@ -122,10 +101,10 @@ def _find_tcl_tk_darwin_frameworks(binaries):
     """
     tcl_root = tk_root = None
     for nm, fnm in binaries:
-        if nm == 'Tcl':
-            tcl_root = os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
-        elif nm == 'Tk':
-            tk_root =  os.path.join(os.path.dirname(fnm), 'Resources/Scripts')
+        if nm == "Tcl":
+            tcl_root = os.path.join(os.path.dirname(fnm), "Resources/Scripts")
+        elif nm == "Tk":
+            tk_root = os.path.join(os.path.dirname(fnm), "Resources/Scripts")
     return tcl_root, tk_root
 
 
@@ -142,12 +121,12 @@ def _find_tcl_tk_dir():
     """
     # Python code to get path to TCL_LIBRARY.
     tcl_root = exec_statement(
-        'from %s import Tcl; print(Tcl().eval("info library"))' % modname_tkinter)
-    tk_version = exec_statement(
-        'from _tkinter import TK_VERSION; print(TK_VERSION)')
+        'from %s import Tcl; print(Tcl().eval("info library"))' % modname_tkinter
+    )
+    tk_version = exec_statement("from _tkinter import TK_VERSION; print(TK_VERSION)")
 
     # TK_LIBRARY is in the same prefix as Tcl.
-    tk_root = os.path.join(os.path.dirname(tcl_root), 'tk%s' % tk_version)
+    tk_root = os.path.join(os.path.dirname(tcl_root), "tk%s" % tk_version)
     return tcl_root, tk_root
 
 
@@ -177,16 +156,16 @@ def _find_tcl_tk(hook_api):
             # to
             #     [('Tcl', '/path/to/Tcl'), ('Tk', '/path/to/Tk')]
             mapping = {}
-            for l in bins:
-                mapping[os.path.basename(l)] = l
+            for alib in bins:
+                mapping[os.path.basename(alib)] = alib
             bins = [
-                ('Tcl', mapping['Tcl']),
-                ('Tk', mapping['Tk']),
+                ("Tcl", mapping["Tcl"]),
+                ("Tk", mapping["Tk"]),
             ]
 
         # _tkinter depends on Tcl/Tk compiled as frameworks.
         path_to_tcl = bins[0][1]
-        if 'Library/Frameworks' in path_to_tcl and "Python" not in path_to_tcl:
+        if "Library/Frameworks" in path_to_tcl and "Python" not in path_to_tcl:
             tcl_tk = _find_tcl_tk_darwin_frameworks(bins)
         # Tcl/Tk compiled as on Linux other Unixes.
         # For example this is the case of Tcl/Tk from macports.
@@ -208,14 +187,12 @@ def _collect_tcl_tk_files(hook_api):
     Tree
         Such list.
     """
-    # Workaround for broken Tcl/Tk detection in virtualenv on Windows.
-    _handle_broken_tcl_tk()
 
     tcl_root, tk_root = _find_tcl_tk(hook_api)
 
     # TODO Shouldn't these be fatal exceptions?
     if not tcl_root:
-        logger.error('Tcl/Tk improperly installed on this system.')
+        logger.error("Tcl/Tk improperly installed on this system.")
         return []
     if not os.path.isdir(tcl_root):
         logger.error('Tcl data directory "%s" not found.', tcl_root)
@@ -224,17 +201,15 @@ def _collect_tcl_tk_files(hook_api):
         logger.error('Tk data directory "%s" not found.', tk_root)
         return []
 
-    tcltree = Tree(
-        tcl_root, prefix='tcl', excludes=['demos', '*.lib', 'tclConfig.sh'])
-    tktree = Tree(
-        tk_root, prefix='tk', excludes=['demos', '*.lib', 'tkConfig.sh'])
+    tcltree = Tree(tcl_root, prefix="tcl", excludes=["demos", "*.lib", "tclConfig.sh"])
+    tktree = Tree(tk_root, prefix="tk", excludes=["demos", "*.lib", "tkConfig.sh"])
 
     # If the current Tcl installation is a Teapot-distributed version of
     # ActiveTcl and the current platform is OS X, warn that this is bad.
     if is_darwin:
         _warn_if_activetcl_or_teapot_installed(tcl_root, tcltree)
 
-    return (tcltree + tktree)
+    return tcltree + tktree
 
 
 def hook(hook_api):

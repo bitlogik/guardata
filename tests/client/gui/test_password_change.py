@@ -111,6 +111,7 @@ async def test_change_password_success(
         assert not l_w.isVisible()
         c_w = logged_gui.test_get_central_widget()
         assert c_w.isVisible()
+
     await aqtbot.wait(200)
 
     await aqtbot.wait_until(_wait_logged_in)
