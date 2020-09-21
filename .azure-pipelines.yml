@@ -235,8 +235,8 @@ jobs:
   - bash: |
       set -eux
       python3 -m pytest $(pytest.base_args) \
-        tests/test_cli.py tests/client/gui/test_bootstrap_organization.py tests/client/gui/test_files.py tests/client/gui/test_login.py tests/client/gui/test_main_window.py --runmountpoint \
-        -n auto --max-worker-restart=0 -x
+        tests/test_cli.py tests/client/gui/test_bootstrap_organization.py tests/client/gui/test_files.py tests/client/gui/test_login.py tests/client/gui/test_main_window.py \
+        --runmountpoint --rungui -n 1 --max-worker-restart=0 -x
     displayName: 'Tests CLI/GUI ease'
   # - bash: | Skipped : all pass but freeze at the end
       # set -eux

@@ -25,12 +25,11 @@ a = Analysis(["../../guardata/client/cli/run_mac.py"],
              hiddenimports=["pytzdata", "certifi"],
              hookspath=["hooks"],
              runtime_hooks=[],
-             excludes=[],
+             excludes=['_gtkagg', '_tkagg', 'curses', 'tcl', 'Tkconstants', 'Tkinter', 'libopenblas', 'libdgamln'],
              win_no_prefer_redirects=False,
              win_private_assemblies=False,
              cipher=None,
              noarchive=False)
-remove(pkgs_remove)
 pyz = PYZ(a.pure, a.zipped_data,
              cipher=None)
 exe = EXE(pyz,
@@ -52,6 +51,7 @@ coll = COLLECT(exe,
                upx=True,
                upx_exclude=[],
                name="guardata")
+remove(pkgs_remove)
 app = BUNDLE(coll,
     name="guardata.app",
     icon="../../guardata/client/resources/guardata.icns",
