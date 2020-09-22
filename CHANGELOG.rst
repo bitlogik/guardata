@@ -3,7 +3,7 @@ guardata history
 ----------------
 
 0.1.2 - 2020-09-22
-^^^^^^^^^^^^^^^^^
+^^^^^^^^^^^^^^^^^^
 
 * First MacOSX version
 * Fix Snap building
