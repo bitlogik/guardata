@@ -111,6 +111,7 @@ async def test_file_link(
     assert logged_gui.tab_center.count() == 1
 
 
+@pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_file_link_invalid_path(
@@ -143,6 +144,7 @@ async def test_file_link_invalid_path(
     assert logged_gui.tab_center.count() == 1
 
 
+@pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_file_link_invalid_workspace(
@@ -173,6 +175,7 @@ async def test_file_link_invalid_workspace(
     await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
 
+@pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_file_link_disconnected(
