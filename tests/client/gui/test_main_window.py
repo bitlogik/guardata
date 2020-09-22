@@ -1,6 +1,7 @@
 # Parsec Cloud (https://guardata.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
+import sys
 from PyQt5 import QtCore, QtWidgets
 
 from guardata.client.gui.lang import translate
@@ -30,7 +31,7 @@ async def logged_gui_with_files(
         wk_button = w_w.layout_workspaces.itemAt(0).widget()
         assert not isinstance(wk_button, QtWidgets.QLabel)
 
-    await aqtbot.wait(200)
+    await aqtbot.wait(500)
 
     await aqtbot.wait_until(workspace_button_ready, timeout=5000)
 
@@ -74,6 +75,7 @@ async def logged_gui_with_files(
     return logged_gui, w_w, f_w
 
 
+@pytest.mark.skipif(sys.platform == "darwin")
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_file_link(
