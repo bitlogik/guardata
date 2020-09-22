@@ -43,6 +43,7 @@ parts:
       - libxext6
       - libx11-6
       - libx11-xcb1
+      - libxkbcommon-x11-0
       - libfreetype6
       - libpng16-16
       - libfontconfig
