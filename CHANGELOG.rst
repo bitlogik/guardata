@@ -2,15 +2,17 @@
 guardata history
 ----------------
 
-0.1.2 - 2020-XX ?
+0.1.2 - 2020-09-22
 ^^^^^^^^^^^^^^^^^
 
+* First MacOSX version
 * Fix Snap building
 * GUI : refresh login list when logout
+* GUI : don't ask to select account if only 1
 * Cleanups (pkg, files)
 * Windows installer simplified
 * Script for dev to add devices/users much faster
-* msgpack dependency updated
+* many dependencies updated
 * Improve backend management of websocket
 
 
