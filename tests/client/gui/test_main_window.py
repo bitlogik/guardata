@@ -75,7 +75,7 @@ async def logged_gui_with_files(
     return logged_gui, w_w, f_w
 
 
-@pytest.mark.skipif(sys.platform == "darwin")
+@pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_file_link(
