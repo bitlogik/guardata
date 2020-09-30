@@ -223,18 +223,21 @@ class BackendApp:
                     data = await stream.receive_some(MAX_RECV)
                     first_request_data += data
 
-                except ConnectionError:
-                    # They've stopped listening. Not much we can do about it here.
-                    data = b""
+                except trio.BrokenResourceError:
+                    return
+
                 conn.receive_data(data)
-
                 event = conn.next_event()
-                if event is not h11.NEED_DATA:
+                if event is h11.NEED_DATA:
+                    continue
+                if isinstance(event, h11.Request):
                     break
-
-            if not isinstance(event, h11.Request):
-                await stream.aclose()
-                return
+                if isinstance(event, h11.ConnectionClosed):
+                    # Peer has left
+                    return
+                else:
+                    logger.error("Unexpected event", client_event=event)
+                    return
 
             # get headers as a dict
             headers = dict(event.headers)

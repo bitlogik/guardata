@@ -16,6 +16,7 @@ from backendService.config import BackendConfig
 from backendService import static as http_static_module
 from backendService.templates import get_template
 from backendService.templates.texts import all_texts
+from backendService.organization import OrganizationAlreadyExistsError
 
 
 ACAO_domain = "https://guardata.app"  # use "" to disable ACAO
@@ -166,24 +167,24 @@ class HTTPComponent:
         return HTTPResponse.build(200, headers=headers, data=data)
 
     async def _http_creategroup(self, req: HTTPRequest, path: str) -> HTTPResponse:
-        if not re.match(r"^[a-zA-Z]{4,63}$", path):
-            data = b"Allowed group name : azAZ 4-63 chars long"
-            return HTTPResponse.build(400, data=data)
-        headers = {"content-Type": "application/json"}
-        org_token = token_hex(32)
-        await self._org.create(path, org_token)
-        # except OrganizationAlreadyExistsError:
-        # dataj = {"status": "already_exists"}
-        # return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
-        groupURL = (
-            f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
-        )
-        dataj = {"status": "ok", "CreatedGroup": path, "groupURL": groupURL}
         headers = {"content-Type": "application/json"}
         if ACAO_domain:
             headers["Access-Control-Allow-Origin"] = ACAO_domain
             headers["Access-Control-Allow-Methods"] = "GET"
             headers["Access-Control-Allow-Headers"] = "Content-Type"
+        if not re.match(r"^[a-zA-Z]{4,63}$", path):
+            data = b"Allowed group name : azAZ 4-63 chars long"
+            return HTTPResponse.build(400, headers=headers, data=data)
+        org_token = token_hex(32)
+        try:
+            await self._org.create(path, org_token)
+        except OrganizationAlreadyExistsError:
+            dataj = {"status": "already_exists"}
+            return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
+        groupURL = (
+            f"parsec://cloud.guardata.app/{path}?action=bootstrap_organization&token={org_token}"
+        )
+        dataj = {"status": "ok", "CreatedGroup": path, "groupURL": groupURL}
         return HTTPResponse.build(200, headers=headers, data=json.dumps(dataj).encode("utf8"))
 
     ROUTE_MAPPING = [

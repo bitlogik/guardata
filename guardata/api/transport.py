@@ -122,14 +122,18 @@ class Transport:
     @classmethod
     async def init_for_server(cls, stream, first_request_data=None):
         ws = WSConnection(ConnectionType.SERVER)
-        if first_request_data:
-            ws.receive_data(first_request_data)
-        transport = cls(stream, ws)
+        try:
+            if first_request_data:
+                ws.receive_data(first_request_data)
+            transport = cls(stream, ws)
 
-        # Wait for client to init WebSocket handshake
-        event = "Websocket handshake timeout"
-        with trio.move_on_after(WEBSOCKET_HANDSHAKE_TIMEOUT):
-            event = await transport._next_ws_event()
+            # Wait for client to init WebSocket handshake
+            event = "Websocket handshake timeout"
+            with trio.move_on_after(WEBSOCKET_HANDSHAKE_TIMEOUT):
+                event = await transport._next_ws_event()
+
+        except RemoteProtocolError as exc:
+            raise TransportError(f"Invalid WebSocket query: {exc}") from exc
 
         if isinstance(event, Request):
             transport.logger.debug("Accepting WebSocket upgrade")
