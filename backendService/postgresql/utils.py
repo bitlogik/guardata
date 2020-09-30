@@ -26,7 +26,7 @@ STR_TO_REALM_MAINTENANCE_TYPE = {type.value: type for type in MaintenanceType}
 
 class Q:
     """
-    Dead simple SQL query composition framework (◠﹏◠)
+    Simple SQL query composition framework
     """
 
     def __init__(self, src, **kwargs):

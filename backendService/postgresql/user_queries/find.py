@@ -45,9 +45,12 @@ LIMIT {limit} OFFSET {offset}
 def _q_count_total_human(query, omit_revoked, omit_non_human, in_find=False):
     conditions = []
     if query:
-        conditions.append(f"AND (human.label ILIKE '%{query}%' OR human.email ILIKE '%{query}%')")
+        query_clean = query.translate({ord(c): None for c in "'%;<>\"="})
+        conditions.append(
+            f"AND (human.label ILIKE '%{query_clean}%' OR human.email ILIKE '%{query_clean}%')"
+        )
         if in_find:
-            conditions = [f"AND user_id ILIKE '%{query}%'"]
+            conditions = [f"AND user_id ILIKE '%{query_clean}%'"]
     if omit_revoked:
         conditions.append("AND (user_.revoked_on IS NULL OR user_.revoked_on > $now)")
     if omit_non_human:
