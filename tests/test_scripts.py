@@ -29,7 +29,7 @@ def run_testenv():
         if os.name == "nt":
             fd, bat_script = tempfile.mkstemp(suffix=".bat")
             with open(fd, "w") as f:
-                f.write(f"call {base_dir}\\scripts\\run_testenv.bat\r\necho %APPDATA%")
+                f.write(f"call {base_dir}\\scripts\\run_testenv.bat\r\necho %LOCALAPPDATA%")
             output = subprocess.check_output(str(bat_script))
             os.unlink(bat_script)
         else:
