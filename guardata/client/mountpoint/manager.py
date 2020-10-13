@@ -40,7 +40,7 @@ try:
         import_function("winfspy")
     else:
         import_function("fuse")
-except (ImportError, RuntimeError):
+except (ImportError, RuntimeError, OSError):
     pass
 
 logger = get_logger()
@@ -66,7 +66,7 @@ def get_mountpoint_runner():
         try:
             # Use import function for easier mock up
             import_function("fuse")
-        except ImportError as exc:
+        except (ImportError, RuntimeError, OSError) as exc:
             raise MountpointFuseNotAvailable(exc) from exc
 
         logging.getLogger("fuse").setLevel(logging.WARNING)
