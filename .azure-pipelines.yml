@@ -53,31 +53,31 @@ jobs:
 #################################################################################
 # Step 1: Binary wheel build
 
-# - job: 's1_build_wheel'
-  # displayName: 'Build wheel'
-  # dependsOn:
-    # - s0_qc
-  # timeoutInMinutes: 8
-  # pool:
-    # vmImage: 'ubuntu-latest'
-  # steps:
-  # - checkout: self
-    # submodules: true
-  # - task: UsePythonVersion@0
-    # inputs:
-      # versionSpec: '$(python.version)'
-  # - bash: |
-      # set -eux
-      # sudo apt-get update
-      # python3 --version
-      # pip3 install -r pre-requirements.txt
-    # displayName: 'Bootstrap'
-  # - bash: |
-      # set -eux
-      # python setup.py bdist_wheel
-    # displayName: 'Build Wheel'
-  # - publish: dist/
-    # artifact: wheel
+- job: 's1_build_wheel'
+  displayName: 'Build wheel'
+  dependsOn:
+    - s0_qc
+  timeoutInMinutes: 8
+  pool:
+    vmImage: 'ubuntu-latest'
+  steps:
+  - checkout: self
+    submodules: true
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '$(python.version)'
+  - bash: |
+      set -eux
+      sudo apt-get update
+      python3 --version
+      pip3 install -r pre-requirements.txt
+    displayName: 'Bootstrap'
+  - bash: |
+      set -eux
+      python setup.py bdist_wheel
+    displayName: 'Build Wheel'
+  - publish: dist/
+    artifact: wheel
 
 
 #################################################################################
@@ -264,7 +264,8 @@ jobs:
 
 - job: 's3_mac_build'
   displayName: 'MacOSX build'
-  # dependsOn:
+  dependsOn:
+    - s1_build_wheel
     # - s2_windows_test
     # - s2_windows_test
     # # replace with s2_mac_test when all fix

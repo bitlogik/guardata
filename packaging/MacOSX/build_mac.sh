@@ -7,6 +7,9 @@ python3 -m pip install .
 python3 -m pip install 'pyinstaller==4.0'
 python3 -m pip install -U certifi
 cd packaging/MacOSX
-echo 'from guardata.client.cli import run' > ../../guardata/client/cli/run_mac.py
-echo 'run.run_gui()' >> ../../guardata/client/cli/run_mac.py
+MACRUNfile='../../guardata/client/cli/run_mac.py'
+echo 'import sys' > $MACRUNfile
+echo 'from guardata.cli import cli' >> $MACRUNfile
+echo 'sys.argv = [sys.argv[0], "client", "gui", *sys.argv[1:]]' >> $MACRUNfile
+echo 'cli.main()' >> $MACRUNfile
 pyinstaller guardata.spec
