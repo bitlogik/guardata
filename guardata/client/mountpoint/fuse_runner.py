@@ -85,8 +85,7 @@ async def _bootstrap_mountpoint(base_mountpoint_path: PurePath, workspace_fs) ->
 
 async def _teardown_mountpoint(mountpoint_path):
     try:
-        with trio.CancelScope(shield=True):
-            await trio.Path(mountpoint_path).rmdir()
+        await trio.Path(mountpoint_path).rmdir()
     except OSError:
         pass
 
@@ -121,6 +120,7 @@ async def fuse_mountpoint_runner(
         "timestamp": getattr(workspace_fs, "timestamp", None),
     }
     try:
+        teardown_cancel_scope = None
         event_bus.send(ClientEvent.MOUNTPOINT_STARTING, **event_kwargs)
 
         async with trio.open_service_nursery() as nursery:
@@ -144,6 +144,8 @@ async def fuse_mountpoint_runner(
                 logger.info("Starting fuse thread...", mountpoint=mountpoint_path)
                 try:
                     fuse_thread_started.set()
+                    if teardown_cancel_scope is not None:
+                        return
                     FUSE(
                         fuse_operations,
                         str(mountpoint_path.absolute()),
@@ -181,9 +183,12 @@ async def fuse_mountpoint_runner(
             task_status.started(mountpoint_path)
 
     finally:
-        await _stop_fuse_thread(mountpoint_path, fuse_operations, fuse_thread_stopped)
-        event_bus.send(ClientEvent.MOUNTPOINT_STOPPED, **event_kwargs)
-        await _teardown_mountpoint(mountpoint_path)
+        with trio.CancelScope(shield=True) as teardown_cancel_scope:
+            await _stop_fuse_thread(
+                mountpoint_path, fuse_operations, fuse_thread_started, fuse_thread_stopped
+            )
+            event_bus.send(ClientEvent.MOUNTPOINT_STOPPED, **event_kwargs)
+            await _teardown_mountpoint(mountpoint_path)
 
 
 async def _wait_for_fuse_ready(mountpoint_path, fuse_thread_started, initial_st_dev):
@@ -195,7 +200,7 @@ async def _wait_for_fuse_ready(mountpoint_path, fuse_thread_started, initial_st_
         try:
             stat = await trio_mountpoint_path.stat()
         except FileNotFoundError:
-            continue
+            raise
         # Looks like a revoked workspace has been mounted
         except PermissionError:
             break
@@ -206,21 +211,24 @@ async def _wait_for_fuse_ready(mountpoint_path, fuse_thread_started, initial_st_
             break
 
 
-async def _stop_fuse_thread(mountpoint_path, fuse_operations, fuse_thread_stopped):
-    if fuse_thread_stopped.is_set():
+async def _stop_fuse_thread(
+    mountpoint_path, fuse_operations, fuse_thread_started, fuse_thread_stopped
+):
+    if fuse_thread_stopped.is_set() or not fuse_thread_started.is_set():
         return
 
-    # Ask for dummy file just to force a fuse operation that will
-    # process the `fuse_exit` from a valid context
-
-    with trio.CancelScope(shield=True):
-        logger.info("Stopping fuse thread...", mountpoint=mountpoint_path)
-        if on_mac():
-            await trio.run_process(["diskutil", "umount", str(mountpoint_path)])
-        fuse_operations.schedule_exit()
+    logger.info("Stopping fuse thread...", mountpoint=mountpoint_path)
+    if on_mac():
+        await trio.run_process(["diskutil", "umount", str(mountpoint_path)])
+    fuse_operations.schedule_exit()
+    # Loop over attemps at waking up the fuse operations
+    while True:
+        # Attempt to wake up the fuse operations
         try:
-            await trio.Path(mountpoint_path / "__shutdown_fuse__").exists()
+            await trio.Path(mountpoint_path / ".__shutdown_fuse__").exists()
         except OSError:
             pass
-        await trio.to_thread.run_sync(fuse_thread_stopped.wait)
-        logger.info("Fuse thread stopped", mountpoint=mountpoint_path)
+        # Check if the attempt succeeded
+        if await trio.to_thread.run_sync(fuse_thread_stopped.wait, 0.01):
+            break
+    logger.info("Fuse thread stopped", mountpoint=mountpoint_path)
