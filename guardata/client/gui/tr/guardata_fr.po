@@ -1652,7 +1652,7 @@ msgstr ""
 msgid "TEXT_LOGIN_ERROR_FUSE_NOT_AVAILABLE"
 msgstr ""
 "FUSE n'a pas pu être chargé.\n"
-"Sur Mac, il est nécessaire d'installer osxfuse (FUSE for MacOS).\n"
+"Sur Mac, il est nécessaire d'installer osxfuse (FUSE for MacOS) et de l'accepter dans les réglages de sécurité.\n"
 "https://osxfuse.github.io/2020/07/04/OSXFUSE-3.11.0.html""
 
 msgid "TEXT_LOGIN_UNKNOWN_ERROR"
