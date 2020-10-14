@@ -2364,6 +2364,12 @@ msgstr "Sauvegarder"
 msgid "TEXT_SETTINGS_CHECK_SHOW_CONFINED_FILES"
 msgstr "Afficher les fichiers exclus de la synchronisation"
 
+msgid "TEXT_WORKSPACE_TEMPORARY_TITLE"
+msgstr "Aperçu dans le temps"
+
+msgid "TEXT_WORKSPACE_TEMPORARY_DESCRIPTION"
+msgstr "Espace de travail tel qu'il était le "
+
 msgid "TEXT_WORKSPACE_TIMESTAMPED_INSTRUCTIONS"
 msgstr ""
 "Vous pourrez naviguer dans l'espace de travail tel qu'il était à un "

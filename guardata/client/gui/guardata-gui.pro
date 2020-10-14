@@ -14,6 +14,7 @@ FORMS += forms/main_window.ui \
          forms/claim_user_widget.ui \
          forms/mount_widget.ui \
          forms/workspaces_widget.ui \
+         forms/temporary_workspace_widget.ui \
          forms/workspace_button.ui \
          forms/user_button.ui \
          forms/device_button.ui \

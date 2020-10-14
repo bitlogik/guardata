@@ -2309,6 +2309,12 @@ msgstr "Save"
 msgid "TEXT_SETTINGS_CHECK_SHOW_CONFINED_FILES"
 msgstr "Display files that will not be synced"
 
+msgid "TEXT_WORKSPACE_TEMPORARY_TITLE"
+msgstr "Snapshot view"
+
+msgid "TEXT_WORKSPACE_TEMPORARY_DESCRIPTION"
+msgstr "Workspace as it was on "
+
 msgid "TEXT_WORKSPACE_TIMESTAMPED_INSTRUCTIONS"
 msgstr "You will be able to see the workspace as it was at a given time."
 

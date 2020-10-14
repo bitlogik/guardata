@@ -15,6 +15,7 @@ from guardata.client.gui.custom_dialogs import show_info
 
 from guardata.client.gui.ui.workspace_button import Ui_WorkspaceButton
 from guardata.client.gui.ui.empty_workspace_widget import Ui_EmptyWorkspaceWidget
+from guardata.client.gui.ui.temporary_workspace_widget import Ui_TemporaryWorkspaceWidget
 
 from guardata.client.gui.switch_button import SwitchButton
 
@@ -26,6 +27,12 @@ class EmptyWorkspaceWidget(QWidget, Ui_EmptyWorkspaceWidget):
         super().__init__()
         self.setupUi(self)
         self.label_icon.apply_style()
+
+
+class TemporaryWorkspaceWidget(QWidget, Ui_TemporaryWorkspaceWidget):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 
 class WorkspaceButton(QWidget, Ui_WorkspaceButton):
@@ -60,29 +67,27 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
         self.switch_button.clicked.connect(self._on_switch_clicked)
         self.reencrypting = None
         self.setCursor(QCursor(Qt.PointingHandCursor))
-        self.widget_empty.layout().addWidget(EmptyWorkspaceWidget())
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
         files = files or []
 
         self.switch_button.setToolTip(_("TEXT_WORKSPACE_SWITCH_TOOLTIP"))
 
-        if not len(files):
-            self.widget_empty.show()
-            self.widget_files.hide()
+        if not self.timestamped:
+            self.button_delete.hide()
+            if not len(files):
+                self.widget_empty.show()
+                self.widget_files.hide()
+                self.widget_empty.layout().addWidget(EmptyWorkspaceWidget())
+            else:
+                for i, f in enumerate(files, 1):
+                    if i > 4:
+                        break
+                    label = getattr(self, "file{}_name".format(i))
+                    label.setText(f)
+                self.widget_files.show()
+                self.widget_empty.hide()
         else:
-            for i, f in enumerate(files, 1):
-                if i > 4:
-                    break
-                label = getattr(self, "file{}_name".format(i))
-                label.setText(f)
-            self.widget_files.show()
-            self.widget_empty.hide()
-
-        if self.timestamped:
-            self.widget_title.setStyleSheet("background-color: #DDDDDD;")
-            self.widget_actions.setStyleSheet("background-color: #DDDDDD;")
-            self.widget.setStyleSheet("background-color: #DDDDDD;")
             self.switch_button.setChecked(True)
             self.button_reencrypt.hide()
             self.button_remount_ts.hide()
@@ -91,8 +96,12 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
             self.label_shared.hide()
             self.label_owner.hide()
             self.switch_button.hide()
-        else:
-            self.button_delete.hide()
+            widg_tmp = TemporaryWorkspaceWidget()
+            widg_tmp.label_timestamp.setText(format_datetime(self.timestamp))
+            self.widget_empty.layout().addWidget(widg_tmp)
+            self.widget_empty.show()
+            self.widget_files.hide()
+
         effect = QGraphicsDropShadowEffect(self)
         effect.setColor(QColor(0x99, 0x99, 0x99))
         effect.setBlurRadius(10)

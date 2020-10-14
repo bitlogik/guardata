@@ -731,13 +731,13 @@ QWidget#widget_title {
  </widget>
  <customwidgets>
   <customwidget>
-   <class>Button</class>
-   <extends>QPushButton</extends>
+   <class>IconLabel</class>
+   <extends>QLabel</extends>
    <header>guardata.client.gui.custom_widgets</header>
   </customwidget>
   <customwidget>
-   <class>IconLabel</class>
-   <extends>QLabel</extends>
+   <class>Button</class>
+   <extends>QPushButton</extends>
    <header>guardata.client.gui.custom_widgets</header>
   </customwidget>
  </customwidgets>
