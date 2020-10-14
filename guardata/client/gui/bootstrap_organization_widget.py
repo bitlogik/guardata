@@ -110,9 +110,19 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
         if status == "invalid-url" or status == "bad-url":
             errmsg = _("TEXT_BOOTSTRAP_ORG_INVALID_URL")
         elif status == "not-found":
+            # in case invite URL is invalid, close dialog
             errmsg = _("TEXT_BOOTSTRAP_ORG_INVITE_NOT_FOUND")
+            self.dialog.reject()
+            show_error(self, errmsg, exception=self.bootstrap_job.exc)
+            self.bootstrap_job = None
+            return
         elif status == "already-bootstrapped":
+            # in case group was already activated, close dialog
             errmsg = _("TEXT_BOOTSTRAP_ORG_ALREADY_BOOTSTRAPPED")
+            self.dialog.reject()
+            show_error(self, errmsg, exception=self.bootstrap_job.exc)
+            self.bootstrap_job = None
+            return
         elif status == "user-exists":
             errmsg = _("TEXT_BOOTSTRAP_ORG_USER_EXISTS")
         elif status == "password-mismatch":
@@ -131,17 +141,21 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
             errmsg = _("TEXT_BOOTSTRAP_ORG_UNKNOWN_FAILURE")
         show_error(self, errmsg, exception=self.bootstrap_job.exc)
         self.bootstrap_job = None
-        self.dialog.reject()
+        self.check_infos()
 
     def on_bootstrap_success(self):
         assert self.bootstrap_job
         assert self.bootstrap_job.is_finished()
         assert self.bootstrap_job.status == "ok"
 
-        self.button_bootstrap.setDisabled(False)
         self.status = self.bootstrap_job.ret
         self.bootstrap_job = None
-        self.check_infos()
+        if self.dialog:
+            self.dialog.accept()
+        elif QApplication.activeModalWidget():
+            QApplication.activeModalWidget().accept()
+        else:
+            logger.warning("Cannot close dialog when bootstraping")
         show_info(
             parent=self,
             message=_("TEXT_BOOTSTRAP_ORG_SUCCESS_organization").format(
@@ -149,12 +163,6 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
             ),
             button_text=_("ACTION_CONTINUE"),
         )
-        if self.dialog:
-            self.dialog.accept()
-        elif QApplication.activeModalWidget():
-            QApplication.activeModalWidget().accept()
-        else:
-            logger.warning("Cannot close dialog when bootstraping")
 
     def bootstrap_clicked(self):
         assert not self.bootstrap_job
@@ -164,7 +172,7 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
                 email=self.line_edit_email.text(), label=self.line_edit_login.text()
             )
         except ValueError as exc:
-            show_error(_("TEXT_BOOTSTRAP_ORG_INVALID_EMAIL"), exception=exc)
+            show_error(self, _("TEXT_BOOTSTRAP_ORG_INVALID_EMAIL"), exception=exc)
             return
 
         self.bootstrap_job = self.jobs_ctx.submit_job(

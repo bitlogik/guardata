@@ -1630,7 +1630,7 @@ msgid "ACTION_CONTINUE"
 msgstr "Continuer"
 
 msgid "TEXT_BOOTSTRAP_ORG_INVALID_EMAIL"
-msgstr "L'email n'est pas valide."
+msgstr "L'email ou le nom ont un format invalide."
 
 msgid "TEXT_BOOTSTRAP_ORG_TITLE"
 msgstr "Activer l'organisation"

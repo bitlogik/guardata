@@ -128,8 +128,8 @@ async def test_bootstrap_organization_backend_offline(
         await proceed_to_bootstrap(aqtbot, bo_w)
 
         def _bootstrap_done():
-            # No logged in should have occured, should go back to login page
-            assert not bo_w.isVisible()
+            # No logged in should have occured
+            assert bo_w.isVisible()
             l_w = gui.test_get_login_widget()
             assert l_w.isVisible()
             assert autoclose_dialog.dialogs == [
@@ -213,8 +213,8 @@ async def test_bootstrap_organization_unknown_error(
     await proceed_to_bootstrap(aqtbot, bo_w)
 
     def _bootstrap_done():
-        # No logged in should have occured, should go back to login page
-        assert not bo_w.isVisible()
+        # No logged in should have occured
+        assert bo_w.isVisible()
         l_w = gui.test_get_login_widget()
         assert l_w.isVisible()
         assert autoclose_dialog.dialogs == [("Error", "Could not activate the organization.")]
