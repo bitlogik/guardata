@@ -273,7 +273,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         action_addr = None
         try:
-            action_addr = BackendActionAddr.from_url(url)
+            action_addr = BackendActionAddr.from_url(url.strip())
         except ValueError as exc:
             show_error(self, _("TEXT_INVALID_URL"), exception=exc)
             return
