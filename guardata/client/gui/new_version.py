@@ -22,27 +22,26 @@ async def _do_check_new_version(url):
     current_version = Version(__version__)
 
     def _fetch_latest_release():
-        # try:
         with urlopen(Request(url, method="GET")) as req:
             latest_v = req.read()
             return Version(latest_v.decode("ascii"))
-        # except Exception as e:
-        # print("ERROR GETTING NEW VERSION")
-        # print(str(e))
-        # return None
 
     latest_version = await trio.to_thread.run_sync(_fetch_latest_release)
     if latest_version:
         if latest_version > current_version:
-            current_arch = QSysInfo().currentCpuArchitecture()
-            if current_arch == "x86_64":
-                win_version = "win64"
+            if platform.system() == "Windows":
+                current_arch = QSysInfo().currentCpuArchitecture()
+                if current_arch == "x86_64":
+                    win_version = "win64"
+                    return (
+                        latest_version,
+                        f"https://dl.guardata.app/guardata-{latest_version.public}-{win_version}-setup.exe",
+                    )
+            elif platform.system() == "Darwin":
                 return (
                     latest_version,
-                    f"https://dl.guardata.app/guardata-{latest_version.public}-{win_version}-setup.exe",
+                    f"https://dl.guardata.app/guardata_{latest_version.public}.dmg",
                 )
-            # elif current_arch == "i386":
-            # win_version = "win32"
 
     return None
 
@@ -97,9 +96,8 @@ class CheckNewVersion(QDialog, Ui_NewVersionDialog):
         super().__init__(**kwargs)
         self.setupUi(self)
 
-        if platform.system() != "Windows":
+        if platform.system() != "Windows" and platform.system() != "Darwin":
             return
-        # "Linux", "Darwin"
 
         self.widget_info = NewVersionInfo(parent=self)
         self.widget_available = NewVersionAvailable(parent=self)
