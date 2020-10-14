@@ -641,7 +641,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self,
                     _("TEXT_TAB_CLOSE_TITLE"),
                     _("TEXT_TAB_CLOSE_INSTRUCTIONS_device").format(
-                        device=f"{tab.core.device.short_user_display} - {tab.core.device.device_display}"
+                        device=f"{tab.client.device.short_user_display} - {tab.client.device.device_display}"
                     ),
                     [_("ACTION_TAB_CLOSE_CONFIRM"), _("ACTION_CANCEL")],
                 )

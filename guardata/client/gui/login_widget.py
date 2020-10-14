@@ -125,7 +125,12 @@ class LoginWidget(QWidget, Ui_LoginWidget):
 
     def reload_devices(self):
         self._clear_widget()
-        devices = list_available_devices(self.config.config_dir)
+        devices_all = list_available_devices(self.config.config_dir)
+        devices = [
+            device
+            for device in devices_all
+            if not guardataApp.is_device_connected(device.organization_id, device.device_id)
+        ]
         n_devices = len(devices)
         if n_devices < 1:
             no_device_widget = LoginNoDevicesWidget()
