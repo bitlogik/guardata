@@ -185,8 +185,8 @@ async def test_login_logout_account_list_refresh(
     await aqtbot.wait_until(_switch_to_login_tab)
 
     acc_w = gui.test_get_login_widget().widget.layout().itemAt(0).widget()
-    # 2 because we have a spacer
-    assert acc_w.accounts_widget.layout().count() == 2
+    assert isinstance(acc_w, LoginPasswordInputWidget)
+    assert not acc_w.button_back.isVisible()
 
     def _switch_to_main_tab():
         gui.tab_center.setCurrentIndex(0)

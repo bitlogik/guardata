@@ -52,11 +52,14 @@ class LoginPasswordInputWidget(QWidget, Ui_LoginPasswordInputWidget):
     back_clicked = pyqtSignal()
     log_in_clicked = pyqtSignal(Path, str)
 
-    def __init__(self, device):
+    def __init__(self, device, hide_back=False):
         super().__init__()
         self.setupUi(self)
         self.device = device
-        self.button_back.clicked.connect(self.back_clicked.emit)
+        if hide_back:
+            self.button_back.hide()
+        else:
+            self.button_back.clicked.connect(self.back_clicked.emit)
         self.button_login.clicked.connect(self._on_log_in_clicked)
         self.label_instructions.setText(
             _("TEXT_LOGIN_ENTER_PASSWORD_INSTRUCTIONS_organization-device-user-email").format(
@@ -133,7 +136,7 @@ class LoginWidget(QWidget, Ui_LoginWidget):
             self.widget.layout().addWidget(no_device_widget)
             no_device_widget.setFocus()
         elif n_devices == 1:
-            self._on_account_clicked(devices[0])
+            self._on_account_clicked(devices[0], hide_back=True)
         else:
             accounts_widget = LoginAccountsWidget(devices)
             accounts_widget.account_clicked.connect(self._on_account_clicked)
@@ -149,9 +152,9 @@ class LoginWidget(QWidget, Ui_LoginWidget):
                 w.hide()
                 w.setParent(None)
 
-    def _on_account_clicked(self, device):
+    def _on_account_clicked(self, device, hide_back=False):
         self._clear_widget()
-        lw = LoginPasswordInputWidget(device)
+        lw = LoginPasswordInputWidget(device, hide_back=hide_back)
         lw.back_clicked.connect(self.reload_devices)
         lw.log_in_clicked.connect(self.try_login)
         self.widget.layout().addWidget(lw)
