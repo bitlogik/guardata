@@ -82,9 +82,8 @@ def test_human_handle_compare():
     "email,label",
     (
         ("alice@example.com", "Alice"),
-        ("a@x", "A"),  # Smallest size
-        (f"{'a' * 64}@{'x' * 185}.com", "x" * 254),  # Max sizes
-        (f"{'飞' * 21}@{'飞' * 62}.com", f"{'飞' * 84}xx"),  # Unicode & max size
+        ("a@x.e", "A"),  # Smallest size
+        (f"{'a' * 180}@{'x' * 60}.com", "x" * 254),  # Max sizes
     ),
 )
 def test_valid_human_handle(email, label):

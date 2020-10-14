@@ -94,8 +94,13 @@ class HumanHandle(namedtuple("HumanHandle", "email label")):
     __slots__ = ()
 
     def __init__(self, email: str, label: str):
-        # TODO: how to check the email  easily ?
-        if not isinstance(email, str) or not 0 < _bytes_size(email) < 255:
+
+        email_regex = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+        if (
+            not isinstance(email, str)
+            or not 3 < _bytes_size(email) < 255
+            or not re.match(email_regex, email)
+        ):
             raise ValueError("Invalid email address")
 
         if not isinstance(label, str) or not 0 < _bytes_size(label) < 255:
