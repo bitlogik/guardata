@@ -82,7 +82,7 @@ class EventBusSpy:
     def clear(self):
         self.events.clear()
 
-    async def wait_with_timeout(self, event, kwargs=ANY, dt=ANY, timeout=1):
+    async def wait_with_timeout(self, event, kwargs=ANY, dt=ANY, timeout=5):
         with trio.fail_after(timeout):
             await self.wait(event, kwargs, dt)
 
@@ -105,7 +105,7 @@ class EventBusSpy:
         self._waiters.add(_waiter)
         return await receive_channel.receive()
 
-    async def wait_multiple_with_timeout(self, events, timeout=1, in_order=True):
+    async def wait_multiple_with_timeout(self, events, timeout=5, in_order=True):
         with trio.fail_after(timeout):
             await self.wait_multiple(events, in_order=in_order)
 

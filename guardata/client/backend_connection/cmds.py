@@ -33,6 +33,7 @@ from guardata.api.protocol import (
     invite_4_greeter_communicate_serializer,
     invite_4_claimer_communicate_serializer,
     ping_serializer,
+    organization_stats_serializer,
     apiv1_organization_create_serializer,
     apiv1_organization_stats_serializer,
     apiv1_organization_status_serializer,
@@ -121,6 +122,12 @@ async def _send_cmd(transport: Transport, serializer, **req) -> dict:
 
 
 ###  Backend authenticated cmds  ###
+
+### Organization API ###
+
+
+async def organization_stats(transport: Transport) -> dict:
+    return await _send_cmd(transport, organization_stats_serializer, cmd="organization_stats")
 
 
 ### Events&misc API ###
@@ -633,7 +640,7 @@ async def organization_create(
     )
 
 
-async def organization_stats(transport: Transport, organization_id: OrganizationID) -> dict:
+async def apiv1_organization_stats(transport: Transport, organization_id: OrganizationID) -> dict:
     return await _send_cmd(
         transport,
         apiv1_organization_stats_serializer,

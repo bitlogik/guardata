@@ -82,10 +82,10 @@ def _get_pattern_filter(pattern_filter_path: Path) -> Optional[Pattern]:
 
 def get_pattern_filter(pattern_filter_path: Optional[Path] = None) -> Pattern:
     pattern = None
-    # Get the pattern from the path defined in the core config
+    # Get the pattern from the path defined in the client config
     if pattern_filter_path is not None:
         pattern = _get_pattern_filter(pattern_filter_path)
-    # Default to the pattern from the ignore file in the core resources
+    # Default to the pattern from the ignore file in the client resources
     if pattern is None:
         try:
             with importlib_resources.path(
@@ -98,6 +98,13 @@ def get_pattern_filter(pattern_filter_path: Optional[Path] = None) -> Pattern:
     if pattern is None:
         return FAILSAFE_PATTERN_FILTER
     return pattern
+
+
+@attr.s(frozen=True, slots=True, auto_attribs=True)
+class OrganizationStats:
+    users: int
+    data_size: int
+    metadata_size: int
 
 
 @attr.s(frozen=True, slots=True, auto_attribs=True)
@@ -150,6 +157,18 @@ class LoggedClient:
             user_info = await self.get_user_info(item["user_id"])
             results.append(user_info)
         return (results, rep["total"])
+
+    async def get_organization_stats(self) -> OrganizationStats:
+        """
+        Raises:
+            BackendConnectionError
+        """
+        rep = await self._backend_conn.cmds.organization_stats()
+        if rep["status"] != "ok":
+            raise BackendConnectionError(f"Backend error: {rep}")
+        return OrganizationStats(
+            users=rep["users"], data_size=rep["data_size"], metadata_size=rep["metadata_size"]
+        )
 
     async def get_user_info(self, user_id: UserID) -> UserInfo:
         """

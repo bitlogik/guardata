@@ -103,14 +103,14 @@ def size(bytes, system=traditional):
     for factor, suffix in system:
         if bytes >= factor:
             break
-    amount = int(bytes / factor)
+    amount = float(bytes / factor)
     if isinstance(suffix, tuple):
         singular, multiple = suffix
-        if amount == 1:
+        if amount >= 2.0:
             suffix = singular
         else:
             suffix = multiple
-    return f"{amount} {suffix}"
+    return f"{amount:.1f} {suffix}"
 
 
 def get_filesize(bytesize):

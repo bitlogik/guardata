@@ -743,6 +743,12 @@ async def alice2_client(client_factory, alice2):
 
 
 @pytest.fixture
+async def otheralice_client(client_factory, otheralice):
+    async with client_factory(otheralice) as client:
+        yield client
+
+
+@pytest.fixture
 async def adam_client(client_factory, adam):
     async with client_factory(adam) as client:
         yield client

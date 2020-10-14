@@ -1976,6 +1976,13 @@ msgstr "Êtes-vous sûrs de vouloir fermer guardata ?"
 msgid "ACTION_GUARDATA_QUIT_CONFIRM"
 msgstr "Quitter"
 
+msgid "TEXT_ORGANIZATION_SIZE_organizationsize"
+msgstr "<b>{organizationsize}</b> utilisés"
+
+msgid "TEXT_ORGANIZATION_SIZE_TOOLTIP_datasize"
+msgstr ""
+"Données : <b>{datasize}</b>\n"
+
 msgid "TEXT_GUARDATA_DEVELOPMENT_INFO"
 msgstr "Développé par <a href=\"https://bitlogik.fr\" title=\"BitLogiK\" "
 "style=\"color: #2185d0; font-weight: bold;\">BitLogiK</a></br>et <a href=\"https://scille.eu\" title=\"Scille\">Scille</a>"

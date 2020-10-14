@@ -79,7 +79,7 @@ def _short_cmd(cmd):
         return f"{cmd[:40]}…"
 
 
-def _run(cmd, env={}, timeout=20.0, capture=True):
+def _run(cmd, env={}, timeout=30.0, capture=True):
     print(f"========= RUN {cmd} ==============")
     env = {**os.environ.copy(), "DEBUG": "true", **env}
     python_bin = "python3"

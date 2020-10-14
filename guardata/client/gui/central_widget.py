@@ -2,7 +2,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
 from guardata.client.client_events import ClientEvent
-from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtCore import pyqtSignal, QTimer
 from PyQt5.QtGui import QPixmap, QColor, QIcon
 from PyQt5.QtWidgets import QGraphicsDropShadowEffect, QWidget, QMenu
 
@@ -14,7 +14,8 @@ from guardata.client.gui.lang import translate as _
 from guardata.client.gui.custom_widgets import Pixmap
 from guardata.client.gui.custom_dialogs import show_error
 from guardata.client.gui.ui.central_widget import Ui_CentralWidget
-
+from guardata.client.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
+from guardata.client.backend_connection import BackendConnectionError, BackendNotAvailable
 
 from guardata.api.protocol import (
     HandshakeAPIVersionError,
@@ -29,6 +30,15 @@ from guardata.client.fs import (
 )
 
 
+async def _do_get_organization_stats(client):
+    try:
+        return await client.get_organization_stats()
+    except BackendNotAvailable as exc:
+        raise JobResultError("offline") from exc
+    except BackendConnectionError as exc:
+        raise JobResultError("error") from exc
+
+
 class CentralWidget(QWidget, Ui_CentralWidget):
     NOTIFICATION_EVENTS = [
         ClientEvent.BACKEND_CONNECTION_CHANGED,
@@ -38,6 +48,11 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         ClientEvent.SHARING_UPDATED,
         ClientEvent.FS_ENTRY_FILE_UPDATE_CONFLICTED,
     ]
+
+    organization_stats_success = pyqtSignal(QtToTrioJob)
+    organization_stats_error = pyqtSignal(QtToTrioJob)
+    vlobs_updated_qt = pyqtSignal(object, object)
+    RESET_TIMER_STATS = 10000  # ms
 
     connection_state_changed = pyqtSignal(object, object)
     logout_requested = pyqtSignal()
@@ -57,6 +72,14 @@ class CentralWidget(QWidget, Ui_CentralWidget):
 
         for e in self.NOTIFICATION_EVENTS:
             self.event_bus.connect(e, self.handle_event)
+
+        self.event_bus.connect(ClientEvent.FS_ENTRY_SYNCED, self._on_vlobs_updated_trio)
+        self.event_bus.connect(ClientEvent.BACKEND_REALM_VLOBS_UPDATED, self._on_vlobs_updated_trio)
+        self.vlobs_updated_qt.connect(self._on_vlobs_updated_qt)
+        self.organization_stats_timer = QTimer()
+        self.organization_stats_timer.setInterval(self.RESET_TIMER_STATS)
+        self.organization_stats_timer.setSingleShot(True)
+        self.organization_stats_timer.timeout.connect(self._get_organization_stats)
 
         self.set_user_info()
         menu = QMenu()
@@ -90,6 +113,9 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         self.mount_widget = MountWidget(self.client, self.jobs_ctx, self.event_bus, parent=self)
         self.widget_central.layout().insertWidget(0, self.mount_widget)
         self.mount_widget.folder_changed.connect(self._on_folder_changed)
+
+        self.organization_stats_success.connect(self._on_organization_stats_success)
+        self.organization_stats_error.connect(self._on_organization_stats_error)
 
         self.users_widget = UsersWidget(self.client, self.jobs_ctx, self.event_bus, parent=self)
         self.widget_central.layout().insertWidget(0, self.users_widget)
@@ -171,6 +197,22 @@ class CentralWidget(QWidget, Ui_CentralWidget):
                 "WARNING", _("NOTIF_WARN_SYNC_CONFLICT_{}").format(kwargs["path"])
             )
 
+    def _get_organization_stats(self):
+        self.jobs_ctx.submit_job(
+            ThreadSafeQtSignal(self, "organization_stats_success", QtToTrioJob),
+            ThreadSafeQtSignal(self, "organization_stats_error", QtToTrioJob),
+            _do_get_organization_stats,
+            client=self.client,
+        )
+
+    def _on_vlobs_updated_trio(self, event, workspace_id=None, id=None, *args, **kwargs):
+        self.vlobs_updated_qt.emit(event, id)
+
+    def _on_vlobs_updated_qt(self, event, uuid):
+        if not self.organization_stats_timer.isActive():
+            self.organization_stats_timer.start()
+            self._get_organization_stats()
+
     def _on_connection_state_changed(self, status, status_exc, allow_systray=True):
         text = None
         icon = None
@@ -178,7 +220,11 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         notif = None
         disconnected = None
 
+        self.menu.label_organization_name.hide()
+        self.menu.label_organization_size.clear()
         if status in (BackendConnStatus.READY, BackendConnStatus.INITIALIZING):
+            if status == BackendConnStatus.READY and self.client.device.is_admin:
+                self._get_organization_stats()
             tooltip = text = _("TEXT_BACKEND_STATE_CONNECTED")
             icon = QPixmap(":/icons/images/material/cloud_queue.svg")
 
@@ -224,6 +270,22 @@ class CentralWidget(QWidget, Ui_CentralWidget):
                 ),
                 5000,
             )
+
+    def _on_organization_stats_success(self, job):
+        assert job.is_finished()
+        assert job.status == "ok"
+
+        organization_stats = job.ret
+        self.menu.show_organization_stats(
+            organization_id=self.client.device.organization_id,
+            organization_stats=organization_stats,
+        )
+
+    def _on_organization_stats_error(self, job):
+        assert job.is_finished()
+        assert job.status != "ok"
+        self.menu.label_organization_name.hide()
+        self.menu.label_organization_size.clear()
 
     def on_new_notification(self, notif_type, msg):
         if notif_type == "REVOKED":
