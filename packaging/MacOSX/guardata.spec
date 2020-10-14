@@ -56,15 +56,22 @@ app = BUNDLE(coll,
     icon="../../guardata/client/resources/guardata.icns",
     bundle_identifier="fr.bitlogik.guardata",
     info_plist={
-            'NSPrincipalClass': 'NSApplication',
+            "NSPrincipalClass": "NSApplication",
             "NSHighResolutionCapable": True,
-            'NSAppleScriptEnabled': False,
+            "NSAppleScriptEnabled": False,
             "CFBundleIdentifier": "fr.bitlogik.guardata",
             "CFBundleName": "guardata",
             "CFBundleDisplayName": "guardata",
             "CFBundleShortVersionString": __version__,
             "LSApplicationCategoryType": "public.app-category.productivity",
             "LSMultipleInstancesProhibited": True,
+            "CFBundleURLTypes": [
+              {
+                "CFBundleTypeRole": "Viewer",
+                "CFBundleURLName": "parsec",
+                "CFBundleURLSchemes": ["parsec"]
+              }
+            ]
          },
 )
 
