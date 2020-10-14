@@ -3,7 +3,7 @@
 
 import trio
 from pathlib import Path
-from pendulum import Pendulum, now as pendulum_now
+from pendulum import DateTime, now as pendulum_now
 from typing import Tuple, Optional, Union, Dict, Sequence, Pattern
 from structlog import get_logger
 
@@ -720,7 +720,7 @@ class UserFS:
         return errors
 
     async def _process_message(
-        self, sender_id: DeviceID, expected_timestamp: Pendulum, ciphered: bytes
+        self, sender_id: DeviceID, expected_timestamp: DateTime, ciphered: bytes
     ):
         """
         Raises:
@@ -889,7 +889,7 @@ class UserFS:
 
         return users
 
-    def _generate_reencryption_messages(self, new_workspace_entry, users, now: Pendulum):
+    def _generate_reencryption_messages(self, new_workspace_entry, users, now: DateTime):
         """
         Raises:
             FSError

@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from pendulum import Pendulum
+from pendulum import DateTime
 from triopg import UniqueViolationError
 
 from guardata.api.protocol import OrganizationID
@@ -97,7 +97,7 @@ class PGOrganizationComponent(BaseOrganizationComponent):
         self.dbh = dbh
 
     async def create(
-        self, id: OrganizationID, bootstrap_token: str, expiration_date: Optional[Pendulum] = None
+        self, id: OrganizationID, bootstrap_token: str, expiration_date: Optional[DateTime] = None
     ) -> None:
         async with self.dbh.pool.acquire() as conn:
             try:
@@ -176,7 +176,7 @@ class PGOrganizationComponent(BaseOrganizationComponent):
         )
 
     async def set_expiration_date(
-        self, id: OrganizationID, expiration_date: Pendulum = None
+        self, id: OrganizationID, expiration_date: DateTime = None
     ) -> None:
         async with self.dbh.pool.acquire() as conn, conn.transaction():
             result = await conn.execute(

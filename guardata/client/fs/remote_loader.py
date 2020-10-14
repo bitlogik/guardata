@@ -4,7 +4,7 @@
 from contextlib import contextmanager
 from typing import Dict, Optional, List, Tuple, cast
 
-from pendulum import Pendulum, now as pendulum_now
+from pendulum import DateTime, now as pendulum_now
 
 from guardata.utils import timestamps_in_the_ballpark
 from guardata.crypto import HashDigest, CryptoError
@@ -84,7 +84,7 @@ class RemoteLoader:
         self._realm_role_certificates_cache = None
         self._realm_role_certificates_cache_timestamp = None
 
-    async def _get_user_realm_role_at(self, user_id: UserID, timestamp: Pendulum):
+    async def _get_user_realm_role_at(self, user_id: UserID, timestamp: DateTime):
         if (
             not self._realm_role_certificates_cache
             or self._realm_role_certificates_cache_timestamp <= timestamp
@@ -321,8 +321,8 @@ class RemoteLoader:
         self,
         entry_id: EntryID,
         version: Optional[int] = None,
-        timestamp: Optional[Pendulum] = None,
-        expected_backend_timestamp: Optional[Pendulum] = None,
+        timestamp: Optional[DateTime] = None,
+        expected_backend_timestamp: Optional[DateTime] = None,
     ) -> BaseRemoteManifest:
         """
         Download a manifest.
@@ -424,7 +424,7 @@ class RemoteLoader:
 
         return remote_manifest
 
-    async def list_versions(self, entry_id: EntryID) -> Dict[int, Tuple[Pendulum, DeviceID]]:
+    async def list_versions(self, entry_id: EntryID) -> Dict[int, Tuple[DateTime, DeviceID]]:
         """
         Raises:
             FSError
@@ -502,7 +502,7 @@ class RemoteLoader:
             )
 
     async def _vlob_create(
-        self, encryption_revision: int, entry_id: EntryID, ciphered: bytes, now: Pendulum
+        self, encryption_revision: int, entry_id: EntryID, ciphered: bytes, now: DateTime
     ):
         """
         Raises:
@@ -539,7 +539,7 @@ class RemoteLoader:
         encryption_revision: int,
         entry_id: EntryID,
         ciphered: bytes,
-        now: Pendulum,
+        now: DateTime,
         version: int,
     ):
         """
@@ -582,7 +582,7 @@ class RemoteLoader:
 
 
 class RemoteLoaderTimestamped(RemoteLoader):
-    def __init__(self, remote_loader: RemoteLoader, timestamp: Pendulum):
+    def __init__(self, remote_loader: RemoteLoader, timestamp: DateTime):
         self.device = remote_loader.device
         self.workspace_id = remote_loader.workspace_id
         self.get_workspace_entry = remote_loader.get_workspace_entry
@@ -600,8 +600,8 @@ class RemoteLoaderTimestamped(RemoteLoader):
         self,
         entry_id: EntryID,
         version: Optional[int] = None,
-        timestamp: Optional[Pendulum] = None,
-        expected_backend_timestamp: Optional[Pendulum] = None,
+        timestamp: Optional[DateTime] = None,
+        expected_backend_timestamp: Optional[DateTime] = None,
     ) -> BaseRemoteManifest:
         """
         Allows to have manifests at all timestamps as it is needed by the versions method of either

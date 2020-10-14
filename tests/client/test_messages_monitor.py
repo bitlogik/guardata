@@ -4,7 +4,7 @@ from guardata.client.client_events import ClientEvent
 import pytest
 import trio
 from unittest.mock import ANY
-from pendulum import Pendulum, now as pendulum_now
+from pendulum import datetime, now as pendulum_now
 
 from tests.common import create_shared_workspace, freeze_time
 
@@ -101,7 +101,7 @@ async def test_new_sharing_trigger_event(alice_client, bob_client, running_backe
                     id=wid,
                     key=ANY,
                     encryption_revision=1,
-                    encrypted_on=Pendulum(2000, 1, 1),
+                    encrypted_on=datetime(2000, 1, 1),
                     role_cached_on=ANY,
                     role=WorkspaceRole.MANAGER,
                 ),
@@ -129,7 +129,7 @@ async def test_revoke_sharing_trigger_event(alice_client, bob_client, running_ba
                     id=wid,
                     key=ANY,
                     encryption_revision=1,
-                    encrypted_on=Pendulum(2000, 1, 2),
+                    encrypted_on=datetime(2000, 1, 2),
                     role_cached_on=ANY,
                     role=None,
                 ),
@@ -138,7 +138,7 @@ async def test_revoke_sharing_trigger_event(alice_client, bob_client, running_ba
                     id=wid,
                     key=ANY,
                     encryption_revision=1,
-                    encrypted_on=Pendulum(2000, 1, 2),
+                    encrypted_on=datetime(2000, 1, 2),
                     role_cached_on=ANY,
                     role=WorkspaceRole.MANAGER,
                 ),
@@ -165,7 +165,7 @@ async def test_new_reencryption_trigger_event(alice_client, bob_client, running_
                     id=wid,
                     key=ANY,
                     encryption_revision=2,
-                    encrypted_on=Pendulum(2000, 1, 3),
+                    encrypted_on=datetime(2000, 1, 3),
                     role_cached_on=ANY,
                     role=WorkspaceRole.OWNER,
                 ),
@@ -174,7 +174,7 @@ async def test_new_reencryption_trigger_event(alice_client, bob_client, running_
                     id=wid,
                     key=ANY,
                     encryption_revision=1,
-                    encrypted_on=Pendulum(2000, 1, 2),
+                    encrypted_on=datetime(2000, 1, 2),
                     role_cached_on=ANY,
                     role=WorkspaceRole.OWNER,
                 ),
@@ -189,7 +189,7 @@ async def test_new_reencryption_trigger_event(alice_client, bob_client, running_
                     id=wid,
                     key=ANY,
                     encryption_revision=2,
-                    encrypted_on=Pendulum(2000, 1, 3),
+                    encrypted_on=datetime(2000, 1, 3),
                     role_cached_on=ANY,
                     role=WorkspaceRole.MANAGER,
                 ),
@@ -198,7 +198,7 @@ async def test_new_reencryption_trigger_event(alice_client, bob_client, running_
                     id=wid,
                     key=ANY,
                     encryption_revision=1,
-                    encrypted_on=Pendulum(2000, 1, 2),
+                    encrypted_on=datetime(2000, 1, 2),
                     role_cached_on=ANY,
                     role=WorkspaceRole.MANAGER,
                 ),

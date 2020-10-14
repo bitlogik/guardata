@@ -4,7 +4,7 @@
 import trio
 import click
 from pathlib import Path
-from pendulum import Pendulum, parse as pendulum_parse
+from pendulum import DateTime, parse as pendulum_parse
 
 from guardata.utils import trio_run
 from guardata.cli_utils import cli_exception_handler, generate_not_available_cmd
@@ -32,7 +32,7 @@ else:
         _run_gui(config, start_arg=url, diagnose=diagnose)
 
 
-async def _run_mountpoint(config, device, timestamp: Pendulum = None):
+async def _run_mountpoint(config, device, timestamp: DateTime = None):
     config = config.evolve(mountpoint_enabled=True)
     async with logged_client_factory(config, device):
         display_device = click.style(device.device_id, fg="yellow")

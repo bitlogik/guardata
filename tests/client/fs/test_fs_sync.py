@@ -2,7 +2,7 @@
 
 from guardata.client.client_events import ClientEvent
 import pytest
-from pendulum import Pendulum
+from pendulum import datetime
 from unittest.mock import ANY
 
 from guardata.client.types import WorkspaceEntry, WorkspaceRole
@@ -43,7 +43,7 @@ async def test_new_workspace(running_backend, alice, alice_user_fs, alice2_user_
         with freeze_time("2000-01-03"):
             await workspace.sync()
     spy.assert_events_occured(
-        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3))]
+        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 3))]
     )
 
     workspace2 = alice_user_fs.get_workspace(wid)
@@ -59,8 +59,8 @@ async def test_new_workspace(running_backend, alice, alice_user_fs, alice2_user_
         "need_sync": False,
         "base_version": 1,
         "children": [],
-        "created": Pendulum(2000, 1, 2),
-        "updated": Pendulum(2000, 1, 2),
+        "created": datetime(2000, 1, 2),
+        "updated": datetime(2000, 1, 2),
         "confined": False,
     }
     assert workspace_entry == WorkspaceEntry(
@@ -68,8 +68,8 @@ async def test_new_workspace(running_backend, alice, alice_user_fs, alice2_user_
         id=wid,
         key=spy.ANY,
         encryption_revision=1,
-        encrypted_on=Pendulum(2000, 1, 2),
-        role_cached_on=Pendulum(2000, 1, 2),
+        encrypted_on=datetime(2000, 1, 2),
+        role_cached_on=datetime(2000, 1, 2),
         role=WorkspaceRole.OWNER,
     )
     workspace_entry2 = workspace.get_workspace_entry()
@@ -98,12 +98,12 @@ async def test_new_empty_entry(type, running_backend, alice_user_fs, alice2_user
 
     if type == "file":  # TODO: file and folder should generate the same events after the migration
         expected_events = [
-            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3))
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 3))
         ]
     else:
         expected_events = [
-            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": fid}, Pendulum(2000, 1, 3)),
-            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 3)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": fid}, datetime(2000, 1, 3)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 3)),
         ]
     spy.assert_events_occured(expected_events)
 
@@ -118,8 +118,8 @@ async def test_new_empty_entry(type, running_backend, alice_user_fs, alice2_user
             "is_placeholder": False,
             "need_sync": False,
             "base_version": 1,
-            "created": Pendulum(2000, 1, 2),
-            "updated": Pendulum(2000, 1, 2),
+            "created": datetime(2000, 1, 2),
+            "updated": datetime(2000, 1, 2),
             "size": 0,
             "confined": False,
         }
@@ -130,8 +130,8 @@ async def test_new_empty_entry(type, running_backend, alice_user_fs, alice2_user
             "is_placeholder": False,
             "need_sync": False,
             "base_version": 1,
-            "created": Pendulum(2000, 1, 2),
-            "updated": Pendulum(2000, 1, 2),
+            "created": datetime(2000, 1, 2),
+            "updated": datetime(2000, 1, 2),
             "children": [],
             "confined": False,
         }
@@ -162,7 +162,7 @@ async def test_simple_sync(running_backend, alice_user_fs, alice2_user_fs):
         with freeze_time("2000-01-04"):
             await workspace.sync()
     spy.assert_events_occured(
-        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 4))]
+        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 4))]
     )
 
     # 2) Fetch back file from another fs
@@ -172,7 +172,7 @@ async def test_simple_sync(running_backend, alice_user_fs, alice2_user_fs):
             # TODO: `sync` on not loaded entry should load it
             await workspace2.sync()
     spy.assert_events_occured(
-        [(ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5))]
+        [(ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 5))]
     )
 
     # 3) Finally make sure both fs have the same data
@@ -203,7 +203,7 @@ async def test_fs_recursive_sync(running_backend, alice_user_fs):
     with alice_user_fs.event_bus.listen() as spy:
         with freeze_time("2000-01-03"):
             await workspace.sync()
-    sync_date = Pendulum(2000, 1, 3)
+    sync_date = datetime(2000, 1, 3)
     spy.assert_events_occured(
         [
             (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": spy.ANY}, sync_date),
@@ -252,7 +252,7 @@ async def test_cross_sync(running_backend, alice_user_fs, alice2_user_fs):
             await workspace.sync()
 
     spy.assert_events_occured(
-        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 4))]
+        [(ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 4))]
     )
 
     with alice2_user_fs.event_bus.listen() as spy:
@@ -264,18 +264,18 @@ async def test_cross_sync(running_backend, alice_user_fs, alice2_user_fs):
             (
                 ClientEvent.FS_ENTRY_DOWNSYNCED,
                 {"workspace_id": wid, "id": wid},
-                Pendulum(2000, 1, 5),
+                datetime(2000, 1, 5),
             ),
-            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 5)),
+            (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 5)),
             (
                 ClientEvent.FS_ENTRY_SYNCED,
                 {"workspace_id": wid, "id": spy.ANY},
-                Pendulum(2000, 1, 5),
+                datetime(2000, 1, 5),
             ),
             (
                 ClientEvent.FS_ENTRY_SYNCED,
                 {"workspace_id": wid, "id": spy.ANY},
-                Pendulum(2000, 1, 5),
+                datetime(2000, 1, 5),
             ),
         ]
     )
@@ -285,7 +285,7 @@ async def test_cross_sync(running_backend, alice_user_fs, alice2_user_fs):
             await workspace.sync()
 
     spy.assert_events_occured(
-        [(ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, Pendulum(2000, 1, 6))]
+        [(ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": wid}, datetime(2000, 1, 6))]
     )
 
     # 3) Finally make sure both fs have the same data
@@ -365,7 +365,7 @@ async def test_concurrent_update(running_backend, alice_user_fs, alice2_user_fs)
     with alice_user_fs.event_bus.listen() as spy:
         with freeze_time("2000-01-05"):
             await workspace.sync()
-    date_sync = Pendulum(2000, 1, 5)
+    date_sync = datetime(2000, 1, 5)
     spy.assert_events_occured(
         [
             (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": barid}, date_sync),
@@ -378,7 +378,7 @@ async def test_concurrent_update(running_backend, alice_user_fs, alice2_user_fs)
     with alice2_user_fs.event_bus.listen() as spy:
         with freeze_time("2000-01-06"):
             await workspace2.sync()
-    date_sync = Pendulum(2000, 1, 6)
+    date_sync = datetime(2000, 1, 6)
     spy.assert_events_occured(
         [
             (ClientEvent.FS_ENTRY_SYNCED, {"workspace_id": wid, "id": barid}, date_sync),
@@ -404,7 +404,7 @@ async def test_concurrent_update(running_backend, alice_user_fs, alice2_user_fs)
     with alice_user_fs.event_bus.listen() as spy:
         with freeze_time("2000-01-08"):
             await workspace.sync()
-    date_sync = Pendulum(2000, 1, 8)
+    date_sync = datetime(2000, 1, 8)
     spy.assert_events_occured(
         [
             (ClientEvent.FS_ENTRY_DOWNSYNCED, {"workspace_id": wid, "id": barid}, date_sync),
@@ -467,8 +467,8 @@ async def test_create_already_existing_folder_vlob(running_backend, alice_user_f
         "base_version": 2,
         "is_placeholder": False,
         "need_sync": False,
-        "created": Pendulum(2000, 1, 2),
-        "updated": Pendulum(2000, 1, 2),
+        "created": datetime(2000, 1, 2),
+        "updated": datetime(2000, 1, 2),
         "children": ["x"],
         "confined": False,
     }
@@ -512,8 +512,8 @@ async def test_create_already_existing_file_vlob(running_backend, alice_user_fs,
         "id": ANY,
         "is_placeholder": False,
         "need_sync": False,
-        "created": Pendulum(2000, 1, 2),
-        "updated": Pendulum(2000, 1, 2),
+        "created": datetime(2000, 1, 2),
+        "updated": datetime(2000, 1, 2),
         "base_version": 1,
         "size": 0,
         "confined": False,
@@ -575,8 +575,8 @@ async def test_create_already_existing_block(running_backend, alice_user_fs, ali
         "id": ANY,
         "is_placeholder": False,
         "need_sync": False,
-        "created": Pendulum(2000, 1, 2),
-        "updated": Pendulum(2000, 1, 3),
+        "created": datetime(2000, 1, 2),
+        "updated": datetime(2000, 1, 3),
         "base_version": 2,
         "size": 4,
         "confined": False,
@@ -612,8 +612,8 @@ async def test_sync_data_before_workspace(running_backend, alice_user_fs):
         "id": ANY,
         "type": "file",
         "base_version": 1,
-        "created": Pendulum(2000, 1, 4),
-        "updated": Pendulum(2000, 1, 5),
+        "created": datetime(2000, 1, 4),
+        "updated": datetime(2000, 1, 5),
         "is_placeholder": False,
         "need_sync": False,
         "size": 2,
@@ -624,8 +624,8 @@ async def test_sync_data_before_workspace(running_backend, alice_user_fs):
         "id": wid,
         "type": "folder",
         "base_version": 1,
-        "created": Pendulum(2000, 1, 2),
-        "updated": Pendulum(2000, 1, 3),
+        "created": datetime(2000, 1, 2),
+        "updated": datetime(2000, 1, 3),
         "is_placeholder": False,
         "need_sync": True,
         "children": ["bar"],

@@ -5,7 +5,7 @@ import attr
 import trio
 from collections import defaultdict
 from typing import Union, List, Dict, Tuple, AsyncIterator, cast, Pattern
-from pendulum import Pendulum, now as pendulum_now
+from pendulum import DateTime, now as pendulum_now
 
 from guardata.api.data import BaseManifest as BaseRemoteManifest
 from guardata.api.data import FileManifest as RemoteFileManifest
@@ -211,7 +211,7 @@ class WorkspaceFS:
 
     # Versioning
 
-    async def get_earliest_timestamp(self) -> Pendulum:
+    async def get_earliest_timestamp(self) -> DateTime:
         """
         Get the earliest timestamp from which we can obtain a timestamped workspace
 
@@ -228,7 +228,7 @@ class WorkspaceFS:
 
     # Timestamped version
 
-    async def to_timestamped(self, timestamp: Pendulum):
+    async def to_timestamped(self, timestamp: DateTime):
         workspace = workspacefs.WorkspaceFSTimestamped(self, timestamp)
         try:
             await workspace.path_info("/")

@@ -20,7 +20,7 @@ async def thread_pool_runner(max_workers=None):
     https://github.com/python-trio/trio/blob/c5497c5ac4/trio/_threads.py#L32-L128
     """
     executor = ThreadPoolExecutor(max_workers=max_workers)
-    trio_token = trio.hazmat.current_trio_token()
+    trio_token = trio.lowlevel.current_trio_token()
 
     async def run_in_thread(fn, *args):
         send_channel, receive_channel = trio.open_memory_channel(1)

@@ -2,7 +2,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
 from typing import Tuple, List, Sequence, Optional
-from pendulum import Pendulum, now as pendulum_now
+from pendulum import DateTime, now as pendulum_now
 
 from guardata.crypto import VerifyKey
 from guardata.api.protocol import UserID, DeviceID
@@ -43,7 +43,7 @@ class TrustchainContext:
     def invalidate_user_cache(self, user_id: UserID) -> None:
         self._users_cache.pop(user_id, None)
 
-    def get_user(self, user_id: UserID, now: Pendulum = None) -> Optional[UserCertificateContent]:
+    def get_user(self, user_id: UserID, now: DateTime = None) -> Optional[UserCertificateContent]:
         now = now or pendulum_now()
         try:
             cached_on, verified_user = self._users_cache[user_id]
@@ -54,7 +54,7 @@ class TrustchainContext:
         return None
 
     def get_revoked_user(
-        self, user_id: UserID, now: Pendulum = None
+        self, user_id: UserID, now: DateTime = None
     ) -> Optional[RevokedUserCertificateContent]:
         now = now or pendulum_now()
         try:
@@ -66,7 +66,7 @@ class TrustchainContext:
         return None
 
     def get_device(
-        self, device_id: DeviceID, now: Pendulum = None
+        self, device_id: DeviceID, now: DateTime = None
     ) -> Optional[DeviceCertificateContent]:
         now = now or pendulum_now()
         try:
@@ -128,7 +128,7 @@ class TrustchainContext:
         users: Sequence[bytes] = (),
         revoked_users: Sequence[bytes] = (),
         devices: Sequence[bytes] = (),
-        now: Pendulum = None,
+        now: DateTime = None,
     ) -> Tuple[
         List[UserCertificateContent],
         List[RevokedUserCertificateContent],

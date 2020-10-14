@@ -76,7 +76,7 @@ class Device:
     device_certificate: bytes
     redacted_device_certificate: bytes
     device_certifier: Optional[DeviceID]
-    created_on: pendulum.Pendulum = attr.ib(factory=pendulum.now)
+    created_on: pendulum.DateTime = attr.ib(factory=pendulum.now)
 
 
 @attr.s(slots=True, frozen=True, repr=False, auto_attribs=True)
@@ -100,8 +100,8 @@ class User:
     redacted_user_certificate: bytes
     user_certifier: Optional[DeviceID]
     profile: UserProfile = UserProfile.STANDARD
-    created_on: pendulum.Pendulum = attr.ib(factory=pendulum.now)
-    revoked_on: Optional[pendulum.Pendulum] = None
+    created_on: pendulum.DateTime = attr.ib(factory=pendulum.now)
+    revoked_on: Optional[pendulum.DateTime] = None
     revoked_user_certificate: Optional[bytes] = None
     revoked_user_certifier: Optional[DeviceID] = None
 
@@ -137,7 +137,7 @@ class UserInvitation:
 
     user_id: UserID
     creator: DeviceID
-    created_on: pendulum.Pendulum = attr.ib(factory=pendulum.now)
+    created_on: pendulum.DateTime = attr.ib(factory=pendulum.now)
 
     @property
     def organization_id(self) -> OrganizationID:
@@ -154,7 +154,7 @@ class DeviceInvitation:
 
     device_id: DeviceID
     creator: DeviceID
-    created_on: pendulum.Pendulum = attr.ib(factory=pendulum.now)
+    created_on: pendulum.DateTime = attr.ib(factory=pendulum.now)
 
     def is_valid(self) -> bool:
         return (pendulum.now() - self.created_on).total_seconds() < INVITATION_VALIDITY
@@ -564,7 +564,7 @@ class BaseUserComponent:
         user_id: UserID,
         revoked_user_certificate: bytes,
         revoked_user_certifier: DeviceID,
-        revoked_on: pendulum.Pendulum = None,
+        revoked_on: pendulum.DateTime = None,
     ) -> None:
         """
         Raises:

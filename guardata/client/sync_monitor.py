@@ -3,7 +3,7 @@
 
 from guardata.client.client_events import ClientEvent
 import trio
-from trio.hazmat import current_clock
+from trio.lowlevel import current_clock
 import math
 from structlog import get_logger
 

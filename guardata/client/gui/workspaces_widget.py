@@ -136,14 +136,14 @@ async def _do_workspace_list(client):
     return workspaces
 
 
-async def _do_workspace_mount(client, workspace_id, timestamp: pendulum.Pendulum = None):
+async def _do_workspace_mount(client, workspace_id, timestamp: pendulum.DateTime = None):
     try:
         await client.mountpoint_manager.mount_workspace(workspace_id, timestamp)
     except MountpointAlreadyMounted:
         pass
 
 
-async def _do_workspace_unmount(client, workspace_id, timestamp: pendulum.Pendulum = None):
+async def _do_workspace_unmount(client, workspace_id, timestamp: pendulum.DateTime = None):
     try:
         await client.mountpoint_manager.unmount_workspace(workspace_id, timestamp)
     except MountpointNotMounted:
@@ -489,7 +489,7 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
                 time.hour(),
                 time.minute(),
                 time.second(),
-                tzinfo="local",
+                tz="local",
             )
             self.mount_workspace(workspace_fs.workspace_id, datetime)
 

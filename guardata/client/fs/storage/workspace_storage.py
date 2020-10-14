@@ -6,8 +6,8 @@ from collections import defaultdict
 from typing import Dict, Tuple, Set, Optional, Union, AsyncIterator, NoReturn, Pattern
 
 import trio
-from trio import hazmat
-from pendulum import Pendulum
+from trio import lowlevel
+from pendulum import DateTime
 from structlog import get_logger
 from async_generator import asynccontextmanager
 
@@ -61,7 +61,7 @@ class BaseWorkspaceStorage:
         self.fd_counter = 0
 
         # Locking structures
-        self.locking_tasks: Dict[EntryID, hazmat.Task] = {}
+        self.locking_tasks: Dict[EntryID, lowlevel.Task] = {}
         self.entry_locks: Dict[EntryID, trio.Lock] = defaultdict(trio.Lock)
 
         # Manifest and block storage
@@ -85,7 +85,7 @@ class BaseWorkspaceStorage:
     async def lock_entry_id(self, entry_id: EntryID) -> AsyncIterator[EntryID]:
         async with self.entry_locks[entry_id]:
             try:
-                self.locking_tasks[entry_id] = hazmat.current_task()
+                self.locking_tasks[entry_id] = lowlevel.current_task()
                 yield entry_id
             finally:
                 del self.locking_tasks[entry_id]
@@ -97,7 +97,7 @@ class BaseWorkspaceStorage:
 
     def _check_lock_status(self, entry_id: EntryID) -> None:
         task = self.locking_tasks.get(entry_id)
-        if task != hazmat.current_task():
+        if task != lowlevel.current_task():
             raise RuntimeError(f"Entry `{entry_id}` modified without beeing locked")
 
     # File management interface
@@ -320,7 +320,7 @@ class WorkspaceStorage(BaseWorkspaceStorage):
 
     # Timestamped workspace
 
-    def to_timestamped(self, timestamp: Pendulum) -> "WorkspaceStorageTimestamped":
+    def to_timestamped(self, timestamp: DateTime) -> "WorkspaceStorageTimestamped":
         return WorkspaceStorageTimestamped(self, timestamp)
 
 
@@ -334,7 +334,7 @@ class WorkspaceStorageTimestamped(BaseWorkspaceStorage):
     - the same lock mecanism to protect against race conditions, although it is useless there
     """
 
-    def __init__(self, workspace_storage: BaseWorkspaceStorage, timestamp: Pendulum):
+    def __init__(self, workspace_storage: BaseWorkspaceStorage, timestamp: DateTime):
         super().__init__(
             workspace_storage.device,
             workspace_storage.path,
@@ -401,5 +401,5 @@ class WorkspaceStorageTimestamped(BaseWorkspaceStorage):
     async def ensure_manifest_persistent(self, entry_id: EntryID) -> None:
         pass
 
-    def to_timestamped(self, timestamp: Pendulum) -> "WorkspaceStorageTimestamped":
+    def to_timestamped(self, timestamp: DateTime) -> "WorkspaceStorageTimestamped":
         return WorkspaceStorageTimestamped(self, timestamp)

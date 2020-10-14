@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
-from pendulum import Pendulum
+from pendulum import datetime
 
 from guardata.api.data import UserManifest, WorkspaceEntry
 from guardata.client.types import LocalUserManifest
@@ -10,7 +10,7 @@ from guardata.client.fs.userfs.merging import merge_local_user_manifests
 
 @pytest.fixture
 def gen_date():
-    curr = Pendulum(2000, 1, 1)
+    curr = datetime(2000, 1, 1)
 
     def _gen():
         nonlocal curr

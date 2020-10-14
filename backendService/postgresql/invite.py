@@ -1,6 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
-from pendulum import Pendulum, now as pendulum_now
+from pendulum import DateTime, now as pendulum_now
 from uuid import UUID, uuid4
 from typing import List, Optional
 
@@ -122,7 +122,7 @@ async def _do_delete_invitation(
     organization_id: OrganizationID,
     greeter: UserID,
     token: UUID,
-    on: Pendulum,
+    on: DateTime,
     reason: InvitationDeletedReason,
 ):
     row = await conn.fetchrow(
@@ -416,7 +416,7 @@ async def _do_new_user_invitation(
     organization_id: OrganizationID,
     greeter_user_id: UserID,
     claimer_email: Optional[str],
-    created_on: Pendulum,
+    created_on: DateTime,
 ) -> UUID:
     if claimer_email:
         invitation_type = InvitationType.USER
@@ -472,7 +472,7 @@ class PGInviteComponent(BaseInviteComponent):
         organization_id: OrganizationID,
         greeter_user_id: UserID,
         claimer_email: str,
-        created_on: Optional[Pendulum] = None,
+        created_on: Optional[DateTime] = None,
     ) -> UserInvitation:
         """
         Raise: InvitationAlreadyMemberError
@@ -504,7 +504,7 @@ class PGInviteComponent(BaseInviteComponent):
         self,
         organization_id: OrganizationID,
         greeter_user_id: UserID,
-        created_on: Optional[Pendulum] = None,
+        created_on: Optional[DateTime] = None,
     ) -> DeviceInvitation:
         """
         Raise: Nothing
@@ -530,7 +530,7 @@ class PGInviteComponent(BaseInviteComponent):
         organization_id: OrganizationID,
         greeter: UserID,
         token: UUID,
-        on: Pendulum,
+        on: DateTime,
         reason: InvitationDeletedReason,
     ) -> None:
         async with self.dbh.pool.acquire() as conn, conn.transaction():

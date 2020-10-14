@@ -2,7 +2,7 @@
 
 from typing import List, Tuple
 from collections import defaultdict
-from pendulum import Pendulum
+from pendulum import DateTime
 
 from backendService.backend_events import BackendEvent
 from guardata.api.protocol import UserID, DeviceID, OrganizationID
@@ -22,7 +22,7 @@ class MemoryMessageComponent(BaseMessageComponent):
         organization_id: OrganizationID,
         sender: DeviceID,
         recipient: UserID,
-        timestamp: Pendulum,
+        timestamp: DateTime,
         body: bytes,
     ) -> None:
         messages = self._organizations[organization_id]

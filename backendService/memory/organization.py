@@ -2,7 +2,7 @@
 
 from typing import Optional
 
-from pendulum import Pendulum
+from pendulum import DateTime
 
 from guardata.api.protocol import OrganizationID
 from guardata.crypto import VerifyKey
@@ -41,7 +41,7 @@ class MemoryOrganizationComponent(BaseOrganizationComponent):
         self._block_component = block
 
     async def create(
-        self, id: OrganizationID, bootstrap_token: str, expiration_date: Optional[Pendulum] = None
+        self, id: OrganizationID, bootstrap_token: str, expiration_date: Optional[DateTime] = None
     ) -> None:
         org = self._organizations.get(id)
 
@@ -101,7 +101,7 @@ class MemoryOrganizationComponent(BaseOrganizationComponent):
         return OrganizationStats(users=users, data_size=data_size, metadata_size=metadata_size)
 
     async def set_expiration_date(
-        self, id: OrganizationID, expiration_date: Pendulum = None
+        self, id: OrganizationID, expiration_date: DateTime = None
     ) -> None:
         try:
             self._organizations[id] = self._organizations[id].evolve(
