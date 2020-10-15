@@ -95,7 +95,7 @@ class HumanHandle(namedtuple("HumanHandle", "email label")):
 
     def __init__(self, email: str, label: str):
 
-        email_regex = r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
+        email_regex = r"^[a-zA-Z0-9\.!#&+?~\-_=]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$"
         if (
             not isinstance(email, str)
             or not 3 < _bytes_size(email) < 255
@@ -107,10 +107,10 @@ class HumanHandle(namedtuple("HumanHandle", "email label")):
             raise ValueError("Invalid label")
 
         parsed_label, parsed_email = parseaddr(str(self))
-        if parsed_email != email:
-            raise ValueError("Invalid email address")
         if parsed_label != label:
             raise ValueError("Invalid label")
+        if parsed_email != email:
+            raise ValueError("Invalid email address")
 
         # No need to call super().__init__ given namedtuple set attributes during __new__
         super().__init__()

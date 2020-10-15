@@ -172,7 +172,16 @@ class BootstrapOrganizationWidget(QWidget, Ui_BootstrapOrganizationWidget):
                 email=self.line_edit_email.text(), label=self.line_edit_login.text()
             )
         except ValueError as exc:
-            show_error(self, _("TEXT_BOOTSTRAP_ORG_INVALID_EMAIL"), exception=exc)
+            if hasattr(exc, "args") and len(exc.args) > 0:
+                if exc.args[0] == "Invalid email address":
+                    err_msg = "TEXT_BOOTSTRAP_ORG_INVALID_EMAIL"
+                elif exc.args[0] == "Invalid label":
+                    err_msg = "TEXT_CLAIM_USER_INVALID_HUMAN_HANDLE"
+                else:
+                    err_msg = "TEXT_BOOTSTRAP_ORG_UNKNOWN_FAILURE"
+            else:
+                err_msg = "TEXT_BOOTSTRAP_ORG_UNKNOWN_FAILURE"
+            show_error(self, _(err_msg), exception=exc)
             return
 
         self.bootstrap_job = self.jobs_ctx.submit_job(
