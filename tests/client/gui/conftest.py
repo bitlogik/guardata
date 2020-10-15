@@ -274,6 +274,9 @@ def autoclose_dialog(monkeypatch):
             spy.dialogs.append((dialog.label_title.text(), dialog.center_widget))
 
     monkeypatch.setattr(
+        "guardata.client.gui.custom_dialogs.GreyedDialog.open", _dialog_exec, raising=False
+    )
+    monkeypatch.setattr(
         "guardata.client.gui.custom_dialogs.GreyedDialog.exec_", _dialog_exec, raising=False
     )
     return spy

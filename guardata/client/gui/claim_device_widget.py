@@ -655,9 +655,8 @@ class ClaimDeviceWidget(QWidget, Ui_ClaimDeviceWidget):
             msg = _("TEXT_CLAIM_DEVICE_UNKNOWN_ERROR")
         if job.exc:
             exc = job.exc.params.get("origin", None)
-        show_error(self, msg, exception=exc)
-        # No point in retrying since the claimer job itself failed, simply close the dialog
         self.dialog.reject()
+        show_error(self, msg, exception=exc)
 
     def cancel(self):
         item = self.main_layout.itemAt(0)

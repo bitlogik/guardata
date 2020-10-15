@@ -258,7 +258,7 @@ class ErrorWidget(QWidget, Ui_ErrorWidget):
 def show_error(parent, message, exception=None):
     w = ErrorWidget(message, exception)
     d = GreyedDialog(w, title=_("TEXT_ERR_DIALOG_TITLE"), parent=parent)
-    return d.exec_()
+    return d.open()
 
 
 class InfoWidget(QWidget, Ui_InfoWidget):
@@ -286,4 +286,4 @@ def show_info(parent, message, button_text=None):
     d = GreyedDialog(w, title=None, parent=parent, hide_close=True)
     w.dialog = d
     w.button_ok.setFocus()
-    return d.exec_()
+    return d.open()

@@ -224,22 +224,22 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     def _show_about(self):
         w = AboutWidget()
         d = GreyedDialog(w, title="", parent=self, width=1000)
-        d.exec_()
+        d.open()
 
     def _show_license(self):
         w = LicenseWidget()
         d = GreyedDialog(w, title=_("TEXT_LICENSE_TITLE"), parent=self, width=1000)
-        d.exec_()
+        d.open()
 
     # def _show_changelog(self):
     # w = ChangelogWidget()
     # d = GreyedDialog(w, title=_("TEXT_CHANGELOG_TITLE"), parent=self, width=1000)
-    # d.exec_()
+    # d.open()
 
     def _show_settings(self):
         w = SettingsWidget(self.config, self.jobs_ctx, self.event_bus)
         d = GreyedDialog(w, title=_("TEXT_SETTINGS_TITLE"), parent=self, width=1000)
-        d.exec_()
+        d.open()
 
     # def _on_show_doc_clicked(self):
     # desktop.open_doc_link()
@@ -259,6 +259,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         CreateOrgWidget.show_modal(self.jobs_ctx, self, on_finished=_on_finished)
 
     def _on_join_org_clicked(self):
+        self.show_top()
+        QCoreApplication.processEvents()
         url = get_text_input(
             parent=self,
             title=_("TEXT_JOIN_ORG_URL_TITLE"),
@@ -432,6 +434,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
         devices = list_available_devices(self.config.config_dir)
         if not len(devices) and not invitation_link:
+            # Add some refresh of async sleep
+            # ELse should start once the main window is fully painted (catch ready event)
+            self.show_top()
+            QCoreApplication.processEvents()
             r = ask_question(
                 self,
                 _("TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_TITLE"),

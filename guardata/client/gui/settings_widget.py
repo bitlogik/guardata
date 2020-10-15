@@ -40,7 +40,7 @@ class SettingsWidget(QWidget, Ui_SettingsWidget):
 
     def check_version(self):
         d = CheckNewVersion(self.jobs_ctx, self.event_bus, self.client_config, parent=self)
-        d.exec_()
+        d.open()
 
     def save(self):
         self.event_bus.send(
