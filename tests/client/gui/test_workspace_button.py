@@ -6,7 +6,7 @@ from PyQt5 import QtCore
 
 from guardata.client.types import WorkspaceRole, UserInfo
 from guardata.client.gui.workspace_button import WorkspaceButton
-from guardata.client.gui.lang import switch_language
+from guardata.client.gui.lang import switch_language, translate as _
 
 
 @pytest.fixture
@@ -62,6 +62,7 @@ async def test_workspace_button(qtbot, workspace_fs, client_config, alice_user_i
     assert w.name == "Workspace"
     assert w.label_title.text().startswith("Workspace")
     assert w.label_title.toolTip() == "Workspace (private)"
+    assert w.label_role.text() == _("TEXT_WORKSPACE_ROLE_OWNER")
 
 
 @pytest.mark.gui
@@ -92,6 +93,7 @@ async def test_workspace_button_owned_by(
     assert w.name == "Workspace"
     assert w.label_title.text().startswith("Workspace")
     assert w.label_title.toolTip() == "Workspace (owned by Boby McBobFace)"
+    assert w.label_role.text() == _("TEXT_WORKSPACE_ROLE_READER")
 
 
 @pytest.mark.gui
@@ -122,6 +124,7 @@ async def test_workspace_button_shared_with(
     assert w.name == "Workspace"
     assert w.label_title.text().startswith("Workspace")
     assert w.label_title.toolTip() == "Workspace (shared with Boby McBobFace)"
+    assert w.label_role.text() == _("TEXT_WORKSPACE_ROLE_OWNER")
 
 
 @pytest.mark.gui

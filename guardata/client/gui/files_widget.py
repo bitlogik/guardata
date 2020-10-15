@@ -38,6 +38,7 @@ from guardata.client.gui.custom_dialogs import (
 from guardata.client.gui.file_history_widget import FileHistoryWidget
 from guardata.client.gui.loading_widget import LoadingWidget
 from guardata.client.gui.lang import translate as _
+from guardata.client.gui.workspace_roles import get_role_translation
 from guardata.client.gui.ui.files_widget import Ui_FilesWidget
 from guardata.client.types import DEFAULT_BLOCK_SIZE
 
@@ -187,13 +188,6 @@ class FilesWidget(QWidget, Ui_FilesWidget):
         self.import_job = None
         self.clipboard = None
 
-        self.ROLES_TEXTS = {
-            WorkspaceRole.READER: _("TEXT_WORKSPACE_ROLE_READER"),
-            WorkspaceRole.CONTRIBUTOR: _("TEXT_WORKSPACE_ROLE_CONTRIBUTOR"),
-            WorkspaceRole.MANAGER: _("TEXT_WORKSPACE_ROLE_MANAGER"),
-            WorkspaceRole.OWNER: _("TEXT_WORKSPACE_ROLE_OWNER"),
-        }
-
         self.button_back.clicked.connect(self.back_clicked)
         self.button_back.apply_style()
         self.button_import_folder.clicked.connect(self.import_folder_clicked)
@@ -260,7 +254,7 @@ class FilesWidget(QWidget, Ui_FilesWidget):
         self.workspace_fs = wk_fs
         ws_entry = self.jobs_ctx.run_sync(self.workspace_fs.get_workspace_entry)
         self.current_user_role = ws_entry.role
-        # self.label_role.setText(self.ROLES_TEXTS[self.current_user_role])
+        self.label_role.setText(get_role_translation(self.current_user_role))
         self.table_files.current_user_role = self.current_user_role
         if self.current_user_role == WorkspaceRole.READER:
             self.button_import_folder.hide()
@@ -856,7 +850,7 @@ class FilesWidget(QWidget, Ui_FilesWidget):
 
         elif previous_entry is not None and previous_entry.role is not None:
             self.current_user_role = new_entry.role
-            # self.label_role.setText(self.ROLES_TEXTS[self.current_user_role])
+            self.label_role.setText(get_role_translation(self.current_user_role))
             if (
                 previous_entry.role != WorkspaceRole.READER
                 and new_entry.role == WorkspaceRole.READER

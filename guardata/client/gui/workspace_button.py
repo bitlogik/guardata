@@ -11,6 +11,7 @@ from guardata.client.types import EntryID, WorkspaceRole
 from guardata.client.fs.workspacefs import ReencryptionNeed
 
 from guardata.client.gui.lang import translate as _, format_datetime
+from guardata.client.gui.workspace_roles import get_role_translation
 from guardata.client.gui.custom_dialogs import show_info
 
 from guardata.client.gui.ui.workspace_button import Ui_WorkspaceButton
@@ -69,6 +70,7 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
         self.setCursor(QCursor(Qt.PointingHandCursor))
         self.setContextMenuPolicy(Qt.CustomContextMenu)
         self.customContextMenuRequested.connect(self.show_context_menu)
+        self.label_role.setText(get_role_translation(self.current_role))
         files = files or []
 
         self.switch_button.setToolTip(_("TEXT_WORKSPACE_SWITCH_TOOLTIP"))
@@ -155,6 +157,11 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
     def is_owner(self):
         user_id = self.workspace_fs.device.user_id
         return user_id in self.users_roles and self.users_roles[user_id][0] == WorkspaceRole.OWNER
+
+    @property
+    def current_role(self):
+        user_id = self.workspace_fs.device.user_id
+        return self.users_roles[user_id][0]
 
     def show_context_menu(self, pos):
         global_pos = self.mapToGlobal(pos)
