@@ -403,8 +403,13 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.config = self.config.evolve(**kwargs)
         save_config(self.config)
 
-    def showMaximized(self, skip_dialogs=False, invitation_link=""):
-        super().showMaximized()
+    def show_window(self, skip_dialogs=False, invitation_link=""):
+        try:
+            if not self.restoreGeometry(self.config.gui_geometry):
+                self.showMaximized()
+        except TypeError:
+            self.showMaximized()
+
         QCoreApplication.processEvents()
 
         # Used with the --diagnose option
@@ -678,6 +683,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     self.force_close = False
                     self.need_close = False
                     return
+
+            state = self.saveGeometry()
+            self.event_bus.send(ClientEvent.GUI_CONFIG_CHANGED, gui_geometry=state)
 
             self.close_all_tabs()
             event.accept()
