@@ -2,6 +2,30 @@
 guardata history
 ----------------
 
+0.1.4 - 2020-10-16
+^^^^^^^^^^^^^^^^^^
+
+* Updates in the GUI
+
+  * Various UI improvements on group activation modal
+  * More friendly group join data input
+  * Nicer widget for snapshot workspaces
+  * Show user role in workspace GUI
+  * Save GUI window size and position
+  * Spinner on GUI directory loading
+  * Fix and improve login tabs
+  * Version update check on Mac
+  * Display data size of the group in the GUI
+
+* Logs on Mac
+* Possible args on Mac
+* parsec protocol is now handled on Mac
+* Some Python dependencies updated
+* Improve mountpoint cancelling
+* Better error display
+* Improve server queries handling
+
+
 0.1.2 - 2020-09-22
 ^^^^^^^^^^^^^^^^^^
 
