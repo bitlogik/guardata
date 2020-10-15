@@ -40,7 +40,7 @@ class GreyedDialog(QDialog, Ui_GreyedDialog):
         self.setObjectName("GreyedDialog")
         self.setWindowModality(Qt.ApplicationModal)
         self.button_close.apply_style()
-        if platform.system() == "Windows":
+        if platform.system() == "Windows" or platform.system() == "Darwin":
             # SplashScreen on Windows freezes the Window
             self.setWindowFlags(Qt.FramelessWindowHint)
         else:
