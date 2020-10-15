@@ -35,6 +35,7 @@ from guardata.client.gui.custom_dialogs import (
     show_info,
     GreyedDialog,
 )
+from guardata.client.gui.custom_widgets import CenteredSpinnerWidget
 from guardata.client.gui.file_history_widget import FileHistoryWidget
 from guardata.client.gui.loading_widget import LoadingWidget
 from guardata.client.gui.lang import translate as _
@@ -181,6 +182,9 @@ class FilesWidget(QWidget, Ui_FilesWidget):
     def __init__(self, client, jobs_ctx, event_bus, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
+        self.spinner = CenteredSpinnerWidget(parent=self.table_files)
+        self.table_files_layout.addWidget(self.spinner, 0, 0)
+        self.spinner.hide()
         self.client = client
         self.jobs_ctx = jobs_ctx
         self.event_bus = event_bus
@@ -520,6 +524,10 @@ class FilesWidget(QWidget, Ui_FilesWidget):
         self.load(self.current_directory)
 
     def load(self, directory, default_selection=None):
+        self.table_files.clear()
+        self.table_files.setStyleSheet("background-color: #EFEFEF;")
+        self.spinner.spinner_movie.start()
+        self.spinner.show()
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "folder_stat_success", QtToTrioJob),
             ThreadSafeQtSignal(self, "folder_stat_error", QtToTrioJob),
@@ -705,6 +713,9 @@ class FilesWidget(QWidget, Ui_FilesWidget):
             default_selection,
         ) = job.ret
         self.table_files.clear()
+        self.table_files.setStyleSheet("background-color: #FFFFFF;")
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
         old_sort = self.table_files.horizontalHeader().sortIndicatorSection()
         old_order = self.table_files.horizontalHeader().sortIndicatorOrder()
         self.table_files.setSortingEnabled(False)
@@ -746,6 +757,9 @@ class FilesWidget(QWidget, Ui_FilesWidget):
 
     def _on_folder_stat_error(self, job):
         self.table_files.clear()
+        self.table_files.setStyleSheet("background-color: #FFFFFF;")
+        self.spinner.spinner_movie.stop()
+        self.spinner.hide()
         if isinstance(job.exc, FSFileNotFoundError):
             show_error(self, _("TEXT_FILE_FOLDER_NOT_FOUND"))
             self.table_files.add_parent_workspace()

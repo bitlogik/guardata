@@ -50,6 +50,12 @@ def ensure_string_size(s, size, font):
     return s
 
 
+class CenteredSpinnerWidget(SpinnerWidget):
+    def __init__(self, parent=None):
+        super().__init__(parent=parent)
+        self.setMaximumSize(QSize(16777215, 16777215))
+
+
 class CodeInputWidget(QWidget, Ui_CodeInputWidget):
     good_code_clicked = pyqtSignal()
     wrong_code_clicked = pyqtSignal()
