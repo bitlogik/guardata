@@ -7,7 +7,9 @@ guardata history
 
 * Updates in the GUI
 
+  * Modal stability fix (blank, hidden error, input disabled,...)
   * Various UI improvements on group activation modal
+  * Fix dialog crash when closing on Mac
   * More friendly group join data input
   * Nicer widget for snapshot workspaces
   * Show user role in workspace GUI
@@ -19,7 +21,6 @@ guardata history
 
 * Logs on Mac
 * Possible args on Mac
-* parsec protocol is now handled on Mac
 * Some Python dependencies updated
 * Improve mountpoint cancelling
 * Better error display
