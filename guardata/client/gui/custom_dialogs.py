@@ -103,7 +103,6 @@ class GreyedDialog(QDialog, Ui_GreyedDialog):
             and getattr(self.center_widget, "on_close", None)
         ):
             getattr(self.center_widget, "on_close")()
-        self.setParent(None)
 
 
 class TextInputWidget(QWidget, Ui_InputWidget):
