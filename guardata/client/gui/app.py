@@ -106,6 +106,18 @@ def fail_on_first_exception(kill_window):
             raise exceptions[0]
 
 
+@contextmanager
+def log_pyqt_exceptions():
+    def log_except(etype, exception, traceback):
+        logger.exception("Exception in Qt", exc_info=(etype, exception, traceback))
+
+    sys.excepthook, previous_hook = log_except, sys.excepthook
+    try:
+        yield
+    finally:
+        sys.excepthook = previous_hook
+
+
 def run_gui(config: ClientConfig, start_arg: str = None, diagnose: bool = False):
     logger.info("Starting UI")
 
@@ -196,4 +208,5 @@ def run_gui(config: ClientConfig, start_arg: str = None, diagnose: bool = False)
             with fail_on_first_exception(kill_window):
                 return app.exec_()
         else:
-            return app.exec_()
+            with log_pyqt_exceptions():
+                return app.exec_()
