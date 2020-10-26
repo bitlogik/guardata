@@ -149,3 +149,8 @@ html {
   margin-left: -80px;
 }
 
+.imglogo {
+  width: 80%;
+  max-width: 300px;
+  margin-bottom: 32px;
+}
