@@ -172,6 +172,17 @@ class HTTPComponent:
             headers["Access-Control-Allow-Origin"] = ACAO_domain
             headers["Access-Control-Allow-Methods"] = "GET"
             headers["Access-Control-Allow-Headers"] = "Content-Type"
+        if b"token" in req.headers:
+            try:
+                assert self._config.administration_token == req.headers[b"token"].decode("utf-8")
+            except:
+                dataj = {"status": "wrong_token"}
+                return HTTPResponse.build(
+                    400, headers=headers, data=json.dumps(dataj).encode("utf8")
+                )
+        else:
+            dataj = {"status": "missing_token"}
+            return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
         if not re.match(r"^[a-zA-Z]{4,63}$", path):
             data = b"Allowed group name : azAZ 4-63 chars long"
             return HTTPResponse.build(400, headers=headers, data=data)
