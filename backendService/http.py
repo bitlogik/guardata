@@ -184,8 +184,8 @@ class HTTPComponent:
             dataj = {"status": "missing_token"}
             return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
         if not re.match(r"^[a-zA-Z]{4,63}$", path):
-            data = b"Allowed group name : azAZ 4-63 chars long"
-            return HTTPResponse.build(400, headers=headers, data=data)
+            dataj = {"status": "invalid_group_name"}
+            return HTTPResponse.build(400, headers=headers, data=json.dumps(dataj).encode("utf8"))
         org_token = token_hex(32)
         try:
             await self._org.create(path, org_token)
