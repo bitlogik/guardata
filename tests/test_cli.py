@@ -278,7 +278,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
         wait_for="Starting guardata server",
     ):
 
-        print("####### Create organization #######")
+        print("####### Create group #######")
         admin_url = f"parsec://localhost:{unused_tcp_port}"
         if not ssl_conf.use_ssl:
             admin_url += "?no_ssl=true"
@@ -290,10 +290,10 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
             env=ssl_conf.client_env,
         )
         url = re.search(
-            r"^Bootstrap organization url: (.*)$", p.stdout.decode(), re.MULTILINE
+            r"^Bootstrap group url: (.*)$", p.stdout.decode(), re.MULTILINE
         ).group(1)
 
-        print("####### Bootstrap organization #######")
+        print("####### Bootstrap group #######")
         with _running(
             "client bootstrap_organization "
             f"{url} --config-dir={config_dir} --password={password}",
@@ -316,7 +316,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
             alice1_slughash = match.group(1)
             p.wait()
 
-        print("####### Stats organization #######")
+        print("####### Stats group #######")
         _run(
             "client stats_organization "
             f"{org} --addr={admin_url} "
@@ -324,7 +324,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
             env=ssl_conf.client_env,
         )
 
-        print("####### Status organization #######")
+        print("####### Status group #######")
         _run(
             "client status_organization "
             f"{org} --addr={admin_url} "

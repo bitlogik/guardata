@@ -707,8 +707,8 @@ class BaseInviteComponent:
         # First we "talk" by providing our payload and retrieve the peer's
         # payload if he has talked prior to us.
         # Then we "listen" by waiting for the peer to provide his payload if we
-        # have talk first, or to confirm us it has received our payload if we
-        # have talk after him.
+        # have talked first, or to confirm us it has received our payload if we
+        # have talked after him.
         filter_organization_id = organization_id
         filter_token = token
 

@@ -366,14 +366,14 @@ async def _conduit_listen(conn, ctx: ConduitListenCtx) -> Optional[bytes]:
             curr_peer_payload = row["conduit_greeter_payload"]
 
         if ctx.peer_payload is None:
-            # We are waiting for the peer to provite it payload
+            # We are waiting for the peer to provide its payload
 
             # Only peer payload should be allowed to change
             if curr_conduit_state != ctx.state or curr_our_payload != ctx.payload:
                 raise InvitationInvalidStateError()
 
             if curr_peer_payload is not None:
-                # Our peer has provided it payload (hence it knows
+                # Our peer has provided its payload (hence it knows
                 # about our payload too), we can update the conduit
                 # to the next state
                 await conn.execute(

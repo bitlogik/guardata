@@ -13,21 +13,21 @@ from guardata.client.backend_connection import apiv1_backend_administration_cmds
 
 
 async def _create_organization(debug, name, backend_addr, administration_token, expiration_date):
-    async with spinner("Creating organization in backend"):
+    async with spinner("Creating group in backend"):
         async with apiv1_backend_administration_cmds_factory(
             backend_addr, administration_token
         ) as cmds:
             rep = await cmds.organization_create(name, expiration_date)
             if rep["status"] != "ok":
-                raise RuntimeError(f"Backend refused to create organization: {rep}")
+                raise RuntimeError(f"Backend refused to create group: {rep}")
             bootstrap_token = rep["bootstrap_token"]
 
     organization_addr = BackendOrganizationBootstrapAddr.build(backend_addr, name, bootstrap_token)
     organization_addr_display = click.style(organization_addr.to_url(), fg="yellow")
-    click.echo(f"Bootstrap organization url: {organization_addr_display}")
+    click.echo(f"Bootstrap group url: {organization_addr_display}")
 
 
-@click.command(short_help="create new organization")
+@click.command(short_help="create new group")
 @click.argument("name", required=True, type=OrganizationID)
 @click.option("--addr", "-B", required=True, type=BackendAddr.from_url)
 @click.option("--administration-token", "-T", required=True)

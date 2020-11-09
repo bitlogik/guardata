@@ -71,7 +71,7 @@ def main():
             f" --addr={backend_addr} --administration-token={TOKEN}"
         )
 
-        boostrap_addr = out.stdout.decode().split("Bootstrap organization url: ")[-1].strip()
+        boostrap_addr = out.stdout.decode().split("Bootstrap group url: ")[-1].strip()
         out = run_cmd(
             f"{GUARDATA_CLI} client bootstrap_organization {DEVICE}"
             f" --addr={boostrap_addr} --config-dir={confdir} --password={PASSWORD}"
