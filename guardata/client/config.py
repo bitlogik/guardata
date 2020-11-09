@@ -21,7 +21,7 @@ def move_from_roaming_to_local(environ):
     # In case guardata was installed prior to v0.1.0
     if environ != {} and (Path(environ["APPDATA"]) / "guardata/config/config.json").exists():
         if Path(environ["APPDATA"]) != Path(environ["LOCALAPPDATA"]):
-            move(environ["APPDATA"] + "\\guardata", environ["LOCALAPPDATA"] + "\\guardata")
+            move(environ["APPDATA"] + "\\guardata", environ["LOCALAPPDATA"])
 
 
 def get_default_data_base_dir(environ: dict) -> Path:
