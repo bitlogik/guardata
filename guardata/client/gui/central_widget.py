@@ -16,6 +16,7 @@ from guardata.client.gui.custom_dialogs import show_error
 from guardata.client.gui.ui.central_widget import Ui_CentralWidget
 from guardata.client.gui.trio_thread import JobResultError, ThreadSafeQtSignal, QtToTrioJob
 from guardata.client.backend_connection import BackendConnectionError, BackendNotAvailable
+from guardata.client.fs import FSWorkspaceNotFoundError
 
 from guardata.api.protocol import (
     HandshakeAPIVersionError,
@@ -58,7 +59,9 @@ class CentralWidget(QWidget, Ui_CentralWidget):
     logout_requested = pyqtSignal()
     new_notification = pyqtSignal(str, str)
 
-    def __init__(self, client, jobs_ctx, event_bus, systray_notification, **kwargs):
+    def __init__(
+        self, client, jobs_ctx, event_bus, systray_notification, action_addr=None, **kwargs
+    ):
         super().__init__(**kwargs)
         self.setupUi(self)
 
@@ -126,7 +129,20 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         self._on_connection_state_changed(
             self.client.backend_status, self.client.backend_status_exc, allow_systray=False
         )
-        self.show_mount_widget()
+        if action_addr is not None:
+            try:
+                self.go_to_file_link(action_addr.workspace_id, action_addr.path)
+            except FSWorkspaceNotFoundError:
+                show_error(
+                    self,
+                    _("TEXT_FILE_LINK_WORKSPACE_NOT_FOUND_organization").format(
+                        organization=action_addr.organization_id
+                    ),
+                )
+
+                self.show_mount_widget()
+        else:
+            self.show_mount_widget()
 
     def _show_user_menu(self):
         self.button_user.showMenu()
@@ -291,10 +307,18 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         if notif_type == "REVOKED":
             show_error(self, msg)
 
-    def show_mount_widget(self):
+    def go_to_file_link(self, workspace_id, path, mount=False):
+        self.show_mount_widget()
+        self.mount_widget.show_files_widget(
+            self.client.user_fs.get_workspace(workspace_id), path, selected=True, mount_it=True
+        )
+
+    def show_mount_widget(self, user_info=None):
         self.clear_widgets()
         self.menu.activate_files()
         self.label_title.setText(_("ACTION_MENU_DOCUMENTS"))
+        if user_info is not None:
+            self.mount_widget.workspaces_widget.set_user_info(user_info)
         self.mount_widget.show()
         self.mount_widget.show_workspaces_widget()
 

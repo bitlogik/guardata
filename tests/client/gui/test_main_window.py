@@ -175,48 +175,6 @@ async def test_file_link_invalid_workspace(
     await aqtbot.wait_until(assert_dialogs, timeout=3000)
 
 
-@pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
-@pytest.mark.gui
-@pytest.mark.trio
-async def test_file_link_disconnected(
-    aqtbot, running_backend, backend, autoclose_dialog, logged_gui_with_files, bob, monkeypatch
-):
-    logged_gui, w_w, f_w = logged_gui_with_files
-    url = BackendOrganizationFileLinkAddr.build(
-        f_w.client.device.organization_addr, f_w.workspace_fs.workspace_id, "/dir1"
-    )
-
-    class AvailableDevice:
-        def __init__(self, org_id):
-            self.organization_id = org_id
-
-    device = AvailableDevice(bob.organization_id)
-    monkeypatch.setattr(
-        "guardata.client.gui.main_window.list_available_devices", lambda *args, **kwargs: [device]
-    )
-
-    await logged_gui.test_logout_and_switch_to_login_widget()
-
-    await aqtbot.run(logged_gui.add_instance, str(url))
-
-    def assert_dialogs():
-        assert len(autoclose_dialog.dialogs) == 1
-        assert autoclose_dialog.dialogs == [
-            (
-                "Error",
-                translate("TEXT_FILE_LINK_PLEASE_LOG_IN_organization").format(
-                    organization=bob.organization_id
-                ),
-            )
-        ]
-
-    await aqtbot.wait(200)
-
-    await aqtbot.wait_until(assert_dialogs, timeout=3000)
-
-    assert logged_gui.tab_center.count() == 1
-
-
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_tab_login_logout(
