@@ -469,6 +469,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             else:
                 self.tab_center.setTabToolTip(idx, _("TEXT_TAB_TITLE_LOG_IN_SCREEN"))
                 self.tab_center.setTabText(idx, _("TEXT_TAB_TITLE_LOG_IN_SCREEN"))
+                self.tab_center.setStyleSheet("QTabBar::tab {min-width:7em;padding:4px;}")
         elif state == "logout":
             self.tab_center.removeTab(idx)
             idx = self._get_login_tab_index()
