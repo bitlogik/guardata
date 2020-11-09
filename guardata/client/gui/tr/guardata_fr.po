@@ -2375,6 +2375,13 @@ msgstr ""
 "Vous pourrez naviguer dans l'espace de travail tel qu'il était à un "
 "moment donné."
 
+msgid "TEXT_WORKSPACE_TIMESTAMPED_INSTRUCTIONS_created"
+msgstr ""
+"Vous pourrez naviguer dans l'espace de travail tel qu'il était à un "
+"moment donné.\n"
+"\n"
+"Cet espace de travail a été créé le {created}."
+
 msgid "TEXT_WORKSPACE_TIMESTAMPED_SELECT_DATE"
 msgstr "Sélectionnez une date"
 

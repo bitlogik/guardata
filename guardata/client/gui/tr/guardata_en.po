@@ -2318,6 +2318,11 @@ msgstr "Workspace as it was on "
 msgid "TEXT_WORKSPACE_TIMESTAMPED_INSTRUCTIONS"
 msgstr "You will be able to see the workspace as it was at a given time."
 
+msgid "TEXT_WORKSPACE_TIMESTAMPED_INSTRUCTIONS_created"
+msgstr "You will be able to see the workspace as it was at a given time.\n"
+"\n"
+"This workspace was created on {created}."
+
 msgid "TEXT_WORKSPACE_TIMESTAMPED_SELECT_DATE"
 msgstr "Select a date..."
 

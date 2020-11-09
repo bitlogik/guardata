@@ -9,7 +9,7 @@ from structlog import get_logger
 
 import pendulum
 
-from guardata.client.gui.lang import get_qlocale, translate as _
+from guardata.client.gui.lang import get_qlocale, translate as _, format_datetime
 from guardata.client.gui.custom_dialogs import show_error, GreyedDialog
 from guardata.client.gui.trio_thread import ThreadSafeQtSignal
 from guardata.client.gui.ui.timestamped_workspace_widget import Ui_TimestampedWorkspaceWidget
@@ -94,6 +94,11 @@ class TimestampedWorkspaceWidget(QWidget, Ui_TimestampedWorkspaceWidget):
         self.limits_job = None
         self.creation_date = (creation.year, creation.month, creation.day)
         self.creation_time = (creation.hour, creation.minute, creation.second)
+        self.label_info.setText(
+            _("TEXT_WORKSPACE_TIMESTAMPED_INSTRUCTIONS_created").format(
+                created=format_datetime(creation, full=True)
+            )
+        )
         now = pendulum.now().in_timezone("local")
         self.now_date = (now.year, now.month, now.day)
         self.now_time = (now.hour, now.minute, now.second)
@@ -110,7 +115,7 @@ class TimestampedWorkspaceWidget(QWidget, Ui_TimestampedWorkspaceWidget):
     def show_modal(cls, workspace_fs, jobs_ctx, parent, on_finished):
         w = cls(workspace_fs=workspace_fs, jobs_ctx=jobs_ctx)
         d = GreyedDialog(
-            center_widget=w, title=_("TEXT_WORKSPACE_TIMESTAMPED_TITLE"), parent=parent, width=1000
+            center_widget=w, title=_("TEXT_WORKSPACE_TIMESTAMPED_TITLE"), parent=parent, width=600
         )
         w.dialog = d
 
