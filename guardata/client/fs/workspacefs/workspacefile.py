@@ -7,7 +7,12 @@ from typing import Union
 from enum import IntEnum
 import functools
 
-from guardata.client.fs.exceptions import FSUnsupportedOperation, FSOffsetError
+from guardata.client.fs.exceptions import (
+    FSUnsupportedOperation,
+    FSOffsetError,
+    FSLocalStorageClosedError,
+)
+
 from guardata.client.types import FsPath, FileDescriptor
 
 
@@ -105,15 +110,45 @@ class WorkspaceFile:
     async def __anext__(self):
         return await self.readline()
 
+    def _check_open_state(self) -> None:
+        if self._state == FileState.CLOSED:
+            raise ValueError("I/O operation on closed file.")
+        elif self._state == FileState.INIT:
+            raise ValueError("I/O operation on non-initialized file.")
+
     async def close(self):
         """Close the file"""
-        if self._state != FileState.CLOSED:
+        # Idempotency
+        if self._state == FileState.CLOSED:
+            return
+        # Make sure the state is set to CLOSED
+        try:
+            # Make sure the file descriptor is closed even if the flushing fails
+            try:
+                # Ignore storage closed exceptions, since it follows an operational error
+                try:
+                    # Flush the file (typically causes the manifest to be reshaped)
+                    await self._transactions.fd_flush(self.fileno())
+                except FSLocalStorageClosedError:
+                    return
+            finally:
+                # Ignore storage closed exceptions, since it follows an operational error
+                try:
+                    # Close the file
+                    await self._transactions.fd_close(self.fileno())
+                except FSLocalStorageClosedError:
+                    return
+        finally:
             self._state = FileState.CLOSED
-            await self._transactions.fd_close(self._fd)
 
     async def aclose(self):
         """Same as close"""
         return await self.close()
+
+    def fileno(self) -> FileDescriptor:
+        self._check_open_state()
+        assert self._fd is not None  # Since we checked the state
+        return self._fd
 
     @property
     def closed(self):
@@ -280,3 +315,6 @@ class WorkspaceFile:
         if not self._append:
             self._offset += result
         return result
+
+    async def flush(self) -> None:
+        await self._transactions.fd_flush(self.fileno())

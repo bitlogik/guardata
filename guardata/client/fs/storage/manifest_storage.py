@@ -4,11 +4,12 @@
 import re
 
 import trio
+from pathlib import Path
 from structlog import get_logger
 from typing import Dict, Tuple, Set, Optional, Union, Pattern
 from async_generator import asynccontextmanager
 
-from guardata.client.fs.exceptions import FSLocalMissError
+from guardata.client.fs.exceptions import FSLocalMissError, FSLocalStorageClosedError
 from guardata.client.types import EntryID, ChunkID, LocalDevice, BaseLocalManifest, BlockID
 from guardata.client.fs.storage.local_database import LocalDatabase
 
@@ -42,7 +43,7 @@ class ManifestStorage:
 
     @property
     def path(self):
-        return self.localdb.path
+        return Path(self.localdb.path)
 
     @classmethod
     @asynccontextmanager
@@ -53,7 +54,12 @@ class ManifestStorage:
             yield self
         finally:
             with trio.CancelScope(shield=True):
-                await self._flush_cache_ahead_of_persistance()
+                # Flush the in-memory cache before closing the storage
+                try:
+                    await self._flush_cache_ahead_of_persistance()
+                # Ignore storage closed exceptions, since it follows an operational error
+                except FSLocalStorageClosedError:
+                    pass
 
     def _open_cursor(self):
         # We want the manifest to be written to the disk as soon as possible

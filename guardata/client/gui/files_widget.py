@@ -382,6 +382,8 @@ class FilesWidget(QWidget, Ui_FilesWidget):
 
     def show_history(self):
         files = self.table_files.selected_files()
+        if len(files) == 0:
+            return
         if len(files) > 1:
             show_error(self, _("TEXT_FILE_HISTORY_MULTIPLE_FILES_SELECTED_ERROR"))
             return

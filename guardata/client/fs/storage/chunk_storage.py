@@ -4,10 +4,11 @@
 import time
 
 import trio
+from pathlib import Path
 from async_generator import asynccontextmanager
 
 from guardata.client.types import ChunkID
-from guardata.client.fs.exceptions import FSLocalMissError
+from guardata.client.fs.exceptions import FSLocalMissError, FSLocalStorageClosedError
 from guardata.client.types import LocalDevice, DEFAULT_BLOCK_SIZE
 from guardata.client.fs.storage.local_database import LocalDatabase
 
@@ -21,7 +22,7 @@ class ChunkStorage:
 
     @property
     def path(self):
-        return self.localdb.path
+        return Path(self.localdb.path)
 
     @classmethod
     @asynccontextmanager
@@ -32,7 +33,12 @@ class ChunkStorage:
             yield self
         finally:
             with trio.CancelScope(shield=True):
-                await self.localdb.commit()
+                # Commit the pending changes in the local database
+                try:
+                    await self.localdb.commit()
+                # Ignore storage closed exceptions, since it follows an operational error
+                except FSLocalStorageClosedError:
+                    pass
 
     def _open_cursor(self):
         # There is no point in commiting dirty chunks:
