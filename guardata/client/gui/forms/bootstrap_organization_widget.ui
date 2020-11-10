@@ -375,7 +375,7 @@
              <number>10</number>
             </property>
             <property name="topMargin">
-             <number>5</number>
+             <number>0</number>
             </property>
             <item>
              <spacer name="horizontalSpacer">
@@ -385,7 +385,7 @@
               <property name="sizeHint" stdset="0">
                <size>
                 <width>40</width>
-                <height>20</height>
+                <height>0</height>
                </size>
               </property>
              </spacer>
@@ -406,8 +406,8 @@
               </property>
               <property name="iconSize">
                <size>
-                <width>16</width>
-                <height>16</height>
+                <width>20</width>
+                <height>20</height>
                </size>
               </property>
               <property name="flat">
