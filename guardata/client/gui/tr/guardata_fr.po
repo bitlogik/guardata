@@ -4,9 +4,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: guardata 0.0.5\n"
+"Project-Id-Version: guardata 0.1.6\n"
 "POT-Creation-Date: 2020-08-14 06:36+0200\n"
-"PO-Revision-Date: 2020-09-03 07:46+0200\n"
+"PO-Revision-Date: 2020-11-10 06:38+0200\n"
 "Language: fr\n"
 "Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
@@ -1551,6 +1551,9 @@ msgstr "Copier"
 
 msgid "ACTION_FILE_MENU_CUT"
 msgstr "Couper"
+
+msgid "ACTION_FILE_MENU_PASTE_FROM_OTHER_WORKSPACE_source"
+msgstr "Coller depuis {source}"
 
 msgid "ACTION_FILE_MENU_SHOW_FILE_HISTORY"
 msgstr "Voir l'historique"

@@ -1,12 +1,13 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
+from typing import Optional
+
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtWidgets import QWidget
 
-from guardata.client.gui.files_widget import FilesWidget
+from guardata.client.gui.files_widget import FilesWidget, Clipboard
 from guardata.client.gui.workspaces_widget import WorkspacesWidget
-
 from guardata.client.gui.ui.mount_widget import Ui_MountWidget
 
 
@@ -21,6 +22,7 @@ class MountWidget(QWidget, Ui_MountWidget):
         self.client = client
         self.jobs_ctx = jobs_ctx
         self.event_bus = event_bus
+        self.global_clipboard = None
         self.workspaces_widget = WorkspacesWidget(
             self.client, self.jobs_ctx, self.event_bus, parent=self
         )
@@ -28,6 +30,7 @@ class MountWidget(QWidget, Ui_MountWidget):
         self.workspaces_widget.load_workspace_clicked.connect(self.load_workspace)
         self.files_widget = FilesWidget(self.client, self.jobs_ctx, self.event_bus, parent=self)
         self.files_widget.folder_changed.connect(self.folder_changed.emit)
+        self.files_widget.global_clipboard_updated_qt.connect(self.clipboard_updated)
         self.layout_content.insertWidget(0, self.files_widget)
         self.files_widget.back_clicked.connect(self.show_workspaces_widget)
         self.show_workspaces_widget()
@@ -43,6 +46,7 @@ class MountWidget(QWidget, Ui_MountWidget):
             default_selection=default_path.name
             if len(default_path.parts) != 0 and selected
             else None,
+            clipboard=self.global_clipboard,
         )
         if mount_it and not self.workspaces_widget.is_workspace_mounted(
             workspace_fs.workspace_id, None
@@ -55,3 +59,6 @@ class MountWidget(QWidget, Ui_MountWidget):
         self.files_widget.hide()
         self.workspaces_widget.show()
         self.workspaces_widget.reset()
+
+    def clipboard_updated(self, clipboard: Optional[Clipboard] = None):
+        self.global_clipboard = clipboard
