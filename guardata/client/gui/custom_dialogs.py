@@ -3,7 +3,7 @@
 
 import platform
 
-from PyQt5.QtCore import Qt
+from PyQt5.QtCore import Qt, pyqtSignal
 from PyQt5.QtGui import QPainter
 from PyQt5.QtWidgets import (
     QWidget,
@@ -33,6 +33,8 @@ logger = get_logger()
 
 
 class GreyedDialog(QDialog, Ui_GreyedDialog):
+    closing = pyqtSignal()
+
     def __init__(self, center_widget, title, parent, hide_close=False, width=None):
         super().__init__(None)
         self.setupUi(self)
@@ -103,6 +105,7 @@ class GreyedDialog(QDialog, Ui_GreyedDialog):
             and getattr(self.center_widget, "on_close", None)
         ):
             getattr(self.center_widget, "on_close")()
+        self.closing.emit()
 
 
 class TextInputWidget(QWidget, Ui_InputWidget):

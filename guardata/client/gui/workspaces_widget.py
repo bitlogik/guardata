@@ -568,6 +568,10 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
             button=workspace_button,
         )
 
+    def on_sharing_closing(self, has_changes):
+        if has_changes:
+            self.reset()
+
     def share_workspace(self, workspace_fs):
         WorkspaceSharingWidget.show_modal(
             user_fs=self.client.user_fs,
@@ -575,7 +579,7 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
             client=self.client,
             jobs_ctx=self.jobs_ctx,
             parent=self,
-            on_finished=self.reset,
+            on_finished=self.on_sharing_closing,
         )
 
     def reencrypt_workspace(

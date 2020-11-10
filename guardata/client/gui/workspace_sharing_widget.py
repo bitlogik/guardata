@@ -161,6 +161,7 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
     get_users_error = pyqtSignal(QtToTrioJob)
     share_success = pyqtSignal(QtToTrioJob)
     share_error = pyqtSignal(QtToTrioJob)
+    closing = pyqtSignal(bool)
 
     def __init__(self, user_fs, workspace_fs, client, jobs_ctx):
         super().__init__()
@@ -169,6 +170,7 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
         self.client = client
         self.jobs_ctx = jobs_ctx
         self.workspace_fs = workspace_fs
+        self.has_changes = False
 
         self.share_success.connect(self._on_share_success)
         self.share_error.connect(self._on_share_error)
@@ -239,6 +241,8 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
 
     def _on_share_success(self, job):
         workspace_name, successes, errors = job.ret
+        if successes:
+            self.has_changes = True
         for result in successes:
             sharing_widget = self._get_sharing_widget(result.user_info.user_id)
             if sharing_widget:
@@ -307,6 +311,9 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
         self.spinner.hide()
         self.widget_users.show()
 
+    def on_close(self):
+        self.closing.emit(self.has_changes)
+
     def reset(self):
         self.spinner.spinner_movie.start()
         self.spinner.show()
@@ -324,7 +331,8 @@ class WorkspaceSharingWidget(QWidget, Ui_WorkspaceSharingWidget):
         w = cls(user_fs=user_fs, workspace_fs=workspace_fs, client=client, jobs_ctx=jobs_ctx)
         d = GreyedDialog(w, title=_("TEXT_WORKSPACE_SHARING_TITLE"), parent=parent, width=1000)
 
-        d.finished.connect(on_finished)
+        d.closing.connect(w.on_close)
+        w.closing.connect(on_finished)
         # Unlike exec_, show is asynchronous and works within the main Qt loop
         d.show()
         return w
