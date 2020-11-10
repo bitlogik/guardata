@@ -541,7 +541,7 @@ class GreetDeviceWidget(QWidget, Ui_GreetDeviceWidget):
     @classmethod
     def show_modal(cls, client, jobs_ctx, invite_addr, parent, on_finished):
         w = cls(client=client, jobs_ctx=jobs_ctx, invite_addr=invite_addr)
-        d = GreyedDialog(w, _("TEXT_GREET_DEVICE_TITLE"), parent=parent, width=1000)
+        d = GreyedDialog(w, _("TEXT_GREET_DEVICE_TITLE"), parent=parent, width=750)
         w.dialog = d
 
         d.finished.connect(on_finished)
