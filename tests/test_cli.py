@@ -289,9 +289,7 @@ def test_full_run(coolorg, unused_tcp_port, tmpdir, ssl_conf):
             f"--administration-token={administration_token}",
             env=ssl_conf.client_env,
         )
-        url = re.search(
-            r"^Bootstrap group url: (.*)$", p.stdout.decode(), re.MULTILINE
-        ).group(1)
+        url = re.search(r"^Bootstrap group url: (.*)$", p.stdout.decode(), re.MULTILINE).group(1)
 
         print("####### Bootstrap group #######")
         with _running(

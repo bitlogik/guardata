@@ -55,9 +55,11 @@ async def new_environment(source_file=None):
             "XDG_CACHE_HOME": f"{tempdir}/cache",
             "XDG_DATA_HOME": f"{tempdir}/share",
             "XDG_CONFIG_HOME": f"{tempdir}/config",
+            "PATH": f"{os.environ['PATH']}:{os.environ['HOME']}/.local/bin",
         }
     env["EMAIL_CONFIG"] = "DUMMY_SERVICE"
     env["PYTEST_CURRENT_TEST"] = "TestsScripts"
+    env["DEBUG"] = "True"
     for key, value in env.items():
         if key.startswith("XDG") or key.find("DATA") != -1:
             await trio.Path(value).mkdir(exist_ok=True)
