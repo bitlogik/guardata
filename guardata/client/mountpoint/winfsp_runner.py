@@ -86,7 +86,7 @@ def _generate_volume_serial_number(device, workspace_id):
     return adler32(f"{device.organization_id}-{device.device_id}-{workspace_id}".encode())
 
 
-async def _wait_for_winfsp_ready(mountpoint_path, timeout=1.0):
+async def _wait_for_winfsp_ready(mountpoint_path, timeout=5.0):
     trio_mountpoint_path = trio.Path(mountpoint_path)
 
     # Polling for `timeout` seconds until winfsp is ready
@@ -147,7 +147,7 @@ async def winfsp_mountpoint_runner(
         sectors_per_allocation_unit=1,
         volume_creation_time=filetime_now(),
         volume_serial_number=volume_serial_number,
-        file_info_timeout=1000,
+        file_info_timeout=5000,
         case_sensitive_search=1,
         case_preserved_names=1,
         unicode_on_disk=1,
