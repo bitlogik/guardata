@@ -4,6 +4,7 @@
 from guardata.client.client_events import ClientEvent
 from typing import Optional
 from structlog import get_logger
+from sys import platform
 
 from PyQt5.QtCore import QCoreApplication, pyqtSignal, Qt, QSize
 from PyQt5.QtGui import QColor, QIcon, QKeySequence
@@ -433,7 +434,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.event_bus.send(ClientEvent.GUI_CONFIG_CHANGED, gui_last_version=GUARDATA_VERSION)
 
         devices = list_available_devices(self.config.config_dir)
-        if not len(devices) and not invitation_link:
+        if not len(devices) and not invitation_link and platform != "darwin":
             # Add some refresh of async sleep
             # ELse should start once the main window is fully painted (catch ready event)
             self.show_top()
