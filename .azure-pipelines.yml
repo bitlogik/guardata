@@ -41,7 +41,7 @@ jobs:
       set -eux
       sudo apt-get update
       python3 --version
-      pip3 install pre-commit
+      pip3 install --use-feature=2020-resolver pre-commit
     displayName: 'Bootstrap'
   - bash: |
       set -eux
@@ -70,7 +70,7 @@ jobs:
       set -eux
       sudo apt-get update
       python3 --version
-      pip3 install -r pre-requirements.txt
+      pip3 install --use-feature=2020-resolver -r pre-requirements.txt
     displayName: 'Bootstrap'
   - bash: |
       set -eux
@@ -104,7 +104,7 @@ jobs:
       set -eux
       sudo apt-get update
       python --version
-      pip3 install -r pre-requirements.txt
+      pip3 install --use-feature=2020-resolver -r pre-requirements.txt
       sudo apt-get install postgresql-$(postgresql.version)
       psql --version
     displayName: 'Bootstrap'
@@ -114,7 +114,7 @@ jobs:
       rm -rf guardata
       # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
-      pip3 install $WHEEL[all]
+      pip3 install --use-feature=2020-resolver $WHEEL[all]
       # Check dependency compatibility
       pip3 check guardata[all]
     displayName: 'Install'
@@ -156,7 +156,7 @@ jobs:
   - bash: |
       set -eux
       python.exe --version
-      pip install -r pre-requirements.txt
+      pip install --use-feature=2020-resolver -r pre-requirements.txt
       choco install -y --no-progress winfsp --pre --version=$(winfsp.version)
       # Install winfsp-test and put it in PATH
       mkdir winfsp-test
@@ -172,7 +172,7 @@ jobs:
       WHEEL_DIRECTORY=`python -c 'print(r"$(Pipeline.Workspace)/wheel".replace("\\\\", "/"))'`
       WHEEL=$(ls $WHEEL_DIRECTORY/guardata-*.whl)
       echo $WHEEL
-      pip install $WHEEL[all]
+      pip install --use-feature=2020-resolver $WHEEL[all]
       # Check dependency compatibility
       pip check guardata[all]
       # Check winfsp-tests availability
@@ -228,7 +228,7 @@ jobs:
       rm -rf guardata
       # Install the guardata wheel with all dependencies
       WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
-      pip3 install $WHEEL[all]
+      pip3 install --use-feature=2020-resolver $WHEEL[all]
       # Check dependency compatibility
       pip3 check guardata[all]
     displayName: 'Install'
