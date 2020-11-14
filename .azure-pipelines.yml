@@ -222,15 +222,13 @@ jobs:
   - bash: |
       set -eux
       python3 --version
-      psql --version
+      # Install osxfuse
       brew cask install osxfuse
-      # Remove the guardata folder (force to use the wheel)
-      rm -rf guardata
-      # Install the guardata wheel with all dependencies
-      WHEEL=$(ls $(Pipeline.Workspace)/wheel/guardata-*.whl)
-      pip3 install --use-feature=2020-resolver $WHEEL[all]
+      # Build and install guardata
+      python3 setup.py bdist_wheel
+      python3 -m pip install --use-feature=2020-resolver ".[all]"
       # Check dependency compatibility
-      pip3 check guardata[all]
+      python3 -m pip check guardata[all]
     displayName: 'Install'
   - bash: |
       set -eux
@@ -260,7 +258,7 @@ jobs:
 # Step 3: Build on MacOSX
 #  Build for MacOSX is done on Azure,
 #  as GitLab is not offering Mac shared runners.
-#  Requires code sign on the app bundle output.
+#  Requires code sign and notarization on the app bundle output.
 
 - job: 's3_mac_build'
   displayName: 'MacOSX build'
@@ -275,8 +273,6 @@ jobs:
   - task: UsePythonVersion@0
     inputs:
       versionSpec: '3.7'
-  - download: current
-    artifact: wheel
   - bash: |
       set -eux
       cd packaging/MacOSX
