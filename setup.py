@@ -3,6 +3,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 
+from platform import system
 from setuptools import setup, find_packages, distutils, Command
 from setuptools.command.build_py import build_py
 
@@ -238,7 +239,10 @@ with open("README.rst") as readme_file:
     readme = readme_file.read()
 
 
-PYQT_DEPS = ["PyQt5==5.14.2", "pyqt5-sip==12.8.0"]
+pyQT5_version = "5.14.2"
+if system() == "Darwin":
+    pyQT5_version = "5.13.1"
+PYQT_DEPS = [f"PyQt5=={pyQT5_version}", "pyqt5-sip==12.8.0"]
 BABEL_DEP = "Babel==2.6.0"
 
 

@@ -1,10 +1,10 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from sys import modules
+from sys import modules, platform
 from os import path
 from PyQt5.QtWidgets import QApplication
-from PyQt5.QtCore import QFile
+from PyQt5.QtCore import QFile, QEvent
 from PyQt5.QtGui import QFont, QFontDatabase, QIcon
 
 
@@ -32,6 +32,17 @@ class guardataApp(QApplication):
         QFontDatabase.addApplicationFont(":/fonts/fonts/Roboto-Regular.ttf")
         f = QFont(font)
         self.setFont(f)
+
+    def event(self, ev):
+        if platform == "darwin":
+            if ev.type() == QEvent.FileOpen:
+                mw = self.get_main_window()
+                urlread = ev.url().toString()
+                if urlread.startswith("parsec:"):
+                    mw.show_window(skip_dialogs=False, invitation_link=urlread)
+                    mw.new_instance_needed.emit(urlread)
+                    return True
+        return False
 
     @classmethod
     def add_connected_device(cls, org_id, device_id):

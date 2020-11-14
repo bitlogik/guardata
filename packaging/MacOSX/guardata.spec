@@ -68,7 +68,7 @@ app = BUNDLE(coll,
             "CFBundleURLTypes": [
               {
                 "CFBundleTypeRole": "Viewer",
-                "CFBundleURLName": "parsec",
+                "CFBundleURLName": "fr.bitlogik.guardata",
                 "CFBundleURLSchemes": ["parsec"]
               }
             ]
