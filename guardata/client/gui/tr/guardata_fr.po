@@ -86,6 +86,12 @@ msgstr "Êtes-vous sûrs de vouloir supprimer les {count} fichiers ?"
 msgid "ACTION_FILE_DELETE_MULTIPLE"
 msgstr "Supprimer"
 
+msgid "TEXT_FILE_OPEN_ERROR_file"
+msgstr "Le fichier <b>{file}</b> ne peut pas être ouvert."
+
+msgid "TEXT_FILE_OPEN_MULTIPLE_ERROR"
+msgstr "Certains de ces fichiers ne peuvent pas être ouverts."
+
 msgid "TEXT_FILE_OPEN_MULTIPLE_TITLE_count"
 msgstr "Ouvrir plusieurs fichiers"
 

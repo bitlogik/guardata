@@ -534,7 +534,8 @@ class FilesWidget(QWidget, Ui_FilesWidget):
     def open_files(self):
         files = self.table_files.selected_files()
         if len(files) == 1:
-            self.open_file(files[0][2])
+            if not self.open_file(files[0][2]):
+                show_error(self, _("TEXT_FILE_OPEN_ERROR_file").format(file=files[0][2]))
         else:
 
             def _on_open_file_question_finished(return_code, answer):
@@ -565,7 +566,7 @@ class FilesWidget(QWidget, Ui_FilesWidget):
             if isinstance(self.workspace_fs, WorkspaceFSTimestamped)
             else None,
         )
-        desktop.open_file(str(path))
+        return desktop.open_file(str(path))
 
     def item_activated(self, file_type, file_name):
         if file_type == FileType.ParentFolder:
@@ -573,7 +574,8 @@ class FilesWidget(QWidget, Ui_FilesWidget):
         elif file_type == FileType.ParentWorkspace:
             self.back_clicked.emit()
         elif file_type == FileType.File:
-            self.open_file(file_name)
+            if not self.open_file(file_name):
+                show_error(self, _("TEXT_FILE_OPEN_ERROR_file").format(file=file_name))
         elif file_type == FileType.Folder:
             self.load(self.current_directory / file_name)
 

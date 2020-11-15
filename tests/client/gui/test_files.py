@@ -616,6 +616,69 @@ async def test_cut_files(
 
 @pytest.mark.gui
 @pytest.mark.trio
+async def test_open_file_failed(
+    aqtbot,
+    running_backend,
+    logged_gui_with_files,
+    monkeypatch,
+    autoclose_dialog,
+    temp_dir,
+    input_patcher,
+):
+    w_f = logged_gui_with_files.test_get_files_widget()
+
+    assert w_f is not None
+
+    assert w_f.table_files.rowCount() == 4
+
+    monkeypatch.setattr(
+        "guardata.client.gui.files_widget.desktop.open_file", lambda *args, **kwargs: (False)
+    )
+    input_patcher.patch_question(
+        "guardata.client.gui.files_widget.ask_question",
+        QtWidgets.QDialog.Accepted,
+        (_("ACTION_FILE_OPEN_MULTIPLE")),
+    )
+
+    # Open the file selected
+    await aqtbot.run(
+        w_f.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(2, 0, 2, 0), True
+    )
+    assert len(w_f.table_files.selected_files()) == 1
+    w_f.table_files.open_clicked.emit()
+    autoclose_dialog.reset()
+
+    def _open_single_file_error_shown():
+        assert autoclose_dialog.dialogs == [
+            ("Error", _("TEXT_FILE_OPEN_ERROR_file").format(file="file01.txt"))
+        ]
+
+    await aqtbot.wait_until(_open_single_file_error_shown)
+
+    autoclose_dialog.reset()
+
+    # Open a file by double click
+    w_f.table_files.item_activated.emit(FileType.File, "file01.txt")
+
+    await aqtbot.wait_until(_open_single_file_error_shown)
+
+    autoclose_dialog.reset()
+
+    # Open multiple files
+    await aqtbot.run(
+        w_f.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(2, 0, 3, 0), True
+    )
+    assert len(w_f.table_files.selected_files()) == 2
+    w_f.table_files.open_clicked.emit()
+
+    def _open_multiple_files_error_shown():
+        assert autoclose_dialog.dialogs == [("Error", _("TEXT_FILE_OPEN_MULTIPLE_ERROR"))]
+
+    await aqtbot.wait_until(_open_multiple_files_error_shown, timeout=2500)
+
+
+@pytest.mark.gui
+@pytest.mark.trio
 async def test_copy_files(
     aqtbot, running_backend, logged_gui_with_files, monkeypatch, autoclose_dialog, temp_dir
 ):

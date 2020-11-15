@@ -10,23 +10,23 @@ from guardata.api.protocol import DeviceName
 
 
 def open_file(path):
-    QDesktopServices.openUrl(QUrl.fromLocalFile(QFileInfo(path).absoluteFilePath()))
+    return QDesktopServices.openUrl(QUrl.fromLocalFile(QFileInfo(path).absoluteFilePath()))
 
 
 def open_url(url):
-    QDesktopServices.openUrl(QUrl(url))
+    return QDesktopServices.openUrl(QUrl(url))
 
 
 # def open_doc_link():
-# open_url("SOON")
+# return open_url("SOON")
 
 
 def open_feedback_link():
-    open_url("https://guardata.app/contact")
+    return open_url("https://guardata.app/contact")
 
 
 # def open_user_guide():
-# open_url("https://USERGUIDE")
+# return open_url("https://USERGUIDE")
 
 
 def get_default_device():
