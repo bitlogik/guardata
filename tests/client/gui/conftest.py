@@ -11,7 +11,7 @@ import queue
 import threading
 from concurrent import futures
 from importlib import import_module
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 from sys import platform
 
 from guardata import __version__ as guardata_version
@@ -28,6 +28,40 @@ from guardata.client.gui.central_widget import CentralWidget
 from guardata.client.gui.lang import switch_language
 from guardata.client.gui.guardata_application import guardataApp
 from guardata.client.local_device import LocalDeviceAlreadyExistsError
+
+
+class InputPatcher(QtCore.QObject):
+    text_input_finished = QtCore.pyqtSignal(QtWidgets.QDialog.DialogCode, str)
+    question_finished = QtCore.pyqtSignal(QtWidgets.QDialog.DialogCode, str)
+
+    def __init__(self, monkeypatch):
+        super().__init__()
+        self.monkeypatch = monkeypatch
+
+    def patch_text_input(self, fn, return_code, text):
+        def _emit_finished_sig(*args, on_finished, **kwargs):
+            self.text_input_finished.connect(on_finished)
+            self.text_input_finished.emit(return_code, text)
+            # Disconnecting the signal, else it will get reconnected every time the emit_finished_sig function
+            # is called which will call the on_finished function twice or more.
+            self.text_input_finished.disconnect(on_finished)
+
+        self.monkeypatch.setattr(fn, _emit_finished_sig)
+
+    def patch_question(self, fn, return_code, text):
+        def _emit_finished_sig(*args, on_finished, **kwargs):
+            self.question_finished.connect(on_finished)
+            self.question_finished.emit(return_code, text)
+            # Disconnecting the signal, else it will get reconnected every time the emit_finished_sig function
+            # is called which will call the on_finished function twice or more.
+            self.question_finished.disconnect(on_finished)
+
+        self.monkeypatch.setattr(fn, _emit_finished_sig)
+
+
+@pytest.fixture
+def input_patcher(monkeypatch):
+    return InputPatcher(monkeypatch)
 
 
 class ThreadedTrioTestRunner:
@@ -140,8 +174,8 @@ async def qt_thread_gateway(run_trio_test_in_thread):
 
 
 @pytest.fixture
-async def aqtbot(qtbot, run_trio_test_in_thread):
-    return AsyncQtBot(qtbot, run_trio_test_in_thread)
+async def aqtbot(qtbot, run_trio_test_in_thread, monkeypatch):
+    return AsyncQtBot(qtbot, run_trio_test_in_thread, monkeypatch)
 
 
 class CtxManagerAsyncWrapped:
@@ -168,7 +202,7 @@ class CtxManagerAsyncWrapped:
 
 
 class AsyncQtBot:
-    def __init__(self, qtbot, qt_thread_gateway):
+    def __init__(self, qtbot, qt_thread_gateway, monkeypatch):
         self.qtbot = qtbot
         self.qt_thread_gateway = qt_thread_gateway
         self.run = self.qt_thread_gateway.send_action
@@ -275,9 +309,6 @@ def autoclose_dialog(monkeypatch):
 
     monkeypatch.setattr(
         "guardata.client.gui.custom_dialogs.GreyedDialog.open", _dialog_exec, raising=False
-    )
-    monkeypatch.setattr(
-        "guardata.client.gui.custom_dialogs.GreyedDialog.exec_", _dialog_exec, raising=False
     )
     return spy
 

@@ -5,7 +5,7 @@ import trio
 from enum import IntEnum
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QDialog
 
 from guardata.client.backend_connection import BackendNotAvailable, BackendConnectionError
 from guardata.client.invite import InviteError, InvitePeerResetError, InviteAlreadyUsedError
@@ -416,6 +416,9 @@ class GreetDeviceCodeExchangeWidget(QWidget, Ui_GreetDeviceCodeExchangeWidget):
 class GreetDeviceWidget(QWidget, Ui_GreetDeviceWidget):
     greeter_success = pyqtSignal(QtToTrioJob)
     greeter_error = pyqtSignal(QtToTrioJob)
+    accepted = pyqtSignal()
+    rejected = pyqtSignal()
+    finished = pyqtSignal(QDialog.DialogCode)
 
     def __init__(self, client, jobs_ctx, invite_addr):
         super().__init__()
@@ -423,7 +426,6 @@ class GreetDeviceWidget(QWidget, Ui_GreetDeviceWidget):
         self.client = client
         self.jobs_ctx = jobs_ctx
         self.invite_addr = invite_addr
-        self.dialog = None
         self.greeter = Greeter()
         self.greeter_job = None
         self.greeter_success.connect(self._on_greeter_success)
@@ -452,17 +454,17 @@ class GreetDeviceWidget(QWidget, Ui_GreetDeviceWidget):
             return
         # No reason to restart the process if cancelled, simply close the dialog
         if job is not None and job.status == "cancelled":
-            self.dialog.reject()
+            self.rejected.emit()
             return
         # No reason to restart the process if offline, simply close the dialog
         if job is not None and isinstance(job.exc.params.get("origin", None), BackendNotAvailable):
-            self.dialog.reject()
+            self.rejected.emit()
             return
         # No reason to restart the process if the invitation is already used, simply close the dialog
         if job is not None and isinstance(
             job.exc.params.get("origin", None), InviteAlreadyUsedError
         ):
-            self.dialog.reject()
+            self.rejected.emit()
             return
         # Let's try one more time with the same dialog
         self.restart()
@@ -492,7 +494,7 @@ class GreetDeviceWidget(QWidget, Ui_GreetDeviceWidget):
 
     def _on_finished(self):
         show_info(self, _("TEXT_DEVICE_GREET_SUCCESSFUL"))
-        self.dialog.accept()
+        self.accepted.emit()
 
     def _on_greeter_success(self, job):
         if self.greeter_job != job:
@@ -535,16 +537,18 @@ class GreetDeviceWidget(QWidget, Ui_GreetDeviceWidget):
         if self.greeter_job:
             self.greeter_job.cancel_and_join()
 
-    def on_close(self):
+    def on_close(self, return_code):
         self.cancel()
+        self.finished.emit(return_code)
 
     @classmethod
     def show_modal(cls, client, jobs_ctx, invite_addr, parent, on_finished):
         w = cls(client=client, jobs_ctx=jobs_ctx, invite_addr=invite_addr)
         d = GreyedDialog(w, _("TEXT_GREET_DEVICE_TITLE"), parent=parent, width=750)
-        w.dialog = d
-
-        d.finished.connect(on_finished)
+        d.closing.connect(w.on_close)
+        w.finished.connect(on_finished)
+        w.accepted.connect(d.accept)
+        w.rejected.connect(d.reject)
         # Unlike exec_, show is asynchronous and works within the main Qt loop
         d.show()
         return w

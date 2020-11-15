@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 from uuid import UUID
 import pendulum
 from unittest.mock import ANY, Mock
@@ -16,7 +16,7 @@ from guardata.client.gui.workspace_button import WorkspaceButton
 @pytest.mark.trio
 @pytest.mark.parametrize("invalid_name", (False, True))
 async def test_add_workspace(
-    aqtbot, running_backend, logged_gui, monkeypatch, autoclose_dialog, invalid_name
+    aqtbot, running_backend, logged_gui, monkeypatch, autoclose_dialog, invalid_name, input_patcher
 ):
     w_w = await logged_gui.test_switch_to_workspaces_widget()
 
@@ -26,9 +26,10 @@ async def test_add_workspace(
 
     # Add (or try to) a new workspace
     workspace_name = ".." if invalid_name else "Workspace1"
-    monkeypatch.setattr(
+    input_patcher.patch_text_input(
         "guardata.client.gui.workspaces_widget.get_text_input",
-        lambda *args, **kwargs: (workspace_name),
+        QtWidgets.QDialog.Accepted,
+        workspace_name,
     )
     await aqtbot.mouse_click(w_w.button_add_workspace, QtCore.Qt.LeftButton)
 
@@ -58,7 +59,7 @@ async def test_add_workspace(
 @pytest.mark.trio
 @pytest.mark.parametrize("invalid_name", (False, True))
 async def test_rename_workspace(
-    aqtbot, running_backend, logged_gui, monkeypatch, autoclose_dialog, invalid_name
+    aqtbot, running_backend, logged_gui, monkeypatch, autoclose_dialog, invalid_name, input_patcher
 ):
     w_w = await logged_gui.test_switch_to_workspaces_widget()
 
@@ -77,9 +78,10 @@ async def test_rename_workspace(
 
     # Now do the rename
     workspace_name = ".." if invalid_name else "Workspace1_Renamed"
-    monkeypatch.setattr(
+    input_patcher.patch_text_input(
         "guardata.client.gui.workspaces_widget.get_text_input",
-        lambda *args, **kwargs: (workspace_name),
+        QtWidgets.QDialog.Accepted,
+        workspace_name,
     )
     await aqtbot.mouse_click(wk_button.button_rename, QtCore.Qt.LeftButton)
 

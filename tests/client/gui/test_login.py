@@ -90,7 +90,7 @@ async def test_login_back_to_account_list(
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_login_no_devices(aqtbot, gui_factory, autoclose_dialog, client_config):
+async def test_login_no_devices(aqtbot, gui_factory, client_config):
     gui = await gui_factory()
     lw = gui.test_get_login_widget()
 

@@ -3,7 +3,7 @@
 import pytest
 
 # from unittest.mock import ANY
-from PyQt5 import QtCore
+from PyQt5 import QtCore, QtWidgets
 
 # from guardata.client.gui.users_widget import UserInvitationButton
 from guardata.client.gui.lang import translate as _
@@ -16,15 +16,24 @@ from tests.common import customize_fixtures
 @pytest.mark.parametrize("online", (True, False))
 @customize_fixtures(backend_has_email=True, logged_gui_as_admin=True)
 async def test_invite_user(
-    aqtbot, logged_gui, bob, running_backend, monkeypatch, autoclose_dialog, email_letterbox, online
+    aqtbot,
+    logged_gui,
+    bob,
+    running_backend,
+    monkeypatch,
+    autoclose_dialog,
+    email_letterbox,
+    online,
+    input_patcher,
 ):
     u_w = await logged_gui.test_switch_to_users_widget()
 
     assert u_w.layout_users.count() == 3
 
-    monkeypatch.setattr(
+    input_patcher.patch_text_input(
         "guardata.client.gui.users_widget.get_text_input",
-        lambda *args, **kwargs: "hubert.farnsworth@pe.com",
+        QtWidgets.QDialog.Accepted,
+        "hubert.farnsworth@pe.com",
     )
 
     with running_backend.offline():
@@ -53,7 +62,7 @@ async def test_invite_user_not_allowed(logged_gui, running_backend):
 @pytest.mark.parametrize("online", (True, False))
 @customize_fixtures(logged_gui_as_admin=True)
 async def test_revoke_user(
-    aqtbot, running_backend, autoclose_dialog, monkeypatch, logged_gui, online
+    aqtbot, running_backend, autoclose_dialog, monkeypatch, logged_gui, online, input_patcher
 ):
     u_w = await logged_gui.test_switch_to_users_widget()
 
@@ -63,9 +72,10 @@ async def test_revoke_user(
     assert bob_w.label_email.text() == "bob@example.com"
     assert bob_w.user_info.is_revoked is False
 
-    monkeypatch.setattr(
+    input_patcher.patch_question(
         "guardata.client.gui.users_widget.ask_question",
-        lambda *args: _("ACTION_USER_REVOCATION_CONFIRM"),
+        QtWidgets.QDialog.Accepted,
+        _("ACTION_USER_REVOCATION_CONFIRM"),
     )
 
     if online:
@@ -98,7 +108,7 @@ async def test_revoke_user(
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_revoke_user_not_allowed(
-    aqtbot, running_backend, autoclose_dialog, monkeypatch, logged_gui
+    aqtbot, running_backend, autoclose_dialog, monkeypatch, logged_gui, input_patcher
 ):
     u_w = await logged_gui.test_switch_to_users_widget()
 
@@ -109,9 +119,10 @@ async def test_revoke_user_not_allowed(
 
     # TODO: we should instead check that the menu giving access to revocation button is hidden...
 
-    monkeypatch.setattr(
+    input_patcher.patch_question(
         "guardata.client.gui.users_widget.ask_question",
-        lambda *args: _("ACTION_USER_REVOCATION_CONFIRM"),
+        QtWidgets.QDialog.Accepted,
+        _("ACTION_USER_REVOCATION_CONFIRM"),
     )
 
     await aqtbot.run(alice_w.revoke_clicked.emit, alice_w.user_info)
@@ -135,15 +146,19 @@ async def test_cancel_user_invitation(
     monkeypatch,
     alice,
     email_letterbox,
+    input_patcher,
 ):
 
     email = "i@like.coffee"
 
     # Patch dialogs
-    monkeypatch.setattr("guardata.client.gui.users_widget.get_text_input", lambda *x, **y: email)
-    monkeypatch.setattr(
+    input_patcher.patch_text_input(
+        "guardata.client.gui.users_widget.get_text_input", QtWidgets.QDialog.Accepted, email
+    )
+    input_patcher.patch_question(
         "guardata.client.gui.users_widget.ask_question",
-        lambda *x, **y: _("TEXT_USER_INVITE_CANCEL_INVITE_ACCEPT"),
+        QtWidgets.QDialog.Accepted,
+        _("TEXT_USER_INVITE_CANCEL_INVITE_ACCEPT"),
     )
     u_w = await logged_gui.test_switch_to_users_widget()
 

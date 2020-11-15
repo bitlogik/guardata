@@ -1,7 +1,8 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
-from PyQt5.QtWidgets import QWidget, QApplication
+from PyQt5.QtCore import pyqtSignal
+from PyQt5.QtWidgets import QWidget
 
 from structlog import get_logger
 
@@ -22,11 +23,12 @@ logger = get_logger()
 
 
 class PasswordChangeWidget(QWidget, Ui_PasswordChangeWidget):
+    accepted = pyqtSignal()
+
     def __init__(self, client, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.setupUi(self)
         self.client = client
-        self.dialog = None
         pwd_str_widget = PasswordStrengthWidget(main_pwd=self.line_edit_password)
         self.line_edit_old_password.textChanged.connect(self.check_infos)
         self.line_edit_password.textChanged.connect(pwd_str_widget.on_password_change)
@@ -58,23 +60,14 @@ class PasswordChangeWidget(QWidget, Ui_PasswordChangeWidget):
                     key_file, self.line_edit_old_password.text(), self.line_edit_password.text()
                 )
                 show_info(self, _("TEXT_CHANGE_PASSWORD_SUCCESS"))
-                if self.dialog:
-                    self.dialog.accept()
-                elif QApplication.activeModalWidget():
-                    QApplication.activeModalWidget().accept()
-                else:
-                    logger.warning("Cannot close dialog when changing password info")
+                self.accepted.emit()
             except LocalDeviceCryptoError as exc:
                 show_error(self, _("TEXT_CHANGE_PASSWORD_INVALID_PASSWORD"), exception=exc)
 
     @classmethod
-    def show_modal(cls, client, parent, on_finished):
+    def show_modal(cls, client, parent):
         w = cls(client=client)
         d = GreyedDialog(w, title=_("TEXT_CHANGE_PASSWORD_TITLE"), parent=parent)
-        w.dialog = d
-
-        if on_finished:
-            d.finished.connect(on_finished)
+        w.accepted.connect(d.accept)
         # Unlike exec_, show is asynchronous and works within the main Qt loop
         d.show()
-        return w

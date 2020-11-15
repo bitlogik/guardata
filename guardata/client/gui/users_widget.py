@@ -261,22 +261,23 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         )
 
     def invite_user(self):
-        user_email = get_text_input(
+        def _on_user_email_input_finished(return_code, user_email):
+            if return_code and user_email:
+                self.jobs_ctx.submit_job(
+                    ThreadSafeQtSignal(self, "invite_user_success", QtToTrioJob),
+                    ThreadSafeQtSignal(self, "invite_user_error", QtToTrioJob),
+                    _do_invite_user,
+                    client=self.client,
+                    email=user_email,
+                )
+
+        get_text_input(
             self,
             _("TEXT_USER_INVITE_EMAIL"),
             _("TEXT_USER_INVITE_EMAIL_INSTRUCTIONS"),
             placeholder=_("TEXT_USER_INVITE_EMAIL_PLACEHOLDER"),
             button_text=_("ACTION_USER_INVITE_DO_INVITE"),
-        )
-        if not user_email:
-            return
-
-        self.jobs_ctx.submit_job(
-            ThreadSafeQtSignal(self, "invite_user_success", QtToTrioJob),
-            ThreadSafeQtSignal(self, "invite_user_error", QtToTrioJob),
-            _do_invite_user,
-            client=self.client,
-            email=user_email,
+            on_finished=_on_user_email_input_finished,
         )
 
     def add_user(self, user_info, is_current_user):
@@ -297,29 +298,34 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         button.show()
 
     def greet_user(self, token):
+        def _on_finished(return_code):
+            self.reset()
+
         GreetUserWidget.show_modal(
             client=self.client,
             jobs_ctx=self.jobs_ctx,
             token=token,
             parent=self,
-            on_finished=self.reset,
+            on_finished=_on_finished,
         )
 
     def cancel_invitation(self, token):
-        r = ask_question(
+        def _on_cancel_invitation_question_finished(return_code, answer):
+            if return_code and answer == _("TEXT_USER_INVITE_CANCEL_INVITE_ACCEPT"):
+                self.jobs_ctx.submit_job(
+                    ThreadSafeQtSignal(self, "cancel_invitation_success", QtToTrioJob),
+                    ThreadSafeQtSignal(self, "cancel_invitation_error", QtToTrioJob),
+                    _do_cancel_invitation,
+                    client=self.client,
+                    token=token,
+                )
+
+        ask_question(
             self,
             _("TEXT_USER_INVITE_CANCEL_INVITE_QUESTION_TITLE"),
             _("TEXT_USER_INVITE_CANCEL_INVITE_QUESTION_CONTENT"),
             [_("TEXT_USER_INVITE_CANCEL_INVITE_ACCEPT"), _("ACTION_NO")],
-        )
-        if r != _("TEXT_USER_INVITE_CANCEL_INVITE_ACCEPT"):
-            return
-        self.jobs_ctx.submit_job(
-            ThreadSafeQtSignal(self, "cancel_invitation_success", QtToTrioJob),
-            ThreadSafeQtSignal(self, "cancel_invitation_error", QtToTrioJob),
-            _do_cancel_invitation,
-            client=self.client,
-            token=token,
+            on_finished=_on_cancel_invitation_question_finished,
         )
 
     def _on_revoke_success(self, job):
@@ -359,20 +365,22 @@ class UsersWidget(QWidget, Ui_UsersWidget):
         show_error(self, errmsg, exception=job.exc)
 
     def revoke_user(self, user_info):
-        result = ask_question(
+        def _on_revoke_question_finished(return_code, answer):
+            if return_code and answer == _("ACTION_USER_REVOCATION_CONFIRM"):
+                self.jobs_ctx.submit_job(
+                    ThreadSafeQtSignal(self, "revoke_success", QtToTrioJob),
+                    ThreadSafeQtSignal(self, "revoke_error", QtToTrioJob),
+                    _do_revoke_user,
+                    client=self.client,
+                    user_info=user_info,
+                )
+
+        ask_question(
             self,
             _("TEXT_USER_REVOCATION_TITLE"),
             _("TEXT_USER_REVOCATION_INSTRUCTIONS_user").format(user=user_info.short_user_display),
             [_("ACTION_USER_REVOCATION_CONFIRM"), _("ACTION_CANCEL")],
-        )
-        if result != _("ACTION_USER_REVOCATION_CONFIRM"):
-            return
-        self.jobs_ctx.submit_job(
-            ThreadSafeQtSignal(self, "revoke_success", QtToTrioJob),
-            ThreadSafeQtSignal(self, "revoke_error", QtToTrioJob),
-            _do_revoke_user,
-            client=self.client,
-            user_info=user_info,
+            on_finished=_on_revoke_question_finished,
         )
 
     def _flush_users_list(self):

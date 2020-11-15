@@ -253,47 +253,46 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
     def _on_create_org_clicked(self):
         def _on_finished(action_addr):
-            if action_addr is None:
-                return
-            self._on_bootstrap_org_clicked(action_addr)
+            return
 
         CreateOrgWidget.show_modal(self.jobs_ctx, self, on_finished=_on_finished)
 
     def _on_join_org_clicked(self):
         self.show_top()
-        QCoreApplication.processEvents()
-        url = get_text_input(
+
+        def _on_url_input_finished(return_code, url):
+            if not return_code or url is None:
+                return
+            if url == "":
+                show_error(self, _("TEXT_JOIN_ORG_INVALID_URL"))
+                return
+
+            action_addr = None
+            try:
+                action_addr = BackendActionAddr.from_url(url.strip())
+            except ValueError as exc:
+                show_error(self, _("TEXT_INVALID_URL"), exception=exc)
+                return
+
+            if isinstance(action_addr, BackendOrganizationBootstrapAddr):
+                self._on_bootstrap_org_clicked(action_addr)
+            elif isinstance(action_addr, BackendInvitationAddr):
+                if action_addr.invitation_type == InvitationType.USER:
+                    self._on_claim_user_clicked(action_addr)
+                elif action_addr.invitation_type == InvitationType.DEVICE:
+                    self._on_claim_device_clicked(action_addr)
+                else:
+                    show_error(self, _("TEXT_INVALID_URL"))
+            else:
+                show_error(self, _("TEXT_INVALID_URL"))
+
+        get_text_input(
             parent=self,
             title=_("TEXT_JOIN_ORG_URL_TITLE"),
             message=_("TEXT_JOIN_ORG_URL_INSTRUCTIONS"),
             placeholder=_("TEXT_JOIN_ORG_URL_PLACEHOLDER"),
+            on_finished=_on_url_input_finished,
         )
-        if url is None:
-            return
-        elif url == "":
-            show_error(self, _("TEXT_JOIN_ORG_INVALID_URL"))
-            return
-
-        action_addr = None
-        try:
-            action_addr = BackendActionAddr.from_url(url.strip())
-        except ValueError as exc:
-            show_error(self, _("TEXT_INVALID_URL"), exception=exc)
-            return
-
-        if isinstance(action_addr, BackendOrganizationBootstrapAddr):
-            self._on_bootstrap_org_clicked(action_addr)
-        elif isinstance(action_addr, BackendInvitationAddr):
-            if action_addr.invitation_type == InvitationType.USER:
-                self._on_claim_user_clicked(action_addr)
-            elif action_addr.invitation_type == InvitationType.DEVICE:
-                self._on_claim_device_clicked(action_addr)
-            else:
-                show_error(self, _("TEXT_INVALID_URL"))
-                return
-        else:
-            show_error(self, _("TEXT_INVALID_URL"))
-            return
 
     def _on_bootstrap_org_clicked(self, action_addr=None):
         if not action_addr:
@@ -331,41 +330,33 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         )
 
     def _on_claim_user_clicked(self, action_addr):
-        widget = None
-
-        def _on_finished():
-            nonlocal widget
-            if not widget.status:
+        def _on_claim_finished(return_code, login, password):
+            if not return_code or not login or not password:
                 return
-            login, password = widget.status
             self.reload_login_devices()
             self.try_login(login, password)
 
-        widget = ClaimUserWidget.show_modal(
+        ClaimUserWidget.show_modal(
             jobs_ctx=self.jobs_ctx,
             config=self.config,
             addr=action_addr,
             parent=self,
-            on_finished=_on_finished,
+            on_finished=_on_claim_finished,
         )
 
     def _on_claim_device_clicked(self, action_addr):
-        widget = None
-
-        def _on_finished():
-            nonlocal widget
-            if not widget.status:
+        def _on_claim_finished(return_code, login, password):
+            if not return_code or not login or not password:
                 return
-            login, password = widget.status
             self.reload_login_devices()
             self.try_login(login, password)
 
-        widget = ClaimDeviceWidget.show_modal(
+        ClaimDeviceWidget.show_modal(
             jobs_ctx=self.jobs_ctx,
             config=self.config,
             addr=action_addr,
             parent=self,
-            on_finished=_on_finished,
+            on_finished=_on_claim_finished,
         )
 
     def try_login(self, device, password):
@@ -438,8 +429,16 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             # Add some refresh of async sleep
             # ELse should start once the main window is fully painted (catch ready event)
             self.show_top()
-            QCoreApplication.processEvents()
-            r = ask_question(
+
+            def _on_bootstrap_question_finished(return_code, answer):
+                if not return_code:
+                    return
+                if answer == _("ACTION_NO_DEVICE_JOIN_ORGANIZATION"):
+                    self._on_join_org_clicked()
+                elif answer == _("ACTION_NO_DEVICE_CREATE_ORGANIZATION"):
+                    self._on_create_org_clicked()
+
+            ask_question(
                 self,
                 _("TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_TITLE"),
                 _("TEXT_KICKSTART_GUARDATA_WHAT_TO_DO_INSTRUCTIONS"),
@@ -447,12 +446,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     _("ACTION_NO_DEVICE_CREATE_ORGANIZATION"),
                     _("ACTION_NO_DEVICE_JOIN_ORGANIZATION"),
                 ],
+                on_finished=_on_bootstrap_question_finished,
                 radio_mode=True,
             )
-            if r == _("ACTION_NO_DEVICE_JOIN_ORGANIZATION"):
-                self._on_join_org_clicked()
-            elif r == _("ACTION_NO_DEVICE_CREATE_ORGANIZATION"):
-                self._on_create_org_clicked()
 
     def show_top(self):
         self.activateWindow()
@@ -654,30 +650,47 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.close_tab(idx, force=True)
 
     def close_tab(self, index, force=False):
+        def _close_tab():
+            self.tab_center.removeTab(index)
+            if not tab:
+                return
+            tab.logout()
+            self.reload_login_devices()
+            if self.tab_center.count() == 1:
+                self.tab_center.setTabsClosable(False)
+            self._toggle_add_tab_button()
+
         tab = self.tab_center.widget(index)
         if not force:
-            r = _("ACTION_TAB_CLOSE_CONFIRM")
             if tab and tab.is_logged_in:
-                r = ask_question(
+
+                def _on_tab_close_question_finished(return_code, answer):
+                    if return_code and answer == _("ACTION_TAB_CLOSE_CONFIRM"):
+                        _close_tab()
+
+                ask_question(
                     self,
                     _("TEXT_TAB_CLOSE_TITLE"),
                     _("TEXT_TAB_CLOSE_INSTRUCTIONS_device").format(
                         device=f"{tab.client.device.short_user_display} - {tab.client.device.device_display}"
                     ),
                     [_("ACTION_TAB_CLOSE_CONFIRM"), _("ACTION_CANCEL")],
+                    on_finished=_on_tab_close_question_finished,
                 )
-            if r != _("ACTION_TAB_CLOSE_CONFIRM"):
-                return
-        self.tab_center.removeTab(index)
-        if not tab:
-            return
-        tab.logout()
-        self.reload_login_devices()
-        if self.tab_center.count() == 1:
-            self.tab_center.setTabsClosable(False)
-        self._toggle_add_tab_button()
 
     def closeEvent(self, event):
+        def _on_closing_question_finished(return_code, answer):
+            if not return_code or answer != _("ACTION_GUARDATA_QUIT_CONFIRM"):
+                event.ignore()
+                self.force_close = False
+                self.need_close = False
+            else:
+                state = self.saveGeometry()
+                self.event_bus.send(ClientEvent.GUI_CONFIG_CHANGED, gui_geometry=state)
+                self.close_all_tabs()
+                event.accept()
+                QApplication.quit()
+
         if self.minimize_on_close and not self.need_close:
             self.hide()
             event.ignore()
@@ -688,21 +701,11 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                 )
         else:
             if self.config.gui_confirmation_before_close and not self.force_close:
-                result = ask_question(
+                ask_question(
                     self if self.isVisible() else None,
                     _("TEXT_GUARDATA_QUIT_TITLE"),
                     _("TEXT_GUARDATA_QUIT_INSTRUCTIONS"),
                     [_("ACTION_GUARDATA_QUIT_CONFIRM"), _("ACTION_CANCEL")],
+                    on_finished=_on_closing_question_finished,
                 )
-                if result != _("ACTION_GUARDATA_QUIT_CONFIRM"):
-                    event.ignore()
-                    self.force_close = False
-                    self.need_close = False
-                    return
-
-            state = self.saveGeometry()
-            self.event_bus.send(ClientEvent.GUI_CONFIG_CHANGED, gui_geometry=state)
-
-            self.close_all_tabs()
-            event.accept()
-            QApplication.quit()
+                event.ignore()

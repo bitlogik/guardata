@@ -35,7 +35,7 @@ async def logged_gui_with_workspace(
     client_config,
     alice,
     running_backend,
-    monkeypatch,
+    input_patcher,
     fixtures_customization,
 ):
     # Logged as bob (i.e. standard profile) by default
@@ -56,9 +56,10 @@ async def logged_gui_with_workspace(
     for index in range(workspaces_nb):
         workspace_name = "Workspace"
         workspace_name = workspace_name + str(index + 1) if index > 0 else workspace_name
-        monkeypatch.setattr(
+        input_patcher.patch_text_input(
             "guardata.client.gui.workspaces_widget.get_text_input",
-            lambda *args, **kwargs: (workspace_name),
+            QtWidgets.QDialog.Accepted,
+            workspace_name,
         )
 
         async with aqtbot.wait_signals(
@@ -84,7 +85,7 @@ async def logged_gui_with_workspace(
 
 @pytest.fixture
 async def logged_gui_with_files(
-    aqtbot, logged_gui_with_workspace, running_backend, monkeypatch, temp_dir
+    aqtbot, logged_gui_with_workspace, running_backend, monkeypatch, temp_dir, input_patcher
 ):
     w_f = logged_gui_with_workspace.test_get_files_widget()
 
@@ -108,8 +109,8 @@ async def logged_gui_with_files(
     add_button = w_f.button_create_folder
     assert add_button is not None
 
-    monkeypatch.setattr(
-        "guardata.client.gui.files_widget.get_text_input", lambda *args, **kwargs: ("dir1")
+    input_patcher.patch_text_input(
+        "guardata.client.gui.files_widget.get_text_input", QtWidgets.QDialog.Accepted, "dir1"
     )
     async with aqtbot.wait_signal(w_f.folder_create_success):
         await aqtbot.mouse_click(add_button, QtCore.Qt.LeftButton)
@@ -127,15 +128,17 @@ async def logged_gui_with_files(
     yield logged_gui_with_workspace
 
 
-async def create_directories(logged_gui_with_workspace, aqtbot, monkeypatch, dir_names):
+async def create_directories(
+    logged_gui_with_workspace, aqtbot, monkeypatch, dir_names, input_patcher
+):
     w_f = logged_gui_with_workspace.test_get_files_widget()
     assert w_f is not None
 
     add_button = w_f.button_create_folder
 
     for dir_name in dir_names:
-        monkeypatch.setattr(
-            "guardata.client.gui.files_widget.get_text_input", lambda *args, **kwargs: (dir_name)
+        input_patcher.patch_text_input(
+            "guardata.client.gui.files_widget.get_text_input", QtWidgets.QDialog.Accepted, dir_name
         )
         async with aqtbot.wait_signal(w_f.folder_create_success):
             await aqtbot.mouse_click(add_button, QtCore.Qt.LeftButton)
@@ -164,7 +167,9 @@ async def test_list_files(aqtbot, running_backend, logged_gui_with_workspace):
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_create_dir(aqtbot, running_backend, logged_gui_with_workspace, monkeypatch):
+async def test_create_dir(
+    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, input_patcher
+):
     w_f = logged_gui_with_workspace.test_get_files_widget()
 
     assert w_f is not None
@@ -172,7 +177,9 @@ async def test_create_dir(aqtbot, running_backend, logged_gui_with_workspace, mo
         pass
     assert w_f.table_files.rowCount() == 1
 
-    await create_directories(logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1"])
+    await create_directories(
+        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1"], input_patcher
+    )
 
     assert w_f.table_files.rowCount() == 2
     for i in range(5):
@@ -184,7 +191,7 @@ async def test_create_dir(aqtbot, running_backend, logged_gui_with_workspace, mo
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_create_dir_already_exists(
-    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, autoclose_dialog
+    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, autoclose_dialog, input_patcher
 ):
     w_f = logged_gui_with_workspace.test_get_files_widget()
 
@@ -195,30 +202,37 @@ async def test_create_dir_already_exists(
 
     add_button = w_f.button_create_folder
 
-    monkeypatch.setattr(
-        "guardata.client.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Dir1")
+    input_patcher.patch_text_input(
+        "guardata.client.gui.files_widget.get_text_input", QtWidgets.QDialog.Accepted, "Dir1"
     )
-    async with aqtbot.wait_signals(
-        [w_f.folder_create_success, w_f.folder_stat_success, w_f.fs_synced_qt], timeout=3000
-    ):
-        await aqtbot.mouse_click(add_button, QtCore.Qt.LeftButton)
 
-    assert w_f.table_files.rowCount() == 2
-    assert w_f.table_files.item(1, 1).text() == "Dir1"
+    def _dir_created():
+        assert w_f.table_files.rowCount() == 2
+        assert w_f.table_files.item(1, 1).text() == "Dir1"
+        assert len(autoclose_dialog.dialogs) == 0
+
+    async with aqtbot.wait_signal(w_f.folder_create_success):
+        await aqtbot.mouse_click(add_button, QtCore.Qt.LeftButton)
+    await aqtbot.wait_until(_dir_created)
+
+    def _dir_creation_failed():
+        assert w_f.table_files.rowCount() == 2
+        assert len(autoclose_dialog.dialogs) == 1
+        assert autoclose_dialog.dialogs[0] == (
+            "Error",
+            "A folder with the same name already exists.",
+        )
 
     async with aqtbot.wait_signal(w_f.folder_create_error):
         await aqtbot.mouse_click(add_button, QtCore.Qt.LeftButton)
-
-    assert w_f.table_files.rowCount() == 2
-
-    assert len(autoclose_dialog.dialogs) == 1
-    assert autoclose_dialog.dialogs[0][0] == "Error"
-    assert autoclose_dialog.dialogs[0][1] == "A folder with the same name already exists."
+    await aqtbot.wait_until(_dir_creation_failed)
 
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_navigate(aqtbot, running_backend, logged_gui_with_workspace, monkeypatch):
+async def test_navigate(
+    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, input_patcher
+):
     w_f = logged_gui_with_workspace.test_get_files_widget()
     central_widget = logged_gui_with_workspace.test_get_central_widget()
 
@@ -229,7 +243,9 @@ async def test_navigate(aqtbot, running_backend, logged_gui_with_workspace, monk
     assert central_widget.label_title2.text() == "Workspace"
     assert central_widget.label_title3.text() == "/"
 
-    await create_directories(logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2"])
+    await create_directories(
+        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2"], input_patcher
+    )
 
     assert w_f.table_files.rowCount() == 3
     for i in range(5):
@@ -331,7 +347,9 @@ async def test_show_inconsistent_dir(
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, monkeypatch):
+async def test_delete_dirs(
+    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, input_patcher
+):
     w_f = logged_gui_with_workspace.test_get_files_widget()
 
     assert w_f is not None
@@ -340,7 +358,7 @@ async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
     assert w_f.table_files.rowCount() == 1
 
     await create_directories(
-        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2", "Dir3"]
+        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2", "Dir3"], input_patcher
     )
 
     assert w_f.table_files.rowCount() == 4
@@ -350,8 +368,10 @@ async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
         w_f.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(1, 0, 1, 0), True
     )
     assert len(w_f.table_files.selected_files()) == 1
-    monkeypatch.setattr(
-        "guardata.client.gui.files_widget.ask_question", lambda *args: _("ACTION_FILE_DELETE")
+    input_patcher.patch_question(
+        "guardata.client.gui.files_widget.ask_question",
+        QtWidgets.QDialog.Accepted,
+        _("ACTION_FILE_DELETE"),
     )
     async with aqtbot.wait_signals([w_f.delete_success, w_f.folder_stat_success]):
         w_f.table_files.delete_clicked.emit()
@@ -368,9 +388,10 @@ async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
         w_f.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(1, 0, 2, 0), True
     )
     assert len(w_f.table_files.selected_files()) == 2
-    monkeypatch.setattr(
+    input_patcher.patch_question(
         "guardata.client.gui.files_widget.ask_question",
-        lambda *args: _("ACTION_FILE_DELETE_MULTIPLE"),
+        QtWidgets.QDialog.Accepted,
+        _("ACTION_FILE_DELETE_MULTIPLE"),
     )
     async with aqtbot.wait_signals([w_f.delete_success, w_f.folder_stat_success]):
         w_f.table_files.delete_clicked.emit()
@@ -387,7 +408,9 @@ async def test_delete_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
 
 @pytest.mark.gui
 @pytest.mark.trio
-async def test_rename_dirs(aqtbot, running_backend, logged_gui_with_workspace, monkeypatch):
+async def test_rename_dirs(
+    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, input_patcher
+):
     w_f = logged_gui_with_workspace.test_get_files_widget()
 
     assert w_f is not None
@@ -396,7 +419,7 @@ async def test_rename_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
     assert w_f.table_files.rowCount() == 1
 
     await create_directories(
-        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2", "Dir3"]
+        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2", "Dir3"], input_patcher
     )
 
     assert w_f.table_files.rowCount() == 4
@@ -405,8 +428,8 @@ async def test_rename_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
         w_f.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(1, 0, 1, 0), True
     )
     assert len(w_f.table_files.selected_files()) == 1
-    monkeypatch.setattr(
-        "guardata.client.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Abcd")
+    input_patcher.patch_text_input(
+        "guardata.client.gui.files_widget.get_text_input", QtWidgets.QDialog.Accepted, "Abcd"
     )
     # Rename Dir1 to Abcd
     async with aqtbot.wait_signals([w_f.rename_success, w_f.folder_stat_success]):
@@ -427,8 +450,8 @@ async def test_rename_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
         w_f.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(2, 0, 3, 0), True
     )
     assert len(w_f.table_files.selected_files()) == 2
-    monkeypatch.setattr(
-        "guardata.client.gui.files_widget.get_text_input", lambda *args, **kwargs: ("NewName")
+    input_patcher.patch_text_input(
+        "guardata.client.gui.files_widget.get_text_input", QtWidgets.QDialog.Accepted, "NewName"
     )
     async with aqtbot.wait_signals([w_f.rename_success, w_f.folder_stat_success]):
         w_f.table_files.rename_clicked.emit()
@@ -450,7 +473,7 @@ async def test_rename_dirs(aqtbot, running_backend, logged_gui_with_workspace, m
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_rename_dir_already_exists(
-    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, autoclose_dialog
+    aqtbot, running_backend, logged_gui_with_workspace, monkeypatch, autoclose_dialog, input_patcher
 ):
     w_f = logged_gui_with_workspace.test_get_files_widget()
 
@@ -459,13 +482,17 @@ async def test_rename_dir_already_exists(
         pass
     assert w_f.table_files.rowCount() == 1
 
-    await create_directories(logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2"])
+    await create_directories(
+        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir1", "Dir2"], input_patcher
+    )
     assert w_f.table_files.rowCount() == 3
 
     async with aqtbot.wait_signal(w_f.folder_stat_success):
         w_f.table_files.item_activated.emit(FileType.Folder, "Dir2")
 
-    await create_directories(logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir21"])
+    await create_directories(
+        logged_gui_with_workspace, aqtbot, monkeypatch, ["Dir21"], input_patcher
+    )
     assert w_f.table_files.rowCount() == 2
 
     async with aqtbot.wait_signal(w_f.folder_stat_success):
@@ -475,9 +502,10 @@ async def test_rename_dir_already_exists(
         w_f.table_files.setRangeSelected, QtWidgets.QTableWidgetSelectionRange(1, 0, 1, 0), True
     )
     assert len(w_f.table_files.selected_files()) == 1
-    monkeypatch.setattr(
-        "guardata.client.gui.files_widget.get_text_input", lambda *args, **kwargs: ("Dir2")
+    input_patcher.patch_text_input(
+        "guardata.client.gui.files_widget.get_text_input", QtWidgets.QDialog.Accepted, "Dir2"
     )
+    autoclose_dialog.reset()
     async with aqtbot.wait_signal(w_f.rename_error):
         w_f.table_files.rename_clicked.emit()
     assert w_f.table_files.item(1, 1).text() == "Dir1"

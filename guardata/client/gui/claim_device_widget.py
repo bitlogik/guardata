@@ -6,7 +6,7 @@ from enum import IntEnum
 from structlog import get_logger
 from PyQt5.QtCore import pyqtSignal
 from PyQt5.QtGui import QFont
-from PyQt5.QtWidgets import QWidget
+from PyQt5.QtWidgets import QWidget, QDialog
 
 from guardata.client.types import LocalDevice
 from guardata.client.local_device import save_device_with_password
@@ -508,13 +508,15 @@ class ClaimDeviceWidget(QWidget, Ui_ClaimDeviceWidget):
     claimer_error = pyqtSignal(QtToTrioJob)
     retrieve_info_success = pyqtSignal(QtToTrioJob)
     retrieve_info_error = pyqtSignal(QtToTrioJob)
+    finished = pyqtSignal(QDialog.DialogCode, object, object)
+    accepted = pyqtSignal()
+    rejected = pyqtSignal()
 
     def __init__(self, jobs_ctx, config, addr):
         super().__init__()
         self.setupUi(self)
         self.jobs_ctx = jobs_ctx
         self.config = config
-        self.dialog = None
         self.addr = addr
         self.status = None
         self.device_email = None
@@ -562,7 +564,7 @@ class ClaimDeviceWidget(QWidget, Ui_ClaimDeviceWidget):
             if job.exc:
                 exc = job.exc.params.get("origin", None)
                 show_error(self, _("TEXT_CLAIM_DEVICE_FAILED_TO_RETRIEVE_INFO"), exception=exc)
-        self.dialog.reject()
+        self.rejected.emit()
 
     def _on_page_failed(self, job):
         # The dialog has already been rejected
@@ -570,13 +572,13 @@ class ClaimDeviceWidget(QWidget, Ui_ClaimDeviceWidget):
             return
         # No reason to restart the process if cancelled, simply close the dialog
         if job is not None and job.status == "cancelled":
-            self.dialog.reject()
+            self.rejected.emit()
             return
         # No reason to restart the process if offline or invitation has been deleted, simply close the dialog
         if job is not None and isinstance(
             job.exc.params.get("origin", None), (BackendNotAvailable, InviteAlreadyUsedError)
         ):
-            self.dialog.reject()
+            self.rejected.emit()
             return
         # Let's try one more time with the same dialog
         self.restart()
@@ -621,7 +623,7 @@ class ClaimDeviceWidget(QWidget, Ui_ClaimDeviceWidget):
         save_device_with_password(self.config.config_dir, device, password)
         show_info(self, _("TEXT_CLAIM_DEVICE_SUCCESSFUL"))
         self.status = (device, password)
-        self.dialog.accept()
+        self.accepted.emit()
 
     def _on_claimer_success(self, job):
         if self.claimer_job is not job:
@@ -655,7 +657,7 @@ class ClaimDeviceWidget(QWidget, Ui_ClaimDeviceWidget):
             msg = _("TEXT_CLAIM_DEVICE_UNKNOWN_ERROR")
         if job.exc:
             exc = job.exc.params.get("origin", None)
-        self.dialog.reject()
+        self.rejected.emit()
         show_error(self, msg, exception=exc)
 
     def cancel(self):
@@ -669,16 +671,20 @@ class ClaimDeviceWidget(QWidget, Ui_ClaimDeviceWidget):
         if self.claimer_job:
             self.claimer_job.cancel_and_join()
 
-    def on_close(self):
+    def on_close(self, return_code):
         self.cancel()
+        if return_code and self.status:
+            self.finished.emit(return_code, *self.status)
+        else:
+            self.finished.emit(return_code, None, None)
 
     @classmethod
     def show_modal(cls, jobs_ctx, config, addr, parent, on_finished):
         w = cls(jobs_ctx=jobs_ctx, config=config, addr=addr)
         d = GreyedDialog(w, _("TEXT_CLAIM_DEVICE_TITLE"), parent=parent, width=800)
-        w.dialog = d
-
-        d.finished.connect(on_finished)
+        d.closing.connect(w.on_close)
+        w.finished.connect(on_finished)
+        w.accepted.connect(d.accept)
+        w.rejected.connect(d.reject)
         # Unlike exec_, show is asynchronous and works within the main Qt loop
         d.show()
-        return w

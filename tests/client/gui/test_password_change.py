@@ -31,9 +31,10 @@ async def test_change_password_invalid_old_password(
     await aqtbot.wait(250)
     await aqtbot.mouse_click(pc_w.button_change, QtCore.Qt.LeftButton)
 
-    assert autoclose_dialog.dialogs == [
-        ("Error", "You did not provide the right password for this device.")
-    ]
+    assert autoclose_dialog.dialogs[0] == (
+        "Error",
+        "You did not provide the right password for this device.",
+    )
 
 
 @pytest.mark.gui
@@ -85,7 +86,11 @@ async def test_change_password_success(
     assert pc_w.button_change.isEnabled()
     await aqtbot.mouse_click(pc_w.button_change, QtCore.Qt.LeftButton)
 
-    assert autoclose_dialog.dialogs == [("", "The password has been successfully changed.")]
+    def _wait_confirmation_shown():
+        assert len(autoclose_dialog.dialogs) == 1
+        assert autoclose_dialog.dialogs[0] == ("", "The password has been successfully changed.")
+
+    await aqtbot.wait_until(_wait_confirmation_shown)
     autoclose_dialog.reset()
 
     # Retry to login...
