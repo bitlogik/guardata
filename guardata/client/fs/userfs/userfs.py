@@ -68,7 +68,7 @@ class ReencryptionJob:
         self.old_workspace_entry = old_workspace_entry
         assert new_workspace_entry.id == old_workspace_entry.id
 
-    async def do_one_batch(self, size=100) -> Tuple[int, int]:
+    async def do_one_batch(self, size=512) -> Tuple[int, int]:
         """
         Raises:
             FSError

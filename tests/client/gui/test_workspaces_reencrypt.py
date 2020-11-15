@@ -336,7 +336,7 @@ async def test_workspace_reencryption_do_one_batch_error(
 
     async def mocked_start_reencryption(self, workspace_id):
         class Job:
-            async def do_one_batch(self, size):
+            async def do_one_batch(self, size=512):
                 raise error_type("")
 
         return Job()
