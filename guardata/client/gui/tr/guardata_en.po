@@ -432,6 +432,11 @@ msgstr "No workspace has been created yet."
 msgid "TEXT_WORKSPACE_ERROR_WORKSPACES"
 msgstr "Error getting the workspaces"
 
+msgid "TEXT_WORKSPACE_CANNOT_MOUNT_NO_DRIVE"
+msgstr ""
+"Impossible to open this workspace because many workspaces are already mounted."
+" Unactivate some of them before activating a new one."
+
 msgid "TEXT_WORKSPACE_CANNOT_MOUNT"
 msgstr ""
 "An internal error prevents guardata from accessing the files in this "

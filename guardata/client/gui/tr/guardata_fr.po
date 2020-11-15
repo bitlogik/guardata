@@ -462,6 +462,11 @@ msgstr "Aucun espace de travail n'a été créé."
 msgid "TEXT_WORKSPACE_ERROR_WORKSPACES"
 msgstr "Erreur lors de la récupération des espaces de travail"
 
+msgid "TEXT_WORKSPACE_CANNOT_MOUNT_NO_DRIVE"
+msgstr ""
+"Impossible d'ouvrir cet espace de travail, car beaucoup sont déja montés."
+" Désactivez certains espaces de travail avant d'en activer un nouveau."
+
 msgid "TEXT_WORKSPACE_CANNOT_MOUNT"
 msgstr ""
 "Une erreur interne empêche guardata d'accéder aux fichiers de cet espace de"
