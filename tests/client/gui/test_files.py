@@ -864,6 +864,7 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
     await aqtbot.wait_until(lambda: _files_displayed(1))
 
     # Paste the files/folders of second workspace in first workspace folder
+    await aqtbot.wait(500)
     async with aqtbot.wait_signal(w_f.table_files.paste_clicked):
         await aqtbot.key_click(w_f.table_files, "V", modifier=QtCore.Qt.ControlModifier)
 
@@ -875,6 +876,7 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
     assert w_f.table_files.item(3, 1).text() == "file02.txt"
 
     # Moving to sub directory
+    await aqtbot.wait(500)
     async with aqtbot.wait_signal(w_f.folder_stat_success):
         w_f.table_files.item_activated.emit(FileType.Folder, "dir1")
     await aqtbot.wait_until(lambda: _files_displayed(3))
@@ -888,14 +890,16 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
     wk_button = wk_widget.layout_workspaces.itemAt(1).widget()
     assert wk_button.name == "Workspace2"
 
+    await aqtbot.wait(500)
     async with aqtbot.wait_signal(wk_widget.load_workspace_clicked):
         await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
     await aqtbot.wait_until(lambda: _files_displayed(4))
 
     # Moving to sub directory
+    await aqtbot.wait(500)
     async with aqtbot.wait_signal(w_f.folder_stat_success):
         w_f.table_files.item_activated.emit(FileType.Folder, "dir1")
-    await aqtbot.wait_until(lambda: _files_displayed(3), timeout=5000)
+    await aqtbot.wait_until(lambda: _files_displayed(3), timeout=2500)
     assert w_f.table_files.item(1, 1).text() == "file01.txt"
     assert w_f.table_files.item(2, 1).text() == "file02.txt"
 
@@ -904,6 +908,7 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
     assert mount_widget.global_clipboard is not None
 
     # Test copy again in subdirectory
+    await aqtbot.wait(500)
     async with aqtbot.wait_signal(w_f.table_files.paste_clicked):
         await aqtbot.key_click(w_f.table_files, "V", modifier=QtCore.Qt.ControlModifier)
 
@@ -915,9 +920,10 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
     assert w_f.table_files.item(5, 1).text() == "file02.txt"
 
     # Moving to sub/sub directory
+    await aqtbot.wait(500)
     async with aqtbot.wait_signal(w_f.folder_stat_success):
         w_f.table_files.item_activated.emit(FileType.Folder, "dir1")
-    await aqtbot.wait_until(lambda: _files_displayed(3))
+    await aqtbot.wait_until(lambda: _files_displayed(3), timeout=2500)
     assert w_f.table_files.item(1, 1).text() == "file01.txt"
     assert w_f.table_files.item(2, 1).text() == "file02.txt"
 
