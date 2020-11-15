@@ -501,7 +501,7 @@ class WorkspaceFS:
         await self.touch(target_path, exist_ok=exist_ok)
         offset = 0
         while True:
-            buff = await self.read_bytes(source_path, length, offset * length)
+            buff = await source_workspace.read_bytes(source_path, length, offset * length)
             if not buff:
                 break
             await self.write_bytes(target_path, buff, offset * length)
