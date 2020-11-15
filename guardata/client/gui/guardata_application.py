@@ -39,10 +39,11 @@ class guardataApp(QApplication):
                 mw = self.get_main_window()
                 urlread = ev.url().toString()
                 if urlread.startswith("parsec:"):
-                    mw.show_window(skip_dialogs=False, invitation_link=urlread)
-                    mw.new_instance_needed.emit(urlread)
+                    if mw:
+                        mw.show_window(skip_dialogs=False, invitation_link=urlread)
+                        mw.new_instance_needed.emit(urlread)
                     return True
-        return False
+        return super().event(ev)
 
     @classmethod
     def add_connected_device(cls, org_id, device_id):
