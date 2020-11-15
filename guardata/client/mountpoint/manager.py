@@ -266,6 +266,17 @@ class MountpointManager:
             await self.safe_unmount(workspace_id, timestamp=timestamp)
 
 
+async def cleanup_macos_mount(base_mountpoint_path):
+    if os.path.isdir(base_mountpoint_path):
+        for dirs in os.listdir(base_mountpoint_path):
+            dir_path = str(base_mountpoint_path) + "/" + str(dirs)
+            stats = os.statvfs(dir_path)
+            if stats.f_blocks == 0 and stats.f_ffree == 0 and stats.f_bavail == 0:
+                await trio.run_process(["diskutil", "unmount", dir_path])
+                if dirs in os.listdir(base_mountpoint_path):
+                    await trio.run_process(["rm", "-d", dir_path])
+
+
 @asynccontextmanager
 async def mountpoint_manager_factory(
     user_fs,
@@ -288,14 +299,10 @@ async def mountpoint_manager_factory(
         cleanup_guardata_drive_icons()
 
     elif platform == "darwin":
-        if os.path.isdir(base_mountpoint_path):
-            for dirs in os.listdir(base_mountpoint_path):
-                dir_path = str(base_mountpoint_path) + "/" + str(dirs)
-                stats = os.statvfs(dir_path)
-                if stats.f_blocks == 0 and stats.f_ffree == 0 and stats.f_bavail == 0:
-                    await trio.run_process(["diskutil", "unmount", dir_path])
-                    if dirs in os.listdir(base_mountpoint_path):
-                        await trio.run_process(["rm", "-d", dir_path])
+        try:
+            await cleanup_macos_mount(base_mountpoint_path)
+        except FileNotFoundError:
+            pass
 
     def on_event(event, new_entry, previous_entry=None):
         # Workspace created

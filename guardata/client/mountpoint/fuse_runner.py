@@ -220,7 +220,8 @@ async def _stop_fuse_thread(
     logger.info("Stopping fuse thread...", mountpoint=mountpoint_path)
     if on_mac():
         await trio.run_process(["diskutil", "umount", str(mountpoint_path)])
-    fuse_operations.schedule_exit()
+    else:
+        fuse_operations.schedule_exit()
     # Loop over attemps at waking up the fuse operations
     while True:
         # Attempt to wake up the fuse operations
