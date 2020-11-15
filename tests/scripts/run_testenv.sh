@@ -42,7 +42,7 @@ fi
 # Run python script and source
 if [[ "$(uname)" == "Darwin" ]]
 then
-  source_file=$TMPDIR/guardata-temp
+  source_file=$TMPDIR/guardata-temp-$(uuidgen)
   if [ -f $source_file ]; then
     rm -f $source_file
   fi

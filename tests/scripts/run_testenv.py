@@ -113,7 +113,7 @@ async def generate_gui_config():
 
 
 async def configure_mime_types():
-    if os.name == "nt":
+    if sys.platform == "win32" or sys.platform == "darwin":
         return
     XDG_DATA_HOME = os.environ["XDG_DATA_HOME"]
     desktop_file = trio.Path(f"{XDG_DATA_HOME}/applications/guardata.desktop")
