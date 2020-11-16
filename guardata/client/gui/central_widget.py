@@ -53,7 +53,7 @@ class CentralWidget(QWidget, Ui_CentralWidget):
     organization_stats_success = pyqtSignal(QtToTrioJob)
     organization_stats_error = pyqtSignal(QtToTrioJob)
     vlobs_updated_qt = pyqtSignal(object, object)
-    RESET_TIMER_STATS = 10000  # ms
+    RESET_TIMER_STATS = 40000  # ms
 
     connection_state_changed = pyqtSignal(object, object)
     logout_requested = pyqtSignal()
