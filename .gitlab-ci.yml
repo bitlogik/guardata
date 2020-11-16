@@ -93,8 +93,9 @@ pip-build:
     - rm -Rf tests
     - rm -Rf backendService
     - rm -Rf guardata/test_utils
+    - python3 -m pip install -U pip
     - python3 -m venv venv_build
-    - ./venv_build/bin/python3 -m pip install --use-feature=2020-resolver -r pre-requirements.txt
+    - ./venv_build/bin/python3 -m pip install -r pre-requirements.txt
   script:
     - echo __version__=\"$CI_COMMIT_TAG\" > guardata/_version.py
     - cat CHANGELOG.rst >> README.rst
@@ -102,7 +103,7 @@ pip-build:
     - pip3 install --use-feature=2020-resolver --user virtualenv
     - python3 -m venv venv_test
     - source venv_test/bin/activate
-    - pip3 install --use-feature=2020-resolver -r pre-requirements.txt
+    - pip3 install -r pre-requirements.txt
     - pip3 install --use-feature=2020-resolver $(ls dist/guardata-*.whl)[client]
     - mkdir empty
     - cd empty
