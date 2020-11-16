@@ -2,6 +2,26 @@
 guardata history
 ----------------
 
+0.1.6 - 2020-11-16
+^^^^^^^^^^^^^^^^^^
+
+* Updates in the GUI
+
+  * Fix crash when loading >2GB file
+  * Improve loading file link
+  * Email address in sharing list
+  * Refine calendar for time machine
+  * Copy/paste between worspaces
+  * Catch no more remaining drives on Windows
+  * All dialogs are non-blocking
+  * UX improved for machine greeting
+
+* Works on MacOS 11 (untested on ARM)
+* Better stability on Mac
+* URL scheme now works on Mac
+* various small improvements
+
+
 0.1.4 - 2020-10-16
 ^^^^^^^^^^^^^^^^^^
 
