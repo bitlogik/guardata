@@ -91,8 +91,8 @@
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>720</width>
-        <height>458</height>
+        <width>750</width>
+        <height>453</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_8">
@@ -256,7 +256,7 @@
            <widget class="QWidget" name="widget_password" native="true">
             <layout class="QVBoxLayout" name="verticalLayout_2">
              <property name="spacing">
-              <number>10</number>
+              <number>5</number>
              </property>
              <property name="leftMargin">
               <number>0</number>
@@ -372,26 +372,19 @@
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_3">
             <property name="spacing">
-             <number>10</number>
+             <number>4</number>
             </property>
             <property name="topMargin">
              <number>0</number>
             </property>
             <item>
-             <spacer name="horizontalSpacer">
-              <property name="orientation">
-               <enum>Qt::Horizontal</enum>
-              </property>
-              <property name="sizeHint" stdset="0">
+             <widget class="QPushButton" name="button_bootstrap">
+              <property name="maximumSize">
                <size>
-                <width>40</width>
-                <height>0</height>
+                <width>250</width>
+                <height>16777215</height>
                </size>
               </property>
-             </spacer>
-            </item>
-            <item>
-             <widget class="QPushButton" name="button_bootstrap">
               <property name="cursor">
                <cursorShape>PointingHandCursor</cursorShape>
               </property>
@@ -428,7 +421,7 @@
             <property name="sizeHint" stdset="0">
              <size>
               <width>20</width>
-              <height>40</height>
+              <height>80</height>
              </size>
             </property>
            </spacer>

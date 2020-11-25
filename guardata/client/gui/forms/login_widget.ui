@@ -96,21 +96,21 @@
         <widget class="QLabel" name="label_3">
          <property name="minimumSize">
           <size>
-           <width>156</width>
-           <height>101</height>
+           <width>320</width>
+           <height>71</height>
           </size>
          </property>
          <property name="maximumSize">
           <size>
-           <width>156</width>
-           <height>101</height>
+           <width>320</width>
+           <height>71</height>
           </size>
          </property>
          <property name="text">
           <string/>
          </property>
          <property name="pixmap">
-             <pixmap resource="../rc/resources.qrc">:/logos/images/logos/guardata.png</pixmap>
+          <pixmap resource="../rc/resources.qrc">:/logos/images/logos/guardata.png</pixmap>
          </property>
          <property name="scaledContents">
           <bool>true</bool>

@@ -33,6 +33,11 @@
      </property>
      <item>
       <widget class="QLabel" name="label_status">
+       <property name="font">
+        <font>
+         <pointsize>7</pointsize>
+        </font>
+       </property>
        <property name="text">
         <string>TEXT_IMPORT_FILES_PROGRESS</string>
        </property>

@@ -113,14 +113,14 @@ color: #2185d0;
          <widget class="IconLabel" name="label_icon">
           <property name="minimumSize">
            <size>
-            <width>76</width>
-            <height>76</height>
+            <width>68</width>
+            <height>68</height>
            </size>
           </property>
           <property name="maximumSize">
            <size>
-            <width>76</width>
-            <height>76</height>
+            <width>68</width>
+            <height>68</height>
            </size>
           </property>
           <property name="text">
@@ -162,6 +162,7 @@ color: #2185d0;
          <font>
           <pointsize>12</pointsize>
           <weight>75</weight>
+          <bold>true</bold>
          </font>
         </property>
         <property name="text">
@@ -174,6 +175,11 @@ color: #2185d0;
       </item>
       <item>
        <widget class="QLabel" name="label_is_current">
+        <property name="font">
+         <font>
+          <pointsize>7</pointsize>
+         </font>
+        </property>
         <property name="text">
          <string/>
         </property>
@@ -190,7 +196,7 @@ color: #2185d0;
         <property name="sizeHint" stdset="0">
          <size>
           <width>18</width>
-          <height>35</height>
+          <height>30</height>
          </size>
         </property>
        </spacer>
