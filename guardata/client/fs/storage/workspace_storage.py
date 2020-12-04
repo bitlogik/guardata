@@ -39,7 +39,7 @@ DEFAULT_CHUNK_VACUUM_THRESHOLD = 512 * 1024 * 1024
 
 
 class BaseWorkspaceStorage:
-    """ Common base class for WorkspaceStorage and WorkspaceStorageTimestamped
+    """Common base class for WorkspaceStorage and WorkspaceStorageTimestamped
     Can not be instanciated
     """
 

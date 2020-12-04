@@ -167,8 +167,8 @@ async def _add_random_users(
     bob_ws_id: EntryID,
     additional_users_number: int,
 ):
-    """ Add random number of users with random role, and share workspaces with them.
-        1 out of 10 users will be revoked from organization.
+    """Add random number of users with random role, and share workspaces with them.
+    1 out of 10 users will be revoked from organization.
     """
     for _ in range(additional_users_number):
         name = "test_" + str(uuid4())[:8]

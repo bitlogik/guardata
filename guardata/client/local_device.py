@@ -219,10 +219,10 @@ def list_available_devices(config_dir: Path) -> List[AvailableDevice]:
 
 def load_device_with_password(key_file: Path, password: str) -> LocalDevice:
     """
-        LocalDeviceNotFoundError
-        LocalDeviceCryptoError
-        LocalDeviceValidationError
-        LocalDevicePackingError
+    LocalDeviceNotFoundError
+    LocalDeviceCryptoError
+    LocalDeviceValidationError
+    LocalDevicePackingError
     """
     try:
         ciphertext = key_file.read_bytes()
@@ -251,11 +251,11 @@ def save_device_with_password(
     config_dir: Path, device: LocalDevice, password: str, force: bool = False
 ) -> AvailableDevice:
     """
-        LocalDeviceError
-        LocalDeviceNotFoundError
-        LocalDeviceCryptoError
-        LocalDeviceValidationError
-        LocalDevicePackingError
+    LocalDeviceError
+    LocalDeviceNotFoundError
+    LocalDeviceCryptoError
+    LocalDeviceValidationError
+    LocalDevicePackingError
     """
     key_file = get_default_key_file(config_dir, device)
     _save_device_with_password(key_file, device, password, force=force)
@@ -297,11 +297,11 @@ def _save_device_with_password(
 
 def change_device_password(key_file: Path, old_password: str, new_password: str) -> None:
     """
-        LocalDeviceError
-        LocalDeviceNotFoundError
-        LocalDeviceCryptoError
-        LocalDeviceValidationError
-        LocalDevicePackingError
+    LocalDeviceError
+    LocalDeviceNotFoundError
+    LocalDeviceCryptoError
+    LocalDeviceValidationError
+    LocalDevicePackingError
     """
     device = load_device_with_password(key_file, password=old_password)
     _save_device_with_password(key_file, device, password=new_password, force=True)

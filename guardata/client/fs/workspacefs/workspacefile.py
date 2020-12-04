@@ -84,7 +84,7 @@ class WorkspaceFile:
     async def ainit(self):
         """Initializing the File Object.
 
-            Check the FileState and truncate the file if needed.
+        Check the FileState and truncate the file if needed.
         """
         if self._state == FileState.INIT:
             self._state = FileState.OPEN
@@ -179,7 +179,7 @@ class WorkspaceFile:
         return self._path
 
     async def read(self, size: int = -1) -> bytes:
-        """ Read up to size bytes from the object and return them.
+        """Read up to size bytes from the object and return them.
 
         As a convenience, if size is unspecified or -1, all bytes until EOF are returned.
         If 0 bytes are returned, and size was not 0, this indicates end of file.
@@ -211,7 +211,7 @@ class WorkspaceFile:
         raise NotImplementedError
 
     async def seek(self, offset: int, whence=os.SEEK_SET) -> int:
-        """ Change the stream position to the given offset.
+        """Change the stream position to the given offset.
         Behaviour depends on the whence parameter. The default value for whence is SEEK_SET.
         SEEK_SET or 0 -> seek from the start of the stream (the default);
         Offset have to be 0 or bigger.
@@ -252,7 +252,7 @@ class WorkspaceFile:
         return self._offset
 
     async def truncate(self, size=None) -> int:
-        """ Resize the stream to the given size in bytes.
+        """Resize the stream to the given size in bytes.
         Resize to the current position if size is not specified.
         The current stream position isn't changed.
         This resizing can extend or reduce the current file size. In case of extension, the
@@ -285,9 +285,9 @@ class WorkspaceFile:
         return self._writable
 
     async def write(self, data: Union[str, bytes]) -> int:
-        """ Check write right and execute write_bytes or write_str depend on the mode
-            Raises:
-            FSUnsupportedOperation
+        """Check write right and execute write_bytes or write_str depend on the mode
+        Raises:
+        FSUnsupportedOperation
         """
         if not self.writable():
             raise FSUnsupportedOperation
@@ -307,7 +307,7 @@ class WorkspaceFile:
         raise NotImplementedError
 
     async def _write_bytes(self, data: bytes) -> int:
-        """ Write the given bytes-like object.
+        """Write the given bytes-like object.
         Return the number of bytes written.
         """
 
