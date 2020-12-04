@@ -1,10 +1,14 @@
 {% if greeter %}
 This is an invitation from {{ greeter }} to join the existing group {{ organization_id }} on guardata.
 {% else %}
-This is an invitation to add a new device in the {{ organization_id}} group on guardata.
+This is an invitation to add a new device in the {{ organization_id }} group on guardata.
 {% endif %}
 
 If you don't already have it, you have to download the guardata client via the following link : https://guardata.app/get
+
+{% if greeter %}
+By joining the group {{ organization_id }}, you agree to the service Users Terms available at https://guardata.app/docs/CGUguardata.pdf .
+{% endif %}
 
 Once installed, click on the following link to proceed to guardata : {{ invitation_url }}
 
