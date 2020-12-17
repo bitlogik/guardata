@@ -5,6 +5,7 @@ from guardata.client.client_events import ClientEvent
 import os
 import errno
 from typing import Optional
+from trio import Cancelled
 from structlog import get_logger
 from contextlib import contextmanager
 from stat import S_IRWXU, S_IFDIR, S_IFREG
@@ -47,6 +48,10 @@ def translate_error(event_bus, operation, path):
     except FSRemoteOperationError as exc:
         event_bus.send(ClientEvent.MOUNTPOINT_REMOTE_ERROR, exc=exc, operation=operation, path=path)
         raise FuseOSError(exc.errno) from exc
+
+    except Cancelled as exc:
+        # Raised by self.fs_access incase trio loop finishes early
+        raise FuseOSError(errno.EACCES) from exc
 
     except Exception as exc:
         logger.exception("Unhandled exception in fuse mountpoint")
