@@ -10,6 +10,7 @@ from guardata.client.gui.mount_widget import MountWidget
 from guardata.client.gui.users_widget import UsersWidget
 from guardata.client.gui.devices_widget import DevicesWidget
 from guardata.client.gui.menu_widget import MenuWidget
+from guardata.client.gui.password_change_widget import PasswordChangeWidget
 from guardata.client.gui.lang import translate as _
 from guardata.client.gui.custom_widgets import Pixmap
 from guardata.client.gui.custom_dialogs import show_error
@@ -86,6 +87,9 @@ class CentralWidget(QWidget, Ui_CentralWidget):
 
         self.set_user_info()
         menu = QMenu()
+        change_password_act = menu.addAction(_("ACTION_DEVICE_MENU_CHANGE_PASSWORD"))
+        change_password_act.triggered.connect(self.change_password)
+        menu.addSeparator()
         log_out_act = menu.addAction(_("ACTION_LOG_OUT"))
         log_out_act.triggered.connect(self.logout_requested.emit)
         self.button_user.setMenu(menu)
@@ -152,6 +156,9 @@ class CentralWidget(QWidget, Ui_CentralWidget):
         username = self.client.device.short_user_display
         user_text = f"{org}\n{username}"
         self.button_user.setText(user_text)
+
+    def change_password(self):
+        PasswordChangeWidget.show_modal(client=self.client, parent=self)
 
     def _on_folder_changed(self, workspace_name, path):
         if workspace_name and path:

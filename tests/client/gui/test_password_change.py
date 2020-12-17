@@ -13,16 +13,23 @@ def catch_password_change_widget(widget_catcher_factory):
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_change_password_invalid_old_password(
-    aqtbot, running_backend, logged_gui, catch_password_change_widget, autoclose_dialog
+    aqtbot,
+    running_backend,
+    logged_gui,
+    catch_password_change_widget,
+    autoclose_dialog,
+    qt_thread_gateway,
 ):
-    d_w = await logged_gui.test_switch_to_devices_widget()
+    c_w = logged_gui.test_get_central_widget()
 
-    assert d_w.layout_devices.count() == 1
-    db_w = d_w.layout_devices.itemAt(0).widget()
-    assert db_w.is_current_device is True
+    assert c_w is not None
+
+    def _trigger_password_change():
+        c_w.button_user.menu().actions()[0].trigger()
+
+    await qt_thread_gateway.send_action(_trigger_password_change)
 
     await aqtbot.wait(250)
-    await aqtbot.run(db_w.change_password_clicked.emit)
     pc_w = await catch_password_change_widget()
 
     await aqtbot.key_clicks(pc_w.line_edit_old_password, "0123456789")
@@ -40,16 +47,23 @@ async def test_change_password_invalid_old_password(
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_change_password_invalid_password_check(
-    aqtbot, running_backend, logged_gui, catch_password_change_widget, autoclose_dialog
+    aqtbot,
+    running_backend,
+    logged_gui,
+    catch_password_change_widget,
+    autoclose_dialog,
+    qt_thread_gateway,
 ):
-    d_w = await logged_gui.test_switch_to_devices_widget()
+    c_w = logged_gui.test_get_central_widget()
 
-    assert d_w.layout_devices.count() == 1
-    db_w = d_w.layout_devices.itemAt(0).widget()
-    assert db_w.is_current_device is True
+    assert c_w is not None
+
+    def _trigger_password_change():
+        c_w.button_user.menu().actions()[0].trigger()
+
+    await qt_thread_gateway.send_action(_trigger_password_change)
 
     await aqtbot.wait(250)
-    await aqtbot.run(db_w.change_password_clicked.emit)
     pc_w = await catch_password_change_widget()
 
     await aqtbot.key_clicks(pc_w.line_edit_old_password, "P2ssxdor!s3")
@@ -69,14 +83,16 @@ async def test_change_password_success(
     autoclose_dialog,
     qt_thread_gateway,
 ):
-    d_w = await logged_gui.test_switch_to_devices_widget()
+    c_w = logged_gui.test_get_central_widget()
 
-    assert d_w.layout_devices.count() == 1
-    db_w = d_w.layout_devices.itemAt(0).widget()
-    assert db_w.is_current_device is True
+    assert c_w is not None
+
+    def _trigger_password_change():
+        c_w.button_user.menu().actions()[0].trigger()
+
+    await qt_thread_gateway.send_action(_trigger_password_change)
 
     await aqtbot.wait(250)
-    await aqtbot.run(db_w.change_password_clicked.emit)
     pc_w = await catch_password_change_widget()
 
     await aqtbot.key_clicks(pc_w.line_edit_old_password, "P2ssxdor!s3")

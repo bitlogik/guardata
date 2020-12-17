@@ -2,7 +2,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 
 from PyQt5.QtCore import pyqtSignal, Qt
-from PyQt5.QtWidgets import QWidget, QMenu, QGraphicsDropShadowEffect, QLabel
+from PyQt5.QtWidgets import QWidget, QGraphicsDropShadowEffect, QLabel
 from PyQt5.QtGui import QColor
 
 from guardata.client.backend_connection import BackendNotAvailable, BackendConnectionError
@@ -11,7 +11,6 @@ from guardata.client.gui.greet_device_widget import GreetDeviceWidget
 from guardata.client.gui.lang import translate as _
 from guardata.client.gui.custom_widgets import ensure_string_size
 from guardata.client.gui.custom_dialogs import show_error
-from guardata.client.gui.password_change_widget import PasswordChangeWidget
 from guardata.client.gui.flow_layout import FlowLayout
 from guardata.client.gui.ui.devices_widget import Ui_DevicesWidget
 from guardata.client.gui.ui.device_button import Ui_DeviceButton
@@ -20,8 +19,6 @@ DEVICES_PER_PAGE = 100
 
 
 class DeviceButton(QWidget, Ui_DeviceButton):
-    change_password_clicked = pyqtSignal()
-
     def __init__(self, device_info, is_current_device):
         super().__init__()
         self.setupUi(self)
@@ -35,26 +32,12 @@ class DeviceButton(QWidget, Ui_DeviceButton):
         self.label_device_name.setToolTip(self.device_info.device_display)
         if self.is_current_device:
             self.label_is_current.setText("({})".format(_("TEXT_DEVICE_IS_CURRENT")))
-        self.setContextMenuPolicy(Qt.CustomContextMenu)
-        self.customContextMenuRequested.connect(self.show_context_menu)
         effect = QGraphicsDropShadowEffect(self)
         effect.setColor(QColor(0x99, 0x99, 0x99))
         effect.setBlurRadius(10)
         effect.setXOffset(2)
         effect.setYOffset(2)
         self.setGraphicsEffect(effect)
-
-    def show_context_menu(self, pos):
-        if not self.is_current_device:
-            return
-        global_pos = self.mapToGlobal(pos)
-        menu = QMenu(self)
-        action = menu.addAction(_("ACTION_DEVICE_MENU_CHANGE_PASSWORD"))
-        action.triggered.connect(self.change_password)
-        menu.exec_(global_pos)
-
-    def change_password(self):
-        self.change_password_clicked.emit()
 
 
 async def _do_invite_device(client):
@@ -147,9 +130,6 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
             pattern=pattern,
         )
 
-    def change_password(self):
-        PasswordChangeWidget.show_modal(client=self.client, parent=self)
-
     def invite_device(self):
         self.jobs_ctx.submit_job(
             ThreadSafeQtSignal(self, "invite_success", QtToTrioJob),
@@ -189,7 +169,6 @@ class DevicesWidget(QWidget, Ui_DevicesWidget):
     def add_device(self, device_info, is_current_device):
         button = DeviceButton(device_info, is_current_device)
         self.layout_devices.addWidget(button)
-        button.change_password_clicked.connect(self.change_password)
         button.show()
 
     def pagination(self, total: int):

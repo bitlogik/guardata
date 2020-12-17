@@ -482,7 +482,7 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             central_widget = self.test_get_central_widget()
 
             def _trigger_logout_menu():
-                central_widget.button_user.menu().actions()[0].trigger()
+                central_widget.button_user.menu().actions()[2].trigger()
 
             tabw = self.test_get_tab()
 
