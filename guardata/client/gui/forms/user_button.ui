@@ -193,7 +193,7 @@ color: #2185d0;
        <widget class="QLabel" name="label_is_current">
         <property name="font">
          <font>
-          <pointsize>7</pointsize>
+          <pointsize>8</pointsize>
          </font>
         </property>
         <property name="text">
