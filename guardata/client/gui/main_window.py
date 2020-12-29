@@ -650,11 +650,12 @@ class MainWindow(QMainWindow, Ui_MainWindow):
             self.close_tab(idx, force=True)
 
     def close_tab(self, index, force=False):
-        def _close_tab():
+        def _close_tab(logged):
             self.tab_center.removeTab(index)
-            if not tab:
-                return
-            tab.logout()
+            if logged:
+                if not tab:
+                    return
+                tab.logout()
             self.reload_login_devices()
             if self.tab_center.count() == 1:
                 self.tab_center.setTabsClosable(False)
@@ -666,7 +667,7 @@ class MainWindow(QMainWindow, Ui_MainWindow):
 
                 def _on_tab_close_question_finished(return_code, answer):
                     if return_code and answer == _("ACTION_TAB_CLOSE_CONFIRM"):
-                        _close_tab()
+                        _close_tab(True)
 
                 ask_question(
                     self,
@@ -677,6 +678,10 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     [_("ACTION_TAB_CLOSE_CONFIRM"), _("ACTION_CANCEL")],
                     on_finished=_on_tab_close_question_finished,
                 )
+            elif tab:
+                _close_tab(False)
+        elif tab:
+            _close_tab(tab.is_logged_in)
 
     def closeEvent(self, event):
         def _on_closing_question_finished(return_code, answer):
