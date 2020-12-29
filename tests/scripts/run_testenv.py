@@ -107,7 +107,7 @@ async def generate_gui_config():
         "gui_check_version_at_startup": False,
         "gui_tray_enabled": False,
         "gui_last_version": GUARDATA_VERSION,
-        "gui_show_confined": True,
+        "gui_show_confined": False,
     }
     await config_file.write_text(json.dumps(config, indent=4))
 

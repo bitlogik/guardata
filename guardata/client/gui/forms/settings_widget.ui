@@ -69,8 +69,8 @@ border-radius: 8px;
        <rect>
         <x>0</x>
         <y>0</y>
-        <width>549</width>
-        <height>563</height>
+        <width>563</width>
+        <height>526</height>
        </rect>
       </property>
       <layout class="QVBoxLayout" name="verticalLayout_2">
@@ -271,10 +271,22 @@ border-radius: 8px;
              <layout class="QHBoxLayout" name="horizontalLayout_4">
               <item>
                <widget class="QPushButton" name="button_check_version">
+                <property name="sizePolicy">
+                 <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                  <horstretch>0</horstretch>
+                  <verstretch>0</verstretch>
+                 </sizepolicy>
+                </property>
                 <property name="minimumSize">
                  <size>
                   <width>0</width>
                   <height>32</height>
+                 </size>
+                </property>
+                <property name="maximumSize">
+                 <size>
+                  <width>280</width>
+                  <height>16777215</height>
                  </size>
                 </property>
                 <property name="font">
@@ -293,19 +305,6 @@ border-radius: 8px;
                  <string>ACTION_SETTINGS_CHECK_NEW_VERSION</string>
                 </property>
                </widget>
-              </item>
-              <item>
-               <spacer name="horizontalSpacer_2">
-                <property name="orientation">
-                 <enum>Qt::Horizontal</enum>
-                </property>
-                <property name="sizeHint" stdset="0">
-                 <size>
-                  <width>40</width>
-                  <height>20</height>
-                 </size>
-                </property>
-               </spacer>
               </item>
              </layout>
             </item>
@@ -350,17 +349,6 @@ border-radius: 8px;
             </item>
            </layout>
           </item>
-
-
-
-
-
-
-
-
-
-
-
           <item>
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
@@ -377,13 +365,6 @@ border-radius: 8px;
             <property name="leftMargin">
              <number>0</number>
             </property>
-            <item>
-             <widget class="QCheckBox" name="check_box_workspace_color">
-              <property name="text">
-               <string>TEXT_SETTINGS_CHECK_USE_WORKSPACES_COLORS</string>
-              </property>
-             </widget>
-            </item>
            </layout>
           </item>
          </layout>
@@ -428,20 +409,13 @@ border-radius: 8px;
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
-      <spacer name="horizontalSpacer">
-       <property name="orientation">
-        <enum>Qt::Horizontal</enum>
-       </property>
-       <property name="sizeHint" stdset="0">
-        <size>
-         <width>40</width>
-         <height>20</height>
-        </size>
-       </property>
-      </spacer>
-     </item>
-     <item>
       <widget class="QPushButton" name="button_save">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
+       </property>
        <property name="minimumSize">
         <size>
          <width>0</width>
