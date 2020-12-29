@@ -4,7 +4,7 @@
 cd ../..
 python3 setup.py bdist_wheel
 python3 -m pip --use-feature=2020-resolver install .
-python3 -m pip --use-feature=2020-resolver install 'pyinstaller==4.0'
+python3 -m pip --use-feature=2020-resolver install 'pyinstaller==4.1'
 python3 -m pip --use-feature=2020-resolver install -U certifi
 cd packaging/MacOSX
 MACRUNfile='../../guardata/client/cli/run_mac.py'
