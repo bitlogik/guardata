@@ -20,7 +20,7 @@ msgid "TEXT_WORKSPACE_ROLE_CONTRIBUTOR"
 msgstr "Contributeur"
 
 msgid "TEXT_WORKSPACE_ROLE_MANAGER"
-msgstr "Gestionnaire
+msgstr "Gestionnaire"
 
 msgid "TEXT_WORKSPACE_ROLE_OWNER"
 msgstr "Propriétaire"
