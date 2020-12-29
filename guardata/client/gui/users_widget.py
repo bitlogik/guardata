@@ -26,7 +26,7 @@ from guardata.client.gui.ui.user_button import Ui_UserButton
 from guardata.client.gui.ui.user_invitation_button import Ui_UserInvitationButton
 from guardata.client.gui.ui.users_widget import Ui_UsersWidget
 
-USERS_PER_PAGE = 100
+USERS_PER_PAGE = 20
 
 
 class UserInvitationButton(QWidget, Ui_UserInvitationButton):

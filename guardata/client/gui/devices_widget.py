@@ -15,7 +15,7 @@ from guardata.client.gui.flow_layout import FlowLayout
 from guardata.client.gui.ui.devices_widget import Ui_DevicesWidget
 from guardata.client.gui.ui.device_button import Ui_DeviceButton
 
-DEVICES_PER_PAGE = 100
+DEVICES_PER_PAGE = 20
 
 
 class DeviceButton(QWidget, Ui_DeviceButton):
