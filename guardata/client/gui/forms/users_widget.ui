@@ -209,6 +209,9 @@
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
           <widget class="QPushButton" name="button_previous_page">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="text">
             <string>ACTION_LIST_PREVIOUS_PAGE</string>
            </property>
@@ -229,6 +232,9 @@
          </item>
          <item>
           <widget class="QPushButton" name="button_next_page">
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="text">
             <string>ACTION_LIST_NEXT_PAGE</string>
            </property>

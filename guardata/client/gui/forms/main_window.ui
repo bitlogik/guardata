@@ -10,6 +10,12 @@
     <height>512</height>
    </rect>
   </property>
+  <property name="maximumSize">
+   <size>
+    <width>1600</width>
+    <height>800</height>
+   </size>
+  </property>
   <property name="font">
    <font>
     <pointsize>10</pointsize>

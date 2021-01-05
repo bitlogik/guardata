@@ -537,6 +537,9 @@ QWidget#widget_title {
              <height>32</height>
             </size>
            </property>
+           <property name="cursor">
+            <cursorShape>PointingHandCursor</cursorShape>
+           </property>
            <property name="toolTip">
             <string>TEXT_WORKSPACE_OPEN_WORKSPACE_TOOLTIP</string>
            </property>

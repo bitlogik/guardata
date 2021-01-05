@@ -65,6 +65,9 @@ QLabel {
    </property>
    <item>
     <widget class="QWidget" name="widget" native="true">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <layout class="QVBoxLayout" name="verticalLayout_2">
       <property name="spacing">
        <number>6</number>

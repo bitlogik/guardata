@@ -57,6 +57,9 @@
    </item>
    <item>
     <widget class="QPushButton" name="button_create_org">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="focusPolicy">
       <enum>Qt::ClickFocus</enum>
      </property>
@@ -67,6 +70,9 @@
    </item>
    <item>
     <widget class="QPushButton" name="button_join_org">
+     <property name="cursor">
+      <cursorShape>PointingHandCursor</cursorShape>
+     </property>
      <property name="focusPolicy">
       <enum>Qt::ClickFocus</enum>
      </property>

@@ -68,6 +68,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="button_send_email">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="text">
         <string>ACTION_SEND_EMAIL</string>
        </property>
@@ -75,6 +78,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="button_copy_addr">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="text">
         <string>ACTION_COPY_ADDR</string>
        </property>
@@ -115,11 +121,11 @@
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
       <widget class="QPushButton" name="button_start">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="text">
         <string>ACTION_START</string>
-       </property>
-       <property name="maximumWidth">
-        <number>120</number>
        </property>
       </widget>
      </item>

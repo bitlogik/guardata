@@ -115,6 +115,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="button_previous">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="text">
         <string>ACTION_PREVIOUS</string>
        </property>
@@ -125,6 +128,9 @@
      </item>
      <item>
       <widget class="QPushButton" name="button_validate">
+       <property name="cursor">
+        <cursorShape>PointingHandCursor</cursorShape>
+       </property>
        <property name="text">
         <string>ACTION_NEXT</string>
        </property>
