@@ -2,11 +2,16 @@
 
 import pytest
 import sys
+from pathlib import Path
 from PyQt5 import QtCore, QtWidgets
 
 from guardata.client.gui.lang import translate
 from guardata.client.types import BackendOrganizationFileLinkAddr
-from guardata.client.local_device import save_device_with_password
+from guardata.client.local_device import (
+    AvailableDevice,
+    _save_device_with_password,
+    save_device_with_password,
+)
 
 
 @pytest.fixture
@@ -75,6 +80,21 @@ async def logged_gui_with_files(
     return logged_gui, w_w, f_w
 
 
+@pytest.fixture
+def bob_available_device(bob, tmpdir):
+    key_file_path = Path(tmpdir) / "bob_device.key"
+    _save_device_with_password(key_file=key_file_path, device=bob, password="")
+    return AvailableDevice(
+        key_file_path=key_file_path,
+        organization_id=bob.organization_id,
+        device_id=bob.device_id,
+        human_handle=bob.human_handle,
+        device_label=bob.device_label,
+        root_verify_key_hash=bob.root_verify_key_hash,
+    )
+
+
+@pytest.fixture
 @pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
 @pytest.mark.gui
 @pytest.mark.trio
@@ -109,6 +129,59 @@ async def test_file_link(
     await aqtbot.wait_until(folder_ready, timeout=3000)
 
     assert logged_gui.tab_center.count() == 1
+
+
+@pytest.mark.gui
+@pytest.mark.trio
+async def test_link_file_unmounted(
+    aqtbot,
+    running_backend,
+    backend,
+    autoclose_dialog,
+    logged_gui_with_files,
+    bob,
+    monkeypatch,
+    bob_available_device,
+):
+    logged_gui, w_w, f_w = logged_gui_with_files
+
+    client = logged_gui.test_get_client()
+    url = BackendOrganizationFileLinkAddr.build(
+        f_w.client.device.organization_addr, f_w.workspace_fs.workspace_id, f_w.current_directory
+    )
+
+    monkeypatch.setattr(
+        "guardata.client.gui.main_window.list_available_devices",
+        lambda *args, **kwargs: [bob_available_device],
+    )
+
+    await aqtbot.run(logged_gui.add_instance, str(url))
+
+    def _folder_ready():
+        assert f_w.isVisible()
+        assert f_w.table_files.rowCount() == 2
+        folder = f_w.table_files.item(1, 1)
+        assert folder
+        assert folder.text() == "dir1"
+
+    await aqtbot.wait_until(_folder_ready)
+
+    assert logged_gui.tab_center.count() == 1
+
+    def _mounted():
+        assert client.mountpoint_manager.is_workspace_mounted(f_w.workspace_fs.workspace_id)
+
+    await aqtbot.wait_until(_mounted)
+    await client.mountpoint_manager.unmount_workspace(f_w.workspace_fs.workspace_id)
+
+    def _unmounted():
+        assert not client.mountpoint_manager.is_workspace_mounted(f_w.workspace_fs.workspace_id)
+
+    await aqtbot.wait_until(_unmounted)
+
+    await aqtbot.run(logged_gui.add_instance, str(url))
+
+    await aqtbot.wait_until(_mounted)
 
 
 @pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
