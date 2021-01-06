@@ -56,6 +56,8 @@ class MainWindow(QMainWindow, Ui_MainWindow):
     TAB_NOTIFICATION_COLOR = QColor(46, 146, 208)
     TAB_NOT_SELECTED_COLOR = QColor(123, 132, 163)
     TAB_SELECTED_COLOR = QColor(12, 65, 159)
+    DEFAULT_WIDTH = 1050
+    DEFAULT_HEIGHT = 680
 
     def __init__(self, jobs_ctx, event_bus, config, minimize_on_close: bool = False, **kwargs):
         super().__init__(**kwargs)
@@ -397,12 +399,20 @@ class MainWindow(QMainWindow, Ui_MainWindow):
         self.config = self.config.evolve(**kwargs)
         save_config(self.config)
 
+    def resize_standard(self):
+        # Resize window to the stardard size
+        scaling = self.logicalDpiX() / 96.0
+        window_width = int(scaling * MainWindow.DEFAULT_WIDTH)
+        window_height = int(scaling * MainWindow.DEFAULT_HEIGHT)
+        self.resize(window_width, window_height)
+
     def show_window(self, skip_dialogs=False, invitation_link=""):
+        self.show()
         try:
             if not self.restoreGeometry(self.config.gui_geometry):
-                self.showMaximized()
+                self.resize_standard()
         except TypeError:
-            self.showMaximized()
+            self.resize_standard()
 
         QCoreApplication.processEvents()
 
