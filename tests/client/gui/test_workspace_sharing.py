@@ -109,10 +109,12 @@ async def test_share_workspace(
     def _set_manager():
         user_w.combo_role.setCurrentIndex(3)
 
-    async with aqtbot.wait_signal(share_w_w.share_success):
+    async with aqtbot.wait_signal(share_w_w.share_success, timeout=2500):
         await qt_thread_gateway.send_action(_set_manager)
 
-    async with aqtbot.wait_signals([share_w_w.parent().parent().closing, w_w.list_success]):
+    async with aqtbot.wait_signals(
+        [share_w_w.parent().parent().closing, w_w.list_success], timeout=2500
+    ):
 
         def _close_dialog():
             share_w_w.parent().parent().reject()
