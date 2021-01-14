@@ -715,6 +715,9 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     "guardata", _("TEXT_TRAY_GUARDATA_STILL_RUNNING_MESSAGE"), 2000
                 )
         else:
+            tab = self.tab_center.widget(0)
+            if self.tab_center.count() == 1 and (tab and not tab.is_logged_in):
+                self.force_close = True
             if self.config.gui_confirmation_before_close and not self.force_close:
                 ask_question(
                     self if self.isVisible() else None,
