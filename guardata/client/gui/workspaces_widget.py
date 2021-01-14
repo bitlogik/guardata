@@ -26,7 +26,6 @@ from guardata.client.fs import (
     FSError,
     FSWorkspaceNoAccess,
     FSWorkspaceNotFoundError,
-    FSWorkspaceInMaintenance,
 )
 from guardata.client.mountpoint.exceptions import (
     MountpointAlreadyMounted,
@@ -107,22 +106,7 @@ async def _do_workspace_list(client):
             )
             users_roles[user_info.user_id] = (ws_entry.role, user_info)
 
-        try:
-            # List files and directories in the root directory, used for preview
-            files = []
-            async for child in workspace_fs.iterdir("/"):
-                child_info = await workspace_fs.path_info(child)
-                # Do not include confined files and directories in the preview
-                if not child_info.get("confined") or client.config.gui_show_confined:
-                    files.append(child.name)
-        except FSBackendOfflineError:
-            pass
-        except FSWorkspaceInMaintenance:
-            # If a reencryption has already been started, workspace files can not be fetched
-            # But the workspace need to be displayed to be able to trigger for example
-            # reencryption operation
-            pass
-        workspaces.append((workspace_fs, ws_entry, users_roles, files, timestamped))
+        workspaces.append((workspace_fs, ws_entry, users_roles, [], timestamped))
 
     user_manifest = client.user_fs.get_user_manifest()
     available_workspaces = [w for w in user_manifest.workspaces if w.role]
@@ -431,7 +415,7 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
             workspace_fs=workspace_fs,
             users_roles=users_roles,
             is_mounted=self.is_workspace_mounted(workspace_fs.workspace_id, None),
-            files=files[:4],
+            files=[],
             timestamped=timestamped,
         )
         self.layout_workspaces.addWidget(button)

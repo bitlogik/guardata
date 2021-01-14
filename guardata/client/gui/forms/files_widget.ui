@@ -111,6 +111,9 @@ QScrollBar:vertical {
             <height>38</height>
            </size>
           </property>
+          <property name="cursor">
+           <cursorShape>PointingHandCursor</cursorShape>
+          </property>
           <property name="toolTip">
            <string>TEXT_FILE_BACK_TO_WORKSPACES_TOOLTIP</string>
           </property>
@@ -350,7 +353,7 @@ QScrollBar:vertical {
            <number>0</number>
           </property>
           <property name="horizontalScrollBarPolicy">
-           <enum>Qt::ScrollBarAlwaysOff</enum>
+           <enum>Qt::ScrollBarAsNeeded</enum>
           </property>
           <property name="editTriggers">
            <set>QAbstractItemView::NoEditTriggers</set>

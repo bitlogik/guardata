@@ -304,6 +304,9 @@ msgstr "Force du mot de passe : {strength}"
 msgid "ACTION_WORKSPACE_OPEN_IN_FILE_EXPLORER"
 msgstr "Ouvrir dans l'explorateur de fichiers"
 
+msgid "ACTION_WORKSPACE_OPEN_GUI"
+msgstr "Explorer avec le GUI"
+
 msgid "ACTION_WORKSPACE_RENAME"
 msgstr "Renommer"
 

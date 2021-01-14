@@ -287,6 +287,9 @@ msgstr "Password strength: {strength}"
 msgid "ACTION_WORKSPACE_OPEN_IN_FILE_EXPLORER"
 msgstr "Open in the file explorer"
 
+msgid "ACTION_WORKSPACE_OPEN_GUI"
+msgstr "Explore on the GUI"
+
 msgid "ACTION_WORKSPACE_RENAME"
 msgstr "Rename"
 

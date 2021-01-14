@@ -1,6 +1,7 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
+from sys import platform
 from typing import Optional
 from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QGraphicsDropShadowEffect, QMenu
@@ -77,18 +78,8 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
 
         if not self.timestamped:
             self.button_delete.hide()
-            if not len(files):
-                self.widget_empty.show()
-                self.widget_files.hide()
-                self.widget_empty.layout().addWidget(EmptyWorkspaceWidget())
-            else:
-                for i, f in enumerate(files, 1):
-                    if i > 4:
-                        break
-                    label = getattr(self, "file{}_name".format(i))
-                    label.setText(f)
-                self.widget_files.show()
-                self.widget_empty.hide()
+            self.widget_empty.layout().addWidget(EmptyWorkspaceWidget())
+            self.widget_empty.show()
         else:
             self.switch_button.setChecked(True)
             self.button_reencrypt.hide()
@@ -102,7 +93,6 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
             widg_tmp.label_timestamp.setText(format_datetime(self.timestamp))
             self.widget_empty.layout().addWidget(widg_tmp)
             self.widget_empty.show()
-            self.widget_files.hide()
 
         effect = QGraphicsDropShadowEffect(self)
         effect.setColor(QColor(0x99, 0x99, 0x99))
@@ -166,9 +156,13 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
     def show_context_menu(self, pos):
         global_pos = self.mapToGlobal(pos)
         menu = QMenu(self)
-
-        action = menu.addAction(_("ACTION_WORKSPACE_OPEN_IN_FILE_EXPLORER"))
-        action.triggered.connect(self.button_open_workspace_clicked)
+        if self.switch_button.isChecked():
+            if platform == "win32":
+                action = menu.addAction(_("ACTION_WORKSPACE_OPEN_GUI"))
+                action.triggered.connect(self.button_open_gui_clicked)
+            else:
+                action = menu.addAction(_("ACTION_WORKSPACE_OPEN_IN_FILE_EXPLORER"))
+                action.triggered.connect(self.button_open_workspace_clicked)
         if not self.timestamped:
             action = menu.addAction(_("ACTION_WORKSPACE_RENAME"))
             action.triggered.connect(self.button_rename_clicked)
@@ -184,6 +178,9 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
             action.triggered.connect(self.button_delete_clicked)
 
         menu.exec_(global_pos)
+
+    def button_open_gui_clicked(self):
+        self.clicked.emit(self.workspace_fs)
 
     def button_open_workspace_clicked(self):
         self.open_clicked.emit(self.workspace_fs)
@@ -296,7 +293,10 @@ class WorkspaceButton(QWidget, Ui_WorkspaceButton):
 
     def mousePressEvent(self, event):
         if event.button() & Qt.LeftButton and self.switch_button.isChecked():
-            self.clicked.emit(self.workspace_fs)
+            if platform == "win32":
+                self.button_open_workspace_clicked()
+            else:
+                self.clicked.emit(self.workspace_fs)
 
     def _on_switch_clicked(self, state):
         self.set_mountpoint_state(state)
