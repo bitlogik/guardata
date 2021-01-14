@@ -43,7 +43,10 @@ async def logged_gui_with_files(
     f_w = logged_gui.test_get_files_widget()
     wk_button = w_w.layout_workspaces.itemAt(0).widget()
     async with aqtbot.wait_exposed(f_w), aqtbot.wait_signal(f_w.folder_changed):
-        await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
+        if sys.platform == "win32":
+            wk_button.button_open_gui_clicked()
+        else:
+            await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
 
     def _entry_available():
         assert f_w.workspace_fs.get_workspace_name() == "w1"

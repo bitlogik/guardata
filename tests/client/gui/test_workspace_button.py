@@ -1,7 +1,7 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
 import pytest
-
+from sys import platform
 from PyQt5 import QtCore
 
 from guardata.client.types import WorkspaceRole, UserInfo
@@ -56,7 +56,6 @@ async def test_workspace_button(qtbot, workspace_fs, client_config, alice_user_i
     w.show()
 
     assert w.widget_empty.isVisible() is True
-    assert w.widget_files.isVisible() is False
     assert w.label_owner.isVisible() is True
     assert w.label_shared.isVisible() is False
     assert w.name == "Workspace"
@@ -87,7 +86,6 @@ async def test_workspace_button_owned_by(
     qtbot.addWidget(w)
     w.show()
     assert w.widget_empty.isVisible() is True
-    assert w.widget_files.isVisible() is False
     assert w.label_owner.isVisible() is False
     assert w.label_shared.isVisible() is True
     assert w.name == "Workspace"
@@ -118,7 +116,6 @@ async def test_workspace_button_shared_with(
     qtbot.addWidget(w)
     w.show()
     assert w.widget_empty.isVisible() is True
-    assert w.widget_files.isVisible() is False
     assert w.label_owner.isVisible() is True
     assert w.label_shared.isVisible() is True
     assert w.name == "Workspace"
@@ -138,22 +135,18 @@ async def test_workspace_button_files(qtbot, workspace_fs, client_config, alice_
         workspace_fs=workspace_fs,
         users_roles=roles,
         is_mounted=True,
-        files=["File1.txt", "File2.txt", "Dir1"],
+        files=[],
     )
 
     qtbot.addWidget(w)
     w.show()
-    assert w.widget_empty.isVisible() is False
-    assert w.widget_files.isVisible() is True
+    assert w.widget_empty.isVisible() is True
     assert w.label_owner.isVisible() is True
     assert w.label_shared.isVisible() is False
     assert w.name == "Workspace"
-    assert w.file1_name.text() == "File1.txt"
-    assert w.file2_name.text() == "File2.txt"
-    assert w.file3_name.text() == "Dir1"
-    assert w.file4_name.text() == ""
 
 
+@pytest.mark.skipif(platform == "win32", reason="Windows GUI click open explorer")
 @pytest.mark.gui
 @pytest.mark.trio
 async def test_workspace_button_clicked(qtbot, workspace_fs, client_config, alice_user_info):

@@ -578,7 +578,10 @@ def testing_main_window_cls(aqtbot, qt_thread_gateway):
             async with aqtbot.wait_exposed(f_w, timeout=2500), aqtbot.wait_signal(
                 f_w.folder_changed, timeout=2500
             ):
-                await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
+                if platform == "win32":
+                    wk_button.button_open_gui_clicked()
+                else:
+                    await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
             await aqtbot.wait(200)
 
             # Sanity check just to be sure...

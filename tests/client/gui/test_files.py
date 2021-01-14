@@ -2,6 +2,7 @@
 
 import pathlib
 import pytest
+from sys import platform
 from PyQt5 import QtCore, QtWidgets, QtGui
 
 from guardata.client.types import WorkspaceRole
@@ -78,7 +79,10 @@ async def logged_gui_with_workspace(
     assert wk_button.name == "Workspace"
 
     async with aqtbot.wait_signal(wk_widget.load_workspace_clicked):
-        await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
+        if platform == "win32":
+            wk_button.button_open_gui_clicked()
+        else:
+            await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
 
     yield logged_gui
 
@@ -816,7 +820,10 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
 
     # Going to second workspace
     async with aqtbot.wait_signal(wk_widget.load_workspace_clicked):
-        await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
+        if platform == "win32":
+            wk_button.button_open_gui_clicked()
+        else:
+            await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
     await aqtbot.wait_until(lambda: _files_displayed(1))
 
     # Paste the files/folders of first workspace in second workspace folder
@@ -860,7 +867,10 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
     assert wk_button.name == "Workspace"
 
     async with aqtbot.wait_signal(wk_widget.load_workspace_clicked):
-        await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
+        if platform == "win32":
+            wk_button.button_open_gui_clicked()
+        else:
+            await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
     await aqtbot.wait_until(lambda: _files_displayed(1))
 
     # Paste the files/folders of second workspace in first workspace folder
@@ -892,7 +902,10 @@ async def test_copy_cut_folders_and_files_between_two_workspaces(
 
     await aqtbot.wait(500)
     async with aqtbot.wait_signal(wk_widget.load_workspace_clicked):
-        await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
+        if platform == "win32":
+            wk_button.button_open_gui_clicked()
+        else:
+            await aqtbot.mouse_click(wk_button, QtCore.Qt.LeftButton)
     await aqtbot.wait_until(lambda: _files_displayed(4))
 
     # Moving to sub directory
