@@ -2,6 +2,26 @@
 guardata history
 ----------------
 
+0.2.0 - 2021-01-15
+^^^^^^^^^^^^^^^^^^
+
+* Updates in the GUI
+
+  * Update for dark on Mac
+  * Fix text escaping some buttons
+  * In Windows : workspaces open Explorer
+  * Files list preview removed
+  * Password change is now in "user" logout menu
+  * Fix a code syntax in French translation
+  * Fix tab closing issue
+  * Default changes : don't start in full screen, hide temp files
+  * Close without confirmation when no login
+
+* Update code quality control
+* Fix uncatch exception on mounting (Linux)
+* pyInstaller updated on MacOS
+
+
 0.1.6 - 2020-11-16
 ^^^^^^^^^^^^^^^^^^
 
