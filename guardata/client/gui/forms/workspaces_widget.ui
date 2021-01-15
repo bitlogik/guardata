@@ -22,6 +22,10 @@
 
 #button_goto_file:hover, #button_add_workspace:hover {
 	color: #0070DD;
+}
+
+#scrollAreaWidgetContents {
+	background-color: #EEEEEE;
 }</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
@@ -282,7 +286,7 @@
    <extends>QPushButton</extends>
    <header>guardata.client.gui.custom_widgets</header>
   </customwidget>
-   <customwidget>
+  <customwidget>
    <class>SpinnerWidget</class>
    <extends>QWidget</extends>
    <header>guardata.client.gui.custom_widgets</header>

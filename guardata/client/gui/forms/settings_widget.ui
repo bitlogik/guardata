@@ -29,7 +29,17 @@ background-color: #FFFFFF;
 {
 background-color: rgb(255, 255, 255);
 border-radius: 8px;
-}</string>
+}
+
+#SettingsWidget {
+	background-color: #F4F4F4;
+}
+
+#scrollArea {
+	background-color: #F4F4F4;
+}
+
+</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
    <property name="spacing">
