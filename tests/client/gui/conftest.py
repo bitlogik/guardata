@@ -5,7 +5,6 @@ import pytest
 from unittest.mock import patch
 from functools import wraps, partial
 import trio
-from pytestqt.exceptions import TimeoutError
 from trio.testing import trio_test as vanilla_trio_test
 import queue
 import threading
@@ -217,41 +216,6 @@ class AsyncQtBot:
             wrapper.__name__ = f"{fnname}"
             return wrapper
 
-        # Rewrite pytestqt.qtbot wait_until method for MacOSX : wait timeout then assert callback
-        # Workaround for https://github.com/pytest-dev/pytest-qt/issues/313
-        # else the wait_until freezes forever on Mac
-        async def wait_until_macosx(fct, **kwargs):
-            def try_callback(tmo=True):
-                try:
-                    ret = fct()
-                except AssertionError:
-                    if tmo:
-                        raise TimeoutError(timeout_msg)
-                    else:
-                        return False
-                if ret not in (None, True, False):
-                    msg = "wait_until callback must return None, True or False : returned %r"
-                    raise ValueError(msg % ret)
-                if ret is None:
-                    return True
-                if ret is True:
-                    return True
-                if ret is False:
-                    if tmo:
-                        raise TimeoutError(timeout_msg)
-                    return ret
-
-            timeout = kwargs.get("timeout", 1000)
-            if timeout < 20:
-                timeout = 20
-            timeout_msg = f"waitUntil timed out in {timeout} miliseconds"
-            for t in range(20):
-                self.qtbot.wait(timeout // 20)
-                cbret = try_callback(t == 19)
-                if cbret is True:
-                    break
-            self.qtbot.wait(100)
-
         self.key_click = _autowrap("keyClick")
         self.key_clicks = _autowrap("keyClicks")
         self.key_event = _autowrap("keyEvent")
@@ -266,10 +230,7 @@ class AsyncQtBot:
         self.add_widget = _autowrap("add_widget")
         self.stop = _autowrap("stop")
         self.wait = _autowrap("wait")
-        if platform == "darwin":
-            self.wait_until = wait_until_macosx
-        else:
-            self.wait_until = _autowrap("wait_until")
+        self.wait_until = _autowrap("wait_until")
 
         def _autowrap_ctx_manager(fnname):
             def wrapper(*args, **kwargs):
