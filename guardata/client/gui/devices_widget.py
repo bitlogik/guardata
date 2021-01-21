@@ -62,11 +62,13 @@ async def _do_list_devices(client, page, pattern=None):
             return devices_filtered, DEVICES_PER_PAGE - 1
 
         # When without filter : put the current device first
+        curr_dev = None
         for i, device in enumerate(devices):
             if client.device.device_id == device.device_id:
                 curr_dev = devices.pop(i)
                 break
-        devices.insert(0, curr_dev)
+        if curr_dev:
+            devices.insert(0, curr_dev)
         return devices, total
 
     except BackendNotAvailable as exc:
