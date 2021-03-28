@@ -124,10 +124,9 @@ def run_gui(config: ClientConfig, start_arg: str = None, diagnose: bool = False)
     # Needed for High DPI usage of QIcons, otherwise only QImages are well scaled
     QApplication.setAttribute(Qt.AA_EnableHighDpiScaling)
     QApplication.setAttribute(Qt.AA_UseHighDpiPixmaps)
-    if sys.platform != "darwin":
-        QApplication.setHighDpiScaleFactorRoundingPolicy(
-            Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
-        )
+    QApplication.setHighDpiScaleFactorRoundingPolicy(
+        Qt.HighDpiScaleFactorRoundingPolicy.PassThrough
+    )
 
     app = guardataApp()
 
