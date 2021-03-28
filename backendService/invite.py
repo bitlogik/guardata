@@ -200,7 +200,7 @@ class BaseInviteComponent:
         # information in database so that we default to no claimer present
         # (which is the most likely when a backend is restarted) .
         #
-        # However there is multiple way this list can go out of sync:
+        # However there are multiple ways this list can go out of sync:
         # - a claimer can be connected to a backend, then another backend starts
         # - the backend the claimer is connected to crashes witout being able
         #   to notify the other backends

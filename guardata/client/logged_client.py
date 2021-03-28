@@ -251,6 +251,7 @@ class LoggedClient:
     async def new_user_invitation(self, email: str, send_email: bool) -> BackendInvitationAddr:
         """
         Raises:
+            InviteAlreadyMemberError
             BackendConnectionError
         """
         rep = await self._backend_conn.cmds.invite_new(
