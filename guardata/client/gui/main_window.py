@@ -727,3 +727,5 @@ class MainWindow(QMainWindow, Ui_MainWindow):
                     on_finished=_on_closing_question_finished,
                 )
                 event.ignore()
+            else:
+                _on_closing_question_finished(1, _("ACTION_GUARDATA_QUIT_CONFIRM"))
