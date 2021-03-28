@@ -98,7 +98,7 @@ async def _do_workspace_list(client):
                 human_handle=client.device.human_handle,
                 profile=client.device.profile,
                 revoked_on=None,
-                # Unfortunatly, this field is not available from LocalDevice,
+                # Unfortunately, this field is not available from LocalDevice,
                 # so it is set with a dummy value
                 # More a hack than an issue given this field is
                 # not used here.
@@ -641,6 +641,8 @@ class WorkspacesWidget(QWidget, Ui_WorkspacesWidget):
         self.reencrypting.remove(workspace_id)
 
     def _on_workspace_reencryption_error(self, job):
+        if job.is_cancelled():
+            return
         if job.status == "offline-backend":
             err_msg = _("TEXT_WORKPACE_REENCRYPT_OFFLINE_ERROR")
         elif job.status == "access-error":
