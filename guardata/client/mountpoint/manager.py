@@ -272,7 +272,7 @@ async def cleanup_macos_mount(base_mountpoint_path):
             dir_path = str(base_mountpoint_path) + "/" + str(dirs)
             stats = os.statvfs(dir_path)
             if stats.f_blocks == 0 and stats.f_ffree == 0 and stats.f_bavail == 0:
-                await trio.run_process(["diskutil", "unmount", dir_path])
+                await trio.run_process(["diskutil", "unmount", "force", dir_path])
                 if dirs in os.listdir(base_mountpoint_path):
                     await trio.run_process(["rm", "-d", dir_path])
 
