@@ -223,7 +223,7 @@ jobs:
       set -eux
       python3 --version
       # Install osxfuse
-      brew cask install osxfuse
+      brew install --cask macfuse
       # Build and install guardata
       python3 setup.py bdist_wheel
       python3 -m pip install --use-feature=2020-resolver ".[all]"
