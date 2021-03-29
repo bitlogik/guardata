@@ -19,6 +19,7 @@ from guardata.client.types import (
     EntryName,
     BackendOrganizationFileLinkAddr,
 )
+from guardata.client.backend_connection import BackendNotAvailable
 from guardata.client.fs import (
     WorkspaceFS,
     WorkspaceFSTimestamped,
@@ -90,7 +91,7 @@ async def _do_workspace_list(client):
             for user, role in roles.items():
                 user_info = await client.get_user_info(user)
                 users_roles[user_info.user_id] = (role, user_info)
-        except FSBackendOfflineError:
+        except (FSBackendOfflineError, BackendNotAvailable):
             # Fallback to craft a custom list with only our device since it's
             # the only one we know about
             user_info = UserInfo(
