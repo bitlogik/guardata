@@ -142,6 +142,9 @@ border-radius: 8px;
             </property>
             <item>
              <widget class="QCheckBox" name="check_box_tray">
+              <property name="styleSheet">
+               <string notr="true">color: #000000</string>
+              </property>
               <property name="text">
                <string>TEXT_SETTINGS_CHECK_MINIMIZE_IN_TRAY</string>
               </property>
@@ -270,6 +273,9 @@ border-radius: 8px;
              <layout class="QHBoxLayout" name="horizontalLayout_2">
               <item>
                <widget class="QCheckBox" name="check_box_check_at_startup">
+                <property name="styleSheet">
+                 <string notr="true">color: #000000</string>
+                </property>
                 <property name="text">
                  <string>TEXT_SETTINGS_CHECK_NEW_VERSION_ON_STARTUP</string>
                 </property>
@@ -363,6 +369,9 @@ border-radius: 8px;
            <layout class="QHBoxLayout" name="horizontalLayout_12">
             <item>
              <widget class="QCheckBox" name="check_box_show_confined">
+              <property name="styleSheet">
+               <string notr="true">color: #000000</string>
+              </property>
               <property name="text">
                <string>TEXT_SETTINGS_CHECK_SHOW_CONFINED_FILES</string>
               </property>
