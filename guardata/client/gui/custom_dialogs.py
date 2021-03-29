@@ -27,8 +27,8 @@ logger = get_logger()
 class GreyedDialog(QDialog, Ui_GreyedDialog):
     closing = pyqtSignal(QDialog.DialogCode)
 
-    def __init__(self, center_widget, title, parent, hide_close=False, width=None):
-        super().__init__(None)
+    def __init__(self, center_widget, title, parent, hide_close=False, width=None, is_modal=False):
+        super().__init__(parent)
         self.setupUi(self)
         self.setModal(True)
         self.setObjectName("GreyedDialog")
@@ -62,7 +62,8 @@ class GreyedDialog(QDialog, Ui_GreyedDialog):
                 )
         if main_win:
             if main_win.isVisible():
-                self.setParent(main_win)
+                if (not is_modal) or platform.system() == "Windows":
+                    self.setParent(main_win)
                 self.resize(main_win.size())
             else:
                 main_win.show_top()
@@ -247,7 +248,7 @@ class ErrorWidget(QWidget, Ui_ErrorWidget):
 
 def show_error(parent, message, exception=None):
     w = ErrorWidget(message, exception)
-    d = GreyedDialog(w, title=_("TEXT_ERR_DIALOG_TITLE"), parent=parent)
+    d = GreyedDialog(w, title=_("TEXT_ERR_DIALOG_TITLE"), parent=parent, is_modal=True)
     d.open()
 
 
@@ -269,7 +270,7 @@ class InfoWidget(QWidget, Ui_InfoWidget):
 
 def show_info(parent, message, button_text=None):
     w = InfoWidget(message, button_text)
-    d = GreyedDialog(w, title=None, parent=parent, hide_close=True)
+    d = GreyedDialog(w, title=None, parent=parent, hide_close=True, is_modal=True)
     w.accepted.connect(d.accept)
     w.button_ok.setFocus()
     d.open()
