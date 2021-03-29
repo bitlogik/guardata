@@ -42,7 +42,7 @@ async def logged_gui_with_files(
 
     f_w = logged_gui.test_get_files_widget()
     wk_button = w_w.layout_workspaces.itemAt(0).widget()
-    async with aqtbot.wait_exposed(f_w), aqtbot.wait_signal(f_w.folder_changed):
+    async with aqtbot.wait_exposed(f_w), aqtbot.wait_signal(f_w.folder_changed, timeout=15000):
         if sys.platform == "win32":
             wk_button.button_open_gui_clicked()
         else:
