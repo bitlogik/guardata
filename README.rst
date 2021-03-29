@@ -35,7 +35,7 @@ Differences with the Parsec reference implementation :
 - More secure short codes for 2-way auth : from 40 bits with hmac-sha2 to 50 bits with argon2id
 - Improve server socket management (parsec-cloud sends header separated from data)
 - Data (encrypted) are local only in Windows, not shared with Microsoft through roaming
-- UX improved (invitation redirect, offline)
+- UX improved (invitation redirect, offline, non-blocking modals)
 
 
 Install

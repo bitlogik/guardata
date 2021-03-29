@@ -2,6 +2,23 @@
 guardata history
 ----------------
 
+0.2.2 - 2021-03-30
+^^^^^^^^^^^^^^^^^^
+
+* Updates in the GUI
+
+  * Fix crash when next device page
+  * Fix can't quit before login when minimize enabled
+  * Safe quit during reencryption
+  * Fixes startup on MacOS
+  * Final update for dark on MacOS
+  * Child modals stay on top
+  * More stable mountpoints on Linux and MacOS
+
+* Updated WebSocket client library
+* Improved offline behavior
+
+
 0.2.0 - 2021-01-15
 ^^^^^^^^^^^^^^^^^^
 

@@ -2,4 +2,4 @@
 # must be PEP440 version
 # can be overrided by git tag in CI/CD compilation
 
-__version__ = "0.2.0"
+__version__ = "0.2.2"
