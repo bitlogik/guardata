@@ -726,6 +726,7 @@ def client_factory(
                     await spy.wait_with_timeout(
                         ClientEvent.BACKEND_CONNECTION_CHANGED,
                         {"status": BackendConnStatus.READY, "status_exc": spy.ANY},
+                        timeout=3.0,
                     )
                 assert client.are_monitors_idle()
 
