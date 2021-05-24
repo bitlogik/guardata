@@ -135,6 +135,7 @@ async def test_file_link(
 
 
 @pytest.mark.gui
+@pytest.mark.skipif(sys.platform == "darwin", reason="Test not reliable on Mac")
 @pytest.mark.trio
 async def test_link_file_unmounted(
     aqtbot,
