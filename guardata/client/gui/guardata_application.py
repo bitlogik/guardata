@@ -35,8 +35,11 @@ class guardataApp(QApplication):
 
     def event(self, ev):
         if platform == "darwin":
+            mw = self.get_main_window()
+            if mw and ev.type() == QEvent.ApplicationActivate:
+                mw.show_top()
+                return True
             if ev.type() == QEvent.FileOpen:
-                mw = self.get_main_window()
                 urlread = ev.url().toString()
                 if urlread.startswith("parsec:"):
                     if mw:
