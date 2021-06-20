@@ -1660,7 +1660,7 @@ msgstr ""
 "FUSE n'a pas pu être chargé.\n"
 "Sur Mac, il est nécessaire d'installer macFUSE (FUSE for MacOS) et de l'accepter dans les réglages de sécurité."
 "À partir de Mac OS 11.x, un rédémarrage est nécessaire après l'installation de macFUSE.\n"
-"<a href=\"http://dl.guardata.app/macfuse-4.0.5.dmg\">Télécharger macFUSE ici</a>"
+"<a href=\"http://dl.guardata.app/macfuse-4.1.2.dmg\">Télécharger macFUSE ici</a>"
 
 msgid "TEXT_LOGIN_UNKNOWN_ERROR"
 msgstr "Impossible de se connecter."

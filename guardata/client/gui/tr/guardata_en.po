@@ -1618,7 +1618,7 @@ msgstr ""
 "Fuse could not be loaded.<br><br>"
 "On Mac, install macFUSE (FUSE for MacOS) and allow it in security settings.<br>"
 "From Mac OS 11.x, a restart is required after macFUSE installation.<br><br>"
-"<a href=\"https://dl.guardata.app/macfuse-4.0.5.dmg\">Get macFUSE here</a>"
+"<a href=\"https://dl.guardata.app/macfuse-4.1.2.dmg\">Get macFUSE here</a>"
 
 msgid "TEXT_LOGIN_UNKNOWN_ERROR"
 msgstr "Cannot log in."
