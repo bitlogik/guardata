@@ -3,7 +3,7 @@
 import pytest
 
 from guardata.api.protocol import UserID, DeviceID, DeviceName, OrganizationID, HumanHandle
-from guardata.api.data import SASCode
+from guardata.api.data import SASCode, EntryName
 
 
 @pytest.mark.parametrize("cls", (UserID, DeviceName, OrganizationID))
@@ -124,3 +124,15 @@ def test_sas_code():
     for invalid in ["", "AAA", "AAAAAA", "aaaaa", "AAAAI", "AAAAO", "AAAA0", "AAAAQ"]:
         with pytest.raises(ValueError):
             SASCode(invalid)
+
+
+def test_entryname_normalization():
+    nfc_str = "àáâäæãåāçćčèéêëēėęîïíīįìłñńôöòóœøōõßśšûüùúūÿžźż"
+    nfd_str = (
+        "àáâäæãåāçćčèéêëēėęîïíīįìłñńôöòóœøōõßśšûüùúūÿžźż"
+    )
+
+    assert nfc_str != nfd_str
+    assert EntryName(nfd_str) == nfc_str
+    assert EntryName(nfc_str) == nfc_str
+    assert EntryName(nfc_str + nfd_str) == nfc_str + nfc_str
