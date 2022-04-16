@@ -2,6 +2,15 @@
 guardata history
 ----------------
 
+0.2.4 - 2022-04-19
+^^^^^^^^^^^^^^^^^^
+
+* Minimizes works on MacOS
+* Mount more reliable on MacOS
+* Normalize filenames
+* Use Github Actions instead of Azure pipelines
+
+
 0.2.2 - 2021-03-30
 ^^^^^^^^^^^^^^^^^^
 
