@@ -216,7 +216,7 @@ jobs:
 
 
 #################################################################################
-# Step 3: Build on MacOSX
+# Step 3.a: Build on MacOSX
 #  Build for MacOSX is done on Github,
 #  as GitLab is not offering Mac shared runners.
 #  Requires code sign and notarization on the app bundle output.
@@ -226,7 +226,7 @@ jobs:
     needs:
       - s2_mac_test
     timeout-minutes: 15
-    runs-on: macOS-10.15
+    runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -243,3 +243,68 @@ jobs:
             name: macpkg
             path: |
                 packaging/MacOSX/guardata-macapp.tar.bz2
+
+#################################################################################
+# Step 3.b: Build on Windows
+#  Requires code signing of the package output.
+
+  s3_win_build:
+    name: Win build
+    needs:
+      - s2_windows_test
+    timeout-minutes: 15
+    runs-on: windows-latest
+    steps:
+      - uses: actions/setup-python@v2
+        with:
+          python-version: 3.7.9
+      - uses: actions/checkout@v2
+      - run: |
+          rm -R -Force guardata/test_utils
+          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
+          choco install -y --no-progress nsis   --version=3.06.1
+          RefreshEnv
+          $pytver = "__version__ = `"${CI_COMMIT_TAG}`"`n"
+          Out-File -FilePath guardata\_version.py -InputObject $pytver -Encoding ascii
+          cd packaging/win32/
+          curl -o winfsp-1.7.20172.msi https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi
+          .\Invoke-Environment.ps1 '"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"'
+          $env:PATH+=";C:\Program Files (x86)\NSIS"
+          python.exe freeze_guardata.py ..\\..
+          makensis.exe installer.nsi
+        name: 'Building'
+      - uses: actions/upload-artifact@v2
+        with:
+            name: winpkg
+            path: |
+                packaging/win32/build/guardata*-setup.exe
+
+#################################################################################
+# Step 3.c: Build Linux Snap
+
+  s3_snap_build:
+    name: Snap build
+    needs:
+      - s2_linux_test
+    timeout-minutes: 15
+    runs-on: ubuntu-latest
+    container: kyrofa/github-snap-builder:core18
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          sudo apt-get -y update
+          cp -R packaging/snap snapbuild
+          cat CHANGELOG.rst >> README.rst
+          cd snapbuild
+          mkdir src
+          cp -R ../guardata src
+          cp ../setup.py src
+          cp ../README.rst src
+          sed -i "s#^\\(__version__ = \\).*\$#\\1'$CI_COMMIT_TAG'#" src/guardata/_version.py
+          sed -i "s/__GUARDATA_VERSION__/$CI_COMMIT_TAG/" snap/snapcraft.yaml
+          snapcraft --destructive-mode
+      - uses: actions/upload-artifact@v2
+        with:
+            name: snappkg
+            path: |
+                snapbuild/guardata*.snap
