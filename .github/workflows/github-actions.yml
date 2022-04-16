@@ -255,16 +255,16 @@ jobs:
     timeout-minutes: 15
     runs-on: windows-latest
     steps:
-      - uses: actions/setup-python@v2
+      - uses: actions/setup-python@v3
         with:
-          python-version: 3.7.9
+          python-version: '3.7.9'
       - uses: actions/checkout@v2
       - run: |
           rm -R -Force guardata/test_utils
-          Import-Module "$env:ChocolateyInstall\helpers\chocolateyProfile.psm1"
-          choco install -y --no-progress nsis   --version=3.06.1
+          choco install -y --no-progress nsis --version=3.06.1
           RefreshEnv
-          $pytver = "__version__ = `"${CI_COMMIT_TAG}`"`n"
+          python.exe -m pip install -U pip
+          $pytver = "__version__ = `"${{github.ref_name}}`"`n"
           Out-File -FilePath guardata\_version.py -InputObject $pytver -Encoding ascii
           cd packaging/win32/
           curl -o winfsp-1.7.20172.msi https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi
@@ -300,8 +300,8 @@ jobs:
           cp -R ../guardata src
           cp ../setup.py src
           cp ../README.rst src
-          sed -i "s#^\\(__version__ = \\).*\$#\\1'$CI_COMMIT_TAG'#" src/guardata/_version.py
-          sed -i "s/__GUARDATA_VERSION__/$CI_COMMIT_TAG/" snap/snapcraft.yaml
+          sed -i "s#^\\(__version__ = \\).*\$#\\1'${{github.ref_name}}'#" src/guardata/_version.py
+          sed -i "s/__GUARDATA_VERSION__/${{github.ref_name}}/" snap/snapcraft.yaml
           snapcraft --destructive-mode
       - uses: actions/upload-artifact@v2
         with:
