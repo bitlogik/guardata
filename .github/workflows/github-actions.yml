@@ -34,7 +34,7 @@ jobs:
         set -eux
         sudo apt-get update
         python3 --version
-        pip3 install --use-feature=2020-resolver pre-commit
+        pip3 install pre-commit
       name: 'Bootstrap'
     - run: |
         set -eux
@@ -61,7 +61,7 @@ jobs:
         set -eux
         sudo apt-get update
         python3 --version
-        pip3 install --use-feature=2020-resolver -r pre-requirements.txt
+        pip3 install -r pre-requirements.txt
       name: 'Bootstrap'
     - run: |
         set -eux
@@ -95,7 +95,7 @@ jobs:
           set -eux
           sudo apt-get update
           python --version
-          pip3 install --use-feature=2020-resolver -r pre-requirements.txt
+          pip3 install -r pre-requirements.txt
           sudo apt-get install postgresql-${{ env.postgresqlVersion }}
           psql --version
         name: 'Bootstrap'
@@ -105,7 +105,7 @@ jobs:
           rm -rf guardata
           # Install the guardata wheel with all dependencies
           WHEEL=$(ls ./guardata-*.whl)
-          pip3 install --use-feature=2020-resolver $WHEEL[all]
+          pip3 install $WHEEL[all]
           # Check dependency compatibility
           pip3 check guardata[all]
         name: 'Install'
@@ -144,7 +144,7 @@ jobs:
           name: wheel
       - run: |
           python.exe --version
-          pip install --use-feature=2020-resolver -r pre-requirements.txt
+          pip install -r pre-requirements.txt
           choco install -y --no-progress winfsp --pre --version=${{ env.winfspVersion }}
           # Install winfsp-test and put it in PATH
           mkdir winfsp-test
@@ -158,7 +158,7 @@ jobs:
           Remove-Item -Recurse -Force guardata
           # Install the guardata wheel with all dependencies
           $WHEEL=Get-Childitem -Path .  -Filter "guardata-*.whl" -Name
-          pip install --use-feature=2020-resolver "$WHEEL[all]"
+          pip install "$WHEEL[all]"
           # Check dependency compatibility
           pip check guardata[all]
           # Check winfsp-tests availability
@@ -202,7 +202,7 @@ jobs:
           brew install --cask macfuse
           # Build and install guardata
           python3 setup.py bdist_wheel
-          python3 -m pip install --use-feature=2020-resolver ".[all]"
+          python3 -m pip install ".[all]"
           # Check dependency compatibility
           python3 -m pip check guardata[all]
         name: 'Install'

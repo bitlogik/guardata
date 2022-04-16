@@ -3,9 +3,9 @@
 
 cd ../..
 python3 setup.py bdist_wheel
-python3 -m pip --use-feature=2020-resolver install .
-python3 -m pip --use-feature=2020-resolver install 'pyinstaller==4.1'
-python3 -m pip --use-feature=2020-resolver install -U certifi
+python3 -m pip install .
+python3 -m pip install 'pyinstaller==4.1'
+python3 -m pip install -U certifi
 cd packaging/MacOSX
 MACRUNfile='../../guardata/client/cli/run_mac.py'
 echo 'import sys, pathlib, os, locale ; from guardata.cli import cli' > $MACRUNfile
