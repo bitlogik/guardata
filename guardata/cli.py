@@ -4,6 +4,7 @@
 import click
 import sys
 import os
+import pathlib
 
 from guardata._version import __version__
 from guardata.cli_utils import generate_not_available_cmd
@@ -41,6 +42,17 @@ def patched_cli_main(args=None, **kwargs):
 
     raw_extra_args = os.environ.get("GUARDATA_CMD_ARGS", "")
     args += [os.path.expandvars(x) for x in raw_extra_args.split()]
+
+    if sys.platform.startswith("darwin"):
+        cert_file_path = pathlib.Path(__file__).parent.joinpath("certifi/cacert.pem").resolve()
+        print(__file__)
+        print(pathlib.Path(__file__).resolve())
+        print(cert_file_path)
+        if cert_file_path.is_file():
+            print("path OK")
+        else:
+            print("Path Error")
+        os.environ["SSL_CERT_FILE"] = cert_file_path.as_posix()
 
     return vanilla_cli_main(args=args, **kwargs)
 
