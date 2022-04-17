@@ -44,7 +44,9 @@ def patched_cli_main(args=None, **kwargs):
     args += [os.path.expandvars(x) for x in raw_extra_args.split()]
 
     if sys.platform.startswith("darwin"):
-        cert_file_path = pathlib.Path(__file__).parent.joinpath("certifi/cacert.pem").resolve()
+        cert_file_path = (
+            pathlib.Path(__file__).parent.parent.joinpath("certifi/cacert.pem").resolve()
+        )
         print(__file__)
         print(pathlib.Path(__file__).resolve())
         print(cert_file_path)
