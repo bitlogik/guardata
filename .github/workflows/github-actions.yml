@@ -77,142 +77,142 @@ jobs:
 #################################################################################
 # Step 2.a: Tests on Linux
 
-  # s2_linux_test:
-    # name: Linux tests
-    # needs:
-      # - s1_build_wheel
-    # timeout-minutes: 40
-    # runs-on: ubuntu-latest
-    # steps:
-      # - uses: actions/checkout@v2
-      # - uses: actions/setup-python@v2
-        # with:
-          # python-version: ${{ env.pythonVersion }}
-      # - uses: actions/download-artifact@v2
-        # with:
-          # name: wheel
-      # - run: |
-          # set -eux
-          # sudo apt-get update
-          # python --version
-          # pip3 install -r pre-requirements.txt
-          # sudo apt-get install postgresql-${{ env.postgresqlVersion }}
-          # psql --version
-        # name: 'Bootstrap'
-      # - run: |
-          # set -eux
-          # # Remove the guardata folder (force to use the wheel)
-          # rm -rf guardata
-          # # Install the guardata wheel with all dependencies
-          # WHEEL=$(ls ./guardata-*.whl)
-          # pip3 install $WHEEL[all]
-          # # Check dependency compatibility
-          # pip3 check guardata[all]
-        # name: 'Install'
-      # - run: |
-          # set -eux
-          # python3 -m pytest --log-level=DEBUG \
-            # --durations=10 -v \
-            # tests --runmountpoint --runslow \
-            # -n auto --max-worker-restart=0 -x
-        # name: 'Tests memory'
-      # - run: |
-          # set -eux
-          # python3 -m pytest --log-level=DEBUG \
-            # --durations=10 -v \
-            # tests/backend tests/test_cli.py --postgresql --runslow \
-            # -n auto --max-worker-restart=0 -x
-        # name: 'Tests postgresql'
+  s2_linux_test:
+    name: Linux tests
+    needs:
+      - s1_build_wheel
+    timeout-minutes: 40
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.pythonVersion }}
+      - uses: actions/download-artifact@v2
+        with:
+          name: wheel
+      - run: |
+          set -eux
+          sudo apt-get update
+          python --version
+          pip3 install -r pre-requirements.txt
+          sudo apt-get install postgresql-${{ env.postgresqlVersion }}
+          psql --version
+        name: 'Bootstrap'
+      - run: |
+          set -eux
+          # Remove the guardata folder (force to use the wheel)
+          rm -rf guardata
+          # Install the guardata wheel with all dependencies
+          WHEEL=$(ls ./guardata-*.whl)
+          pip3 install $WHEEL[all]
+          # Check dependency compatibility
+          pip3 check guardata[all]
+        name: 'Install'
+      - run: |
+          set -eux
+          python3 -m pytest --log-level=DEBUG \
+            --durations=10 -v \
+            tests --runmountpoint --runslow \
+            -n auto --max-worker-restart=0 -x
+        name: 'Tests memory'
+      - run: |
+          set -eux
+          python3 -m pytest --log-level=DEBUG \
+            --durations=10 -v \
+            tests/backend tests/test_cli.py --postgresql --runslow \
+            -n auto --max-worker-restart=0 -x
+        name: 'Tests postgresql'
 
 
 #################################################################################
 # Step 2.b: Tests on Windows
 
-  # s2_windows_test:
-    # name: Windows tests
-    # needs:
-      # - s1_build_wheel
-    # timeout-minutes: 40
-    # runs-on: windows-latest
-    # steps:
-      # - uses: actions/checkout@v2
-      # - uses: actions/setup-python@v2
-        # with:
-          # python-version: ${{ env.pythonVersion }}
-      # - uses: actions/download-artifact@v2
-        # with:
-          # name: wheel
-      # - run: |
-          # python.exe --version
-          # pip install -r pre-requirements.txt
-          # choco install -y --no-progress winfsp --pre --version=${{ env.winfspVersion }}
-          # # Install winfsp-test and put it in PATH
-          # mkdir winfsp-test
-          # curl -L https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-tests-1.7.20172.zip -o winfsp-test/winfsp-tests.zip
-          # unzip winfsp-test/winfsp-tests.zip -d winfsp-test
-          # echo "${Env:GITHUB_WORKSPACE}/winfsp-test"
-          # echo "${Env:GITHUB_WORKSPACE}/winfsp-test" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
-        # name: 'Bootstrap'
-      # - run: |
-          # # Remove the guardata folder from the source to force use of the wheel
-          # Remove-Item -Recurse -Force guardata
-          # # Install the guardata wheel with all dependencies
-          # $WHEEL=Get-Childitem -Path .  -Filter "guardata-*.whl" -Name
-          # pip install "$WHEEL[all]"
-          # # Check dependency compatibility
-          # pip check guardata[all]
-          # # Check winfsp-tests availability
-          # python.exe -c "import winfspy.tests.winfsp_tests"
-        # name: 'Install'
-      # - run: |
-          # python.exe -m pytest --log-level=DEBUG --durations=10 -v tests -n auto --max-worker-restart=0 -x
-        # name: 'Tests fast'
-      # - run: |
-          # python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow -m mountpoint -x
-        # name: 'Tests mountpoint'
-      # - run: |
-          # python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow --rungui -m gui -x -n 1
-        # name: 'Tests GUI'
-      # - run: |
-          # python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runslow -m slow -n auto --max-worker-restart=0 -x
-        # name: 'Tests slow'
+  s2_windows_test:
+    name: Windows tests
+    needs:
+      - s1_build_wheel
+    timeout-minutes: 40
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.pythonVersion }}
+      - uses: actions/download-artifact@v2
+        with:
+          name: wheel
+      - run: |
+          python.exe --version
+          pip install -r pre-requirements.txt
+          choco install -y --no-progress winfsp --pre --version=${{ env.winfspVersion }}
+          # Install winfsp-test and put it in PATH
+          mkdir winfsp-test
+          curl -L https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-tests-1.7.20172.zip -o winfsp-test/winfsp-tests.zip
+          unzip winfsp-test/winfsp-tests.zip -d winfsp-test
+          echo "${Env:GITHUB_WORKSPACE}/winfsp-test"
+          echo "${Env:GITHUB_WORKSPACE}/winfsp-test" | Out-File -FilePath $env:GITHUB_PATH -Encoding utf8 -Append
+        name: 'Bootstrap'
+      - run: |
+          # Remove the guardata folder from the source to force use of the wheel
+          Remove-Item -Recurse -Force guardata
+          # Install the guardata wheel with all dependencies
+          $WHEEL=Get-Childitem -Path .  -Filter "guardata-*.whl" -Name
+          pip install "$WHEEL[all]"
+          # Check dependency compatibility
+          pip check guardata[all]
+          # Check winfsp-tests availability
+          python.exe -c "import winfspy.tests.winfsp_tests"
+        name: 'Install'
+      - run: |
+          python.exe -m pytest --log-level=DEBUG --durations=10 -v tests -n auto --max-worker-restart=0 -x
+        name: 'Tests fast'
+      - run: |
+          python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow -m mountpoint -x
+        name: 'Tests mountpoint'
+      - run: |
+          python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runmountpoint --runslow --rungui -m gui -x -n 1
+        name: 'Tests GUI'
+      - run: |
+          python.exe -m pytest --log-level=DEBUG --durations=10 -v tests --runslow -m slow -n auto --max-worker-restart=0 -x
+        name: 'Tests slow'
 
 
 #################################################################################
 # Step 2.c: Tests on MacOSX
 
-  # s2_mac_test:
-    # name: MacOSX tests
-    # needs:
-      # - s1_build_wheel
-    # timeout-minutes: 40
-    # runs-on: macOS-10.15
-    # steps:
-      # - uses: actions/checkout@v2
-      # - uses: actions/setup-python@v2
-        # with:
-          # python-version: ${{ env.pythonVersion }}
-      # - uses: actions/download-artifact@v2
-        # with:
-          # name: wheel
-      # - run: |
-          # set -eux
-          # python3 --version
-          # # Install osxfuse
-          # brew install --cask macfuse
-          # # Build and install guardata
-          # python3 setup.py bdist_wheel
-          # python3 -m pip install ".[all]"
-          # # Check dependency compatibility
-          # python3 -m pip check guardata[all]
-        # name: 'Install'
-      # - run: |
-          # set -eux
-          # python3 -m pytest --log-level=DEBUG \
-            # --durations=10 -v \
-            # tests/test_cli.py tests/client/gui/test_login.py tests/client/gui/test_main_window.py \
-            # --runmountpoint --rungui -n 1 --max-worker-restart=0 -x
-        # name: 'Tests CLI/GUI ease'
+  s2_mac_test:
+    name: MacOSX tests
+    needs:
+      - s1_build_wheel
+    timeout-minutes: 40
+    runs-on: macOS-10.15
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.pythonVersion }}
+      - uses: actions/download-artifact@v2
+        with:
+          name: wheel
+      - run: |
+          set -eux
+          python3 --version
+          # Install osxfuse
+          brew install --cask macfuse
+          # Build and install guardata
+          python3 setup.py bdist_wheel
+          python3 -m pip install ".[all]"
+          # Check dependency compatibility
+          python3 -m pip check guardata[all]
+        name: 'Install'
+      - run: |
+          set -eux
+          python3 -m pytest --log-level=DEBUG \
+            --durations=10 -v \
+            tests/test_cli.py tests/client/gui/test_login.py tests/client/gui/test_main_window.py \
+            --runmountpoint --rungui -n 1 --max-worker-restart=0 -x
+        name: 'Tests CLI/GUI ease'
 
 
 #################################################################################
@@ -222,9 +222,9 @@ jobs:
   s3_mac_build:
     name: MacOSX build
     needs:
-      #- s2_mac_test
-      - s1_build_wheel
-    timeout-minutes: 15
+      - s2_mac_test
+    if: startsWith(github.ref, 'refs/tags/')
+    timeout-minutes: 10
     runs-on: macos-11
     steps:
       - uses: actions/checkout@v2
@@ -250,10 +250,9 @@ jobs:
   s3_win_build:
     name: Win build
     needs:
-      # - s2_windows_test
-      - s1_build_wheel
+      - s2_windows_test
     if: startsWith(github.ref, 'refs/tags/')
-    timeout-minutes: 15
+    timeout-minutes: 10
     runs-on: windows-latest
     steps:
       - uses: actions/setup-python@v3
@@ -283,29 +282,30 @@ jobs:
 #################################################################################
 # Step 3.c: Build Linux Snap
 
-  # s3_snap_build:
-    # name: Snap build
-    # needs:
-      # - s2_linux_test
-    # timeout-minutes: 15
-    # runs-on: ubuntu-latest
-    # container: kyrofa/github-snap-builder:core18
-    # steps:
-      # - uses: actions/checkout@v3
-      # - run: |
-          # sudo apt-get -y update
-          # cp -R packaging/snap snapbuild
-          # cat CHANGELOG.rst >> README.rst
-          # cd snapbuild
-          # mkdir src
-          # cp -R ../guardata src
-          # cp ../setup.py src
-          # cp ../README.rst src
-          # sed -i "s#^\\(__version__ = \\).*\$#\\1'${{github.ref_name}}'#" src/guardata/_version.py
-          # sed -i "s/__GUARDATA_VERSION__/${{github.ref_name}}/" snap/snapcraft.yaml
-          # snapcraft --destructive-mode
-      # - uses: actions/upload-artifact@v2
-        # with:
-            # name: snappkg
-            # path: |
-                # snapbuild/guardata*.snap
+  s3_snap_build:
+    name: Snap build
+    needs:
+      - s2_linux_test
+    if: startsWith(github.ref, 'refs/tags/')
+    timeout-minutes: 12
+    runs-on: ubuntu-latest
+    container: kyrofa/github-snap-builder:core18
+    steps:
+      - uses: actions/checkout@v3
+      - run: |
+          sudo apt-get -y update
+          cp -R packaging/snap snapbuild
+          cat CHANGELOG.rst >> README.rst
+          cd snapbuild
+          mkdir src
+          cp -R ../guardata src
+          cp ../setup.py src
+          cp ../README.rst src
+          sed -i "s#^\\(__version__ = \\).*\$#\\1'${{github.ref_name}}'#" src/guardata/_version.py
+          sed -i "s/__GUARDATA_VERSION__/${{github.ref_name}}/" snap/snapcraft.yaml
+          snapcraft --destructive-mode
+      - uses: actions/upload-artifact@v2
+        with:
+            name: snappkg
+            path: |
+                snapbuild/guardata*.snap

@@ -47,14 +47,8 @@ def patched_cli_main(args=None, **kwargs):
         cert_file_path = (
             pathlib.Path(__file__).parent.parent.joinpath("certifi/cacert.pem").resolve()
         )
-        print(__file__)
-        print(pathlib.Path(__file__).resolve())
-        print(cert_file_path)
         if cert_file_path.is_file():
-            print("path OK")
-        else:
-            print("Path Error")
-        os.environ["SSL_CERT_FILE"] = cert_file_path.as_posix()
+            os.environ["SSL_CERT_FILE"] = cert_file_path.as_posix()
 
     return vanilla_cli_main(args=args, **kwargs)
 
