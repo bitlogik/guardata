@@ -6,7 +6,7 @@ __all__ = ("BackendEvent",)
 
 
 class BackendEvent(Enum):
-    """ Backend internal events"""
+    """Backend internal events"""
 
     DEVICE_CLAIMED = "device.claimed"
     DEVICE_INVITATION_CANCELLED = "device.invitation.cancelled"
