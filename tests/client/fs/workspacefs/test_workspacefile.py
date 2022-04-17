@@ -46,7 +46,7 @@ def random_text():
 
 
 async def compare_read(triof=None, f=None, size: int = -1, alice_workspace=None, trio_file=None):
-    """ Comparing the full read of boths files with both methods"""
+    """Comparing the full read of boths files with both methods"""
     if (f is None and alice_workspace is None) or (triof is None and trio_file is None):
         raise ValueError
     if f is None:
@@ -60,7 +60,7 @@ async def compare_read(triof=None, f=None, size: int = -1, alice_workspace=None,
 
 
 async def write_in_both_files(triof, f, text):
-    """ writting in both files"""
+    """writting in both files"""
     # Writting text in both files
     output = await f.write(text)
     trio_output = await triof.write(text)
