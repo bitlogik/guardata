@@ -1,5 +1,6 @@
 # Parsec Cloud (https://parsec.cloud) Copyright (c) AGPLv3 2019 Scille SAS
 
+from unicodedata import normalize
 from uuid import UUID, uuid4
 
 from guardata.serde import fields
@@ -26,6 +27,9 @@ EntryIDField = fields.uuid_based_field_factory(EntryID)
 
 class EntryName(str):
     __slots__ = ()
+
+    def __new__(cls, raw):
+        return super(EntryName, cls).__new__(cls, normalize("NFC", raw))
 
     def __init__(self, raw):
 

@@ -1,5 +1,5 @@
 # Copyright 2020 BitLogiK for guardata (https://guardata.app) - AGPLv3
 # must be PEP440 version
-# can be overrided by git tag in CI/CD compilation
+# can be overridden by git tag in CI/CD compilation
 
-__version__ = "0.2.2"
+__version__ = "0.2.4"

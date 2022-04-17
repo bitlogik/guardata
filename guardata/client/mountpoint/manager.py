@@ -8,6 +8,7 @@ import logging
 from pathlib import PurePath
 from pendulum import DateTime
 from structlog import get_logger
+from subprocess import CalledProcessError
 from sys import platform
 from typing import Sequence, Optional
 from importlib import __import__ as import_function
@@ -302,6 +303,8 @@ async def mountpoint_manager_factory(
         try:
             await cleanup_macos_mount(base_mountpoint_path)
         except FileNotFoundError:
+            pass
+        except CalledProcessError:
             pass
 
     def on_event(event, new_entry, previous_entry=None):

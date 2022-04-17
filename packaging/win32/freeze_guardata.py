@@ -97,7 +97,10 @@ def main(guardata_source):
     # Build guardata.exe
     resource_rc = BUILD_DIR / "resource.rc"
     resource_res = BUILD_DIR / "resource.res"
-    versioninfo = (*re.match(r"^.*([0-9]+)\.([0-9]+)\.([0-9]+)", guardata_version).groups(), "0")
+    versioninfo = (
+        *re.match(r"^.*([0-9]+)\.([0-9]+)\.([0-9]+)[a-z]*", guardata_version).groups(),
+        "0",
+    )
     escaped_guardata_ico = str(Path("guardata.ico").resolve()).replace("\\", "\\\\")
     escaped_guardata_manifest = str(Path("guardata.manifest").resolve()).replace("\\", "\\\\")
     resource_rc.write_text(
