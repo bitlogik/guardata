@@ -12,6 +12,10 @@ echo 'import sys, pathlib, os, locale ; from guardata.cli import cli' > $MACRUNf
 echo 'config_folder = pathlib.Path(pathlib.Path.home()/".config/guardata")' >> $MACRUNfile
 echo 'config_folder.mkdir(parents=True, exist_ok=True)' >> $MACRUNfile
 echo 'os.environ["QT_MAC_WANTS_LAYER"] = "1"' >> $MACRUNfile
+echo 'cert_file_path = os.path.abspath(os.path.join(__file__, "../../../../certifi/cacert.pem"))' >> $MACRUNfile
+echo 'print(__file__)' >> $MACRUNfile
+echo 'print(cert_file_path)' >> $MACRUNfile
+echo 'environ["SSL_CERT_FILE"] = cert_file_path' >> $MACRUNfile
 echo 'locale.setlocale(locale.LC_ALL, "")' >> $MACRUNfile
 echo 'argsv = ["client","gui","--log-level=INFO",f"--log-file={config_folder}/guardata-client.log",*sys.argv[1:]]' >> $MACRUNfile
 echo 'cli(argsv)' >> $MACRUNfile
