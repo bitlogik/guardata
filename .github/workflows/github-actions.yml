@@ -268,7 +268,7 @@ jobs:
           Out-File -FilePath guardata\_version.py -InputObject $pytver -Encoding ascii
           cd packaging/win32/
           curl -o winfsp-1.7.20172.msi https://github.com/billziss-gh/winfsp/releases/download/v1.7/winfsp-1.7.20172.msi
-          .\Invoke-Environment.ps1 '"C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\VC\Auxiliary\Build\vcvars64.bat"'
+          .\Invoke-Environment.ps1 '"C:\Program Files\Microsoft Visual Studio\2022\Enterprise\VC\Auxiliary\Build\vcvars64.bat"'
           $env:PATH+=";C:\Program Files (x86)\NSIS"
           python.exe freeze_guardata.py ..\\..
           makensis.exe installer.nsi
