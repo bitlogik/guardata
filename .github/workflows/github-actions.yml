@@ -252,6 +252,9 @@ jobs:
     name: Win build
     needs:
       - s2_windows_test
+    on:
+      push:
+        tags: '*'
     timeout-minutes: 15
     runs-on: windows-latest
     steps:
