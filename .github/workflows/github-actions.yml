@@ -217,32 +217,31 @@ jobs:
 
 #################################################################################
 # Step 3.a: Build on MacOSX
-#  Build for MacOSX is done on Github,
-#  as GitLab is not offering Mac shared runners.
 #  Requires code sign and notarization on the app bundle output.
 
-  # s3_mac_build:
-    # name: MacOSX build
-    # needs:
-      # - s2_mac_test
-    # timeout-minutes: 15
-    # runs-on: macos-11
-    # steps:
-      # - uses: actions/checkout@v2
-      # - uses: actions/setup-python@v2
-        # with:
-          # python-version: ${{ env.pythonVersion }}
-      # - run: |
-          # set -eux
-          # cd packaging/MacOSX
-          # ./build_mac.sh
-          # tar -jcvf guardata-macapp.tar.bz2 dist/guardata.app
-        # name: 'Building'
-      # - uses: actions/upload-artifact@v2
-        # with:
-            # name: macpkg
-            # path: |
-                # packaging/MacOSX/guardata-macapp.tar.bz2
+  s3_mac_build:
+    name: MacOSX build
+    needs:
+      #- s2_mac_test
+      - s1_build_wheel
+    timeout-minutes: 15
+    runs-on: macos-11
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+        with:
+          python-version: ${{ env.pythonVersion }}
+      - run: |
+          set -eux
+          cd packaging/MacOSX
+          ./build_mac.sh
+          tar -jcvf guardata-macapp.tar.bz2 dist/guardata.app
+        name: 'Building'
+      - uses: actions/upload-artifact@v2
+        with:
+            name: macpkg
+            path: |
+                packaging/MacOSX/guardata-macapp.tar.bz2
 
 #################################################################################
 # Step 3.b: Build on Windows
